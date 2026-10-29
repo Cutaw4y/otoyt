@@ -57,33 +57,49 @@ class AssetLedger:
 
 
 # ---------------------------------------------------------------- segment render
-def render_footage(clip, dur, out):
-    sh(["ffmpeg", "-y", "-stream_loop", "-1", "-i", clip, "-t", f"{dur:.3f}",
+FONTS_DIR = Path(__file__).parent / "assets" / "fonts"
+
+
+def render_footage(clip, frames, out, start=0.0):
+    """Stok klipten tam 'frames' karelik, ekranı dolduran (16:9) çekim."""
+    sh(["ffmpeg", "-y", "-ss", f"{max(start, 0):.2f}", "-stream_loop", "-1", "-i", clip,
         "-vf", f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},fps={FPS},format=yuv420p",
-        "-an", "-c:v", "libx264", "-preset", "veryfast", "-crf", "21", out])
+        "-frames:v", int(frames), "-an", "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", out])
     return out
 
 
-def render_still(image, dur, out, move=None):
-    """Durağan görsele yavaş yakınlaşma / kaydırma (Ken Burns) uygular."""
-    frames = max(1, round(dur * FPS))
-    move = move or random.choice(["in", "out", "left", "right"])
-    z_in = "min(1+0.10*on/{n},1.10)".format(n=frames)
-    z_out = "max(1.10-0.10*on/{n},1.0)".format(n=frames)
-    cx, cy = "iw/2-(iw/zoom/2)", "ih/2-(ih/zoom/2)"
-    if move == "in":
-        z, x, y = z_in, cx, cy
+def render_still(image, frames, out, move="in", focus=(0.5, 0.5)):
+    """Durağan görsele hareket: in/out (yakınlaş/uzaklaş), left/right (kaydır), detail (bir bölgeye yakın plan)."""
+    n = max(1, int(frames))
+    fx, fy = focus
+    if move == "detail":
+        z = f"1.32+0.10*on/{n}"
+        x = f"max(0,min(iw-iw/zoom,iw*{fx}-iw/zoom/2))"
+        y = f"max(0,min(ih-ih/zoom,ih*{fy}-ih/zoom/2))"
     elif move == "out":
-        z, x, y = z_out, cx, cy
+        z, x, y = f"1.12-0.10*on/{n}", "iw/2-(iw/zoom/2)", "ih/2-(ih/zoom/2)"
     elif move == "left":
-        z, x, y = "1.08", f"(iw-iw/zoom)*(1-on/{frames})", cy
-    else:
-        z, x, y = "1.08", f"(iw-iw/zoom)*(on/{frames})", cy
+        z, x, y = "1.10", f"(iw-iw/zoom)*(1-on/{n})", "ih/2-(ih/zoom/2)"
+    elif move == "right":
+        z, x, y = "1.10", f"(iw-iw/zoom)*(on/{n})", "ih/2-(ih/zoom/2)"
+    else:  # in
+        z, x, y = f"1.0+0.10*on/{n}", "iw/2-(iw/zoom/2)", "ih/2-(ih/zoom/2)"
     vf = (f"scale={W*2}:{H*2}:force_original_aspect_ratio=increase,crop={W*2}:{H*2},"
-          f"zoompan=z='{z}':x='{x}':y='{y}':d={frames}:s={W}x{H}:fps={FPS},format=yuv420p")
-    sh(["ffmpeg", "-y", "-i", image, "-vf", vf, "-frames:v", frames,
-        "-c:v", "libx264", "-preset", "veryfast", "-crf", "21", out])
+          f"zoompan=z='{z}':x='{x}':y='{y}':d={n}:s={W}x{H}:fps={FPS},format=yuv420p")
+    sh(["ffmpeg", "-y", "-i", image, "-vf", vf, "-frames:v", n,
+        "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", out])
     return out
+
+
+def split_frames(total, target_sec=4.5, min_sec=2.5):
+    """Bir sahneyi ~target_sec'lik çekimlere böler (kare sayısı olarak, toplam birebir korunur)."""
+    n = max(1, round(total / FPS / target_sec))
+    while n > 1 and total / n < min_sec * FPS:
+        n -= 1
+    base = total // n
+    parts = [base] * n
+    parts[-1] += total - base * n
+    return parts
 
 
 # ---------------------------------------------------------------- altyazı
@@ -92,13 +108,19 @@ def _ts(t):
     return f"{ms//3600000:02d}:{ms//60000%60:02d}:{ms//1000%60:02d},{ms%1000:03d}"
 
 
-def srt_blocks(words, per_line=6, until=None):
-    """Kelime zamanlarından altyazı blokları: [(başlangıç, bitiş, metin)]"""
+def srt_blocks(words, per_line=6, until=None, gap=0.6):
+    """Kelime zamanlarından altyazı blokları: [(başlangıç, bitiş, metin)].
+    Blok; kelime sınırına ulaşınca, cümle bitince ya da konuşmada boşluk (intro vb.) olunca kapanır."""
     ws = [w for w in words if until is None or w["end"] <= until + 0.05]
-    out = []
-    for i in range(0, len(ws), per_line):
-        c = ws[i:i + per_line]
-        out.append((c[0]["start"], c[-1]["end"], " ".join(w["word"].strip() for w in c)))
+    out, cur = [], []
+    for i, w in enumerate(ws):
+        cur.append(w)
+        nxt = ws[i + 1] if i + 1 < len(ws) else None
+        sentence_end = w["word"].strip()[-1:] in ".!?" and len(cur) >= 3
+        pause = nxt is not None and nxt["start"] - w["end"] > gap
+        if len(cur) >= per_line or sentence_end or pause or nxt is None:
+            out.append((cur[0]["start"], cur[-1]["end"], " ".join(x["word"].strip() for x in cur)))
+            cur = []
     return out
 
 
@@ -113,54 +135,143 @@ def write_srt(words, out, per_line=6, until=None):
     return write_srt_blocks(srt_blocks(words, per_line, until), out)
 
 
-def _sub_filter(srt, style):
-    p = str(Path(srt).resolve()).replace("\\", "/").replace(":", "\\:").replace("'", "\\'")
-    return f"subtitles='{p}':force_style='{style}'"
+def _ass_time(t):
+    cs = max(0, int(round(t * 100)))
+    return f"{cs//360000}:{cs//6000%60:02d}:{cs//100%60:02d}.{cs%100:02d}"
 
 
-# ---------------------------------------------------------------- final montaj
-def mux_final(video, voice, srt, out, music=None, music_volume=0.07):
-    style = "FontName=DejaVu Sans,FontSize=18,Bold=1,Outline=2,Shadow=0,MarginV=40"
-    ins = ["-i", video, "-i", voice]
-    if music and Path(music).exists():
-        ins += ["-stream_loop", "-1", "-i", music]
-        fc = (f"[0:v]{_sub_filter(srt, style)}[v];"
-              f"[2:a]volume={music_volume}[m];[1:a][m]amix=inputs=2:duration=first:normalize=0[a]")
-    else:
-        fc = f"[0:v]{_sub_filter(srt, style)}[v];[1:a]anull[a]"
-    sh(["ffmpeg", "-y", *ins, "-filter_complex", fc, "-map", "[v]", "-map", "[a]",
-        "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-c:a", "aac", "-b:a", "192k",
-        "-shortest", "-movflags", "+faststart", out])
+def _ass_esc(t):
+    return t.replace("\\", "").replace("{", "(").replace("}", ")").replace("\n", " ")
+
+
+def write_ass_long(words, out, per_line=7):
+    """Uzun video: sade, okunaklı alt yazı (beyaz, ince kontur, yumuşak gölge)."""
+    head = f"""[Script Info]
+ScriptType: v4.00+
+PlayResX: {W}
+PlayResY: {H}
+WrapStyle: 0
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Cap,Inter Display,54,&H00FFFFFF,&H00FFFFFF,&H00201812,&H80000000,-1,0,0,0,100,100,0,0,1,3,2,2,160,160,64,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+"""
+    ev = [f"Dialogue: 0,{_ass_time(a)},{_ass_time(b + 0.15)},Cap,,0,0,0,,{_ass_esc(t)}"
+          for a, b, t in srt_blocks(words, per_line)]
+    Path(out).write_text(head + "\n".join(ev) + "\n", encoding="utf-8")
     return out
 
 
-def make_short(segments, scene_durs, voice, words, out, workdir, max_len=58.0, music=None,
-               start=0, end=None, tag="short"):
-    """Sahne aralığından (start..end) ≤58 sn dikey Short üretir. Ek API maliyeti yok."""
+def write_ass_short(words, out, per_chunk=3):
+    """Shorts: büyük, ortada, konuşulan kelime sarı vurgulu (profesyonel Shorts stili)."""
+    head = f"""[Script Info]
+ScriptType: v4.00+
+PlayResX: {SW}
+PlayResY: {SH}
+WrapStyle: 0
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Big,Inter Display,92,&H00FFFFFF,&H00FFFFFF,&H00000000,&H90000000,-1,0,0,0,100,100,0,0,1,7,3,2,70,70,560,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+"""
+    ev = []
+    chunks, cur = [], []
+    for w in words:  # cümle sonunda yeni grup başlat
+        cur.append(w)
+        if len(cur) >= per_chunk or w["word"].strip()[-1:] in ".!?":
+            chunks.append(cur)
+            cur = []
+    if cur:
+        chunks.append(cur)
+    for chunk in chunks:
+        for j, w in enumerate(chunk):
+            a = w["start"]
+            b = chunk[j + 1]["start"] if j + 1 < len(chunk) else w["end"] + 0.1
+            parts = [("{\\c&H00D7FF&\\fscx108\\fscy108}" + _ass_esc(x["word"].strip().upper()) + "{\\r}")
+                     if k == j else _ass_esc(x["word"].strip().upper()) for k, x in enumerate(chunk)]
+            ev.append(f"Dialogue: 0,{_ass_time(a)},{_ass_time(b)},Big,,0,0,0,,{' '.join(parts)}")
+    Path(out).write_text(head + "\n".join(ev) + "\n", encoding="utf-8")
+    return out
+
+
+def _ass_filter(ass):
+    p = str(Path(ass).resolve()).replace("\\", "/").replace(":", "\\:").replace("'", "\\'")
+    fd = str(FONTS_DIR.resolve()).replace("\\", "/").replace(":", "\\:")
+    return f"ass='{p}':fontsdir='{fd}'"
+
+
+# ---------------------------------------------------------------- ses
+def to_wav(src, out, sr=24000, frames=None):
+    """Sesi mono WAV'a çevirir; 'frames' verilirse tam o video süresine kırpar/uzatır."""
+    args = ["ffmpeg", "-y", "-i", src, "-ac", "1", "-ar", sr]
+    if frames is not None:
+        args += ["-af", f"apad=whole_dur={frames / FPS:.4f}", "-t", f"{frames / FPS:.4f}"]
+    sh(args + [out])
+    return out
+
+
+# ---------------------------------------------------------------- final montaj
+def mux_master(video, narration, out, ass=None, music=None, music_db=-21.0, fade_out=1.5):
+    """Görüntü + anlatım + (konuşurken kısılan) müzik + altyazı → yayın kalitesinde çıktı."""
+    total = duration(video)
+    ins = ["-i", video, "-i", narration]
+    vf = f"[0:v]{_ass_filter(ass)}," if ass else "[0:v]"
+    vf += f"fade=t=out:st={max(total - fade_out, 0):.2f}:d={fade_out}[v]"
+    if music and Path(music).exists():
+        ins += ["-stream_loop", "-1", "-i", music]
+        af = (f"[1:a]aresample=48000,asplit=2[nar][key];"
+              f"[2:a]aresample=48000,volume={music_db}dB[mus];"
+              f"[mus][key]sidechaincompress=threshold=0.015:ratio=8:attack=20:release=450[duck];"
+              f"[nar][duck]amix=inputs=2:duration=first:normalize=0,"
+              f"loudnorm=I=-15:TP=-1.5:LRA=11,afade=t=out:st={max(total - fade_out, 0):.2f}:d={fade_out}[a]")
+    else:
+        af = (f"[1:a]aresample=48000,loudnorm=I=-15:TP=-1.5:LRA=11,"
+              f"afade=t=out:st={max(total - fade_out, 0):.2f}:d={fade_out}[a]")
+    sh(["ffmpeg", "-y", *ins, "-filter_complex", vf + ";" + af, "-map", "[v]", "-map", "[a]",
+        "-t", f"{total:.3f}", "-c:v", "libx264", "-preset", "medium", "-crf", "19",
+        "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-movflags", "+faststart", out])
+    return out
+
+
+def make_short(parts, out, workdir, music=None, tag="short", max_len=58.0):
+    """parts: [(sahne_videosu, sahne_sesi, sahne_kelimeleri)] → tam ekran 9:16 Short (≤58 sn).
+    Intro/outro içermez; konuşulan kelimeyi vurgulayan büyük altyazı."""
     workdir = Path(workdir)
-    end = len(segments) - 1 if end is None else min(end, len(segments) - 1)
-    offset = sum(scene_durs[:start])
-    take, total = [], 0.0
-    for seg, d in zip(segments[start:end + 1], scene_durs[start:end + 1]):
-        if total + d > max_len and take:
+    vids, auds, words, t = [], [], [], 0.0
+    for v, a, ws in parts:
+        d = duration(a)
+        if t + d > max_len and vids:
             break
-        take.append(seg)
-        total += d
-    total = min(total, max_len)
-    joined = concat(take, workdir / f"{tag}_join.mp4", workdir, f"{tag}_segs")
-    vcut = workdir / f"{tag}_voice.m4a"
-    sh(["ffmpeg", "-y", "-ss", f"{offset:.3f}", "-i", voice, "-t", f"{total:.3f}",
-        "-c:a", "aac", "-b:a", "192k", vcut])
-    local = [{"word": w["word"], "start": w["start"] - offset, "end": w["end"] - offset}
-             for w in words if w["start"] >= offset - 0.05 and w["end"] <= offset + total + 0.05]
-    srt = write_srt(local, workdir / f"{tag}.srt", per_line=3, until=total)
-    style = "FontName=DejaVu Sans,FontSize=16,Bold=1,Outline=3,Shadow=0,Alignment=2,MarginV=70"
-    fc = (f"[0:v]split[a][b];"
-          f"[a]scale={SW}:{SH}:force_original_aspect_ratio=increase,crop={SW}:{SH},boxblur=25:2,eq=brightness=-0.15[bg];"
-          f"[b]scale={SW}:-2[fg];[bg][fg]overlay=(W-w)/2:(H-h)/2-120,{_sub_filter(srt, style)}[v]")
-    sh(["ffmpeg", "-y", "-i", joined, "-i", vcut, "-filter_complex", fc,
-        "-map", "[v]", "-map", "1:a", "-t", f"{total:.3f}", "-c:v", "libx264", "-preset", "medium",
-        "-crf", "21", "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", out])
+        vids.append(v)
+        auds.append(a)
+        words += [{"word": w["word"], "start": w["start"] + t, "end": w["end"] + t} for w in ws]
+        t += d
+    total = min(t, max_len)
+    vjoin = concat(vids, workdir / f"{tag}_v.mp4", workdir, f"{tag}_v")
+    ajoin = workdir / f"{tag}_a.wav"
+    lst = workdir / f"{tag}_a.txt"
+    lst.write_text("".join(f"file '{Path(a).resolve()}'\n" for a in auds))
+    sh(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", lst, "-c", "copy", ajoin])
+    ass = write_ass_short([w for w in words if w["end"] <= total + 0.05], workdir / f"{tag}.ass")
+    vf = (f"[0:v]scale=-2:{SH},crop={SW}:{SH},eq=contrast=1.04:saturation=1.08,{_ass_filter(ass)},"
+          f"fade=t=out:st={max(total - 0.4, 0):.2f}:d=0.4[v]")
+    ins = ["-i", vjoin, "-i", ajoin]
+    if music and Path(music).exists():
+        ins += ["-stream_loop", "-1", "-i", music]
+        af = ("[1:a]aresample=48000,asplit=2[nar][key];[2:a]aresample=48000,volume=-20dB[mus];"
+              "[mus][key]sidechaincompress=threshold=0.015:ratio=8:attack=20:release=400[duck];"
+              "[nar][duck]amix=inputs=2:duration=first:normalize=0,loudnorm=I=-14:TP=-1.5[a]")
+    else:
+        af = "[1:a]aresample=48000,loudnorm=I=-14:TP=-1.5[a]"
+    sh(["ffmpeg", "-y", *ins, "-filter_complex", vf + ";" + af, "-map", "[v]", "-map", "[a]",
+        "-t", f"{total:.3f}", "-c:v", "libx264", "-preset", "medium", "-crf", "20",
+        "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", out])
     return out, total
 
 

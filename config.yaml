@@ -20,7 +20,8 @@ script_rules: >
   deep. Only well-established science and engineering facts; if a number is
   uncertain give a range or say "roughly". No filler, no "in today's video", no
   "smash the like button", no clickbait the video doesn't deliver. End with a
-  one-line takeaway.
+  one-line takeaway. Do NOT add a sign-off, greeting or "subscribe" line — the
+  channel's fixed closing line is added automatically.
 
 content_pillars:
   - "How a machine or device works, from the inside (engines, fridges, batteries, phones)"
@@ -63,6 +64,14 @@ voice:
   name: "af_heart"             # en yüksek kaliteli ses. Erkek: "am_michael" / İngiliz: "bm_george" (lang "b")
   lang: "a"                    # a = Amerikan İngilizcesi, b = İngiliz İngilizcesi
   speed: 0.95                  # belgesel temposu
+
+# ======================= KURGU / MARKA =======================
+use_intro: true                # 1. sahneden (merak uyandıran açılış) sonra 2.6 sn logo animasyonu
+outro_line: "And that's how it actually works. See you in the next Cutaway."
+outro_hold_seconds: 8          # kapanış cümlesinden sonra kapanış kartı ekranda kalma süresi
+shot_seconds: 4.5              # bir görüntünün ortalama ekranda kalma süresi (profesyonel tempo 3-6 sn)
+burn_captions: true            # uzun videoda ekrana gömülü sade altyazı
+music_db: -21                  # müzik seviyesi (anlatım varken ayrıca otomatik kısılır)
 
 # ======================= KALİTE =======================
 target_words: 1400             # ~9-10 dakika (8+ dk = ara reklam imkânı)

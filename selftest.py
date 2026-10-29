@@ -1,144 +1,68 @@
 """
-API anahtarı GEREKTİRMEYEN uçtan uca render testi.
-Sahte stok video, sahte diyagram ve sahte ses üretir; gerçek hattı (görsel seçimi,
-Ken Burns, altyazı, müzik, Short, thumbnail) çalıştırıp sonuçları doğrular.
-Çalıştır:  python selftest.py   → çıktılar selftest_out/ klasörüne
+API anahtarı GEREKTİRMEYEN uçtan uca test: sahte ses/görsel/servislerle gerçek kurgu hattını
+(çoklu çekim, intro, kapanış, müzik, altyazı, 3 tam ekran Short, Türkçe altyazı) çalıştırır.
+Çalıştır: python selftest.py  → çıktılar selftest_out/out/ altında
 """
-import json, shutil, sys
-from pathlib import Path
-
-from PIL import Image, ImageDraw
-
-import media
-import pipeline
-
-OUTDIR = Path(__file__).parent / "selftest_out"
-
-
-def probe(path):
-    out = media.sh(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries",
-                    "stream=width,height", "-of", "json", path])
-    s = json.loads(out)["streams"][0]
-    return s["width"], s["height"], media.duration(path)
-
-
-def fake_image(path, color, label):
-    im = Image.new("RGB", (1536, 1024), color)
-    d = ImageDraw.Draw(im)
-    for i in range(0, 1536, 96):
-        d.line([(i, 0), (i, 1024)], fill=(255, 255, 255), width=2)
-    d.ellipse([568, 312, 968, 712], outline=(0, 255, 255), width=12)
-    d.text((40, 40), label, fill="white", font=media._font(60))
-    im.save(path)
-    return path
-
-
-def main():
-    if OUTDIR.exists():
-        shutil.rmtree(OUTDIR)
-    w = OUTDIR / "work"
-    w.mkdir(parents=True)
-
-    # --- sahte stok video (720p, 5 sn — sahneden kısa: döngü testi)
-    clip = w / "stock.mp4"
-    media.sh(["ffmpeg", "-y", "-f", "lavfi", "-i", "testsrc2=size=1280x720:rate=30", "-t", "5",
-              "-c:v", "libx264", "-preset", "ultrafast", clip])
-
-    # --- sahte senaryo: 7 sahne, karışık görsel tipleri
-    durs = [7.5, 9.0, 8.0, 10.0, 12.0, 11.0, 9.5]
-    script = {"title": "How a Jet Engine Actually Works", "scenes": [
-        {"narration": f"Scene {i}", "visual": v, "broll_query": "q", "image_prompt": "p", "duration": d}
-        for i, (v, d) in enumerate(zip(["footage", "diagram", "footage", "footage", "diagram",
-                                        "footage", "footage"], durs))]}
-
-    # --- dış servisleri sahtele
-    calls = {"pexels": 0, "image": 0}
-
-    def fake_pexels(query, out, ledger):
-        calls["pexels"] += 1
-        if calls["pexels"] == 3:      # bir sahnede stok bulunamasın → diyagrama düşmeli
-            return None
-        if calls["pexels"] == 4:
-            return None
-        shutil.copy(clip, out)
-        ledger.add(1000 + calls["pexels"])
-        return out
-
-    def fake_gen_image(prompt, out, fallback_query=None, ledger=None):
-        calls["image"] += 1
-        return fake_image(out, (20, 30, 70), f"diagram {calls['image']}")
-
-    pipeline.fetch_stock = fake_pexels
-    pipeline.gen_image = fake_gen_image
-    pipeline.CFG["min_diagram_ratio"] = 0.4
-
-    # --- ses: gerçek voice.narrate akışı, Kokoro yerine sahte sentezleyici
-    import numpy as np
-    import voice as voice_mod
-
-    def fake_synth(text, v, lang, speed):  # ~14 karakter/sn konuşma + baş/son sessizlik
-        n = int(voice_mod.SR * max(len(text) / 14, 0.5))
-        tone = 0.3 * np.sin(np.linspace(0, 2 * np.pi * 220 * n / voice_mod.SR, n)).astype(np.float32)
-        sil = np.zeros(int(0.3 * voice_mod.SR), dtype=np.float32)
-        return np.concatenate([sil, tone, sil])
-
-    sentence = "Air is pulled into the front of the engine and squeezed hard. "
-    for i, d in enumerate(durs):
-        script["scenes"][i]["narration"] = (sentence * max(1, round(d / 4.6))).strip()
-    pipeline.CFG["voice"] = {"name": "af_heart", "lang": "a", "speed": 1.0}
-    _orig_narrate = voice_mod.narrate
-    voice_mod.narrate = lambda scenes, wd, **kw: _orig_narrate(scenes, wd, synth=fake_synth, **kw)
-    voice, words = pipeline.narrate(script, w)
-    total = media.duration(voice)
-    music = w / "music.mp3"
-    media.sh(["ffmpeg", "-y", "-f", "lavfi", "-i", "sine=frequency=220:duration=20", music])
-
-    # --- gerçek hattı çalıştır
-    ledger = media.AssetLedger(w / "assets_used.json")
-    segs = pipeline.build_segments(script, w, ledger)
-    ledger.save()
-    srt = media.write_srt(words, w / "subs.srt")
-    silent = media.concat(segs, w / "silent.mp4", w, "segs")
-    final = media.mux_final(silent, voice, srt, OUTDIR / "final.mp4", music=music)
-    short, slen = media.make_short(segs, [s["duration"] for s in script["scenes"]], voice, words,
-                                   OUTDIR / "short.mp4", w, music=music)
-    thumbs = []
-    for i, txt in enumerate(["JET ENGINE SECRET", "This Is How Planes Really Fly Through The Sky", "WHY?"]):
-        raw = fake_image(w / f"t{i}.png", (60 + 50 * i, 40, 20), "")
-        thumbs.append(media.compose_thumbnail(raw, txt, OUTDIR / f"thumb_{i}.jpg"))
-    media.contact_sheet(thumbs, OUTDIR / "thumbs_sheet.jpg")
-
-    # --- doğrulamalar
-    fails = []
-    fw, fh, fd = probe(final)
-    sw, shh, sd = probe(short)
-    diag = sum(1 for s in script["scenes"] if s["visual"] == "diagram")
-    checks = [
-        ("Ana video 1920x1080", (fw, fh) == (1920, 1080)),
-        (f"Ana video süresi sesle eşit ({fd:.2f} ≈ {total:.2f})", abs(fd - total) < 0.3),
-        ("Short 1080x1920", (sw, shh) == (1080, 1920)),
-        (f"Short ≤ 58 sn ({sd:.2f})", sd <= 58.5),
-        (f"Diyagram oranı ≥ %40 ({diag}/7)", diag >= 3),
-        (f"Stok bulunamayınca AI görsele düştü (görsel çağrısı: {calls['image']})", calls["image"] >= diag + 1),
-        ("Kanal geneli tekrar kaydı yazıldı", len(json.loads((w / "assets_used.json").read_text())) >= 1),
-        ("3 thumbnail 1280x720", all(Image.open(t).size == (1280, 720) for t in thumbs)),
-        (f"Altyazı kelimeleri sırayla ve ses içinde ({len(words)} kelime)",
-         all(a["start"] <= b["start"] for a, b in zip(words, words[1:])) and words[-1]["end"] <= total + 0.05),
-        ("Sahne süreleri toplamı = ses süresi",
-         abs(sum(s["duration"] for s in script["scenes"]) - total) < 0.1),
-    ]
-    for name, ok in checks:
-        print(("✅ " if ok else "❌ ") + name)
-        if not ok:
-            fails.append(name)
-
-    # inceleme için kareler
-    for name, src, ts in [("frame_footage", final, 2), ("frame_diagram", final, 10), ("frame_short", short, 12)]:
-        media.sh(["ffmpeg", "-y", "-ss", str(ts), "-i", src, "-frames:v", "1", OUTDIR / f"{name}.jpg"])
-
-    print("\nSONUÇ:", "TÜM TESTLER GEÇTİ" if not fails else f"{len(fails)} TEST BAŞARISIZ")
-    return 1 if fails else 0
-
-
-if __name__ == "__main__":
-    sys.exit(main())
+import os, sys, json, shutil, types
+REPO = str(__import__("pathlib").Path(__file__).resolve().parent); sys.path.insert(0, REPO)
+class MFU:
+    def __init__(s, f, **k): s._filename = f
+g = types.ModuleType("googleapiclient"); h = types.ModuleType("googleapiclient.http"); h.MediaFileUpload = MFU
+sys.modules["googleapiclient"] = g; sys.modules["googleapiclient.http"] = h
+os.environ.update(YT_REFRESH_TOKEN="x")
+import numpy as np
+import pipeline, media, publish, voice
+W = REPO + "/selftest_out"
+shutil.rmtree(W, ignore_errors=True); os.makedirs(W)
+shutil.copytree(REPO + "/assets", W + "/assets"); pipeline.ROOT = __import__("pathlib").Path(W); pipeline.HISTORY = pipeline.ROOT / "history.json"
+pipeline.OUT = pipeline.ROOT / "out"; pipeline.BRAND_DONE = pipeline.ROOT / "bd.json"; pipeline.RUNLOG = pipeline.ROOT / "run.txt"
+pipeline.CFG["publish_mode"] = "scheduled"; pipeline.CFG["branding"] = {}; pipeline.DRY_RUN = True
+pipeline.notify = lambda t: print("  📨", t.splitlines()[0])
+# --- içerik
+scenes = [{"narration": f"This is sentence number {i} about jet engines. It explains part {i} clearly.",
+           "visual": "diagram" if i % 3 == 0 else "footage", "broll_query": "jet", "image_prompt": "p"} for i in range(14)]
+script = {"title": "How a Jet Engine Works", "description": "Desc #a #b #c", "tags": ["jet", "engine", "science"],
+          "thumbnail_concepts": [{"image_prompt": "x", "text": "JET"}] * 3, "short_title": "Jet secret",
+          "shorts": [{"start_scene": 0, "end_scene": 2, "title": "Hook one"},
+                     {"start_scene": 5, "end_scene": 7, "title": "Middle part"},
+                     {"start_scene": 6, "end_scene": 9, "title": "OVERLAP - must be skipped"},
+                     {"start_scene": 10, "end_scene": 12, "title": "Ending part"}], "scenes": scenes}
+pipeline.publish.performance_report = lambda h: {"pillar_scores": {}, "best": [], "worst": [], "n": 0}
+pipeline.pick_topic = lambda h, r: {"title": "t", "angle": "a", "pillar": "p"}
+pipeline.write_script = lambda idea: json.loads(json.dumps(script))
+pipeline.verify_loop = lambda s: (s, True)
+pipeline.quality_gate = lambda s: (True, {})
+def fake_llm(system, user, required=(), images=None, judge=False):
+    if "Translate each line" in user:
+        lines = json.loads(user.split("\n", 1)[1].rsplit("\nReturn JSON", 1)[0])["lines"]
+        return {"lines": ["TR: " + l for l in lines]}
+    if "short_titles" in user:
+        d = json.loads(user.split("\nReturn JSON")[0])
+        return {"title": "Jet motoru nasıl çalışır", "description": "Açıklama", "short_titles": ["TR " + t for t in d["short_titles"]]}
+    raise AssertionError(user[:80])
+pipeline.llm_json = fake_llm
+def fake_synth(text, v, lang, speed):
+    n = int(voice.SR * max(len(text) / 14, .5)); sil = np.zeros(int(.2 * voice.SR), np.float32)
+    return np.concatenate([sil, (0.3 * np.sin(np.arange(n) / 20)).astype(np.float32), sil])
+_n = voice.narrate; voice.narrate = lambda sc, wd, **k: _n(sc, wd, synth=fake_synth, **k)
+clip = os.path.join(W, "stock.mp4")
+media.sh(["ffmpeg", "-y", "-f", "lavfi", "-i", "testsrc2=size=1280x720:rate=30", "-t", "4", "-c:v", "libx264", "-preset", "ultrafast", clip])
+def fake_stock(q, out, led): shutil.copy(clip, out); return out
+pipeline.fetch_stock = fake_stock
+from PIL import Image
+def fake_img(prompt, out, fq=None, led=None):
+    out = __import__("pathlib").Path(out).with_suffix(".jpg"); Image.new("RGB", (1024, 1024), (20, 40, 90)).save(out); return out
+pipeline.gen_image = fake_img
+pipeline.make_thumbnails = lambda s, w, l: fake_img("", w / "thumb.jpg")
+ups, caps = [], []
+def fake_upload(video, meta, thumb=None, uploader="youtube"):
+    vid = f"VID{len(ups)}xxxxxx"[:11]; ups.append((vid, meta, media.duration(video))); return vid
+def fake_caption(vid, path, lang, name):
+    txt = open(path, encoding="utf-8").read(); caps.append((vid, lang, txt))
+    if vid != "VID0xxxxxxx": assert lang == "tr"
+    return "c"
+publish.upload = fake_upload; publish.upload_caption = fake_caption
+pipeline.run_once()
+import glob
+out = pipeline.OUT
+print("OUT dosyaları:", sorted(p.name for p in out.glob("*")) if out.exists() else "-")

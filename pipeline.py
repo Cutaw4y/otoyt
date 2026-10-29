@@ -13,7 +13,7 @@ Servisler (hepsi ücretsiz): Gemini, Cloudflare Workers AI, Kokoro, Pexels, YouT
   DRY_RUN=1 python pipeline.py    # üret, yükleme yapma (out/ klasörüne kaydeder)
   python selftest.py              # API'siz render testi
 """
-import json, os, random, re, shutil, sys, tempfile, time, traceback
+import json, math, os, random, re, shutil, sys, tempfile, time, traceback
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -91,7 +91,7 @@ def load_json(path, default):
 
 
 def save_json(path, data):
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=2, default=str), encoding="utf-8")
 
 
 # ---------------------------------------------------------------- 1. konu (analitikle)
@@ -287,13 +287,30 @@ def quality_gate(script):
 
 # ---------------------------------------------------------------- 5. ses (Kokoro, ücretsiz)
 def narrate(script, workdir):
+    """Her sahne için kare-hizalı ses dosyası + sahneye göre kelime zamanları üretir."""
     v = CFG["voice"]
     files, durs, words = voice.narrate(script["scenes"], workdir, voice=v["name"], lang=v["lang"],
                                        speed=v.get("speed", 1.0))
-    for sc, d in zip(script["scenes"], durs):
-        sc["duration"] = d
-    full = media.concat(files, workdir / "voice.wav", workdir, "vo")
-    return full, words
+    off = 0.0
+    for i, (sc, f, d) in enumerate(zip(script["scenes"], files, durs)):
+        frames = int(math.ceil(d * media.FPS))
+        sc["frames"] = frames
+        sc["duration"] = frames / media.FPS
+        sc["voice"] = media.to_wav(f, workdir / f"vo_al_{i:02d}.wav", frames=frames)
+        sc["words"] = [{"word": w["word"], "start": w["start"] - off, "end": w["end"] - off}
+                       for w in words if off - 0.005 <= w["start"] < off + d - 0.005]
+        off += d
+    return script
+
+
+def narrate_line(text, workdir, tag):
+    """Tek bir cümleyi (ör. kapanış cümlesi) seslendirir: (dosya, süre, kelimeler)."""
+    v = CFG["voice"]
+    d = Path(workdir) / tag
+    d.mkdir(exist_ok=True)
+    files, durs, words = voice.narrate([{"narration": text}], d, voice=v["name"], lang=v["lang"],
+                                       speed=v.get("speed", 1.0))
+    return files[0], durs[0], words
 
 
 # ---------------------------------------------------------------- 6. görseller
@@ -306,19 +323,24 @@ def _download(url, out):
     return out
 
 
+_pixabay_cache = {}
+
+
 def fetch_pixabay(query, out, ledger):
     key = os.getenv("PIXABAY_API_KEY")
     if not key or not query:
         return None
-    try:
-        r = requests.get("https://pixabay.com/api/videos/",
-                         params={"key": key, "q": query[:100], "video_type": "film", "min_width": 1280,
-                                 "safesearch": "true", "per_page": 30}, timeout=30)
-        r.raise_for_status()
-    except Exception as e:
-        log(f"Pixabay hatası ({query}): {e}")
-        return None
-    hits = [h for h in r.json().get("hits", []) if not ledger.used(f"x{h['id']}")]
+    if query not in _pixabay_cache:  # aynı aramayı tekrar yapma (Pixabay kuralı: sonuçları önbellekle)
+        try:
+            r = requests.get("https://pixabay.com/api/videos/",
+                             params={"key": key, "q": query[:100], "video_type": "film", "min_width": 1280,
+                                     "safesearch": "true", "per_page": 50}, timeout=30)
+            r.raise_for_status()
+            _pixabay_cache[query] = r.json().get("hits", [])
+        except Exception as e:
+            log(f"Pixabay hatası ({query}): {e}")
+            return None
+    hits = [h for h in _pixabay_cache[query] if not ledger.used(f"x{h['id']}")]
     random.shuffle(hits)
     for h in hits[:5]:
         vs = h.get("videos", {})
@@ -451,7 +473,17 @@ def gen_image(prompt, out, fallback_query=None, ledger=None):
     raise RuntimeError("Ne AI görsel ne yedek fotoğraf bulunabildi")
 
 
-def build_segments(script, workdir, ledger):
+def _clip_start(clip, frames):
+    try:
+        cd = media.duration(clip)
+        room = cd - frames / media.FPS - 0.3
+        return random.uniform(0.2, room) if room > 0.4 else 0.0
+    except Exception:
+        return 0.0
+
+
+def build_scene_videos(script, workdir, ledger):
+    """Her sahneyi ~4-5 sn'lik çekimlere böler (profesyonel tempo), sahne videosunu döndürür."""
     style = CFG["visual_style"]
     scenes = script["scenes"]
     need = int(len(scenes) * CFG["min_diagram_ratio"] + 0.999)
@@ -462,22 +494,88 @@ def build_segments(script, workdir, ledger):
         if s.get("visual") != "diagram":
             s["visual"], have = "diagram", have + 1
 
-    segs, moves = [], ["in", "right", "out", "left"]
+    shot_sec = CFG.get("shot_seconds", 4.5)
     for i, sc in enumerate(scenes):
-        log(f"Sahne {i+1}/{len(scenes)} ({sc.get('visual')}, {sc['duration']:.1f} sn)")
-        seg = workdir / f"seg_{i:02d}.mp4"
-        clip = None
-        if sc.get("visual") != "diagram":
-            clip = fetch_stock(sc.get("broll_query", ""), workdir / f"raw_{i:02d}.mp4", ledger) \
-                or fetch_stock(CFG["fallback_broll"], workdir / f"raw_{i:02d}.mp4", ledger)
-        if clip:
-            media.render_footage(clip, sc["duration"], seg)
-        else:
+        shots = media.split_frames(sc["frames"], shot_sec)
+        log(f"Sahne {i+1}/{len(scenes)} ({sc.get('visual')}, {sc['duration']:.1f} sn, {len(shots)} çekim)")
+        q = sc.get("broll_query") or CFG["fallback_broll"]
+        img = None
+        if sc.get("visual") == "diagram":
             img = gen_image(f"{sc.get('image_prompt') or sc['narration']}. Style: {style}",
-                            workdir / f"img_{i:02d}.jpg", sc.get("broll_query"), ledger)
-            media.render_still(img, sc["duration"], seg, move=moves[i % 4])
-        segs.append(seg)
-    return segs
+                            workdir / f"img_{i:02d}.jpg", q, ledger)
+        files = []
+        for k, fr in enumerate(shots):
+            out = workdir / f"shot_{i:02d}_{k:02d}.mp4"
+            # diyagram sahnesi: diyagram (geniş) → stok → diyagram (detay) → stok ...
+            use_still = img is not None and (k % 2 == 0)
+            clip = None
+            if not use_still:
+                clip = fetch_stock(q, workdir / f"raw_{i:02d}_{k:02d}.mp4", ledger) \
+                    or (fetch_stock(CFG["fallback_broll"], workdir / f"raw_{i:02d}_{k:02d}.mp4", ledger)
+                        if img is None else None)
+            if clip:
+                media.render_footage(clip, fr, out, start=_clip_start(clip, fr))
+            else:
+                if img is None:
+                    img = gen_image(f"{sc.get('image_prompt') or sc['narration']}. Style: {style}",
+                                    workdir / f"img_{i:02d}.jpg", q, ledger)
+                if k == 0:
+                    move = random.choice(["in", "out"])
+                else:
+                    move = random.choice(["detail", "detail", "left", "right"])
+                media.render_still(img, fr, out, move=move,
+                                   focus=(random.uniform(0.3, 0.7), random.uniform(0.3, 0.7)))
+            files.append(out)
+        sc["video"] = media.concat(files, workdir / f"scene_{i:02d}.mp4", workdir, f"scene_{i:02d}")
+    return script
+
+
+def assemble(script, workdir, music):
+    """Hook (1. sahne) → marka intro → içerik → kapanış cümlesi + kapanış kartı. Kare hassasiyetinde."""
+    w = Path(workdir)
+    A = ROOT / "assets"
+    parts = []  # (video, ses, kelimeler)
+    sc = script["scenes"]
+    owners = [sc[0]]  # her parçanın hangi sahneye ait olduğu (intro/outro: None)
+    parts.append((sc[0]["video"], sc[0]["voice"], sc[0]["words"]))
+    intro = A / "intro.mp4"
+    if CFG.get("use_intro", True) and intro.exists():
+        fr = int(round(media.duration(intro) * media.FPS))
+        iv = w / "intro_v.mp4"
+        media.sh(["ffmpeg", "-y", "-i", intro, "-an", "-frames:v", fr, "-c:v", "libx264", "-preset", "veryfast",
+                  "-crf", "18", "-pix_fmt", "yuv420p", "-r", media.FPS, iv])
+        ia = media.to_wav(intro, w / "intro_a.wav", frames=fr)
+        parts.append((iv, ia, []))
+        owners.append(None)
+    for s in sc[1:]:
+        parts.append((s["video"], s["voice"], s["words"]))
+        owners.append(s)
+    # kapanış: her videoda aynı imza cümlesi + kapanış kartı
+    line = CFG.get("outro_line")
+    card = A / "outro.png"
+    if line and card.exists():
+        f, d, ws = narrate_line(line, w, "outro_vo")
+        fr = int(math.ceil((d + CFG.get("outro_hold_seconds", 8)) * media.FPS))
+        ov = media.render_still(card, fr, w / "outro_v.mp4", move="in")
+        oa = media.to_wav(f, w / "outro_a.wav", frames=fr)
+        parts.append((ov, oa, ws))
+        owners.append(None)
+    # birleştir
+    video = media.concat([p[0] for p in parts], w / "master_v.mp4", w, "master_v")
+    lst = w / "master_a.txt"
+    lst.write_text("".join(f"file '{Path(p[1]).resolve()}'\n" for p in parts))
+    nar = w / "master_a.wav"
+    media.sh(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", lst, "-c", "copy", nar])
+    words, t = [], 0.0
+    for (v, a, ws), own in zip(parts, owners):
+        if own is not None:
+            own["t0"] = t  # sahnenin ana videodaki başlangıç anı (Short altyazıları için)
+        words += [{"word": x["word"], "start": x["start"] + t, "end": x["end"] + t} for x in ws]
+        t += media.duration(a)
+    ass = media.write_ass_long(words, w / "captions.ass") if CFG.get("burn_captions", True) else None
+    final = media.mux_master(video, nar, w / "final.mp4", ass=ass, music=music,
+                             music_db=CFG.get("music_db", -21.0))
+    return final, words
 
 
 # ---------------------------------------------------------------- 6a. altyazı çevirisi
@@ -679,22 +777,20 @@ def run_once():
     with tempfile.TemporaryDirectory() as tmp:
         w = Path(tmp)
         log("Seslendirme başlıyor (Kokoro)...")
-        voice_file, words = narrate(script, w)
-        log(f"Seslendirme: {media.duration(voice_file):.0f} sn")
-        srt = media.write_srt(words, w / "subs.srt")
-        segs = build_segments(script, w, ledger)
-        silent = media.concat(segs, w / "silent.mp4", w, "segs")
+        narrate(script, w)
+        log(f"Seslendirme: {sum(s['duration'] for s in script['scenes']):.0f} sn")
+        build_scene_videos(script, w, ledger)
         music = ROOT / "assets" / "music.mp3"
-        final = media.mux_final(silent, voice_file, srt, w / "final.mp4", music=music)
+        final, words = assemble(script, w, music)
         log(f"Ana video: {media.duration(final):.0f} sn")
 
         shorts = []
         if CFG.get("make_shorts", True):
-            durs = [s["duration"] for s in script["scenes"]]
             for k, plan in enumerate(plan_shorts(script)):
                 try:
-                    f, slen = media.make_short(segs, durs, voice_file, words, w / f"short_{k+1}.mp4", w,
-                                               music=music, start=plan["start"], end=plan["end"], tag=f"short{k+1}")
+                    rng = script["scenes"][plan["start"]:plan["end"] + 1]
+                    f, slen = media.make_short([(s["video"], s["voice"], s["words"]) for s in rng],
+                                               w / f"short_{k+1}.mp4", w, music=music, tag=f"short{k+1}")
                     if slen >= 15:
                         shorts.append({**plan, "file": f, "len": slen})
                         log(f"Short {k+1}: sahne {plan['start']}-{plan['end']}, {slen:.0f} sn — {plan['title']}")
@@ -775,7 +871,7 @@ def run_once():
                         "description": f"{trt[k]}\n\nVideonun tamamı: https://youtu.be/{vid}\n#Shorts"}}
                 sid = publish.upload(sh_["file"], m_short, None, up)
                 if tr_blocks and up == "youtube":
-                    off = sum(s["duration"] for s in script["scenes"][:sh_["start"]])
+                    off = script["scenes"][sh_["start"]].get("t0", 0.0)
                     sp = media.write_srt_blocks(shift_blocks(tr_blocks, off, sh_["len"]),
                                                 w / f"short{k+1}_{sub_lang['code']}.srt")
                     try:
