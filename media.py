@@ -5,12 +5,25 @@ Bu dosyadaki fonksiyonlar API çağırmaz (ffmpeg + Pillow); selftest.py ile çe
 """
 import json
 import random
+import re
 import subprocess
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 W, H, FPS = 1920, 1080, 30
+LANG = "en"              # pipeline kanal diline göre ayarlar
+CHAPTER_LABEL = "CHAPTER"
+# Altyazı katmanı renkleri (ASS biçimi &HAABBGGRR); kanal config'i "caption_theme" ile değiştirir
+THEME = {"chap_num": "&H00F0E05E", "chap_box": "&H00201B0B", "callout_box": "&H003CA0FF",
+         "callout_text": "&H00201B0B"}
+
+
+def up(text):
+    """Dile uygun BÜYÜK HARF (Türkçede i→İ, ı→I)."""
+    if LANG == "tr":
+        text = text.replace("i", "İ").replace("ı", "I")
+    return text.upper()
 SW, SH = 1080, 1920  # Shorts
 FONT_BOLD = "DejaVuSans-Bold.ttf"
 
@@ -122,7 +135,8 @@ def srt_blocks(words, per_line=6, until=None, gap=0.6):
     for i, w in enumerate(ws):
         cur.append(w)
         nxt = ws[i + 1] if i + 1 < len(ws) else None
-        sentence_end = w["word"].strip()[-1:] in ".!?" and len(cur) >= 3
+        sentence_end = (w["word"].strip()[-1:] in ".!?" and len(cur) >= 3
+                        and not re.fullmatch(r"\d+\.", w["word"].strip()))
         pause = nxt is not None and nxt["start"] - w["end"] > gap
         if len(cur) >= per_line or sentence_end or pause or nxt is None:
             out.append((cur[0]["start"], cur[-1]["end"], " ".join(x["word"].strip() for x in cur)))
@@ -164,9 +178,9 @@ WrapStyle: 0
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
 Style: Cap,Inter Display,54,&H00FFFFFF,&H00FFFFFF,&H00201812,&H80000000,-1,0,0,0,100,100,0,0,1,3,2,2,160,160,64,1
-Style: ChapNum,Inter Display,30,&H00F0E05E,&H00FFFFFF,&H00201B0B,&H00000000,-1,0,0,0,100,100,3,0,3,14,0,7,90,90,78,1
-Style: ChapTitle,Inter Display,58,&H00FAF4EE,&H00FFFFFF,&H00201B0B,&H00000000,-1,0,0,0,100,100,0,0,3,18,0,7,90,90,128,1
-Style: Callout,Inter Display,50,&H00201B0B,&H00FFFFFF,&H003CA0FF,&H00000000,-1,0,0,0,100,100,1,0,3,12,0,9,90,90,84,1
+Style: ChapNum,Inter Display,30,{THEME['chap_num']},&H00FFFFFF,{THEME['chap_box']},&H00000000,-1,0,0,0,100,100,3,0,3,14,0,7,90,90,78,1
+Style: ChapTitle,Inter Display,58,&H00FAF4EE,&H00FFFFFF,{THEME['chap_box']},&H00000000,-1,0,0,0,100,100,0,0,3,18,0,7,90,90,128,1
+Style: Callout,Inter Display,50,{THEME['callout_text']},&H00FFFFFF,{THEME['callout_box']},&H00000000,-1,0,0,0,100,100,1,0,3,12,0,9,90,90,84,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
@@ -175,12 +189,12 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
           for a, b, t in srt_blocks(words, per_line)]
     for t, title, n in chapters:
         a, b = _ass_time(t + 0.2), _ass_time(t + 3.4)
-        ev.append(f"Dialogue: 2,{a},{b},ChapNum,,0,0,0,,{{\\fad(250,300)\\move(60,78,90,78)}}CHAPTER {n}")
+        ev.append(f"Dialogue: 2,{a},{b},ChapNum,,0,0,0,,{{\\fad(250,300)\\move(60,78,90,78)}}{CHAPTER_LABEL} {n}")
         ev.append(f"Dialogue: 2,{a},{b},ChapTitle,,0,0,0,,{{\\fad(300,300)\\move(60,128,90,128)}}"
-                  f"{_ass_esc(title.upper())}")
+                  f"{_ass_esc(up(title))}")
     for t, text in callouts:
         ev.append(f"Dialogue: 1,{_ass_time(t)},{_ass_time(t + 3.0)},Callout,,0,0,0,,"
-                  f"{{\\fad(200,250)}}{_ass_esc(text.upper())}")
+                  f"{{\\fad(200,250)}}{_ass_esc(up(text))}")
     Path(out).write_text(head + "\n".join(ev) + "\n", encoding="utf-8")
     return out
 
@@ -213,8 +227,8 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         for j, w in enumerate(chunk):
             a = w["start"]
             b = chunk[j + 1]["start"] if j + 1 < len(chunk) else w["end"] + 0.1
-            parts = [("{\\c&H00D7FF&\\fscx108\\fscy108}" + _ass_esc(x["word"].strip().upper()) + "{\\r}")
-                     if k == j else _ass_esc(x["word"].strip().upper()) for k, x in enumerate(chunk)]
+            parts = [("{\\c&H00D7FF&\\fscx108\\fscy108}" + _ass_esc(up(x["word"].strip())) + "{\\r}")
+                     if k == j else _ass_esc(up(x["word"].strip())) for k, x in enumerate(chunk)]
             ev.append(f"Dialogue: 0,{_ass_time(a)},{_ass_time(b)},Big,,0,0,0,,{' '.join(parts)}")
     Path(out).write_text(head + "\n".join(ev) + "\n", encoding="utf-8")
     return out
@@ -336,7 +350,7 @@ def compose_thumbnail(image, text, out, accent=(255, 168, 60), logo=None):
     im = Image.composite(Image.new("RGB", im.size, (0, 0, 0)), im, shade)
 
     d = ImageDraw.Draw(im)
-    text = text.upper().strip()
+    text = up(text).strip()
     size = 130
     while size >= 56:
         f = _font(size)

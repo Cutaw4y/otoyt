@@ -21,3 +21,5 @@
 [19:13:51] Seslendirme başlıyor (Kokoro)...
 [19:21:35] Seslendirme: 438 sn
 [19:21:35] Sahne 1/32 (footage, 17.9 sn, 4 çekim)
+[22:52:35] Doğrulama kaynağı: Google araması
+[22:52:35] Cloudflare günlük ücretsiz kota doldu: {"errors": [{"message": "you have used up your daily free allocation of 10,000 neurons"}]} → bu video için Pexels fotoğraflarına geçiliyor

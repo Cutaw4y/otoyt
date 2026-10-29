@@ -1,6 +1,7 @@
 # ======================= KANAL KİMLİĞİ =======================
 # Niş: Education & Science (2026 verisinde en yüksek medyan RPM'li kategori)
 channel_name: "Cutaway"        # kanal adını değiştirirsen burayı da değiştir
+notify_prefix: "🔧 Cutaway |"   # Telegram mesajlarında hangi kanal olduğu
 channel_brief: >
   Science and engineering behind everyday things and
   giant systems. Each video takes ONE thing (a jet engine, a dam, GPS, a

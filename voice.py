@@ -20,8 +20,14 @@ def _pipeline(lang):
 
 
 def split_sentences(text):
-    parts = re.split(r"(?<=[.!?…])\s+", text.strip())
-    return [p.strip() for p in parts if p.strip()]
+    parts = [p.strip() for p in re.split(r"(?<=[.!?…])\s+", text.strip()) if p.strip()]
+    out = []
+    for p in parts:  # Türkçe sıra sayıları ("3. gece", "19. yüzyıl") cümle sonu değildir
+        if out and re.search(r"(^|\s)\d+\.$", out[-1]) and p[:1].islower():
+            out[-1] += " " + p
+        else:
+            out.append(p)
+    return out
 
 
 def _to_np(audio):
@@ -95,6 +101,64 @@ def narrate(scenes, workdir, voice="af_heart", lang="a", speed=1.0,
             t += gap
         f = write_wav(np.concatenate(pieces), workdir / f"vo_{i:02d}.wav")
         dur = sum(p.size for p in pieces) / SR
+        files.append(f)
+        durs.append(dur)
+        offset += dur
+    return files, durs, words
+
+
+# ---------------------------------------------------------------- Gemini (Türkçe dahil) seslendirme
+def sentence_bounds(a, n, sr=SR, min_gap=0.16, thr=0.012):
+    """Sahne sesinde n cümlenin sınırlarını, cümle arası sessizliklerden bulur.
+    Dönüş: [(başlangıç_sn, bitiş_sn)] × n. Sessizlik yetmezse metin uzunluğuna göre bölmeye bırakır (None)."""
+    if n <= 1:
+        return [(0.0, a.size / sr)]
+    win = int(0.01 * sr)
+    k = a.size // win
+    if k < 5:
+        return None
+    energy = np.sqrt((a[:k * win].reshape(k, win) ** 2).mean(axis=1))
+    silent = energy < thr
+    gaps, i = [], 0
+    while i < k:
+        if silent[i]:
+            j = i
+            while j < k and silent[j]:
+                j += 1
+            if (j - i) * 0.01 >= min_gap and i > 0 and j < k:
+                gaps.append(((j - i), (i + j) / 2 * 0.01))
+            i = j
+        else:
+            i += 1
+    if len(gaps) < n - 1:
+        return None
+    cuts = sorted(c for _, c in sorted(gaps, reverse=True)[:n - 1])
+    edges = [0.0] + cuts + [a.size / sr]
+    return [(edges[i], edges[i + 1]) for i in range(n)]
+
+
+def narrate_gemini(scenes, workdir, voice="Charon", style=None, models=None, scene_gap=0.45):
+    """Her sahneyi tek istekte seslendirir (doğal akış), cümle sınırlarını sessizliklerden bulur."""
+    import ai
+    workdir = Path(workdir)
+    files, durs, words, offset = [], [], [], 0.0
+    for i, sc in enumerate(scenes):
+        sents = split_sentences(sc["narration"])
+        a = _trim(ai.gemini_tts(sc["narration"], voice=voice, style=style,
+                                models=models or ("gemini-3.1-flash-tts-preview",)))
+        d = a.size / SR
+        bounds = sentence_bounds(a, len(sents))
+        if bounds is None:  # sessizlik bulunamazsa metin uzunluğuna göre orantıla
+            lens = [len(s) + 4 for s in sents]
+            tot, t, bounds = sum(lens), 0.0, []
+            for L in lens:
+                bounds.append((t, t + d * L / tot))
+                t += d * L / tot
+        for s, (b0, b1) in zip(sents, bounds):
+            words += word_timings(s, offset + b0, max(b1 - b0, 0.2))
+        full = np.concatenate([a, np.zeros(int(scene_gap * SR), dtype=np.float32)])
+        f = write_wav(full, workdir / f"vo_{i:02d}.wav")
+        dur = full.size / SR
         files.append(f)
         durs.append(dur)
         offset += dur

@@ -1,0 +1,88 @@
+name: OtoYT (Gölgedefter)
+
+on:
+  schedule:
+    - cron: "31 9 * * 2,4,6"   # Sal/Per/Cmt 09:31 UTC (12:31 TR) — Cutaway ile aynı güne düşmez (YouTube kotası)
+  workflow_dispatch:            # "Run workflow" butonu = senin "Çalıştır" tuşun
+    inputs:
+      dry_run:
+        description: "Test modu: video üret ama YouTube'a yükleme"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write               # history.json / assets_used.json kaydı için
+
+concurrency: otoyt
+
+env:
+  OTOYT_CONFIG: channels/golgedefter.yaml
+
+jobs:
+  produce:
+    runs-on: ubuntu-24.04   # sabit sürüm: Ubuntu 26 geçişinde paketler bozulmasın
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Ses modeli önbelleği (her seferinde indirmesin)
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: kokoro-${{ hashFiles('config.yaml') }}
+          restore-keys: kokoro-
+      - name: Bağımlılıklar
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg fonts-dejavu-core espeak-ng
+          pip install -q torch --index-url https://download.pytorch.org/whl/cpu
+          pip install -q -r requirements.txt
+      - name: Video üret ve yükle
+        env:
+          DRY_RUN: ${{ inputs.dry_run && '1' || '' }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_PAID_API_KEY: ${{ secrets.GEMINI_PAID_API_KEY }}
+          YT2_CLIENT_ID: ${{ secrets.YT2_CLIENT_ID }}
+          YT2_CLIENT_SECRET: ${{ secrets.YT2_CLIENT_SECRET }}
+          YT2_REFRESH_TOKEN: ${{ secrets.YT2_REFRESH_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+          AYRSHARE_API_KEY: ${{ secrets.AYRSHARE_API_KEY }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          WHATSAPP_PHONE: ${{ secrets.WHATSAPP_PHONE }}
+          WHATSAPP_APIKEY: ${{ secrets.WHATSAPP_APIKEY }}
+        run: |
+          set +e
+          OTOYT_ATTEMPT=1 python pipeline.py; code=$?
+          if [ $code -eq 3 ]; then
+            echo "Yükleme öncesi hata → 10 dk sonra yeniden deneniyor"; sleep 600
+            OTOYT_ATTEMPT=2 python pipeline.py; code=$?
+          fi
+          exit $code
+      - name: Üretilen videoyu sakla (test modu veya yükleme hatası)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: golgedefter-${{ github.run_number }}
+          path: out/
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Geçmişi kaydet
+        if: always()
+        run: |
+          git config user.name "otoyt-bot"
+          git config user.email "otoyt@users.noreply.github.com"
+          git add -A data/golgedefter
+          git diff --cached --quiet && exit 0
+          git commit -m "golgedefter: $(date -u +%F)"
+          git pull --rebase -q && git push

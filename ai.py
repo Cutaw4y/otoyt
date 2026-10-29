@@ -153,3 +153,45 @@ def cloudflare_image(prompt, out, model="@cf/black-forest-labs/flux-1-schnell", 
         last = f"{r.status_code} {r.text[:300]}"
         time.sleep(8 * (attempt + 1))
     raise RuntimeError(f"Cloudflare görsel üretemedi: {last}")
+
+
+def gemini_tts(text, voice="Charon", style=None, models=("gemini-3.1-flash-tts-preview",), tries=5):
+    """Gemini ile seslendirme (Türkçe dahil). Dönüş: 24 kHz mono float32 numpy dizisi.
+    'style' doğal dille üslup talimatıdır (ör. 'kısık, gizemli bir belgesel anlatıcısı gibi oku')."""
+    import numpy as np
+    key = os.environ["GEMINI_API_KEY"]
+    prompt = f"{style}:\n{text}" if style else text
+    body = {"contents": [{"role": "user", "parts": [{"text": prompt}]}],
+            "generationConfig": {"responseModalities": ["AUDIO"],
+                                 "speechConfig": {"voiceConfig": {"prebuiltVoiceConfig": {"voiceName": voice}}}}}
+    last = None
+    for model in models:
+        for attempt in range(tries):
+            try:
+                r = requests.post(f"{GEMINI}/{model}:generateContent", headers={"x-goog-api-key": key},
+                                  json=body, timeout=300)
+            except requests.RequestException as e:
+                last = e
+                time.sleep(10 * (attempt + 1))
+                continue
+            if r.status_code in (429, 500, 502, 503, 504):
+                last = f"{r.status_code} {r.text[:200]}"
+                wait = _retry_delay(r, attempt)
+                LOG(f"Gemini TTS {model} {r.status_code} → {wait:.0f} sn bekleniyor")
+                time.sleep(wait)
+                continue
+            if r.status_code in (400, 403, 404):
+                last = f"{model}: {r.status_code} {r.text[:300]}"
+                LOG(f"Gemini TTS {model} kullanılamadı: {r.status_code} {r.text[:150]}")
+                break
+            try:
+                parts = r.json()["candidates"][0]["content"]["parts"]
+                b64 = next(p["inlineData"]["data"] for p in parts if "inlineData" in p)
+                pcm = np.frombuffer(base64.b64decode(b64), dtype="<i2").astype(np.float32) / 32768.0
+                if pcm.size > 2400:
+                    return pcm
+                last = "boş ses"
+            except Exception as e:
+                last = f"yanıt çözülemedi: {e}"
+            time.sleep(5)
+    raise RuntimeError(f"Gemini TTS ses üretemedi: {last}")

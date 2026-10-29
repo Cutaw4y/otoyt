@@ -26,19 +26,32 @@ import publish
 import voice
 
 ROOT = Path(__file__).parent
-CFG = yaml.safe_load((ROOT / "config.yaml").read_text(encoding="utf-8"))
-HISTORY = ROOT / "history.json"
+# Kanal seçimi: OTOYT_CONFIG=channels/golgedefter.yaml gibi (varsayılan: Cutaway → config.yaml)
+CONFIG_PATH = ROOT / os.getenv("OTOYT_CONFIG", "config.yaml")
+CFG = yaml.safe_load(CONFIG_PATH.read_text(encoding="utf-8"))
+# Kanal başına anahtar eşlemesi (ör. YT_REFRESH_TOKEN ← YT2_REFRESH_TOKEN)
+for _k, _v in (CFG.get("env_map") or {}).items():
+    if os.getenv(_v):
+        os.environ[_k] = os.environ[_v]
+DATA = ROOT / CFG.get("data_dir", ".")          # kanalın geçmiş/kayıt dosyaları
+ASSETS = ROOT / CFG.get("assets_dir", "assets")  # kanalın logo/intro/müzik dosyaları
+DATA.mkdir(parents=True, exist_ok=True)
+HISTORY = DATA / "history.json"
 OUT = ROOT / "out"
 DRY_RUN = os.getenv("DRY_RUN", "").lower() in ("1", "true", "yes")
 UPLOAD_STARTED = False   # True olduktan sonra hata olursa otomatik tekrar deneme YAPILMAZ (çift yükleme olmasın)
 
 
 # ---------------------------------------------------------------- yardımcılar
-RUNLOG = ROOT / "logs" / "last_run.txt"
+RUNLOG = DATA / "logs" / "last_run.txt"
+media.LANG = CFG.get("language_code", "en")
+media.CHAPTER_LABEL = CFG.get("chapter_label", "CHAPTER")
+media.THEME.update(CFG.get("caption_theme") or {})
 _SECRET_ENVS = ("GEMINI_API_KEY", "CLOUDFLARE_ACCOUNT_ID", "CLOUDFLARE_API_TOKEN", "PIXABAY_API_KEY",
                 "PEXELS_API_KEY", "YT_CLIENT_ID", "YT_CLIENT_SECRET", "YT_REFRESH_TOKEN", "AYRSHARE_API_KEY",
                 "IG_ACCESS_TOKEN", "IG_USER_ID", "TELEGRAM_BOT_TOKEN", "TELEGRAM_CHAT_ID",
-                "WHATSAPP_PHONE", "WHATSAPP_APIKEY")
+                "WHATSAPP_PHONE", "WHATSAPP_APIKEY", "YT2_CLIENT_ID", "YT2_CLIENT_SECRET",
+                "YT2_REFRESH_TOKEN", "GEMINI_PAID_API_KEY")
 
 
 def redact(text):
@@ -64,6 +77,8 @@ def log(msg):
 
 def notify(text):
     """Telegram ve/veya WhatsApp'a (CallMeBot) bildirim. Hangisinin anahtarı varsa ona gider."""
+    if CFG.get("notify_prefix"):  # birden çok kanal: mesaj hangi kanaldan geliyor belli olsun
+        text = f"{CFG['notify_prefix']} {text}"
     tok, chat = os.getenv("TELEGRAM_BOT_TOKEN"), os.getenv("TELEGRAM_CHAT_ID")
     if tok and chat:
         try:
@@ -135,7 +150,7 @@ def pick_topic(history, report):
 SCRIPT_SCHEMA = (
     'Return JSON: {"title":"<=70 chars","description":"150-300 words, include 3 hashtags",'
     '"tags":["8-15 tags"],'
-    '"thumbnail_concepts":[{"image_prompt":"visual concept, NO text in image","text":"2-4 punchy words"}],'
+    '"thumbnail_concepts":[{"image_prompt":"IN ENGLISH: visual concept, NO text in image","text":"2-4 punchy words"}],'
     '"short_title":"<=60 chars hook title for the Shorts cut",'
     '"shorts":[{"start_scene":0,"end_scene":2,"title":"<=60 chars curiosity hook title",'
     '"hook":"why this clip works on its own"}],'
@@ -143,7 +158,7 @@ SCRIPT_SCHEMA = (
     'CTA to watch the full video on YouTube via link in bio, then 5-8 relevant hashtags",'
     '"scenes":[{"narration":"2-3 sentences","visual":"footage or diagram",'
     '"broll_query":"2-4 word English stock footage query",'
-    '"image_prompt":"explanatory illustration of exactly what this scene explains",'
+    '"image_prompt":"IN ENGLISH: illustration of exactly what this scene explains",'
     '"chapter":"short chapter title (2-5 words) ONLY if a new chapter starts at this scene, else empty",'
     '"callout":"on-screen label, max 5 words: the key number, term or comparison of this scene, or empty"}]}\n'
     "Split the video into 4-7 chapters; scene 0 must start the first chapter. Chapter titles are clear "
@@ -209,35 +224,43 @@ def revise_script(script, notes):
 
 
 # ---------------------------------------------------------------- 3. bilgi doğrulama (Google aramalı)
-WIKI = "https://en.wikipedia.org/w/api.php"
-WIKI_HEADERS = {"User-Agent": "OtoYT-Cutaway/1.0 (educational fact-checking; https://cutaw4y.github.io)"}
+WIKI_HEADERS = {"User-Agent": "OtoYT/1.0 (educational fact-checking; https://cutaw4y.github.io)"}
+
+
+def _wiki(lang):
+    return f"https://{lang}.wikipedia.org/w/api.php"
 
 
 def wikipedia_sources(script, max_pages=4, chars=6000):
-    """Konuyla ilgili Wikipedia makalelerinin metnini çeker (ücretsiz, kotasız)."""
-    queries = [script["title"]] + [s.get("broll_query", "") for s in script["scenes"][:3]]
-    titles = []
-    for q in queries:
-        if not q or len(titles) >= max_pages:
-            continue
-        try:
-            r = requests.get(WIKI, headers=WIKI_HEADERS, timeout=30, params={
-                "action": "query", "list": "search", "srsearch": q[:200], "srlimit": 2, "format": "json"})
-            for h in r.json().get("query", {}).get("search", []):
-                if h["title"] not in titles:
-                    titles.append(h["title"])
-        except Exception as e:
-            log(f"Wikipedia arama hatası: {e}")
+    """Konuyla ilgili Wikipedia makalelerini çeker (ücretsiz, kotasız). Kanalın dillerinde arar:
+    ör. Türkçe kanal için önce tr.wikipedia (başlıkla), sonra en.wikipedia (İngilizce anahtar kelimelerle)."""
+    langs = CFG.get("wiki_langs", ["en"])
+    en_q = [s.get("broll_query", "") for s in script["scenes"][:3]]
+    found = []  # (dil, başlık)
+    for lang in langs:
+        queries = ([script["title"]] + ([] if lang != "en" else en_q)) if lang == langs[0] else \
+                  ([script.get("search_en") or script["title"]] + en_q if lang == "en" else [script["title"]])
+        for q in queries:
+            if not q or len(found) >= max_pages:
+                continue
+            try:
+                r = requests.get(_wiki(lang), headers=WIKI_HEADERS, timeout=30, params={
+                    "action": "query", "list": "search", "srsearch": q[:200], "srlimit": 2, "format": "json"})
+                for h in r.json().get("query", {}).get("search", []):
+                    if (lang, h["title"]) not in found:
+                        found.append((lang, h["title"]))
+            except Exception as e:
+                log(f"Wikipedia ({lang}) arama hatası: {e}")
     sources = []
-    for t in titles[:max_pages]:
+    for lang, t in found[:max_pages]:
         try:
-            r = requests.get(WIKI, headers=WIKI_HEADERS, timeout=30, params={
+            r = requests.get(_wiki(lang), headers=WIKI_HEADERS, timeout=30, params={
                 "action": "query", "prop": "extracts", "explaintext": 1, "titles": t,
                 "format": "json", "redirects": 1})
             for pg in r.json().get("query", {}).get("pages", {}).values():
                 txt = (pg.get("extract") or "").strip()
                 if txt:
-                    sources.append(f"### {pg.get('title')}\n{txt[:chars]}")
+                    sources.append(f"### [{lang}] {pg.get('title')}\n{txt[:chars]}")
         except Exception as e:
             log(f"Wikipedia okuma hatası: {e}")
     return sources
@@ -247,7 +270,7 @@ def _claims_prompt(script, how):
     text = "\n".join(s["narration"] for s in script["scenes"])
     return ("You are a rigorous fact-checker for an educational YouTube video. Extract every specific, checkable "
             "factual claim (numbers, dates, how-something-works statements, superlatives) from the script below, "
-            f"max 15. {how} Be strict.\n\n"
+            f"max 15. {how} {CFG.get('factcheck_note', '')} Be strict.\n\n"
             f"Title: {script['title']}\nScript:\n{text}\n\n"
             'Return ONLY JSON, no other text: {"claims":[{"claim":"...","verdict":"correct|wrong|uncertain",'
             '"correction":"correct version if wrong/uncertain"}]}')
@@ -319,11 +342,18 @@ def quality_gate(script):
 
 
 # ---------------------------------------------------------------- 5. ses (Kokoro, ücretsiz)
+def _tts(scenes, workdir):
+    """Kanalın ses sağlayıcısı: kokoro (ücretsiz, İngilizce) veya gemini (Türkçe dahil, doğal)."""
+    v = CFG["voice"]
+    if v.get("provider") == "gemini":
+        return voice.narrate_gemini(scenes, workdir, voice=v.get("name", "Charon"), style=v.get("style"),
+                                    models=v.get("models"))
+    return voice.narrate(scenes, workdir, voice=v["name"], lang=v["lang"], speed=v.get("speed", 1.0))
+
+
 def narrate(script, workdir):
     """Her sahne için kare-hizalı ses dosyası + sahneye göre kelime zamanları üretir."""
-    v = CFG["voice"]
-    files, durs, words = voice.narrate(script["scenes"], workdir, voice=v["name"], lang=v["lang"],
-                                       speed=v.get("speed", 1.0))
+    files, durs, words = _tts(script["scenes"], workdir)
     off = 0.0
     for i, (sc, f, d) in enumerate(zip(script["scenes"], files, durs)):
         frames = int(math.ceil(d * media.FPS))
@@ -338,11 +368,9 @@ def narrate(script, workdir):
 
 def narrate_line(text, workdir, tag):
     """Tek bir cümleyi (ör. kapanış cümlesi) seslendirir: (dosya, süre, kelimeler)."""
-    v = CFG["voice"]
     d = Path(workdir) / tag
     d.mkdir(exist_ok=True)
-    files, durs, words = voice.narrate([{"narration": text}], d, voice=v["name"], lang=v["lang"],
-                                       speed=v.get("speed", 1.0))
+    files, durs, words = _tts([{"narration": text}], d)
     return files[0], durs[0], words
 
 
@@ -566,7 +594,7 @@ def build_scene_videos(script, workdir, ledger):
 def assemble(script, workdir, music):
     """Hook (1. sahne) → marka intro → içerik → kapanış cümlesi + kapanış kartı. Kare hassasiyetinde."""
     w = Path(workdir)
-    A = ROOT / "assets"
+    A = ASSETS
     parts = []  # (video, ses, kelimeler)
     sc = script["scenes"]
     owners = [sc[0]]  # her parçanın hangi sahneye ait olduğu (intro/outro: None)
@@ -679,7 +707,7 @@ def build_chapters(script, total_len, min_len=12.0):
     for i, s in enumerate(sc):
         t = (s.get("chapter") or "").strip()
         if i == 0:
-            raw.append((0.0, t or "Introduction"))
+            raw.append((0.0, t or CFG.get("intro_chapter", "Introduction")))
         elif t:
             raw.append((s.get("t0", 0.0), t))
     out = []
@@ -726,6 +754,8 @@ def explain_error(text):
 
 
 def tr_title(tr_meta, en_title):
+    if CFG.get("language_code") == "tr":  # Türkçe kanal: ana başlık zaten Türkçe
+        return en_title
     t = (tr_meta or {}).get("title")
     return f"{t}\n({en_title})" if t else en_title
 
@@ -762,7 +792,8 @@ def make_thumbnails(script, workdir, ledger):
         raw = gen_image(f"{c['image_prompt']}. {CFG['thumbnail_style']}. No text, no letters, no logos.",
                         workdir / f"thumb_raw_{i}.jpg", script["scenes"][0].get("broll_query"), ledger)
         cands.append(media.compose_thumbnail(raw, c["text"], workdir / f"thumb_{i}.jpg",
-                                             logo=ROOT / "assets" / "cutaway_logo.png"))
+                                             logo=ASSETS / CFG.get("logo_file", "cutaway_logo.png"),
+                                             accent=tuple(CFG.get("thumbnail_accent", (255, 168, 60)))))
     sheet = media.contact_sheet(cands, workdir / "thumbs_sheet.jpg")
     try:
         pick = llm_json(
@@ -850,8 +881,8 @@ def meta(title, desc, tags, publish_at, is_short=False):
             "publish_at": publish_at, "is_short": is_short}
 
 
-BRAND_DONE = ROOT / "assets" / "branding_done.json"
-PENDING_CAPS = ROOT / "pending_captions"
+BRAND_DONE = (DATA / "branding_done.json") if CFG.get("data_dir") else (ROOT / "assets" / "branding_done.json")
+PENDING_CAPS = DATA / "pending_captions"
 
 
 def save_pending_caption(video_id, srt_path, lang, name):
@@ -909,7 +940,7 @@ def run_once():
     ensure_branding()
     retry_pending_captions()
     history = load_json(HISTORY, [])
-    ledger = media.AssetLedger(ROOT / "assets_used.json")
+    ledger = media.AssetLedger(DATA / "assets_used.json")
 
     report = publish.performance_report(history)
     log(f"Analitik: {report['n']} video ölçüldü, sütun puanları: {report['pillar_scores']}")
@@ -919,11 +950,11 @@ def run_once():
 
     with tempfile.TemporaryDirectory() as tmp:
         w = Path(tmp)
-        log("Seslendirme başlıyor (Kokoro)...")
+        log(f"Seslendirme başlıyor ({'Gemini ' + CFG['voice'].get('name', '') if CFG['voice'].get('provider') == 'gemini' else 'Kokoro'})...")
         narrate(script, w)
         log(f"Seslendirme: {sum(s['duration'] for s in script['scenes']):.0f} sn")
         build_scene_videos(script, w, ledger)
-        music = ROOT / "assets" / "music.mp3"
+        music = ASSETS / "music.mp3"
         final, words = assemble(script, w, music)
         log(f"Ana video: {media.duration(final):.0f} sn")
 
@@ -944,7 +975,7 @@ def run_once():
 
         # altyazı izleri: İngilizce (doğru metin) + Türkçe (çeviri)
         cap_blocks = media.srt_blocks(words, per_line=8)
-        en_srt = media.write_srt_blocks(cap_blocks, w / "captions_en.srt")
+        en_srt = media.write_srt_blocks(cap_blocks, w / f"captions_{CFG.get('language_code', 'en')}.srt")
         tr_srt, tr_blocks, tr_meta = None, None, None
         sub_lang = CFG.get("subtitle_translation") or {}
         if sub_lang.get("code"):
@@ -975,17 +1006,19 @@ def run_once():
         global UPLOAD_STARTED
         UPLOAD_STARTED = True
         chs = script.get("_chapters") or []
-        desc = (script["description"] + chapters_text(chs)
-                + "\n\nStock footage: Pixabay / Pexels. Narration: AI voice.")
+        desc = (script["description"] + chapters_text(chs, header=CFG.get("chapters_heading", "Chapters"))
+                + "\n\n" + CFG.get("desc_footer", "Stock footage: Pixabay / Pexels. Narration: AI voice."))
         m_long = meta(script["title"], desc, script["tags"], at(CFG["publish_delay_hours"]))
         if tr_meta:
-            tr_desc = (tr_meta["description"] + chapters_text(chs, tr_meta.get("chapters"), "Bölümler")
-                       + "\n\nStok görüntüler: Pixabay / Pexels. Seslendirme: yapay zekâ sesi.")
+            tr_desc = (tr_meta["description"]
+                       + chapters_text(chs, tr_meta.get("chapters"), sub_lang.get("chapters_heading", "Bölümler"))
+                       + "\n\n" + sub_lang.get("desc_footer",
+                                                 "Stok görüntüler: Pixabay / Pexels. Seslendirme: yapay zekâ sesi."))
             m_long["localizations"] = {sub_lang["code"]: {"title": tr_meta["title"][:100],
                                                           "description": tr_desc[:4900]}}
         vid = publish.upload(final, m_long, thumb, up)
         cap_warned = False
-        for srt_path, code, name in ((en_srt, "en", "English"),
+        for srt_path, code, name in ((en_srt, CFG.get("language_code", "en"), CFG.get("caption_label", "English")),
                                      (tr_srt, sub_lang.get("code"), sub_lang.get("label"))):
             if not srt_path or up != "youtube":
                 continue
@@ -1009,7 +1042,7 @@ def run_once():
         for k, sh_ in enumerate(shorts):
             try:
                 title = sh_["title"][:90].rstrip() + " #Shorts"
-                sdesc = (f"{sh_['title']}\n\nWatch the full video: https://youtu.be/{vid}\n\n"
+                sdesc = (f"{sh_['title']}\n\n{CFG.get('full_video_text', 'Watch the full video:')} https://youtu.be/{vid}\n\n"
                          + " ".join("#" + re.sub(r"\W", "", t) for t in script["tags"][:3]) + " #Shorts")
                 delay = CFG["shorts_delay_hours"] + k * CFG.get("shorts_gap_hours", 16)
                 m_short = meta(title, sdesc, script["tags"], at(delay), is_short=True)
@@ -1017,7 +1050,8 @@ def run_once():
                 if k < len(trt) and trt[k]:
                     m_short["localizations"] = {sub_lang["code"]: {
                         "title": str(trt[k])[:90] + " #Shorts",
-                        "description": f"{trt[k]}\n\nVideonun tamamı: https://youtu.be/{vid}\n#Shorts"}}
+                        "description": f"{trt[k]}\n\n{sub_lang.get('full_video_text', 'Videonun tamamı:')} "
+                                       f"https://youtu.be/{vid}\n#Shorts"}}
                 sid = publish.upload(sh_["file"], m_short, None, up)
                 if tr_blocks and up == "youtube":
                     off = script["scenes"][sh_["start"]].get("t0", 0.0)
@@ -1034,6 +1068,8 @@ def run_once():
                                 "title": sh_["title"], "pillar": idea["pillar"], "video_id": sid, "parent": vid})
                 save_json(HISTORY, history)
                 trs = ((tr_meta or {}).get("short_titles") or [None] * (k + 1))
+                if CFG.get("language_code") == "tr":
+                    trs = [None] * (k + 1)
                 notify(f"📱 Short {k+1}/{len(shorts)} yüklendi: {trs[k] if k < len(trs) and trs[k] else sh_['title']}\n"
                        f"({delay} saat sonra yayında) https://youtu.be/{sid}")
             except Exception as e:
@@ -1066,6 +1102,14 @@ if __name__ == "__main__":
         RUNLOG.write_text("", encoding="utf-8")
     ai.LOG = log
     log(f"Başladı (test modu: {DRY_RUN}, yayın: {CFG['publish_mode']})")
+    if CFG.get("paid_tier") and os.getenv("GEMINI_PAID_API_KEY"):  # ücretli anahtar: dakika sınırları yüksek → beklemeleri kısalt
+        ai.MIN_GAP.update({"lite": 1.0, "default": 2.0})
+    missing = [k for k in CFG.get("require_env", []) if not os.getenv(k)]
+    if missing and not DRY_RUN:
+        # ör. 2. kanalın YouTube izni henüz yoksa video YANLIŞ kanala yüklenmesin
+        log(f"Kurulum eksik, çalışma atlandı: {', '.join(missing)}")
+        notify(f"⏸ Kurulum tamamlanmadığı için bugün video üretilmedi (eksik: {', '.join(missing)}).")
+        sys.exit(0)
     try:
         res = run_once()
         log("Bitti: video üretilmedi." if res is False else "Başarıyla bitti.")

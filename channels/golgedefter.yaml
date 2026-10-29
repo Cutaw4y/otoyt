@@ -1,0 +1,150 @@
+# ======================= GÖLGEDEFTER (2. kanal, Türkçe) =======================
+# Çalıştıran iş akışı: .github/workflows/otoyt_tr.yml  (OTOYT_CONFIG=channels/golgedefter.yaml)
+channel_name: "Gölgedefter"
+notify_prefix: "🕯 Gölgedefter |"
+channel_brief: >
+  Türkçe belgesel kanalı: açıklanamayan olaylar, efsaneler, doğaüstü anlatılar
+  ve dinler tarihindeki tuhaf, gizemli olaylar. Her video TEK bir olayı, yeri,
+  efsaneyi ya da belgeyi ele alır (ör. Dyatlov Geçidi, Voynich El Yazması, Yedi
+  Uyurlar mağarası, Göbeklitepe'nin gömülmesi, Tunguska, Mary Celeste, Anadolu'nun
+  alkarısı ve karakoncolos inançları, Roanoke, Taos uğultusu). Önce anlatılanları
+  hikâye gibi kurar, sonra kayıtlara, belgelere ve bilim insanlarının açıklamalarına
+  geçer; sonunda neyin bilindiğini, neyin hâlâ bilinmediğini dürüstçe ayırır.
+audience: "gizem, tarih ve efsane meraklısı 18-45 yaş Türkçe konuşan izleyiciler"
+tone: "kısık sesli, sakin, gizemli bir belgesel anlatıcısı; ağırbaşlı, abartısız, merak uyandıran"
+language: "Turkish"
+language_code: "tr"
+chapter_label: "BÖLÜM"
+intro_chapter: "Giriş"
+chapters_heading: "Bölümler"
+caption_label: "Türkçe"
+full_video_text: "Videonun tamamı:"
+desc_footer: "Stok görüntüler: Pixabay / Pexels. Seslendirme: yapay zekâ sesi. Anlatılan efsaneler ve iddialar kaynaklarıyla birlikte aktarılır; doğaüstü iddialar kanıtlanmış gerçek olarak sunulmaz."
+wiki_langs: ["tr", "en"]
+
+script_rules: >
+  Türkçe yaz; doğal, akıcı, kulağa hitap eden cümleler (çeviri kokan ifade yok).
+  GİRİŞ (ilk 2-3 cümle): olayın en çarpıcı anını ya da en tuhaf ayrıntısını hemen
+  göster, izleyici doğru videoya tıkladığını anlasın; selamlama yok, "bugünkü
+  videoda" yok, "hiç düşündünüz mü" gibi klişeler yok. Yapı: olayın kendisi
+  (yer, zaman, kim gördü) → anlatılanlar ve tanıklıklar → belgeler ve kayıtlar →
+  öne sürülen açıklamalar (doğal, bilimsel, tarihsel) → hâlâ açıklanamayan kısım.
+  Efsane, tanıklık ve inançları "anlatılana göre", "kayıtlara göre", "iddiaya göre"
+  diye çerçevele; doğaüstü iddiaları kanıtlanmış gerçek gibi SUNMA, ama alay da etme.
+  Dinler ve inançlar hakkında saygılı ve tarafsız ol: hiçbir dini, kutsal kişiyi ya
+  da inananı küçümseme; peygamberleri tasvir etme; kutsal metinlerden ne anlatıldığını
+  aktar, yorumu kaynağına bağla. Kan, vahşet, intihar ayrıntısı yok; ölümler
+  ağırbaşlı ve kısa anlatılır. Yaşayan sıradan kişileri suçlama. Tarih ve sayılar
+  emin değilse "yaklaşık", "kayıtlara göre" de. Sahne başına tek fikir; gerilimi
+  sorularla taşı. Sonda tek cümlelik bir kapanış düşüncesi olsun. Abone ol
+  çağrısı veya veda cümlesi YAZMA: kanalın sabit kapanış cümlesi otomatik eklenir.
+factcheck_note: >
+  This is a channel about legends and unexplained events. Do NOT flag a claim as
+  wrong just because it describes a legend, belief or eyewitness account, as long
+  as the script frames it as a story or claim ("anlatılana göre", "iddiaya göre").
+  Flag as wrong: wrong dates, places, names, numbers, misattributed quotes, or a
+  supernatural claim presented as proven fact.
+
+content_pillars:
+  - "Açıklanamayan gerçek olaylar ve kayıplar (Dyatlov, Mary Celeste, Roanoke, Tunguska)"
+  - "Dünya ve Anadolu efsaneleri, halk inançları ve mitolojik varlıklar"
+  - "Dinler tarihindeki gizemli olaylar, kutsal mekânlar ve kayıp metinler"
+  - "Çözülemeyen el yazmaları, şifreler, gizemli yapılar ve antik buluntular"
+
+visual_style: >
+  dark atmospheric cinematic illustration, painterly, candlelight and moonlight,
+  fog, old parchment and ancient stone textures, muted desaturated colors with warm
+  amber highlights, mysterious silhouettes, no gore, no blood, no faces of religious
+  figures, no text or letters, 16:9
+thumbnail_style: "dark cinematic mystery, one striking subject, strong rim light, fog, high contrast, amber and deep shadow"
+thumbnail_accent: [232, 158, 68]
+caption_theme:            # bölüm kartı ve bilgi etiketleri: kehribar rengi (ASS &HAABBGGRR)
+  chap_num: "&H00449EE8"
+  chap_box: "&H000F0B0D"
+  callout_box: "&H00449EE8"
+  callout_text: "&H000F0B0D"
+
+branding:
+  version: 1
+  banner: "assets/golgedefter/golgedefter_banner.jpg"
+  country: "TR"
+  keywords: "gizem açıklanamayan olaylar efsaneler doğaüstü belgesel tarih gizemleri dinler tarihi gölgedefter"
+  description: >
+    Açıklanamayanların defteri. Gölgedefter; açıklanamayan olayları, efsaneleri,
+    doğaüstü anlatıları ve dinler tarihinin gizemli sayfalarını belgeleriyle
+    birlikte anlatır: ne anlatılıyor, kayıtlar ne diyor, bilim ne açıklıyor ve
+    hâlâ ne bilinmiyor. Yeni sayfalar her Salı, Perşembe ve Cumartesi.
+    Seslendirme yapay zekâ sesidir; her senaryo yayından önce kaynaklarla kontrol edilir.
+
+made_for_kids: false
+declare_synthetic: true
+
+# ======================= DOSYA YERLERİ =======================
+data_dir: "data/golgedefter"           # geçmiş, kayıtlar, bekleyen altyazılar
+assets_dir: "assets/golgedefter"       # intro / outro / müzik / logo (brand_golgedefter.py üretir)
+logo_file: "golgedefter_logo.png"
+
+# Bu kanal kendi YouTube iznini (YT2_*) ve ücretli Gemini anahtarını kullanır.
+env_map:
+  YT_CLIENT_ID: "YT2_CLIENT_ID"          # yoksa Cutaway'in uygulama kimliği kullanılır (aynı Google projesi olabilir)
+  YT_CLIENT_SECRET: "YT2_CLIENT_SECRET"
+  YT_REFRESH_TOKEN: "YT2_REFRESH_TOKEN"
+  GEMINI_API_KEY: "GEMINI_PAID_API_KEY"
+require_env: ["YT2_REFRESH_TOKEN", "GEMINI_PAID_API_KEY"]   # eksikse video YANLIŞ kanala gitmesin diye çalışma atlanır
+paid_tier: true
+
+# ======================= MODELLER (ücretli Gemini anahtarı) =======================
+text_models: ["gemini-pro-latest", "gemini-flash-latest"]
+judge_models: ["gemini-flash-latest", "gemini-flash-lite-latest"]
+factcheck_models: ["gemini-flash-latest", "gemini-flash-lite-latest"]
+
+voice:
+  provider: "gemini"
+  name: "Charon"               # derin, bilgilendirici erkek sesi. Alternatif: "Enceladus" (fısıltılı), "Algenib" (boğuk)
+  style: "Türkçe, kısık ve sakin bir sesle, gizemli bir belgesel anlatıcısı gibi, acele etmeden ve cümle aralarında kısa duraklarla oku"
+  models: ["gemini-3.1-flash-tts-preview", "gemini-2.5-pro-preview-tts", "gemini-2.5-flash-preview-tts"]
+  lang: "tr"
+
+# ======================= KURGU =======================
+use_intro: true
+outro_line: "Bu sayfa şimdilik kapanıyor. Gölgedefter'in bir sonraki sayfasında görüşmek üzere."
+outro_hold_seconds: 8
+shot_seconds: 5.0              # gizem temposu: biraz daha uzun çekimler
+burn_captions: true
+music_db: -20
+
+# ======================= KALİTE =======================
+target_words: 1300             # Türkçe kelimeler uzundur: ~10 dakika
+min_length_ratio: 0.85
+max_expand_rounds: 2
+min_diagram_ratio: 0.5         # sahnelerin en az yarısı atmosferik AI görseli
+min_quality_score: 7
+min_quality_floor: 0
+max_topic_attempts: 5
+max_rewrites: 2
+max_factcheck_rounds: 2
+require_web_factcheck: true
+fallback_broll: "foggy forest night"
+explore_rate: 0.25
+
+# ======================= YAYIN =======================
+uploader: "youtube"
+category_id: "27"
+publish_mode: "private"        # API denetimi onaylanınca "scheduled"
+publish_delay_hours: 6
+# Altyazı izleri: Türkçe (orijinal) + İngilizce çeviri (yabancı izleyici de anlasın)
+subtitle_translation:
+  code: "en"
+  name: "English"
+  label: "English"
+  chapters_heading: "Chapters"
+  desc_footer: "Stock footage: Pixabay / Pexels. Narration: AI voice. Legends and claims are presented with their sources; supernatural claims are not presented as proven fact."
+  full_video_text: "Watch the full video:"
+
+make_shorts: true
+shorts_per_video: 3
+shorts_delay_hours: 20
+shorts_gap_hours: 16
+
+instagram_enabled: false
+instagram_ai_label: true
