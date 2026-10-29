@@ -1,2 +1,45 @@
-[16:15:05] Başladı (test modu: True, yayın: private)
-[16:15:05] Analitik: 0 video ölçüldü, sütun puanları: {}
+[16:18:43] Başladı (test modu: True, yayın: private)
+[16:18:43] Analitik: 0 video ölçüldü, sütun puanları: {}
+[16:23:47] Gemini gemini-flash-latest 503 → 30 sn bekleniyor (2/6)
+[16:29:23] Gemini gemini-flash-latest 503 → 90 sn bekleniyor (4/6)
+[16:33:24] Konu: Why Every Window in the World Floats on Liquid Tin  [How it's made and what it really costs (steel, glass, chips, paper, concrete)]
+[16:39:45] Gemini gemini-flash-latest 503 → 30 sn bekleniyor (2/6)
+[16:44:06] Senaryo yazıldı: 19 sahne, 1352 kelime
+[16:44:06] Gemini gemini-flash-lite-latest 429 → 15 sn bekleniyor (1/2)
+[16:44:22] Gemini gemini-flash-lite-latest 429 → 30 sn bekleniyor (2/2)
+[16:44:52] Gemini gemini-flash-latest 429 → 15 sn bekleniyor (1/2)
+[16:45:07] Gemini gemini-flash-latest 429 → 30 sn bekleniyor (2/2)
+[16:45:37] Google aramalı doğrulama kullanılamadı (Gemini yanıt vermedi: 429 {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check ) → Wikipedia'ya geçiliyor
+[16:45:39] Doğrulama kaynağı: Wikipedia (4 makale)
+[16:45:56] Doğrulama turu 1: 11 iddia, 0 yanlış, 0 belirsiz
+[16:46:22] Editör: {'originality': 8, 'hook': 8, 'clarity': 9, 'value_density': 8, 'audience_fit': 9, 'problems': ['The opening hook is strong and immediately engaging, but slightly abrupt in dropping the technical premise.', 'A few transitions between complex chemical engineering concepts (like dross and the annealing lehr) could use lighter pacing for a broad audience.']}
+[16:46:22] Seslendirme başlıyor (Kokoro)...
+[16:51:19] Seslendirme: 552 sn
+[16:51:19] Sahne 1/19 (footage, 24.3 sn)
+[16:51:39] Sahne 2/19 (diagram, 29.4 sn)
+[16:51:50] Sahne 3/19 (diagram, 31.7 sn)
+[16:52:05] Sahne 4/19 (diagram, 37.7 sn)
+[16:52:20] Sahne 5/19 (footage, 30.6 sn)
+[16:53:05] Sahne 6/19 (diagram, 28.0 sn)
+[16:53:17] Sahne 7/19 (diagram, 31.8 sn)
+[16:53:46] Sahne 8/19 (diagram, 28.4 sn)
+[16:54:01] Sahne 9/19 (diagram, 33.3 sn)
+[16:54:15] Sahne 10/19 (diagram, 26.6 sn)
+[16:54:33] Sahne 11/19 (diagram, 27.9 sn)
+[16:54:50] Sahne 12/19 (footage, 25.3 sn)
+[16:55:08] Sahne 13/19 (diagram, 33.5 sn)
+[16:55:22] Sahne 14/19 (footage, 30.3 sn)
+[16:55:33] Sahne 15/19 (footage, 28.1 sn)
+[16:55:52] Sahne 16/19 (footage, 23.4 sn)
+[16:56:08] Sahne 17/19 (diagram, 31.5 sn)
+[16:56:22] Sahne 18/19 (footage, 33.7 sn)
+[16:56:33] Sahne 19/19 (footage, 16.2 sn)
+[17:04:27] Ana video: 552 sn
+[17:05:31] Short: 54 sn
+[17:06:01] Gemini gemini-flash-lite-latest 503 → 15 sn bekleniyor (1/6)
+[17:06:39] Thumbnail seçimi: #1 - Thumbnail #1 provides the clearest visual link to the title's core concept ('floating on liquid tin') with a bold, uncluttered close-up of molten material. The text 'FLOATING ON TIN' is large, highly readable on mobile, and directly complements the title without causing visual confusion.
+[17:06:42] DRY_RUN: yükleme atlandı, dosyalar out/ klasöründe.
+[17:06:42] Başarıyla bitti.
