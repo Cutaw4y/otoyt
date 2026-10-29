@@ -137,7 +137,38 @@ def sentence_bounds(a, n, sr=SR, min_gap=0.16, thr=0.012):
     return [(edges[i], edges[i + 1]) for i in range(n)]
 
 
-def narrate_gemini(scenes, workdir, voice="Charon", style=None, models=None, scene_gap=0.45):
+def _pad_sentences(a, bounds, min_gap, sr=SR):
+    """Cümle aralarındaki sessizliği en az min_gap saniyeye tamamlar (belgesel ağırlığı)."""
+    if not bounds or len(bounds) < 2 or min_gap <= 0:
+        return a, bounds
+    pieces, new, shift, last = [], [], 0.0, 0
+    for k, (b0, b1) in enumerate(bounds):
+        if k < len(bounds) - 1:
+            cut = int(b1 * sr)
+            seg = a[last:cut]
+            # cut noktası sessizliğin ortasında: mevcut sessizliği ölç
+            hop = int(0.01 * sr)
+            quiet, j = 0, cut
+            while j - hop >= 0 and np.sqrt((a[j - hop:j] ** 2).mean()) < 0.012:
+                j -= hop
+                quiet += hop
+            j = cut
+            while j + hop <= a.size and np.sqrt((a[j:j + hop] ** 2).mean()) < 0.012:
+                j += hop
+                quiet += hop
+            quiet /= sr
+            extra = max(0.0, min_gap - quiet)
+            pieces += [seg, np.zeros(int(extra * sr), dtype=np.float32)]
+            new.append((b0 + shift, b1 + shift))
+            shift += extra
+            last = cut
+        else:
+            pieces.append(a[last:])
+            new.append((b0 + shift, b1 + shift))
+    return np.concatenate(pieces), new
+
+
+def narrate_gemini(scenes, workdir, voice="Charon", style=None, models=None, scene_gap=0.45, sentence_gap=0.0):
     """Her sahneyi tek istekte seslendirir (doğal akış), cümle sınırlarını sessizliklerden bulur."""
     import ai
     workdir = Path(workdir)
@@ -146,8 +177,10 @@ def narrate_gemini(scenes, workdir, voice="Charon", style=None, models=None, sce
         sents = split_sentences(sc["narration"])
         a = _trim(ai.gemini_tts(sc["narration"], voice=voice, style=style,
                                 models=models or ("gemini-3.1-flash-tts-preview",)))
-        d = a.size / SR
         bounds = sentence_bounds(a, len(sents))
+        if bounds is not None:
+            a, bounds = _pad_sentences(a, bounds, sentence_gap)
+        d = a.size / SR
         if bounds is None:  # sessizlik bulunamazsa metin uzunluğuna göre orantıla
             lens = [len(s) + 4 for s in sents]
             tot, t, bounds = sum(lens), 0.0, []

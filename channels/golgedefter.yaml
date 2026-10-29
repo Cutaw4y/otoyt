@@ -36,8 +36,28 @@ script_rules: >
   aktar, yorumu kaynağına bağla. Kan, vahşet, intihar ayrıntısı yok; ölümler
   ağırbaşlı ve kısa anlatılır. Yaşayan sıradan kişileri suçlama. Tarih ve sayılar
   emin değilse "yaklaşık", "kayıtlara göre" de. Sahne başına tek fikir; gerilimi
-  sorularla taşı. Sonda tek cümlelik bir kapanış düşüncesi olsun. Abone ol
+  sorularla taşı. İlk 15 saniyede yerel bir merak boşluğu aç ("Kimsenin fark etmediği
+  o ayrıntı...", "Her şey o gece tek bir sesle başladı..."); olayın insani tarafını
+  (korku, kayıp, inanç, cesaret) hissettir. Çeviri Türkçesi kullanma: gereksiz "bir"
+  tekrarlarını sil ("bir adam bir gün bir karar verdi" değil "O gün adam kararını verdi").
+  Rakam, sembol ve kısaltma bırakma; hepsini okunuşuyla yaz ("bin dokuz yüz elli dokuz",
+  "yüzde kırk"). Yabancı isimleri doğru yazımıyla bırak (fonetik yazma, altyazıda görünür).
+  Ölçüleri Türkiye'de kullanılana çevir: mil → kilometre, pound → kilogram, Fahrenheit →
+  santigrat, feet → metre. Para tutarlarını somut bir kıyasla ver (ör. "o günün parasıyla
+  bir köyün yıllık geliri kadar"). Sonda tek cümlelik bir kapanış düşüncesi olsun. Abone ol
   çağrısı veya veda cümlesi YAZMA: kanalın sabit kapanış cümlesi otomatik eklenir.
+seo_rules: >
+  core_keyword: Türkiye'de insanların gerçekten yazdığı doğal arama kalıbı ("dyatlov geçidi
+  olayı", "voynich el yazması sırrı", "alkarısı nedir"). Başlık doğal Türkçe merak kalıbıyla
+  kurulsun: "gerçek hikayesi", "ne oldu", "neden hâlâ çözülemedi", "kimse bilmiyor",
+  "perde arkası"; çeviri kokan kalıplar ve kelimesi kelimesine İngilizce yapılar yasak.
+  Açıklamanın ilk iki satırı: videonun en can alıcı sorusu + anahtar kelime. Bölüm başlıkları
+  izleyicinin ileri sararken merak edeceği, aranabilir ifadeler ("Olayın Başladığı Gece",
+  "Kayıtlardaki Gizli Ayrıntı", "Bilim Ne Diyor"). Etiketler: anahtar kelime, alternatif
+  yazılışlar, yabancı isimlerin yaygın yanlış yazımları, ilgili yer/kişi/olay adları
+  (Türkçe karaktersiz yazılışları sistem otomatik ekler). pinned_comment: Türk izleyicinin
+  yorum yazmayı sevdiği kişisel görüş sorusu, iki seçenekli ("Sizce gerçek açıklama hangisi:
+  çığ mı, askerî deney mi?", "O gece siz orada olsaydınız çadırdan çıkar mıydınız?").
 factcheck_note: >
   This is a channel about legends and unexplained events. Do NOT flag a claim as
   wrong just because it describes a legend, belief or eyewitness account, as long
@@ -102,6 +122,8 @@ voice:
   provider: "gemini"
   name: "Charon"               # derin, bilgilendirici erkek sesi. Alternatif: "Enceladus" (fısıltılı), "Algenib" (boğuk)
   style: "Türkçe, kısık ve sakin bir sesle, gizemli bir belgesel anlatıcısı gibi, acele etmeden ve cümle aralarında kısa duraklarla oku"
+  sentence_gap: 0.33           # cümle arası en az 0.33 sn (belgesel ağırlığı)
+  scene_gap: 0.6
   models: ["gemini-3.1-flash-tts-preview", "gemini-2.5-pro-preview-tts", "gemini-2.5-flash-preview-tts"]
   lang: "tr"
 
@@ -110,6 +132,8 @@ use_intro: true
 outro_line: "Bu sayfa şimdilik kapanıyor. Gölgedefter'in bir sonraki sayfasında görüşmek üzere."
 outro_hold_seconds: 8
 shot_seconds: 5.0              # gizem temposu: biraz daha uzun çekimler
+hook_scenes: 2
+j_cut_seconds: 0.3
 burn_captions: true
 music_db: -20
 
@@ -132,6 +156,12 @@ uploader: "youtube"
 category_id: "27"
 publish_mode: "private"        # API denetimi onaylanınca "scheduled"
 publish_delay_hours: 6
+# Türkiye izleyicisi: hafta içi 19:00, hafta sonu 14:00; Shorts her akşam 20:30 (TR saati)
+publish_slots: {tz: "Europe/Istanbul", times: {default: "19:00", sat: "14:00", sun: "14:00"}}
+shorts_slots: {tz: "Europe/Istanbul", times: {default: "20:30"}}
+min_lead_hours: 1.5
+post_comment: true
+ascii_tag_variants: true       # "gerçek hikayesi" + "gercek hikayesi"
 # Başlık/açıklama yalnızca Türkçe (çeviri başlık eklenmez). Altyazı: Türkçe + İngilizce çeviri izi (CC'den açılır)
 localize_metadata: false
 subtitle_translation:
@@ -145,7 +175,7 @@ subtitle_translation:
 make_shorts: true
 shorts_per_video: 3
 shorts_delay_hours: 20
-shorts_gap_hours: 16
+shorts_gap_hours: 20
 
 instagram_enabled: false
 instagram_ai_label: true

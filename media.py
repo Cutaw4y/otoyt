@@ -251,11 +251,14 @@ def to_wav(src, out, sr=24000, frames=None):
 
 
 # ---------------------------------------------------------------- final montaj
-def mux_master(video, narration, out, ass=None, music=None, music_db=-21.0, fade_out=1.5):
-    """Görüntü + anlatım + (konuşurken kısılan) müzik + altyazı → yayın kalitesinde çıktı."""
+def mux_master(video, narration, out, ass=None, music=None, music_db=-21.0, fade_out=1.5, j_cut=0.0):
+    """Görüntü + anlatım + (konuşurken kısılan) müzik + altyazı → yayın kalitesinde çıktı.
+    j_cut: görüntü sesin bu kadar gerisinden gelir → yeni sahnenin sesi görüntü değişmeden önce başlar
+    (kurgucuların J-cut geçişi; slayt gösterisi hissini kırar)."""
     total = duration(video)
     ins = ["-i", video, "-i", narration]
-    vf = f"[0:v]{_ass_filter(ass)}," if ass else "[0:v]"
+    vf = f"[0:v]tpad=start_duration={j_cut:.3f}:start_mode=clone," if j_cut > 0 else "[0:v]"
+    vf += f"{_ass_filter(ass)}," if ass else ""
     vf += f"fade=t=out:st={max(total - fade_out, 0):.2f}:d={fade_out}[v]"
     if music and Path(music).exists():
         ins += ["-stream_loop", "-1", "-i", music]
@@ -269,7 +272,7 @@ def mux_master(video, narration, out, ass=None, music=None, music_db=-21.0, fade
               f"afade=t=out:st={max(total - fade_out, 0):.2f}:d={fade_out}[a]")
     sh(["ffmpeg", "-y", *ins, "-filter_complex", vf + ";" + af, "-map", "[v]", "-map", "[a]",
         "-t", f"{total:.3f}", "-c:v", "libx264", "-preset", "medium", "-crf", "19",
-        "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-movflags", "+faststart", out])
+        "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-map_metadata", "-1", "-movflags", "+faststart", out])
     return out
 
 
@@ -305,7 +308,7 @@ def make_short(parts, out, workdir, music=None, tag="short", max_len=58.0):
         af = "[1:a]aresample=48000,loudnorm=I=-14:TP=-1.5[a]"
     sh(["ffmpeg", "-y", *ins, "-filter_complex", vf + ";" + af, "-map", "[v]", "-map", "[a]",
         "-t", f"{total:.3f}", "-c:v", "libx264", "-preset", "medium", "-crf", "20",
-        "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", out])
+        "-c:a", "aac", "-b:a", "192k", "-map_metadata", "-1", "-movflags", "+faststart", out])
     return out, total
 
 

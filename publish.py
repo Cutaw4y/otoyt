@@ -319,3 +319,14 @@ def my_channel_title():
     """İzin anahtarının bağlı olduğu kanalın adı (yanlış kanala yüklemeyi önlemek için)."""
     items = _yt().channels().list(part="snippet", mine=True).execute().get("items", [])
     return items[0]["snippet"]["title"] if items else None
+
+
+def video_privacy(video_id):
+    items = _yt().videos().list(part="status", id=video_id).execute().get("items", [])
+    return items[0]["status"]["privacyStatus"] if items else None
+
+
+def post_comment(video_id, text):
+    """Kanal adına üst düzey yorum yazar (YouTube API yorumu sabitlemeye izin vermez; sabitleme Studio'dan)."""
+    body = {"snippet": {"videoId": video_id, "topLevelComment": {"snippet": {"textOriginal": text[:9000]}}}}
+    return _yt().commentThreads().insert(part="snippet", body=body).execute()["id"]

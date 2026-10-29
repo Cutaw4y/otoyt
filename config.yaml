@@ -32,6 +32,16 @@ script_rules: >
   sign-off, greeting or "subscribe" line — the channel's fixed closing line is
   added automatically.
 
+# Arama ve paketleme (2026 araştırması): anahtar kelime üçlemesi, aranabilir bölümler, yazım hatası etiketleri
+seo_rules: >
+  Pick core_keyword as the phrase a US viewer actually types (e.g. "how a jet engine works",
+  "why glass is transparent"). Put it at the start of the title, in the first sentence of the
+  description, and say it naturally in the first 20 seconds of narration. Chapter titles are
+  Google-style queries ("How the Compressor Works", "Why Turbines Don't Melt"). Tags: core
+  keyword, variants, common misspellings of the technical terms and names, related entities.
+  pinned_comment: a sharp but friendly A-or-B engineering debate tied to the video (e.g.
+  "Nuclear or solar for a city of 1 million — which would you build?").
+
 content_pillars:
   - "How a machine or device works, from the inside (engines, fridges, batteries, phones)"
   - "Giant infrastructure explained (power grids, dams, ports, bridges, internet cables)"
@@ -61,7 +71,13 @@ branding:
 made_for_kids: false
 declare_synthetic: true        # AI içerik beyanı (YouTube politikası)
 
-# ======================= MODELLER (HEPSİ ÜCRETSİZ) =======================
+# ======================= MODELLER =======================
+# Ücretli anahtar (GEMINI_PAID_API_KEY, Ultra'nın aylık kredisi) GitHub'a eklenince otomatik ona geçilir.
+env_map:
+  GEMINI_API_KEY: "GEMINI_PAID_API_KEY"
+paid_tier: true
+paid_text_models: ["gemini-pro-latest", "gemini-flash-latest"]
+paid_judge_models: ["gemini-flash-latest", "gemini-flash-lite-latest"]
 # Gemini ücretsiz katman. Sırayla denenir: ilki olmazsa (kota/hata) sonrakine geçer.
 text_models: ["gemini-flash-latest", "gemini-flash-lite-latest"]   # fikir + senaryo (Flash: günde 20 → az kullanılır)
 judge_models: ["gemini-flash-lite-latest", "gemini-flash-latest"]  # editör + thumbnail hakemi (Lite: günde 500)
@@ -73,15 +89,17 @@ factcheck_models: ["gemini-flash-lite-latest", "gemini-flash-latest"]  # Google 
 voice:
   name: "af_heart"             # en yüksek kaliteli ses. Erkek: "am_michael" / İngiliz: "bm_george" (lang "b")
   lang: "a"                    # a = Amerikan İngilizcesi, b = İngiliz İngilizcesi
-  speed: 0.86                  # sakin belgesel temposu (0.95 hızlı bulundu)
-  sentence_gap: 0.5            # cümleler arası nefes payı (sn)
-  scene_gap: 0.8               # sahne geçişlerinde duraklama (sn)
+  speed: 0.88                  # sakin ama canlı belgesel temposu (0.95 hızlı bulundu)
+  sentence_gap: 0.35           # cümleler arası nefes payı (sn)
+  scene_gap: 0.6               # sahne geçişlerinde duraklama (sn)
 
 # ======================= KURGU / MARKA =======================
 use_intro: true                # 1. sahneden (merak uyandıran açılış) sonra 2.6 sn logo animasyonu
 outro_line: "And that's how it actually works. See you in the next Cutaway."
 outro_hold_seconds: 8          # kapanış cümlesinden sonra kapanış kartı ekranda kalma süresi
 shot_seconds: 4.5              # bir görüntünün ortalama ekranda kalma süresi (profesyonel tempo 3-6 sn)
+hook_scenes: 2                 # ilk 2 sahnede görsel, anlatılanın birebir karşılığı (stok görüntü yok)
+j_cut_seconds: 0.3             # yeni sahnenin sesi görüntüden 0.3 sn önce başlar (kurgucu geçişi)
 burn_captions: true            # uzun videoda ekrana gömülü sade altyazı
 music_db: -21                  # müzik seviyesi (anlatım varken ayrıca otomatik kısılır)
 
@@ -103,7 +121,13 @@ explore_rate: 0.25             # %25 ihtimalle yeni konu türü dener (öğrenme
 uploader: "youtube"            # youtube (ücretsiz) | ayrshare (ÜCRETLİ B planı, denetim reddedilirse)
 category_id: "27"              # 27 = Education
 publish_mode: "private"        # ÖNCE "private" ile test et → sonra "scheduled"
-publish_delay_hours: 6         # ana video üretimden 6 saat sonra yayında (kontrol penceresi)
+publish_delay_hours: 6         # (yayın saatleri tanımlı değilse kullanılır)
+# ABD izleyicisi: uzun video 14:00 ET, Shorts akşam 18:00 ET (vidIQ 40 milyon video verisi)
+publish_slots: {tz: "America/New_York", times: {default: "14:00"}}
+shorts_slots: {tz: "America/New_York", times: {default: "18:00"}}
+min_lead_hours: 1.5            # yükleme ile yayın arasında en az bu kadar (HD işleme tamamlansın)
+post_comment: true             # video yayına girince tartışma sorusu kanal adına yorum olarak yazılır
+ascii_tag_variants: false
 # Altyazı izleri: İngilizce (orijinal) + Türkçe çeviri izi (izleyici CC'den açar).
 # Başlık, açıklama ve Shorts açıklamaları HER ZAMAN İngilizce (Türkçe çeviri başlık eklenmez).
 localize_metadata: false
@@ -114,8 +138,8 @@ subtitle_translation:
 
 make_shorts: true
 shorts_per_video: 3            # her uzun videodan kaç farklı Short (YouTube günlük yükleme kotası: en fazla 4)
-shorts_delay_hours: 20         # ilk Short, ana videodan 20 saat sonra
-shorts_gap_hours: 16           # sonraki Shortlar 16'şar saat arayla → her gün yeni Short
+shorts_delay_hours: 20         # ilk Short ana videodan sonraki günün Shorts saatinde
+shorts_gap_hours: 20           # sonraki Shortlar birer gün arayla
 
 # ======================= INSTAGRAM =======================
 instagram_enabled: false       # IG anahtarları eklenince true yap

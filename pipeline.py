@@ -148,8 +148,14 @@ def pick_topic(history, report):
 
 # ---------------------------------------------------------------- 2. senaryo
 SCRIPT_SCHEMA = (
-    'Return JSON: {"title":"<=70 chars","description":"150-300 words, include 3 hashtags",'
-    '"tags":["8-15 tags"],'
+    'Return JSON: {"core_keyword":"the exact 2-5 word phrase a viewer types into search for this video",'
+    '"title":"<=70 chars; core_keyword must appear within the first 40 characters",'
+    '"description":"the first 120 characters (before \'show more\') contain core_keyword AND the video\'s '
+    'central question; total 150-300 words, include 3 hashtags",'
+    '"tags":["8-15 tags: core_keyword, close variants, COMMON MISSPELLINGS and alternate spellings of the '
+    'names/terms in the video, and related entities (people, places, organizations, objects). No generic words"],'
+    '"pinned_comment":"one pointed A-or-B question about the topic that splits viewers into two camps and makes '
+    'them answer in the comments; specific, respectful, no insults, no politics",'
     '"thumbnail_concepts":[{"image_prompt":"IN ENGLISH: visual concept, NO text in image","text":"2-4 punchy words"}],'
     '"short_title":"<=60 chars hook title for the Shorts cut",'
     '"shorts":[{"start_scene":0,"end_scene":2,"title":"<=60 chars curiosity hook title",'
@@ -159,10 +165,13 @@ SCRIPT_SCHEMA = (
     '"scenes":[{"narration":"2-3 sentences","visual":"footage or diagram",'
     '"broll_query":"2-4 word English stock footage query",'
     '"image_prompt":"IN ENGLISH: illustration of exactly what this scene explains",'
-    '"chapter":"short chapter title (2-5 words) ONLY if a new chapter starts at this scene, else empty",'
+    '"chapter":"ONLY if a new chapter starts here: a 2-6 word SEARCHABLE phrase a viewer would type into '
+    'Google or YouTube about this part (e.g. How X works, Why X fails, What happens when X), else empty",'
     '"callout":"on-screen label, max 5 words: the key number, term or comparison of this scene, or empty"}]}\n'
-    "Split the video into 4-7 chapters; scene 0 must start the first chapter. Chapter titles are clear "
-    "section names (not clickbait). Give a callout to roughly every second scene (numbers, units, key terms), "
+    "Split the video into 4-7 chapters; scene 0 must start the first chapter. Chapter titles are searchable "
+    "phrases, never 'Intro' or 'Part 1'. The narration of scene 0 or 1 must SAY core_keyword out loud "
+    "(spoken in the first 20 seconds). Scenes 0 and 1 must be visual=diagram and their image_prompt must "
+    "show EXACTLY what their narration says (the viewer sees the proof of the hook, never a generic image). Give a callout to roughly every second scene (numbers, units, key terms), "
     "never a full sentence.\n"
     "Give exactly 3 thumbnail_concepts with different ideas. EVERY scene needs BOTH broll_query and image_prompt. "
     "Use visual=diagram whenever a mechanism, inside view, process, comparison or scale must be SHOWN; "
@@ -178,7 +187,8 @@ def _schema():
 def write_script(idea):
     return llm_json(
         f"You write scripts for a faceless educational YouTube channel called {CFG['channel_name']}. "
-        f"{CFG['channel_brief']}\nWrite in {CFG['language']}. Voice: {CFG['tone']}. Rules: {CFG['script_rules']}",
+        f"{CFG['channel_brief']}\nWrite in {CFG['language']}. Voice: {CFG['tone']}. Rules: {CFG['script_rules']}"
+        f"\nSEO and packaging rules: {CFG.get('seo_rules', '')}",
         f"Title idea: {idea['title']}\nAngle: {idea['angle']}\n"
         f"This is a LONG-FORM video: write AT LEAST {CFG['target_words']} words of narration in about "
         f"{max(20, CFG['target_words'] // 50)} scenes (2-3 sentences each). Go deep: mechanisms, concrete "
@@ -216,7 +226,8 @@ def ensure_length(script):
 
 def revise_script(script, notes):
     return llm_json(
-        f"You revise YouTube scripts. Language: {CFG['language']}. Rules: {CFG['script_rules']}",
+        f"You revise YouTube scripts. Language: {CFG['language']}. Rules: {CFG['script_rules']}\n"
+        f"SEO and packaging rules: {CFG.get('seo_rules', '')}",
         f"Problems to fix:\n{notes}\n\nCurrent script JSON:\n{json.dumps(script, ensure_ascii=False)}\n\n"
         "Fix every problem. Replace wrong facts with the correct ones given; remove or soften anything "
         f"uncertain. Keep the same structure and length. {_schema()}",
@@ -347,7 +358,8 @@ def _tts(scenes, workdir):
     v = CFG["voice"]
     if v.get("provider") == "gemini":
         return voice.narrate_gemini(scenes, workdir, voice=v.get("name", "Charon"), style=v.get("style"),
-                                    models=v.get("models"), scene_gap=v.get("scene_gap", 0.45))
+                                    models=v.get("models"), scene_gap=v.get("scene_gap", 0.45),
+                                    sentence_gap=v.get("sentence_gap", 0.0))
     return voice.narrate(scenes, workdir, voice=v["name"], lang=v["lang"], speed=v.get("speed", 1.0),
                          sentence_gap=v.get("sentence_gap", 0.28), scene_gap=v.get("scene_gap", 0.45))
 
@@ -556,6 +568,9 @@ def build_scene_videos(script, workdir, ledger):
         if s.get("visual") != "diagram":
             s["visual"], have = "diagram", have + 1
 
+    hook_n = CFG.get("hook_scenes", 2)
+    for s in scenes[:hook_n]:
+        s["visual"] = "diagram"  # ilk saniyeler: söylenenin birebir görseli
     shot_sec = CFG.get("shot_seconds", 4.5)
     for i, sc in enumerate(scenes):
         shots = media.split_frames(sc["frames"], shot_sec)
@@ -569,7 +584,7 @@ def build_scene_videos(script, workdir, ledger):
         for k, fr in enumerate(shots):
             out = workdir / f"shot_{i:02d}_{k:02d}.mp4"
             # diyagram sahnesi: diyagram (geniş) → stok → diyagram (detay) → stok ...
-            use_still = img is not None and (k % 2 == 0)
+            use_still = img is not None and (k % 2 == 0 or i < hook_n)
             clip = None
             if not use_still:
                 clip = fetch_stock(q, workdir / f"raw_{i:02d}_{k:02d}.mp4", ledger) \
@@ -643,7 +658,7 @@ def assemble(script, workdir, music):
     ass = media.write_ass_long(words if CFG.get("burn_captions", True) else [], w / "captions.ass",
                                chapters=chap_ev, callouts=callouts)
     final = media.mux_master(video, nar, w / "final.mp4", ass=ass, music=music,
-                             music_db=CFG.get("music_db", -21.0))
+                             music_db=CFG.get("music_db", -21.0), j_cut=CFG.get("j_cut_seconds", 0.0))
     return final, words
 
 
@@ -825,6 +840,155 @@ def _score(review):
     return (min(vals), sum(vals) / len(vals))
 
 
+TR_ASCII = str.maketrans("çğıöşüÇĞİÖŞÜâîûÂÎÛ", "cgiosuCGIOSUaiuAIU")
+
+
+def _norm(t):
+    return (t or "").translate(TR_ASCII).lower()
+
+
+def seo_problems(script):
+    """Anahtar kelime üçlemesi: başlığın ilk 40 karakteri, açıklamanın ilk 120 karakteri, ilk 20 sn anlatım."""
+    kw = (script.get("core_keyword") or "").strip()
+    if not kw:
+        return ["- Add core_keyword (the 2-5 word phrase viewers search) and follow the core_keyword rules."]
+    k, out = _norm(kw), []
+    if k not in _norm(script.get("title", ""))[:max(40, len(kw) + 5)]:
+        out.append(f"- The title must contain the core keyword '{kw}' within its first 40 characters.")
+    opening = " ".join(sc.get("narration", "") for sc in script.get("scenes", [])[:2])
+    if k not in _norm(opening):
+        out.append(f"- Say the core keyword '{kw}' out loud in the narration of scene 0 or 1 "
+                   "(within the first 20 seconds), naturally.")
+    return out
+
+
+def seo_fix(script):
+    """Eksikse bir kez düzelttirir; açıklamanın ilk satırını ve etiketleri kodla garanti eder."""
+    probs = seo_problems(script)
+    if probs:
+        log("SEO düzeltmesi: " + " | ".join(p[2:80] for p in probs))
+        try:
+            fixed = revise_script(script, "\n".join(probs) + "\n- Change ONLY what these points need.")
+            if len(fixed.get("scenes", [])) >= len(script["scenes"]) * 0.8:
+                for key in ("_chapters",):
+                    fixed.pop(key, None)
+                script = fixed
+        except Exception as e:
+            log(f"SEO düzeltmesi yapılamadı: {e}")
+    kw = (script.get("core_keyword") or "").strip()
+    desc = script.get("description", "")
+    if kw and _norm(kw) not in _norm(desc[:120]):
+        script["description"] = f"{kw[:1].upper() + kw[1:]}: {desc}"
+    script["tags"] = build_tags(script)
+    return script
+
+
+def build_tags(script, budget=470):
+    """Etiketler: anahtar kelime + modelin yazım hatası/varlık etiketleri + Türkçe karaktersiz yazılışlar.
+    YouTube toplam etiket sınırı 500 karakter."""
+    raw = [script.get("core_keyword", "")] + list(script.get("tags", []))
+    out, seen = [], set()
+    for t in raw:
+        t = re.sub(r"[<>#,]", "", str(t)).strip()
+        variants = [t]
+        if CFG.get("ascii_tag_variants") and t.translate(TR_ASCII) != t:
+            variants.append(t.translate(TR_ASCII))  # Türkçe karaktersiz arama: "gercek hikayesi"
+        for v in variants:
+            key = v.lower()
+            if len(v) < 2 or key in seen:
+                continue
+            cost = len(v) + (2 if " " in v else 0) + 1
+            if sum(len(x) + (2 if " " in x else 0) + 1 for x in out) + cost > budget:
+                return out
+            seen.add(key)
+            out.append(v)
+    return out
+
+
+def slug(text, n=60):
+    s_ = re.sub(r"[^a-z0-9]+", "-", _norm(text)).strip("-")
+    return (s_[:n].rstrip("-") or "video")
+
+
+# ---------------------------------------------------------------- yayın saatleri
+DAYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
+
+
+def next_slot(after, slots):
+    """slots: {"tz": "Europe/Istanbul", "times": {"mon": "19:00", ..., "default": "19:00"}} →
+    'after' anından sonraki ilk yayın anı (UTC)."""
+    from zoneinfo import ZoneInfo
+    tz = ZoneInfo(slots.get("tz", "UTC"))
+    loc = after.astimezone(tz)
+    for add in range(0, 9):
+        day = (loc + timedelta(days=add)).date()
+        hhmm = slots["times"].get(DAYS[day.weekday()], slots["times"].get("default"))
+        if not hhmm:
+            continue
+        h, m = map(int, hhmm.split(":"))
+        cand = datetime(day.year, day.month, day.day, h, m, tzinfo=tz)
+        if cand >= after:
+            return cand.astimezone(timezone.utc)
+    return after
+
+
+def plan_times(now, n_shorts):
+    """Ana video + Shorts yayın anları (UTC). Config'te yayın saatleri yoksa eski gecikme kuralı."""
+    if CFG.get("publish_slots"):
+        main = next_slot(now + timedelta(hours=CFG.get("min_lead_hours", 1.5)), CFG["publish_slots"])
+    else:
+        main = now + timedelta(hours=CFG["publish_delay_hours"])
+    shorts, prev = [], main + timedelta(hours=CFG.get("shorts_delay_hours", 20))
+    for k in range(n_shorts):
+        if CFG.get("shorts_slots"):
+            t = next_slot(prev, CFG["shorts_slots"])
+        else:
+            t = now + timedelta(hours=CFG["shorts_delay_hours"] + k * CFG.get("shorts_gap_hours", 16))
+        shorts.append(t)
+        prev = t + timedelta(hours=CFG.get("shorts_gap_hours", 20))
+    return main, shorts
+
+
+def fmt_local(t):
+    from zoneinfo import ZoneInfo
+    return t.astimezone(ZoneInfo("Europe/Istanbul")).strftime("%d.%m %H:%M")
+
+
+# ---------------------------------------------------------------- sabit yorum (yayından sonra)
+PENDING_COMMENTS = DATA / "pending_comments.json"
+
+
+def queue_comment(video_id, text):
+    if not text or not CFG.get("post_comment", True):
+        return
+    q = load_json(PENDING_COMMENTS, []) if PENDING_COMMENTS.exists() else []
+    q.append({"video_id": video_id, "text": text.strip(), "added": datetime.now().isoformat(timespec="minutes")})
+    save_json(PENDING_COMMENTS, q)
+
+
+def post_due_comments():
+    """Video herkese açık olunca soruyu kanal adına yorum olarak yazar (gizli videoya yorum yazılamaz)."""
+    if DRY_RUN or not PENDING_COMMENTS.exists() or not os.getenv("YT_REFRESH_TOKEN"):
+        return
+    q, keep = load_json(PENDING_COMMENTS, []), []
+    for item in q:
+        try:
+            age = (datetime.now() - datetime.fromisoformat(item["added"])).days
+            if age > 45:
+                continue
+            if publish.video_privacy(item["video_id"]) != "public":
+                keep.append(item)
+                continue
+            publish.post_comment(item["video_id"], item["text"])
+            log(f"Yorum yazıldı: {item['video_id']}")
+            notify(f"💬 Videoya tartışma sorusu yorum olarak yazıldı. İstersen Studio'dan sabitle:\n"
+                   f"https://youtu.be/{item['video_id']}\n«{item['text'][:200]}»")
+        except Exception as e:
+            log(f"Yorum yazılamadı ({item.get('video_id')}): {str(e)[:150]}")
+            keep.append(item)
+    save_json(PENDING_COMMENTS, keep)
+
+
 def produce_script(history, report):
     """Kaliteli senaryo bulana kadar dener: aynı konuda revizyon, olmazsa yeni konu.
     Hiçbiri barajı geçmezse, bilgi hatası olmayan en iyi senaryo alt sınırın üstündeyse kullanılır."""
@@ -841,6 +1005,7 @@ def produce_script(history, report):
         if not facts_ok:
             log("Bilgi doğrulamadan geçemedi → yeni konu")
             continue
+        script = seo_fix(script)
         for attempt in range(CFG["max_rewrites"] + 1):
             ok, review = quality_gate(script)
             sc = _score(review)
@@ -878,7 +1043,7 @@ def produce_script(history, report):
 
 # ---------------------------------------------------------------- ana akış
 def meta(title, desc, tags, publish_at, is_short=False):
-    return {"title": title, "description": desc, "tags": [t for t in tags if len(t) >= 2][:15],
+    return {"title": title, "description": desc, "tags": [t for t in tags if len(t) >= 2][:40],
             "category_id": CFG["category_id"], "lang": CFG["language_code"],
             "made_for_kids": bool(CFG.get("made_for_kids", False)),
             "synthetic": bool(CFG.get("declare_synthetic", True)),
@@ -982,9 +1147,14 @@ def run_once():
 
     report = publish.performance_report(history)
     log(f"Analitik: {report['n']} video ölçüldü, sütun puanları: {report['pillar_scores']}")
+    post_due_comments()
     idea, script = produce_script(history, report)
     if script is None:
         return False
+    kw = (script.get("core_keyword") or "").strip()  # revizyonlardan sonra da garanti
+    if kw and _norm(kw) not in _norm(script.get("description", "")[:120]):
+        script["description"] = f"{kw[:1].upper() + kw[1:]}: {script['description']}"
+    script["tags"] = build_tags(script)
 
     with tempfile.TemporaryDirectory() as tmp:
         w = Path(tmp)
@@ -1038,7 +1208,8 @@ def run_once():
 
         now = datetime.now(timezone.utc)
         sched = CFG["publish_mode"] == "scheduled"
-        at = lambda h: (now + timedelta(hours=h)).strftime("%Y-%m-%dT%H:%M:%SZ") if sched else None
+        main_t, short_ts = plan_times(now, len(shorts))
+        iso = lambda t: t.strftime("%Y-%m-%dT%H:%M:%SZ") if sched else None
         up = CFG.get("uploader", "youtube")
 
         global UPLOAD_STARTED
@@ -1046,7 +1217,7 @@ def run_once():
         chs = script.get("_chapters") or []
         desc = (script["description"] + chapters_text(chs, header=CFG.get("chapters_heading", "Chapters"))
                 + "\n\n" + CFG.get("desc_footer", "Stock footage: Pixabay / Pexels. Narration: AI voice."))
-        m_long = meta(script["title"], desc, script["tags"], at(CFG["publish_delay_hours"]))
+        m_long = meta(script["title"], desc, script["tags"], iso(main_t))
         if tr_meta and CFG.get("localize_metadata", True):
             tr_desc = (tr_meta["description"]
                        + chapters_text(chs, tr_meta.get("chapters"), sub_lang.get("chapters_heading", "Bölümler"))
@@ -1054,7 +1225,10 @@ def run_once():
                                                  "Stok görüntüler: Pixabay / Pexels. Seslendirme: yapay zekâ sesi."))
             m_long["localizations"] = {sub_lang["code"]: {"title": tr_meta["title"][:100],
                                                           "description": tr_desc[:4900]}}
-        vid = publish.upload(final, m_long, thumb, up)
+        named = w / f"{slug(script.get('core_keyword') or script['title'])}.mp4"  # anlamlı dosya adı
+        shutil.copy(final, named)
+        vid = publish.upload(named, m_long, thumb, up)
+        queue_comment(vid, script.get("pinned_comment"))
         cap_warned = False
         for srt_path, code, name in ((en_srt, CFG.get("language_code", "en"), CFG.get("caption_label", "English")),
                                      (tr_srt, sub_lang.get("code"), sub_lang.get("label"))):
@@ -1075,22 +1249,24 @@ def run_once():
         save_json(HISTORY, history)
         ledger.save()
         notify(f"✅ Video yüklendi: {tr_title(tr_meta, script['title'])}\nhttps://youtu.be/{vid}\n"
-               f"Yayın: {CFG['publish_delay_hours']} saat sonra. Beğenmezsen Studio'dan sil.")
+               + (f"Yayın: {fmt_local(main_t)} (TR saati). " if sched else "Şimdilik gizli (private). ")
+               + "Beğenmezsen Studio'dan sil.")
 
         for k, sh_ in enumerate(shorts):
             try:
                 title = sh_["title"][:90].rstrip() + " #Shorts"
                 sdesc = (f"{sh_['title']}\n\n{CFG.get('full_video_text', 'Watch the full video:')} https://youtu.be/{vid}\n\n"
                          + " ".join("#" + re.sub(r"\W", "", t) for t in script["tags"][:3]) + " #Shorts")
-                delay = CFG["shorts_delay_hours"] + k * CFG.get("shorts_gap_hours", 16)
-                m_short = meta(title, sdesc, script["tags"], at(delay), is_short=True)
+                m_short = meta(title, sdesc, script["tags"], iso(short_ts[k]), is_short=True)
                 trt = (tr_meta or {}).get("short_titles") or []
                 if k < len(trt) and trt[k] and CFG.get("localize_metadata", True):
                     m_short["localizations"] = {sub_lang["code"]: {
                         "title": str(trt[k])[:90] + " #Shorts",
                         "description": f"{trt[k]}\n\n{sub_lang.get('full_video_text', 'Videonun tamamı:')} "
                                        f"https://youtu.be/{vid}\n#Shorts"}}
-                sid = publish.upload(sh_["file"], m_short, None, up)
+                sname = w / f"{slug(sh_['title'])}-shorts.mp4"
+                shutil.copy(sh_["file"], sname)
+                sid = publish.upload(sname, m_short, None, up)
                 if tr_blocks and up == "youtube":
                     off = script["scenes"][sh_["start"]].get("t0", 0.0)
                     sp = media.write_srt_blocks(shift_blocks(tr_blocks, off, sh_["len"]),
@@ -1109,7 +1285,8 @@ def run_once():
                 if CFG.get("language_code") == "tr":
                     trs = [None] * (k + 1)
                 notify(f"📱 Short {k+1}/{len(shorts)} yüklendi: {trs[k] if k < len(trs) and trs[k] else sh_['title']}\n"
-                       f"({delay} saat sonra yayında) https://youtu.be/{sid}")
+                       + (f"(yayın: {fmt_local(short_ts[k])} TR saati) " if sched else "(şimdilik gizli) ")
+                       + f"https://youtu.be/{sid}")
             except Exception as e:
                 notify(f"⚠️ Short {k+1} yüklenemedi: {str(e)[:300]}")
                 if "quota" in str(e).lower() or "uploadLimit" in str(e):
@@ -1142,6 +1319,10 @@ if __name__ == "__main__":
     log(f"Başladı (test modu: {DRY_RUN}, yayın: {CFG['publish_mode']})")
     if CFG.get("paid_tier") and os.getenv("GEMINI_PAID_API_KEY"):  # ücretli anahtar: dakika sınırları yüksek → beklemeleri kısalt
         ai.MIN_GAP.update({"lite": 1.0, "default": 2.0})
+        for k in ("text_models", "judge_models", "factcheck_models"):
+            if CFG.get("paid_" + k):
+                CFG[k] = CFG["paid_" + k]
+        log("Ücretli Gemini anahtarı kullanılıyor")
     missing = [k for k in CFG.get("require_env", []) if not os.getenv(k)]
     if missing and not DRY_RUN:
         # ör. 2. kanalın YouTube izni henüz yoksa video YANLIŞ kanala yüklenmesin
