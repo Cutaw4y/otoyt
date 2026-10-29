@@ -1078,6 +1078,8 @@ def produce_script(history, report):
 
 # ---------------------------------------------------------------- ana akış
 def meta(title, desc, tags, publish_at, is_short=False):
+    title = re.sub(r"[<>]", "", title).strip()[:100]
+    desc = re.sub(r"[<>]", "", desc)[:4900]
     return {"title": title, "description": desc, "tags": [t for t in tags if len(t) >= 2][:40],
             "category_id": CFG["category_id"], "lang": CFG["language_code"],
             "made_for_kids": bool(CFG.get("made_for_kids", False)),
@@ -1156,12 +1158,16 @@ def clear_old_localizations():
         log(f"Eski çeviriler kaldırılamadı: {str(e)[:200]}")
 
 
+CHANNEL_ID = None
+
+
 def check_channel():
     """İzin anahtarı bu config'in kanalına mı bağlı? Değilse hiçbir şey yüklemeden dur."""
     if DRY_RUN or CFG.get("uploader", "youtube") != "youtube" or not os.getenv("YT_REFRESH_TOKEN"):
         return
+    global CHANNEL_ID
     try:
-        title = publish.my_channel_title()
+        title, CHANNEL_ID = publish.my_channel()
     except Exception as e:
         log(f"Kanal adı kontrol edilemedi: {str(e)[:150]}")
         return
@@ -1250,8 +1256,10 @@ def run_once():
         global UPLOAD_STARTED
         UPLOAD_STARTED = True
         chs = script.get("_chapters") or []
+        sub_link = (f"\n\n{CFG.get('subscribe_text', '🔔 Subscribe for more:')} "
+                    f"https://www.youtube.com/channel/{CHANNEL_ID}?sub_confirmation=1") if CHANNEL_ID else ""
         desc = (script["description"] + chapters_text(chs, header=CFG.get("chapters_heading", "Chapters"))
-                + "\n\n" + CFG.get("desc_footer", "Stock footage: Pixabay / Pexels. Narration: AI voice."))
+                + sub_link + "\n\n" + CFG.get("desc_footer", "Stock footage: Pixabay / Pexels. Narration: AI voice."))
         m_long = meta(script["title"], desc, script["tags"], iso(main_t))
         if tr_meta and CFG.get("localize_metadata", True):
             tr_desc = (tr_meta["description"]
@@ -1292,7 +1300,9 @@ def run_once():
             try:
                 title = sh_["title"][:90].rstrip() + " #Shorts"
                 sdesc = (f"{sh_['title']}\n\n{CFG.get('full_video_text', 'Watch the full video:')} https://youtu.be/{vid}\n\n"
-                         + " ".join("#" + re.sub(r"\W", "", t) for t in script["tags"][:3]) + " #Shorts")
+                         + " ".join((re.findall(r"#\w+", script.get("description", "")) or
+                                     ["#" + re.sub(r"\W", "", script.get("core_keyword", "") or script["tags"][0])])[:3])
+                         + " #Shorts")
                 m_short = meta(title, sdesc, script["tags"], iso(short_ts[k]), is_short=True)
                 trt = (tr_meta or {}).get("short_titles") or []
                 if k < len(trt) and trt[k] and CFG.get("localize_metadata", True):

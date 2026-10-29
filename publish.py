@@ -315,10 +315,10 @@ def clear_localizations():
     return n
 
 
-def my_channel_title():
-    """İzin anahtarının bağlı olduğu kanalın adı (yanlış kanala yüklemeyi önlemek için)."""
+def my_channel():
+    """İzin anahtarının bağlı olduğu kanal: (ad, kimlik)."""
     items = _yt().channels().list(part="snippet", mine=True).execute().get("items", [])
-    return items[0]["snippet"]["title"] if items else None
+    return (items[0]["snippet"]["title"], items[0]["id"]) if items else (None, None)
 
 
 def video_privacy(video_id):
