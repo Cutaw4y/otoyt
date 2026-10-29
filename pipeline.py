@@ -172,17 +172,74 @@ def revise_script(script, notes):
 
 
 # ---------------------------------------------------------------- 3. bilgi doğrulama (Google aramalı)
-def fact_check(script):
+WIKI = "https://en.wikipedia.org/w/api.php"
+WIKI_HEADERS = {"User-Agent": "OtoYT-Cutaway/1.0 (educational fact-checking; https://cutaw4y.github.io)"}
+
+
+def wikipedia_sources(script, max_pages=4, chars=6000):
+    """Konuyla ilgili Wikipedia makalelerinin metnini çeker (ücretsiz, kotasız)."""
+    queries = [script["title"]] + [s.get("broll_query", "") for s in script["scenes"][:3]]
+    titles = []
+    for q in queries:
+        if not q or len(titles) >= max_pages:
+            continue
+        try:
+            r = requests.get(WIKI, headers=WIKI_HEADERS, timeout=30, params={
+                "action": "query", "list": "search", "srsearch": q[:200], "srlimit": 2, "format": "json"})
+            for h in r.json().get("query", {}).get("search", []):
+                if h["title"] not in titles:
+                    titles.append(h["title"])
+        except Exception as e:
+            log(f"Wikipedia arama hatası: {e}")
+    sources = []
+    for t in titles[:max_pages]:
+        try:
+            r = requests.get(WIKI, headers=WIKI_HEADERS, timeout=30, params={
+                "action": "query", "prop": "extracts", "explaintext": 1, "titles": t,
+                "format": "json", "redirects": 1})
+            for pg in r.json().get("query", {}).get("pages", {}).values():
+                txt = (pg.get("extract") or "").strip()
+                if txt:
+                    sources.append(f"### {pg.get('title')}\n{txt[:chars]}")
+        except Exception as e:
+            log(f"Wikipedia okuma hatası: {e}")
+    return sources
+
+
+def _claims_prompt(script, how):
     text = "\n".join(s["narration"] for s in script["scenes"])
-    prompt = (
-        "You are a rigorous fact-checker for an educational YouTube video. Extract every specific, checkable "
-        "factual claim (numbers, dates, how-something-works statements, superlatives) from the script below, "
-        "max 15. Verify EACH one with Google Search against reliable sources. Be strict.\n\n"
-        f"Title: {script['title']}\nScript:\n{text}\n\n"
-        'Return ONLY JSON, no other text: {"claims":[{"claim":"...","verdict":"correct|wrong|uncertain",'
-        '"correction":"correct version if wrong/uncertain"}]}')
-    out = ai.gemini(prompt, models=CFG["factcheck_models"], search=True, temperature=0.1)
-    return ai.extract_json(out)["claims"]
+    return ("You are a rigorous fact-checker for an educational YouTube video. Extract every specific, checkable "
+            "factual claim (numbers, dates, how-something-works statements, superlatives) from the script below, "
+            f"max 15. {how} Be strict.\n\n"
+            f"Title: {script['title']}\nScript:\n{text}\n\n"
+            'Return ONLY JSON, no other text: {"claims":[{"claim":"...","verdict":"correct|wrong|uncertain",'
+            '"correction":"correct version if wrong/uncertain"}]}')
+
+
+_search_ok = True
+
+
+def fact_check(script):
+    """Önce Google aramalı Gemini; kota/izin yoksa Wikipedia kaynaklarıyla doğrulama."""
+    global _search_ok
+    if CFG.get("use_google_search", True) and _search_ok:
+        try:
+            out = ai.gemini(_claims_prompt(script, "Verify EACH one with Google Search against reliable sources."),
+                            models=CFG["factcheck_models"], search=True, temperature=0.1, tries=2)
+            log("Doğrulama kaynağı: Google araması")
+            return ai.extract_json(out)["claims"]
+        except Exception as e:
+            _search_ok = False  # bu çalışmada tekrar deneyip zaman kaybetme
+            log(f"Google aramalı doğrulama kullanılamadı ({str(e)[:120]}) → Wikipedia'ya geçiliyor")
+    sources = wikipedia_sources(script)
+    log(f"Doğrulama kaynağı: Wikipedia ({len(sources)} makale)")
+    how = ("Verify EACH claim against the SOURCES below (Wikipedia extracts). A claim is 'correct' if the sources "
+           "support it OR it is basic, universally accepted science/engineering knowledge. Mark 'wrong' if it "
+           "contradicts the sources or established science. Mark 'uncertain' if it is a specific number, record or "
+           "date the sources don't confirm.\n\nSOURCES:\n" + ("\n\n".join(sources) or "(no sources found)"))
+    data = ai.extract_json(ai.gemini(_claims_prompt(script, how), models=CFG["judge_models"],
+                                     json_mode=True, temperature=0.1))
+    return data["claims"]
 
 
 def verify_loop(script):
@@ -194,14 +251,16 @@ def verify_loop(script):
                 raise
             log(f"Doğrulama atlandı: {e}")
             return script, True
+        wrong = [c for c in claims if c.get("verdict") == "wrong"]
         bad = [c for c in claims if c.get("verdict") != "correct"]
-        log(f"Doğrulama turu {rnd+1}: {len(claims)} iddia, {len(bad)} sorunlu")
+        log(f"Doğrulama turu {rnd+1}: {len(claims)} iddia, {len(wrong)} yanlış, {len(bad) - len(wrong)} belirsiz")
         if not bad:
             return script, True
         if rnd == CFG["max_factcheck_rounds"]:
-            return script, False
-        notes = "\n".join(f"- [{c.get('verdict')}] {c.get('claim')} → {c.get('correction') or 'remove it'}"
-                          for c in bad)
+            # son turda yalnızca kesin yanlış kaldıysa iptal; belirsizler önceki turlarda yumuşatıldı
+            return script, not wrong
+        notes = "\n".join(f"- [{c.get('verdict')}] {c.get('claim')} → "
+                          f"{c.get('correction') or 'remove it or say it approximately'}" for c in bad)
         script = revise_script(script, notes)
     return script, False
 

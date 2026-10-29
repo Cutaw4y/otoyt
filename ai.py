@@ -78,7 +78,8 @@ def gemini(prompt, system=None, models=("gemini-flash-latest",), images=None, js
 
     last = None
     for model in models:
-        if model in _exhausted:
+        qkey = (model, bool(search))  # aramalı istekler ayrı kota → ayrı takip
+        if qkey in _exhausted:
             continue
         for attempt in range(tries):
             _pace(model)
@@ -89,9 +90,9 @@ def gemini(prompt, system=None, models=("gemini-flash-latest",), images=None, js
                 last = e
                 time.sleep(10 * (attempt + 1))
                 continue
-            if r.status_code == 429 and "PerDay" in r.text:
+            if r.status_code == 429 and ("PerDay" in r.text or "limit: 0" in r.text):
                 # günlük kota bitti: beklemek anlamsız → bu çalışmada bu modeli bir daha deneme
-                _exhausted.add(model)
+                _exhausted.add(qkey)
                 last = f"{model}: günlük ücretsiz kota doldu"
                 LOG(f"Gemini {model} günlük kotası doldu → sonraki modele geçiliyor")
                 break
