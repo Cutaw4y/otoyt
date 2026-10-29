@@ -330,3 +330,35 @@ def post_comment(video_id, text):
     """Kanal adına üst düzey yorum yazar (YouTube API yorumu sabitlemeye izin vermez; sabitleme Studio'dan)."""
     body = {"snippet": {"videoId": video_id, "topLevelComment": {"snippet": {"textOriginal": text[:9000]}}}}
     return _yt().commentThreads().insert(part="snippet", body=body).execute()["id"]
+
+
+def viewer_requests(max_items=40):
+    """Kanalın videolarına gelen son yorumlar (en çok beğenilenler önde) → izleyici konu istekleri için."""
+    yt = _yt()
+    cid = yt.channels().list(part="id", mine=True).execute()["items"][0]["id"]
+    r = yt.commentThreads().list(part="snippet", allThreadsRelatedToChannelId=cid, maxResults=100,
+                                 order="time", textFormat="plainText").execute()
+    out = []
+    for it in r.get("items", []):
+        c = it["snippet"]["topLevelComment"]["snippet"]
+        if c.get("authorChannelId", {}).get("value") == cid:
+            continue  # kendi yorumlarımız
+        out.append((c.get("likeCount", 0), c.get("textOriginal", "")[:300]))
+    out.sort(key=lambda x: -x[0])
+    return [t for _, t in out[:max_items]]
+
+
+def ensure_playlist(title, description, lang, cache):
+    """Konu sütunu için oynatma listesi (bir kez oluşturulur, kimliği cache'te saklanır)."""
+    if title in cache:
+        return cache[title]
+    body = {"snippet": {"title": title[:150], "description": description[:4900], "defaultLanguage": lang},
+            "status": {"privacyStatus": "public"}}
+    pid = _yt().playlists().insert(part="snippet,status", body=body).execute()["id"]
+    cache[title] = pid
+    return pid
+
+
+def add_to_playlist(playlist_id, video_id):
+    body = {"snippet": {"playlistId": playlist_id, "resourceId": {"kind": "youtube#video", "videoId": video_id}}}
+    _yt().playlistItems().insert(part="snippet", body=body).execute()

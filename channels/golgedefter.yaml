@@ -83,6 +83,14 @@ content_pillars:   # izlenme verisine göre sistem en çok tutanlara ağırlık 
   - "Anadolu ve dünya efsaneleri, mitolojik varlıklar, halk inançları"
   - "Çözülemeyen şifreler, yasak bilgi ve antik astronot iddiaları (bilimin cevabıyla birlikte)"
 
+playlists:
+  "Kayıp medeniyetler ve antik gizemler (Göbeklitepe, Sümerler, Nazca, Atlantis efsanesi, Mohenjo-daro)": "Kayıp Medeniyetler ve Antik Gizemler"
+  "İslam tarihi ve kutsal kıssalar (Ashab-ı Kehf, Zülkarneyn, İrem ve Ad kavmi, Semud, Nuh tufanı)": "Kutsal Kıssalar ve İslam Tarihi"
+  "Kıyamet alametleri ve ahir zaman anlatıları (ayet ve hadis kaynaklarıyla, tarih tahmini yok)": "Kıyamet ve Ahir Zaman"
+  "Açıklanamayan gerçek olaylar ve kayıplar (Dyatlov, Mary Celeste, Roanoke, Tunguska)": "Açıklanamayan Olaylar"
+  "Anadolu ve dünya efsaneleri, mitolojik varlıklar, halk inançları": "Efsaneler ve Mitolojik Varlıklar"
+  "Çözülemeyen şifreler, yasak bilgi ve antik astronot iddiaları (bilimin cevabıyla birlikte)": "Çözülemeyen Şifreler ve Yasak Bilgi"
+
 visual_style: >
   dark atmospheric cinematic illustration, painterly, candlelight and moonlight,
   fog, old parchment and ancient stone textures, muted desaturated colors with warm

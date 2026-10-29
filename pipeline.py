@@ -121,10 +121,26 @@ def choose_pillar(report):
     return random.choices(pillars, weights=weights)[0]
 
 
+def fetch_viewer_requests():
+    """İzleyici yorumlarındaki konu istekleri (Jared Owen gibi: izleyiciye sor, onu çek)."""
+    if DRY_RUN or not os.getenv("YT_REFRESH_TOKEN") or CFG.get("uploader", "youtube") != "youtube":
+        return []
+    try:
+        return publish.viewer_requests()
+    except Exception as e:
+        log(f"Yorumlar okunamadı: {str(e)[:120]}")
+        return []
+
+
 def pick_topic(history, report):
     past = [h["title"] for h in history if h.get("type", "long") == "long"][-300:]
     pillar = choose_pillar(report)
     perf = ""
+    reqs = fetch_viewer_requests() if not hasattr(pick_topic, "_reqs") else pick_topic._reqs
+    pick_topic._reqs = reqs
+    if reqs:
+        perf += ("\nRecent viewer comments (if several viewers ask for a topic that fits the channel, PREFER it "
+                 "even if it is outside this pillar):\n" + "\n".join(f"- {c}" for c in reqs[:30]))
     if report["best"]:
         perf += "\nBest performing videos (do more like these):\n" + "\n".join(
             f"- {r['title']} ({r['views']} views, {r['avg_pct']:.0f}% watched)" for r in report["best"])
@@ -138,7 +154,7 @@ def pick_topic(history, report):
         "Already published titles (DO NOT repeat or closely paraphrase):\n- " + "\n- ".join(past or ["(none)"]) +
         "\n\nPropose 6 specific video ideas with high curiosity and broad appeal, each with a clear angle "
         "a viewer can't get from the first search result. Pick the one most likely to get high click-through "
-        "AND high retention.\n"
+        "AND high retention.\n" + (f"Idea rules: {CFG['idea_rules']}\n" if CFG.get("idea_rules") else "") +
         'Return JSON: {"ideas":[{"title":"...","angle":"..."}],"chosen_index":0}',
         required=("ideas", "chosen_index"))
     idea = data["ideas"][min(int(data["chosen_index"]), len(data["ideas"]) - 1)]
@@ -966,6 +982,25 @@ def queue_comment(video_id, text):
     save_json(PENDING_COMMENTS, q)
 
 
+PLAYLISTS = DATA / "playlists.json"
+
+
+def add_to_pillar_playlist(video_id, pillar):
+    """Her konu sütunu bir oynatma listesi: izleyici bir videodan sonrakine akar (izlenme süresi artar)."""
+    names = CFG.get("playlists") or {}
+    title = names.get(pillar)
+    if not title or CFG.get("uploader", "youtube") != "youtube":
+        return
+    cache = load_json(PLAYLISTS, {}) if PLAYLISTS.exists() else {}
+    try:
+        pid = publish.ensure_playlist(title, f"{CFG['channel_name']}: {pillar}", CFG["language_code"], cache)
+        save_json(PLAYLISTS, cache)
+        publish.add_to_playlist(pid, video_id)
+        log(f"Oynatma listesine eklendi: {title}")
+    except Exception as e:
+        log(f"Oynatma listesine eklenemedi: {str(e)[:150]}")
+
+
 def post_due_comments():
     """Video herkese açık olunca soruyu kanal adına yorum olarak yazar (gizli videoya yorum yazılamaz)."""
     if DRY_RUN or not PENDING_COMMENTS.exists() or not os.getenv("YT_REFRESH_TOKEN"):
@@ -1244,6 +1279,7 @@ def run_once():
                     notify("⚠️ Altyazılar şimdilik yüklenemedi: YouTube izninin yenilenmesi gerekiyor "
                            "(get_token.bat bir kez). Altyazılar saklandı, izin yenilenince otomatik yüklenecek.")
                     cap_warned = True
+        add_to_pillar_playlist(vid, idea["pillar"])
         history.append({"date": datetime.now().isoformat(timespec="minutes"), "type": "long",
                         "title": script["title"], "pillar": idea["pillar"], "video_id": vid})
         save_json(HISTORY, history)

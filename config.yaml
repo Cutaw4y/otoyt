@@ -20,7 +20,10 @@ script_rules: >
   question right away so the viewer knows they clicked the right video; no
   greetings, no "in today's video", no clichés ("did you know", "imagine",
   "from sand to smartphone"), no fake suspense that withholds basic info.
-  Preview the payoff early, then deliver it. Structure the video in clear
+  Preview the payoff early, then deliver it. Proven arc: open on the strange observation or
+  failure → rule out the obvious explanation → show the physics step by step → reveal the
+  engineering trade-off (why it is built this way and what it costs). Make invisible forces
+  tangible with scale comparisons. Structure the video in clear
   chapters; each chapter answers one question. Explain like a great teacher:
   one idea per scene, define a term right before using it, everyday analogies,
   concrete examples, scale comparisons; every claim gets a visual proof (a
@@ -42,30 +45,51 @@ seo_rules: >
   pinned_comment: a sharp but friendly A-or-B engineering debate tied to the video (e.g.
   "Nuclear or solar for a city of 1 million — which would you build?").
 
+# Rakip analizi (Practical Engineering, Real Engineering, Branch Education, Jared Owen, The B1M):
+# en çok izlenenler tek bir somut tuhaflık, felaket/arıza analizi ve görünmez altyapıyı somutlaştıran videolar.
 content_pillars:
   - "How a machine or device works, from the inside (engines, fridges, batteries, phones)"
   - "Giant infrastructure explained (power grids, dams, ports, bridges, internet cables)"
   - "Everyday science mysteries (why ice floats, why the sky is blue, how soap works)"
   - "How it's made and what it really costs (steel, glass, chips, paper, concrete)"
+  - "Engineering failures and disasters explained (what broke, why, and what engineers changed after)"
+  - "Hidden engineering you see every day but never notice (road details, tower bases, manholes, rail joints)"
+
+idea_rules: >
+  Each idea centers on ONE concrete oddity, failure or seemingly impossible conflict,
+  never a broad subject ("Why Roads Get Washboards", not "How Roads Work"). Proven title
+  shapes: "Why [familiar thing] [does counterintuitive thing]", "The [Hidden/Bizarre/Wild]
+  [part/story/flaw] of [specific thing]", "What Actually Happens When [X]", "How [X] Survives
+  [extreme Y]". Keep the noun specific. Failures: evergreen post-mortems (decades old,
+  well documented), respectful to victims, focus on the engineering lesson.
+
+playlists:   # her konu sütunu bir oynatma listesi (izleyici videodan videoya akar)
+  "How a machine or device works, from the inside (engines, fridges, batteries, phones)": "How Machines Work Inside"
+  "Giant infrastructure explained (power grids, dams, ports, bridges, internet cables)": "Giant Infrastructure Explained"
+  "Everyday science mysteries (why ice floats, why the sky is blue, how soap works)": "Everyday Science Mysteries"
+  "How it's made and what it really costs (steel, glass, chips, paper, concrete)": "How It's Made & What It Costs"
+  "Engineering failures and disasters explained (what broke, why, and what engineers changed after)": "Engineering Failures Explained"
+  "Hidden engineering you see every day but never notice (road details, tower bases, manholes, rail joints)": "Hidden Engineering"
 
 # Kanalın görsel kimliği: her diyagram bu stilde üretilir → tutarlı marka görünümü
 visual_style: >
-  clean modern educational illustration, cutaway / cross-section where useful,
+  clean modern educational illustration, 3D cutaway / exploded view / cross-section where useful,
   flat vector look with soft gradients, dark navy background, glowing cyan and
   warm orange accents, clear arrows showing flow, no text or labels, 16:9
 thumbnail_style: "bold, high contrast, dramatic lighting, one clear object, cinematic, vivid colors"
 
 # Kanal sayfası (ilk gerçek çalışmada bir kez otomatik ayarlanır)
 branding:
-  version: 2                   # afiş/açıklama değişince artır → bir sonraki çalışmada kanala yeniden uygulanır
+  version: 3                   # afiş/açıklama değişince artır → bir sonraki çalışmada kanala yeniden uygulanır
   banner: "assets/cutaway_banner.jpg"
   country: "TR"
-  keywords: "how things work engineering science explained infrastructure machines education cutaway"
-  description: >
-    How things actually work. Cutaway takes one everyday thing or giant system —
-    a jet engine, a power grid, a container port, a fridge — and explains how it
-    really works, step by step, with clear diagrams and real footage.
-    New videos every Monday, Wednesday and Friday.
+  keywords: "how things work engineering explained science explained infrastructure machines engineering failures how it's made cutaway"
+  description: |
+    ⚙️ How things actually work. Cutaway takes ONE thing — a jet engine, a dam, a microchip, a fridge — and opens it up, step by step.
+    🏗️ Giant infrastructure, hidden everyday engineering, famous engineering failures and how things are made (and what they really cost).
+    🔬 Clear 3D-style diagrams, real footage and fact-checked scripts. No fluff, no clickbait the video doesn't deliver.
+    📅 New videos every Monday, Wednesday and Friday, plus daily Shorts.
+    💬 Tell us in the comments what we should cut open next.
     Narration uses an AI voice; every script is fact-checked before publishing.
 
 made_for_kids: false
@@ -104,7 +128,7 @@ burn_captions: true            # uzun videoda ekrana gömülü sade altyazı
 music_db: -21                  # müzik seviyesi (anlatım varken ayrıca otomatik kısılır)
 
 # ======================= KALİTE =======================
-target_words: 1400             # ~9-10 dakika (8+ dk = ara reklam imkânı)
+target_words: 1650             # ~12-13 dakika (bu nişte izleyici 12-20 dk seviyor; 8+ dk = ara reklam)
 min_length_ratio: 0.85         # bunun altındaysa senaryo genişletilir
 max_expand_rounds: 2
 min_diagram_ratio: 0.4         # sahnelerin en az %40'ı AI diyagram olsun
