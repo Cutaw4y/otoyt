@@ -45,6 +45,20 @@ def _retry_delay(resp, attempt):
     return min(15 * (2 ** attempt), 90)
 
 
+_exhausted = set()
+_last_call = {}
+# Ücretsiz katman dakika sınırları (Flash 5/dk, Flash-Lite 10/dk) → istekler arasına pay bırak
+MIN_GAP = {"lite": 7.0, "default": 13.0}
+
+
+def _pace(model):
+    gap = MIN_GAP["lite"] if "lite" in model else MIN_GAP["default"]
+    wait = _last_call.get(model, 0) + gap - time.time()
+    if wait > 0:
+        time.sleep(wait)
+    _last_call[model] = time.time()
+
+
 def gemini(prompt, system=None, models=("gemini-flash-latest",), images=None, json_mode=False,
            search=False, temperature=0.8, tries=6):
     """Gemini çağrısı; 429/5xx'te bekler, model kalıcı hata verirse listedeki sonrakine geçer."""
@@ -64,7 +78,10 @@ def gemini(prompt, system=None, models=("gemini-flash-latest",), images=None, js
 
     last = None
     for model in models:
+        if model in _exhausted:
+            continue
         for attempt in range(tries):
+            _pace(model)
             try:
                 r = requests.post(f"{GEMINI}/{model}:generateContent",
                                   headers={"x-goog-api-key": key}, json=body, timeout=300)
@@ -72,6 +89,12 @@ def gemini(prompt, system=None, models=("gemini-flash-latest",), images=None, js
                 last = e
                 time.sleep(10 * (attempt + 1))
                 continue
+            if r.status_code == 429 and "PerDay" in r.text:
+                # günlük kota bitti: beklemek anlamsız → bu çalışmada bu modeli bir daha deneme
+                _exhausted.add(model)
+                last = f"{model}: günlük ücretsiz kota doldu"
+                LOG(f"Gemini {model} günlük kotası doldu → sonraki modele geçiliyor")
+                break
             if r.status_code in (429, 500, 502, 503, 504):
                 last = f"{r.status_code} {r.text[:200]}"
                 wait = _retry_delay(r, attempt)

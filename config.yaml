@@ -52,9 +52,9 @@ declare_synthetic: true        # AI içerik beyanı (YouTube politikası)
 
 # ======================= MODELLER (HEPSİ ÜCRETSİZ) =======================
 # Gemini ücretsiz katman. Sırayla denenir: ilki olmazsa (kota/hata) sonrakine geçer.
-text_models: ["gemini-flash-latest", "gemini-flash-lite-latest"]   # fikir + senaryo
-judge_models: ["gemini-flash-latest", "gemini-flash-lite-latest"]  # editör + thumbnail hakemi
-factcheck_models: ["gemini-flash-latest"]                          # Google aramalı doğrulama
+text_models: ["gemini-flash-latest", "gemini-flash-lite-latest"]   # fikir + senaryo (Flash: günde 20 → az kullanılır)
+judge_models: ["gemini-flash-lite-latest", "gemini-flash-latest"]  # editör + thumbnail hakemi (Lite: günde 500)
+factcheck_models: ["gemini-flash-lite-latest", "gemini-flash-latest"]  # Google aramalı doğrulama
 # Görseller: Cloudflare Workers AI FLUX.1 schnell (günde ~170 görsel ücretsiz).
 # Kota biterse otomatik olarak Pexels fotoğraflarına geçer.
 
