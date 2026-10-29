@@ -17,7 +17,7 @@ concurrency: otoyt
 
 jobs:
   produce:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04   # sabit sürüm: Ubuntu 26 geçişinde paketler bozulmasın
     timeout-minutes: 150
     steps:
       - uses: actions/checkout@v4
