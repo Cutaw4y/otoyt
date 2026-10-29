@@ -17,6 +17,9 @@ GEMINI = "https://generativelanguage.googleapis.com/v1beta/models"
 CF = "https://api.cloudflare.com/client/v4/accounts"
 
 
+LOG = print  # pipeline kendi kayıt fonksiyonunu buraya bağlar
+
+
 class QuotaError(RuntimeError):
     pass
 
@@ -71,10 +74,13 @@ def gemini(prompt, system=None, models=("gemini-flash-latest",), images=None, js
                 continue
             if r.status_code in (429, 500, 502, 503, 504):
                 last = f"{r.status_code} {r.text[:200]}"
-                time.sleep(_retry_delay(r, attempt))
+                wait = _retry_delay(r, attempt)
+                LOG(f"Gemini {model} {r.status_code} → {wait:.0f} sn bekleniyor ({attempt+1}/{tries})")
+                time.sleep(wait)
                 continue
             if r.status_code in (400, 403, 404):
                 last = f"{model}: {r.status_code} {r.text[:300]}"
+                LOG(f"Gemini {model} kullanılamadı: {r.status_code} {r.text[:200]}")
                 break  # bu model olmuyor → sonraki modele geç
             j = r.json()
             cands = j.get("candidates") or []

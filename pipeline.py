@@ -33,8 +33,32 @@ DRY_RUN = os.getenv("DRY_RUN", "").lower() in ("1", "true", "yes")
 
 
 # ---------------------------------------------------------------- yardımcılar
+RUNLOG = ROOT / "logs" / "last_run.txt"
+_SECRET_ENVS = ("GEMINI_API_KEY", "CLOUDFLARE_ACCOUNT_ID", "CLOUDFLARE_API_TOKEN", "PIXABAY_API_KEY",
+                "PEXELS_API_KEY", "YT_CLIENT_ID", "YT_CLIENT_SECRET", "YT_REFRESH_TOKEN", "AYRSHARE_API_KEY",
+                "IG_ACCESS_TOKEN", "IG_USER_ID", "TELEGRAM_BOT_TOKEN", "TELEGRAM_CHAT_ID",
+                "WHATSAPP_PHONE", "WHATSAPP_APIKEY")
+
+
+def redact(text):
+    """Kayda yazılan her şeyden anahtarları siler (log repoya da kaydedildiği için)."""
+    text = str(text)
+    for k in _SECRET_ENVS:
+        v = os.getenv(k)
+        if v and len(v) >= 4:
+            text = text.replace(v, f"***{k}***")
+    return re.sub(r"(key|token|apikey|signature|sig)=([^&\s\"']{6,})", r"\1=***", text, flags=re.I)
+
+
 def log(msg):
-    print(f"[{datetime.now():%H:%M:%S}] {msg}", flush=True)
+    line = redact(f"[{datetime.now():%H:%M:%S}] {msg}")
+    print(line, flush=True)
+    try:
+        RUNLOG.parent.mkdir(exist_ok=True)
+        with open(RUNLOG, "a", encoding="utf-8") as fh:
+            fh.write(line + "\n")
+    except Exception:
+        pass
 
 
 def notify(text):
@@ -376,6 +400,7 @@ def build_segments(script, workdir, ledger):
 
     segs, moves = [], ["in", "right", "out", "left"]
     for i, sc in enumerate(scenes):
+        log(f"Sahne {i+1}/{len(scenes)} ({sc.get('visual')}, {sc['duration']:.1f} sn)")
         seg = workdir / f"seg_{i:02d}.mp4"
         clip = None
         if sc.get("visual") != "diagram":
@@ -454,6 +479,8 @@ def run_once():
     idea = pick_topic(history, report)
     log(f"Konu: {idea['title']}  [{idea['pillar']}]")
     script = write_script(idea)
+    log(f"Senaryo yazıldı: {len(script['scenes'])} sahne, "
+        f"{sum(len(s['narration'].split()) for s in script['scenes'])} kelime")
 
     script, facts_ok = verify_loop(script)
     if not facts_ok:
@@ -477,6 +504,7 @@ def run_once():
 
     with tempfile.TemporaryDirectory() as tmp:
         w = Path(tmp)
+        log("Seslendirme başlıyor (Kokoro)...")
         voice_file, words = narrate(script, w)
         log(f"Seslendirme: {media.duration(voice_file):.0f} sn")
         srt = media.write_srt(words, w / "subs.srt")
@@ -554,10 +582,15 @@ def run_once():
 
 
 if __name__ == "__main__":
+    RUNLOG.parent.mkdir(exist_ok=True)
+    RUNLOG.write_text("", encoding="utf-8")
+    ai.LOG = log
+    log(f"Başladı (test modu: {DRY_RUN}, yayın: {CFG['publish_mode']})")
     try:
         run_once()
+        log("Başarıyla bitti.")
     except Exception:
-        err = traceback.format_exc()
-        notify(f"❌ OtoYT hata (video varsa GitHub Actions 'artifacts' altında):\n{err[-3000:]}")
-        print(err, file=sys.stderr)
+        err = redact(traceback.format_exc())
+        log("HATA:\n" + err)
+        notify(f"❌ OtoYT hata:\n{err[-3000:]}")
         sys.exit(1)
