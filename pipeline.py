@@ -159,12 +159,38 @@ def write_script(idea):
         f"You write scripts for a faceless educational YouTube channel called {CFG['channel_name']}. "
         f"{CFG['channel_brief']}\nWrite in {CFG['language']}. Voice: {CFG['tone']}. Rules: {CFG['script_rules']}",
         f"Title idea: {idea['title']}\nAngle: {idea['angle']}\n"
-        f"Target length: ~{CFG['target_words']} words of narration. The FIRST 3 scenes must work on their own "
+        f"This is a LONG-FORM video: write AT LEAST {CFG['target_words']} words of narration in about "
+        f"{max(20, CFG['target_words'] // 50)} scenes (2-3 sentences each). Go deep: mechanisms, concrete "
+        f"examples, comparisons, history and surprising details. The FIRST 3 scenes must work on their own "
         f"as a ~50 second Short (strong hook + payoff). Also plan {CFG.get('shorts_per_video', 3)} Shorts in "
         f"'shorts': each a range of consecutive scenes (0-based, inclusive) that is fully understandable WITHOUT "
         f"the rest of the video, 30-55 seconds of narration (about 75-135 words), starting with a surprising line, "
         f"ranges must not overlap, the first one is scenes 0-2.\n{_schema()}",
         required=("title", "description", "tags", "thumbnail_concepts", "scenes"))
+
+
+def word_count(script):
+    return sum(len(s.get("narration", "").split()) for s in script.get("scenes", []))
+
+
+def ensure_length(script):
+    """Senaryo hedefin belirgin altında kalırsa (ör. zayıf model yazdıysa) genişletir."""
+    target = CFG["target_words"]
+    for attempt in range(CFG.get("max_expand_rounds", 2)):
+        n = word_count(script)
+        if n >= target * CFG.get("min_length_ratio", 0.85):
+            return script
+        log(f"Senaryo kısa ({n}/{target} kelime) → genişletiliyor ({attempt+1})")
+        longer = revise_script(script, (
+            f"- The script is TOO SHORT: {n} words. Expand it to about {target} words "
+            f"(about {max(20, target // 50)} scenes). Keep the strong existing scenes and the hook. "
+            "Add new scenes that go deeper: how each part works step by step, concrete real-world examples, "
+            "comparisons, scale, history and surprising details. Every new scene needs narration, visual, "
+            "broll_query and image_prompt. Keep the 'shorts' plan valid for the new scene numbers."))
+        if word_count(longer) > n:
+            script = longer
+    log(f"Senaryo uzunluğu: {word_count(script)} kelime")
+    return script
 
 
 def revise_script(script, notes):
@@ -753,7 +779,7 @@ def run_once():
     log(f"Analitik: {report['n']} video ölçüldü, sütun puanları: {report['pillar_scores']}")
     idea = pick_topic(history, report)
     log(f"Konu: {idea['title']}  [{idea['pillar']}]")
-    script = write_script(idea)
+    script = ensure_length(write_script(idea))
     log(f"Senaryo yazıldı: {len(script['scenes'])} sahne, "
         f"{sum(len(s['narration'].split()) for s in script['scenes'])} kelime")
 

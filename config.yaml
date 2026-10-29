@@ -76,6 +76,8 @@ music_db: -21                  # müzik seviyesi (anlatım varken ayrıca otomat
 
 # ======================= KALİTE =======================
 target_words: 1400             # ~9-10 dakika (8+ dk = ara reklam imkânı)
+min_length_ratio: 0.85         # bunun altındaysa senaryo genişletilir
+max_expand_rounds: 2
 min_diagram_ratio: 0.4         # sahnelerin en az %40'ı AI diyagram olsun
 min_quality_score: 7           # 5 editör kriterinin hepsi en az bu puan
 max_rewrites: 2
