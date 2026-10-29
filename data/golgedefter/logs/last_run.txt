@@ -1,0 +1,28 @@
+[20:19:01] Başladı (test modu: True, yayın: private)
+[20:19:01] Analitik: 0 video ölçüldü, sütun puanları: {}
+[20:19:01] Gemini gemini-pro-latest günlük kotası doldu → sonraki modele geçiliyor
+[20:23:45] Gemini gemini-flash-latest günlük kotası doldu → sonraki modele geçiliyor
+[20:23:45] HATA:
+Traceback (most recent call last):
+  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 1114, in <module>
+    res = run_once()
+          ^^^^^^^^^^
+  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 947, in run_once
+    idea, script = produce_script(history, report)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 830, in produce_script
+    idea = pick_topic(history + [{"title": t, "type": "long"} for t in tried], report)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 134, in pick_topic
+    data = llm_json(
+           ^^^^^^^^^
+  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 101, in llm_json
+    return ai.gemini_json(system, user, models=models, required=required, images=images,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/otoyt/otoyt/ai.py", line 124, in gemini_json
+    data = extract_json(gemini(user, system=system + "\nReply with valid JSON only.", models=models,
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/otoyt/otoyt/ai.py", line 117, in gemini
+    raise RuntimeError(f"Gemini yanıt vermedi: {last}")
+RuntimeError: Gemini yanıt vermedi: gemini-flash-latest: günlük ücretsiz kota doldu
+
