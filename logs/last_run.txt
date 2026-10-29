@@ -1,0 +1,2 @@
+[16:15:05] Başladı (test modu: True, yayın: private)
+[16:15:05] Analitik: 0 video ölçüldü, sütun puanları: {}
