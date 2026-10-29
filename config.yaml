@@ -80,8 +80,8 @@ min_length_ratio: 0.85         # bunun altındaysa senaryo genişletilir
 max_expand_rounds: 2
 min_diagram_ratio: 0.4         # sahnelerin en az %40'ı AI diyagram olsun
 min_quality_score: 7           # 5 editör kriterinin hepsi en az bu puan (hedef)
-min_quality_floor: 6           # hiçbir deneme hedefi tutturamazsa en iyisi ancak bu puanın üstündeyse yayınlanır
-max_topic_attempts: 3          # baraj geçilemezse yeni konuyla tekrar dene
+min_quality_floor: 0           # 0 = hedef tutmasa da en iyi senaryo HER ZAMAN yayınlanır (videosuz gün olmaz)
+max_topic_attempts: 5          # baraj/bilgi kontrolü geçilemezse yeni konuyla tekrar dene
 max_rewrites: 2
 max_factcheck_rounds: 2
 require_web_factcheck: true    # doğrulama çalışmazsa video ÜRETİLMEZ

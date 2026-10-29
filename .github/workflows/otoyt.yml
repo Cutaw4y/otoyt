@@ -54,7 +54,14 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           WHATSAPP_PHONE: ${{ secrets.WHATSAPP_PHONE }}
           WHATSAPP_APIKEY: ${{ secrets.WHATSAPP_APIKEY }}
-        run: python pipeline.py
+        run: |
+          set +e
+          OTOYT_ATTEMPT=1 python pipeline.py; code=$?
+          if [ $code -eq 3 ]; then
+            echo "Yükleme öncesi hata → 10 dk sonra yeniden deneniyor"; sleep 600
+            OTOYT_ATTEMPT=2 python pipeline.py; code=$?
+          fi
+          exit $code
       - name: Üretilen videoyu sakla (test modu veya yükleme hatası)
         if: always()
         uses: actions/upload-artifact@v4

@@ -30,6 +30,7 @@ CFG = yaml.safe_load((ROOT / "config.yaml").read_text(encoding="utf-8"))
 HISTORY = ROOT / "history.json"
 OUT = ROOT / "out"
 DRY_RUN = os.getenv("DRY_RUN", "").lower() in ("1", "true", "yes")
+UPLOAD_STARTED = False   # True olduktan sonra hata olursa otomatik tekrar deneme YAPILMAZ (çift yükleme olmasın)
 
 
 # ---------------------------------------------------------------- yardımcılar
@@ -758,7 +759,7 @@ def produce_script(history, report):
                 break
             script = revised
         log(f"Konu kalite barajını geçemedi: {idea['title']}")
-    floor = CFG.get("min_quality_floor", 6)
+    floor = CFG.get("min_quality_floor", 0)
     if best and best[0][0] >= floor:
         log(f"Baraj geçilemedi; en iyi senaryo kullanılıyor (min {best[0][0]:.0f}, ort {best[0][1]:.1f})")
         notify(f"ℹ️ Senaryo hedef kaliteyi (7/10) tam tutturamadı; en iyi deneme kullanılıyor "
@@ -902,6 +903,8 @@ def run_once():
         at = lambda h: (now + timedelta(hours=h)).strftime("%Y-%m-%dT%H:%M:%SZ") if sched else None
         up = CFG.get("uploader", "youtube")
 
+        global UPLOAD_STARTED
+        UPLOAD_STARTED = True
         desc = script["description"] + "\n\nStock footage: Pixabay / Pexels. Narration: AI voice."
         m_long = meta(script["title"], desc, script["tags"], at(CFG["publish_delay_hours"]))
         if tr_meta:
@@ -986,7 +989,8 @@ def run_once():
 
 if __name__ == "__main__":
     RUNLOG.parent.mkdir(exist_ok=True)
-    RUNLOG.write_text("", encoding="utf-8")
+    if os.getenv("OTOYT_ATTEMPT", "1") == "1":  # 2. denemede 1. denemenin kaydı silinmesin
+        RUNLOG.write_text("", encoding="utf-8")
     ai.LOG = log
     log(f"Başladı (test modu: {DRY_RUN}, yayın: {CFG['publish_mode']})")
     try:
@@ -996,6 +1000,7 @@ if __name__ == "__main__":
         err = redact(traceback.format_exc())
         log("HATA:\n" + err)
         last = [l for l in err.strip().splitlines() if l.strip()][-1][:300]
-        notify(f"❌ Hata oluştu, video üretilemedi. Claude'a bu mesajı iletebilirsin.\nHata: {last}\n"
-               f"(Ayrıntı GitHub'daki logs/last_run.txt dosyasında)")
-        sys.exit(1)
+        retry = (not UPLOAD_STARTED) and os.getenv("OTOYT_ATTEMPT", "1") == "1"
+        notify(f"❌ Hata oluştu: {last}\n" + ("🔄 10 dakika sonra otomatik olarak yeniden denenecek."
+               if retry else "Claude'a bu mesajı iletebilirsin (ayrıntı: logs/last_run.txt)."))
+        sys.exit(3 if retry else 1)
