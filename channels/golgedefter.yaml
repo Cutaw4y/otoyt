@@ -3,11 +3,12 @@
 channel_name: "Gölgedefter"
 notify_prefix: "🕯 Gölgedefter |"
 channel_brief: >
-  Türkçe belgesel kanalı: açıklanamayan olaylar, efsaneler, doğaüstü anlatılar
-  ve dinler tarihindeki tuhaf, gizemli olaylar. Her video TEK bir olayı, yeri,
-  efsaneyi ya da belgeyi ele alır (ör. Dyatlov Geçidi, Voynich El Yazması, Yedi
-  Uyurlar mağarası, Göbeklitepe'nin gömülmesi, Tunguska, Mary Celeste, Anadolu'nun
-  alkarısı ve karakoncolos inançları, Roanoke, Taos uğultusu). Önce anlatılanları
+  Türkçe belgesel kanalı: kayıp medeniyetler ve antik gizemler, İslam tarihi ve
+  kutsal kıssalar, kıyamet ve ahir zaman anlatıları, açıklanamayan gerçek olaylar,
+  efsaneler ve "yasak bilgi" iddiaları. Her video TEK bir olayı, yeri, kavmi,
+  kıssayı ya da belgeyi ele alır (ör. Göbeklitepe'nin gömülmesi, İrem şehri ve Ad
+  kavmi, Zülkarneyn ve Ye'cüc Me'cüc seddi, Ashab-ı Kehf, Sümerlerin tufan tableti,
+  Nazca çizgileri, Dyatlov Geçidi, Voynich El Yazması, Anadolu'nun alkarısı inancı). Önce anlatılanları
   hikâye gibi kurar, sonra kayıtlara, belgelere ve bilim insanlarının açıklamalarına
   geçer; sonunda neyin bilindiğini, neyin hâlâ bilinmediğini dürüstçe ayırır.
 audience: "gizem, tarih ve efsane meraklısı 18-45 yaş Türkçe konuşan izleyiciler"
@@ -33,7 +34,12 @@ script_rules: >
   diye çerçevele; doğaüstü iddiaları kanıtlanmış gerçek gibi SUNMA, ama alay da etme.
   Dinler ve inançlar hakkında saygılı ve tarafsız ol: hiçbir dini, kutsal kişiyi ya
   da inananı küçümseme; peygamberleri tasvir etme; kutsal metinlerden ne anlatıldığını
-  aktar, yorumu kaynağına bağla. Kan, vahşet, intihar ayrıntısı yok; ölümler
+  aktar, yorumu kaynağına bağla. Ayetleri sure adı ve ayet numarasıyla, hadisleri
+  kaynak kitabıyla (Buhârî, Müslim gibi) ver; kaynağından emin olmadığın anlatımı
+  "rivayet edilir" diye aktar, uydurma ayet ya da hadis asla yazma. Kıyamet için tarih
+  tahmini yapma. Âlimler arasında farklı görüş varsa görüşleri tarafsız sırala.
+  "Yasak bilgi", antik astronot gibi iddiaları iddia olarak anlat ve arkeolojinin ve
+  bilimin cevabını mutlaka ver; spekülasyon üretme, bilgiye dayalı merak uyandır. Kan, vahşet, intihar ayrıntısı yok; ölümler
   ağırbaşlı ve kısa anlatılır. Yaşayan sıradan kişileri suçlama. Tarih ve sayılar
   emin değilse "yaklaşık", "kayıtlara göre" de. Sahne başına tek fikir; gerilimi
   sorularla taşı. İlk 15 saniyede yerel bir merak boşluğu aç ("Kimsenin fark etmediği
@@ -55,21 +61,27 @@ seo_rules: >
   izleyicinin ileri sararken merak edeceği, aranabilir ifadeler ("Olayın Başladığı Gece",
   "Kayıtlardaki Gizli Ayrıntı", "Bilim Ne Diyor"). Etiketler: anahtar kelime, alternatif
   yazılışlar, yabancı isimlerin yaygın yanlış yazımları, ilgili yer/kişi/olay adları
-  (Türkçe karaktersiz yazılışları sistem otomatik ekler). pinned_comment: Türk izleyicinin
+  (Türkçe karaktersiz yazılışları sistem otomatik ekler). Açıklamanın sonunda "Kaynaklar:" başlığıyla
+  videoda geçen ayetleri (sure ve ayet numarası), hadis kaynaklarını ve belgeleri listele. pinned_comment: Türk izleyicinin
   yorum yazmayı sevdiği kişisel görüş sorusu, iki seçenekli ("Sizce gerçek açıklama hangisi:
   çığ mı, askerî deney mi?", "O gece siz orada olsaydınız çadırdan çıkar mıydınız?").
 factcheck_note: >
+  For Quran verses and hadiths: flag as WRONG any verse number, surah name or hadith
+  source that does not match, and any quote presented as a verse or hadith that is not
+  one. Eschatology claims must be attributed ("hadislerde anlatıldığına göre").
   This is a channel about legends and unexplained events. Do NOT flag a claim as
   wrong just because it describes a legend, belief or eyewitness account, as long
   as the script frames it as a story or claim ("anlatılana göre", "iddiaya göre").
   Flag as wrong: wrong dates, places, names, numbers, misattributed quotes, or a
   supernatural claim presented as proven fact.
 
-content_pillars:
+content_pillars:   # izlenme verisine göre sistem en çok tutanlara ağırlık verir
+  - "Kayıp medeniyetler ve antik gizemler (Göbeklitepe, Sümerler, Nazca, Atlantis efsanesi, Mohenjo-daro)"
+  - "İslam tarihi ve kutsal kıssalar (Ashab-ı Kehf, Zülkarneyn, İrem ve Ad kavmi, Semud, Nuh tufanı)"
+  - "Kıyamet alametleri ve ahir zaman anlatıları (ayet ve hadis kaynaklarıyla, tarih tahmini yok)"
   - "Açıklanamayan gerçek olaylar ve kayıplar (Dyatlov, Mary Celeste, Roanoke, Tunguska)"
-  - "Dünya ve Anadolu efsaneleri, halk inançları ve mitolojik varlıklar"
-  - "Dinler tarihindeki gizemli olaylar, kutsal mekânlar ve kayıp metinler"
-  - "Çözülemeyen el yazmaları, şifreler, gizemli yapılar ve antik buluntular"
+  - "Anadolu ve dünya efsaneleri, mitolojik varlıklar, halk inançları"
+  - "Çözülemeyen şifreler, yasak bilgi ve antik astronot iddiaları (bilimin cevabıyla birlikte)"
 
 visual_style: >
   dark atmospheric cinematic illustration, painterly, candlelight and moonlight,
@@ -85,15 +97,16 @@ caption_theme:            # bölüm kartı ve bilgi etiketleri: kehribar rengi (
   callout_text: "&H000F0B0D"
 
 branding:
-  version: 1
+  version: 2
   banner: "assets/golgedefter/golgedefter_banner.jpg"
   country: "TR"
-  keywords: "gizem açıklanamayan olaylar efsaneler doğaüstü belgesel tarih gizemleri dinler tarihi gölgedefter"
-  description: >
-    Açıklanamayanların defteri. Gölgedefter; açıklanamayan olayları, efsaneleri,
-    doğaüstü anlatıları ve dinler tarihinin gizemli sayfalarını belgeleriyle
-    birlikte anlatır: ne anlatılıyor, kayıtlar ne diyor, bilim ne açıklıyor ve
-    hâlâ ne bilinmiyor. Yeni sayfalar her Salı, Perşembe ve Cumartesi.
+  keywords: "gizem belgesel kayıp medeniyetler antik gizemler islam tarihi kıyamet alametleri efsaneler açıklanamayan olaylar gölgedefter"
+  description: |
+    📜 Açıklanamayanların defteri. Kayıp medeniyetlerden kutsal kıssalara, kıyamet anlatılarından tarihin çözülemeyen olaylarına uzanan belgesel bir yolculuk.
+    🏺 Göbeklitepe'den Sümerlere, İrem şehrinden Zülkarneyn'in seddine; antik uygarlıklar, arkeolojik keşifler ve dünyanın en esrarengiz olayları.
+    📖 Ayetler, hadis kaynakları, tarihî belgeler ve akademik araştırmalar ışığında: ne anlatılıyor, kayıtlar ne diyor, bilim ne açıklıyor, hâlâ ne bilinmiyor.
+    🔎 Amacımız spekülasyon üretmek değil; bilgiye dayalı, düşündüren ve merak uyandıran sayfalar açmak.
+    🕯 Yeni sayfalar her Salı, Perşembe ve Cumartesi. Kaçırmamak için abone olmayı unutmayın.
     Seslendirme yapay zekâ sesidir; her senaryo yayından önce kaynaklarla kontrol edilir.
 
 made_for_kids: false
