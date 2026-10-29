@@ -9,7 +9,10 @@ from datetime import date, datetime, timedelta
 
 import requests
 
-YT_SCOPES = ["https://www.googleapis.com/auth/youtube.upload",
+# Not: token yenilenirken kapsam belirtilmez → izin verilmiş tüm kapsamlar gelir
+# (yeni bir kapsam eklendiğinde eski token bozulmasın diye).
+YT_SCOPES = ["https://www.googleapis.com/auth/youtube.force-ssl",
+             "https://www.googleapis.com/auth/youtube.upload",
              "https://www.googleapis.com/auth/youtube",
              "https://www.googleapis.com/auth/yt-analytics.readonly"]
 
@@ -34,7 +37,7 @@ def _creds():
     return Credentials(None, refresh_token=os.environ["YT_REFRESH_TOKEN"],
                        client_id=os.environ["YT_CLIENT_ID"],
                        client_secret=os.environ["YT_CLIENT_SECRET"],
-                       token_uri="https://oauth2.googleapis.com/token", scopes=YT_SCOPES)
+                       token_uri="https://oauth2.googleapis.com/token")
 
 
 def _yt():
@@ -55,9 +58,12 @@ def youtube_upload(video, meta, thumb=None):
                         "tags": meta["tags"], "categoryId": meta["category_id"],
                         "defaultLanguage": meta["lang"], "defaultAudioLanguage": meta["lang"]},
             "status": status}
+    if meta.get("localizations"):  # ör. Türk izleyiciye Türkçe başlık/açıklama
+        body["localizations"] = meta["localizations"]
 
     def do():
-        req = yt.videos().insert(part="snippet,status", body=body, notifySubscribers=True,
+        part = "snippet,status,localizations" if "localizations" in body else "snippet,status"
+        req = yt.videos().insert(part=part, body=body, notifySubscribers=True,
                                  media_body=MediaFileUpload(str(video), chunksize=8 << 20, resumable=True))
         resp = None
         while resp is None:
@@ -118,6 +124,17 @@ def ayrshare_upload(video, meta, thumb=None):
                 return p.get("id") or p.get("postUrl", "")
         return j.get("id", "")
     return _retry(do, tries=2, what="Ayrshare paylaşım")
+
+
+def upload_caption(video_id, srt_path, lang, name):
+    """Videoya altyazı izi ekler (izleyici ayarlardan seçer). youtube.force-ssl izni gerekir."""
+    from googleapiclient.http import MediaFileUpload
+    yt = _yt()
+    body = {"snippet": {"videoId": video_id, "language": lang, "name": name, "isDraft": False}}
+    return _retry(lambda: yt.captions().insert(
+        part="snippet", body=body,
+        media_body=MediaFileUpload(str(srt_path), mimetype="application/octet-stream")).execute(),
+        tries=2, what=f"{lang} altyazı")["id"]
 
 
 def set_branding(banner=None, description=None, keywords=None, country=None, lang=None):

@@ -79,8 +79,16 @@ uploader: "youtube"            # youtube (ücretsiz) | ayrshare (ÜCRETLİ B pla
 category_id: "27"              # 27 = Education
 publish_mode: "private"        # ÖNCE "private" ile test et → sonra "scheduled"
 publish_delay_hours: 6         # ana video üretimden 6 saat sonra yayında (kontrol penceresi)
+# Altyazı izleri: İngilizce (orijinal) + çeviri. Türk izleyici Türkçe altyazı ve Türkçe başlık görür.
+subtitle_translation:
+  code: "tr"
+  name: "Turkish"
+  label: "Türkçe"
+
 make_shorts: true
-shorts_delay_hours: 30         # Short ertesi gün yayınlanır
+shorts_per_video: 3            # her uzun videodan kaç farklı Short (YouTube günlük yükleme kotası: en fazla 4)
+shorts_delay_hours: 20         # ilk Short, ana videodan 20 saat sonra
+shorts_gap_hours: 16           # sonraki Shortlar 16'şar saat arayla → her gün yeni Short
 
 # ======================= INSTAGRAM =======================
 instagram_enabled: false       # IG anahtarları eklenince true yap

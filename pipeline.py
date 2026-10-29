@@ -136,6 +136,8 @@ SCRIPT_SCHEMA = (
     '"tags":["8-15 tags"],'
     '"thumbnail_concepts":[{"image_prompt":"visual concept, NO text in image","text":"2-4 punchy words"}],'
     '"short_title":"<=60 chars hook title for the Shorts cut",'
+    '"shorts":[{"start_scene":0,"end_scene":2,"title":"<=60 chars curiosity hook title",'
+    '"hook":"why this clip works on its own"}],'
     '"ig_caption":"Instagram Reel caption: 1-line hook, 2-3 short lines of value, '
     'CTA to watch the full video on YouTube via link in bio, then 5-8 relevant hashtags",'
     '"scenes":[{"narration":"2-3 sentences","visual":"footage or diagram",'
@@ -158,7 +160,10 @@ def write_script(idea):
         f"{CFG['channel_brief']}\nWrite in {CFG['language']}. Voice: {CFG['tone']}. Rules: {CFG['script_rules']}",
         f"Title idea: {idea['title']}\nAngle: {idea['angle']}\n"
         f"Target length: ~{CFG['target_words']} words of narration. The FIRST 3 scenes must work on their own "
-        f"as a ~50 second Short (strong hook + payoff).\n{_schema()}",
+        f"as a ~50 second Short (strong hook + payoff). Also plan {CFG.get('shorts_per_video', 3)} Shorts in "
+        f"'shorts': each a range of consecutive scenes (0-based, inclusive) that is fully understandable WITHOUT "
+        f"the rest of the video, 30-55 seconds of narration (about 75-135 words), starting with a surprising line, "
+        f"ranges must not overlap, the first one is scenes 0-2.\n{_schema()}",
         required=("title", "description", "tags", "thumbnail_concepts", "scenes"))
 
 
@@ -475,6 +480,82 @@ def build_segments(script, workdir, ledger):
     return segs
 
 
+# ---------------------------------------------------------------- 6a. altyazı çevirisi
+def translate_lines(lines, lang_name, chunk=60):
+    """Altyazı satırlarını sırası ve sayısı bozulmadan çevirir; başaramazsa None."""
+    out = []
+    for i in range(0, len(lines), chunk):
+        part = lines[i:i + chunk]
+        ok = False
+        for _ in range(2):
+            try:
+                data = llm_json(
+                    f"You translate video subtitles into natural, fluent {lang_name}. Keep it short and readable; "
+                    "keep technical terms accurate; do not add or merge lines.",
+                    f"Translate each line into {lang_name}. Return exactly {len(part)} lines in the same order.\n"
+                    + json.dumps({"lines": part}, ensure_ascii=False) + '\nReturn JSON: {"lines":["..."]}',
+                    required=("lines",), judge=True)
+                if isinstance(data["lines"], list) and len(data["lines"]) == len(part):
+                    out += [str(x).strip() for x in data["lines"]]
+                    ok = True
+                    break
+            except Exception as e:
+                log(f"Çeviri hatası: {e}")
+        if not ok:
+            return None
+    return out
+
+
+def local_meta(script, shorts, lang_name):
+    """Başlık/açıklamanın yerel dil sürümü (ör. Türk izleyici Türkçe başlık görür)."""
+    try:
+        data = llm_json(
+            f"You localize YouTube metadata into natural {lang_name}. Keep curiosity and meaning; no clickbait.",
+            json.dumps({"title": script["title"], "description": script["description"],
+                        "short_titles": [s["title"] for s in shorts]}, ensure_ascii=False)
+            + '\nReturn JSON: {"title":"<=90 chars","description":"...","short_titles":["..."]}',
+            required=("title", "description"), judge=True)
+        return data
+    except Exception as e:
+        log(f"Başlık çevirisi yapılamadı: {e}")
+        return None
+
+
+def shift_blocks(blocks, start, length):
+    """Uzun videonun altyazı bloklarından bir Short'un aralığını alıp sıfıra kaydırır."""
+    res = []
+    for a, b, t in blocks:
+        if b <= start or a >= start + length:
+            continue
+        res.append((max(a - start, 0), min(b - start, length), t))
+    return res
+
+
+# ---------------------------------------------------------------- 6b. shorts planı
+def plan_shorts(script):
+    """Senaryodaki short planını doğrular; bozuksa ilk sahnelerden tek short'a düşer."""
+    n = len(script["scenes"])
+    want = max(1, int(CFG.get("shorts_per_video", 3)))
+    plans, used = [], set()
+    for s in script.get("shorts") or []:
+        try:
+            a, b = int(s["start_scene"]), int(s["end_scene"])
+        except (KeyError, TypeError, ValueError):
+            continue
+        a, b = max(0, a), min(n - 1, b)
+        rng = set(range(a, b + 1))
+        if a > b or rng & used:
+            continue
+        used |= rng
+        plans.append({"start": a, "end": b, "title": (s.get("title") or script.get("short_title")
+                                                       or script["title"]).strip()})
+        if len(plans) >= want:
+            break
+    if not plans:
+        plans = [{"start": 0, "end": min(2, n - 1), "title": script.get("short_title") or script["title"]}]
+    return plans
+
+
 # ---------------------------------------------------------------- 7. thumbnail
 def make_thumbnails(script, workdir, ledger):
     cands = []
@@ -573,15 +654,36 @@ def run_once():
         final = media.mux_final(silent, voice_file, srt, w / "final.mp4", music=music)
         log(f"Ana video: {media.duration(final):.0f} sn")
 
-        short = None
+        shorts = []
         if CFG.get("make_shorts", True):
-            short, slen = media.make_short(segs, [s["duration"] for s in script["scenes"]], voice_file, words,
-                                           w / "short.mp4", w, music=music)
-            log(f"Short: {slen:.0f} sn")
+            durs = [s["duration"] for s in script["scenes"]]
+            for k, plan in enumerate(plan_shorts(script)):
+                try:
+                    f, slen = media.make_short(segs, durs, voice_file, words, w / f"short_{k+1}.mp4", w,
+                                               music=music, start=plan["start"], end=plan["end"], tag=f"short{k+1}")
+                    if slen >= 15:
+                        shorts.append({**plan, "file": f, "len": slen})
+                        log(f"Short {k+1}: sahne {plan['start']}-{plan['end']}, {slen:.0f} sn — {plan['title']}")
+                except Exception as e:
+                    log(f"Short {k+1} üretilemedi: {e}")
+        short = shorts[0]["file"] if shorts else None
         thumb = make_thumbnails(script, w, ledger)
 
+        # altyazı izleri: İngilizce (doğru metin) + Türkçe (çeviri)
+        cap_blocks = media.srt_blocks(words, per_line=8)
+        en_srt = media.write_srt_blocks(cap_blocks, w / "captions_en.srt")
+        tr_srt, tr_blocks, tr_meta = None, None, None
+        sub_lang = CFG.get("subtitle_translation") or {}
+        if sub_lang.get("code"):
+            log(f"Altyazı çevirisi: {sub_lang['name']} ({len(cap_blocks)} satır)")
+            tr_text = translate_lines([t for _, _, t in cap_blocks], sub_lang["name"])
+            if tr_text:
+                tr_blocks = [(a, b, t) for (a, b, _), t in zip(cap_blocks, tr_text)]
+                tr_srt = media.write_srt_blocks(tr_blocks, w / f"captions_{sub_lang['code']}.srt")
+            tr_meta = local_meta(script, shorts, sub_lang["name"])
+
         OUT.mkdir(exist_ok=True)
-        for f in (final, thumb, short):
+        for f in [final, thumb, en_srt, tr_srt] + [s["file"] for s in shorts]:
             if f:
                 shutil.copy(f, OUT / Path(f).name)
         save_json(OUT / "script.json", script)
@@ -598,8 +700,25 @@ def run_once():
         up = CFG.get("uploader", "youtube")
 
         desc = script["description"] + "\n\nStock footage: Pixabay / Pexels. Narration: AI voice."
-        vid = publish.upload(final, meta(script["title"], desc, script["tags"],
-                                         at(CFG["publish_delay_hours"])), thumb, up)
+        m_long = meta(script["title"], desc, script["tags"], at(CFG["publish_delay_hours"]))
+        if tr_meta:
+            m_long["localizations"] = {sub_lang["code"]: {"title": tr_meta["title"][:100],
+                                                          "description": tr_meta["description"][:4900]}}
+        vid = publish.upload(final, m_long, thumb, up)
+        cap_warned = False
+        for srt_path, code, name in ((en_srt, "en", "English"),
+                                     (tr_srt, sub_lang.get("code"), sub_lang.get("label"))):
+            if not srt_path or up != "youtube":
+                continue
+            try:
+                publish.upload_caption(vid, srt_path, code, name)
+                log(f"Altyazı eklendi: {name}")
+            except Exception as e:
+                log(f"Altyazı eklenemedi ({name}): {str(e)[:200]}")
+                if not cap_warned and ("insufficient" in str(e).lower() or "403" in str(e)):
+                    notify("⚠️ Altyazılar yüklenemedi: YouTube izninin yenilenmesi gerekiyor "
+                           "(get_token.bat bir kez daha çalıştırılmalı). Video normal yüklendi.")
+                    cap_warned = True
         history.append({"date": datetime.now().isoformat(timespec="minutes"), "type": "long",
                         "title": script["title"], "pillar": idea["pillar"], "video_id": vid})
         save_json(HISTORY, history)
@@ -607,19 +726,35 @@ def run_once():
         notify(f"✅ Yüklendi: {script['title']}\nhttps://youtu.be/{vid}\n"
                f"Yayın: {CFG['publish_delay_hours']} saat sonra. Beğenmezsen Studio'dan sil.")
 
-        if short:
+        for k, sh_ in enumerate(shorts):
             try:
-                sdesc = f"{script.get('short_title', script['title'])}\n\nFull video: https://youtu.be/{vid}\n#Shorts"
-                sid = publish.upload(short, meta(script.get("short_title", script["title"])[:90] + " #Shorts",
-                                                 sdesc, script["tags"], at(CFG["shorts_delay_hours"]),
-                                                 is_short=True), None, up)
+                title = sh_["title"][:90].rstrip() + " #Shorts"
+                sdesc = (f"{sh_['title']}\n\nWatch the full video: https://youtu.be/{vid}\n\n"
+                         + " ".join("#" + re.sub(r"\W", "", t) for t in script["tags"][:3]) + " #Shorts")
+                delay = CFG["shorts_delay_hours"] + k * CFG.get("shorts_gap_hours", 16)
+                m_short = meta(title, sdesc, script["tags"], at(delay), is_short=True)
+                trt = (tr_meta or {}).get("short_titles") or []
+                if k < len(trt) and trt[k]:
+                    m_short["localizations"] = {sub_lang["code"]: {
+                        "title": str(trt[k])[:90] + " #Shorts",
+                        "description": f"{trt[k]}\n\nVideonun tamamı: https://youtu.be/{vid}\n#Shorts"}}
+                sid = publish.upload(sh_["file"], m_short, None, up)
+                if tr_blocks and up == "youtube" and not cap_warned:
+                    try:
+                        off = sum(s["duration"] for s in script["scenes"][:sh_["start"]])
+                        sp = media.write_srt_blocks(shift_blocks(tr_blocks, off, sh_["len"]),
+                                                    w / f"short{k+1}_{sub_lang['code']}.srt")
+                        publish.upload_caption(sid, sp, sub_lang["code"], sub_lang["label"])
+                    except Exception as e:
+                        log(f"Short {k+1} altyazısı eklenemedi: {str(e)[:200]}")
                 history.append({"date": datetime.now().isoformat(timespec="minutes"), "type": "short",
-                                "title": script.get("short_title", script["title"]),
-                                "pillar": idea["pillar"], "video_id": sid, "parent": vid})
+                                "title": sh_["title"], "pillar": idea["pillar"], "video_id": sid, "parent": vid})
                 save_json(HISTORY, history)
-                notify(f"📱 Short yüklendi: https://youtu.be/{sid}")
+                notify(f"📱 Short {k+1}/{len(shorts)} yüklendi ({delay} saat sonra yayında): https://youtu.be/{sid}")
             except Exception as e:
-                notify(f"⚠️ Short yüklenemedi: {e}")
+                notify(f"⚠️ Short {k+1} yüklenemedi: {str(e)[:300]}")
+                if "quota" in str(e).lower() or "uploadLimit" in str(e):
+                    break  # günlük yükleme hakkı doldu; kalanları zorlamayalım
 
         if short and CFG.get("instagram_enabled") and CFG["publish_mode"] != "private":
             try:

@@ -92,16 +92,25 @@ def _ts(t):
     return f"{ms//3600000:02d}:{ms//60000%60:02d}:{ms//1000%60:02d},{ms%1000:03d}"
 
 
+def srt_blocks(words, per_line=6, until=None):
+    """Kelime zamanlarından altyazı blokları: [(başlangıç, bitiş, metin)]"""
+    ws = [w for w in words if until is None or w["end"] <= until + 0.05]
+    out = []
+    for i in range(0, len(ws), per_line):
+        c = ws[i:i + per_line]
+        out.append((c[0]["start"], c[-1]["end"], " ".join(w["word"].strip() for w in c)))
+    return out
+
+
+def write_srt_blocks(blocks, out):
+    lines = [f"{n}\n{_ts(a)} --> {_ts(b)}\n{t}\n" for n, (a, b, t) in enumerate(blocks, 1)]
+    Path(out).write_text("\n".join(lines), encoding="utf-8")
+    return out
+
+
 def write_srt(words, out, per_line=6, until=None):
     """words: [{'word','start','end'}]"""
-    ws = [w for w in words if until is None or w["end"] <= until + 0.05]
-    blocks = []
-    for n, i in enumerate(range(0, len(ws), per_line), 1):
-        c = ws[i:i + per_line]
-        text = " ".join(w["word"].strip() for w in c)
-        blocks.append(f"{n}\n{_ts(c[0]['start'])} --> {_ts(c[-1]['end'])}\n{text}\n")
-    Path(out).write_text("\n".join(blocks), encoding="utf-8")
-    return out
+    return write_srt_blocks(srt_blocks(words, per_line, until), out)
 
 
 def _sub_filter(srt, style):
@@ -125,20 +134,26 @@ def mux_final(video, voice, srt, out, music=None, music_volume=0.07):
     return out
 
 
-def make_short(segments, scene_durs, voice, words, out, workdir, max_len=58.0, music=None):
-    """Baştaki (hook) sahnelerden ≤58 sn dikey Short üretir. Ek API maliyeti yok."""
+def make_short(segments, scene_durs, voice, words, out, workdir, max_len=58.0, music=None,
+               start=0, end=None, tag="short"):
+    """Sahne aralığından (start..end) ≤58 sn dikey Short üretir. Ek API maliyeti yok."""
     workdir = Path(workdir)
+    end = len(segments) - 1 if end is None else min(end, len(segments) - 1)
+    offset = sum(scene_durs[:start])
     take, total = [], 0.0
-    for seg, d in zip(segments, scene_durs):
+    for seg, d in zip(segments[start:end + 1], scene_durs[start:end + 1]):
         if total + d > max_len and take:
             break
         take.append(seg)
         total += d
     total = min(total, max_len)
-    joined = concat(take, workdir / "short_join.mp4", workdir, "short_segs")
-    vcut = workdir / "short_voice.m4a"
-    sh(["ffmpeg", "-y", "-i", voice, "-t", f"{total:.3f}", "-c:a", "aac", "-b:a", "192k", vcut])
-    srt = write_srt(words, workdir / "short.srt", per_line=3, until=total)
+    joined = concat(take, workdir / f"{tag}_join.mp4", workdir, f"{tag}_segs")
+    vcut = workdir / f"{tag}_voice.m4a"
+    sh(["ffmpeg", "-y", "-ss", f"{offset:.3f}", "-i", voice, "-t", f"{total:.3f}",
+        "-c:a", "aac", "-b:a", "192k", vcut])
+    local = [{"word": w["word"], "start": w["start"] - offset, "end": w["end"] - offset}
+             for w in words if w["start"] >= offset - 0.05 and w["end"] <= offset + total + 0.05]
+    srt = write_srt(local, workdir / f"{tag}.srt", per_line=3, until=total)
     style = "FontName=DejaVu Sans,FontSize=16,Bold=1,Outline=3,Shadow=0,Alignment=2,MarginV=70"
     fc = (f"[0:v]split[a][b];"
           f"[a]scale={SW}:{SH}:force_original_aspect_ratio=increase,crop={SW}:{SH},boxblur=25:2,eq=brightness=-0.15[bg];"
