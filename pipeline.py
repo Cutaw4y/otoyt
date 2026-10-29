@@ -741,6 +741,8 @@ ERROR_GUIDE = [
     ("API key not valid", "Gemini API anahtarı geçersiz. Çözüm: GEMINI_API_KEY'i yenile."),
     ("günlük ücretsiz kota doldu", "Gemini'nin günlük ücretsiz hakkı bitti; yarın sıfırlanır. Kalıcı çözüm: "
                                    "ücretli Gemini anahtarı (GEMINI_PAID_API_KEY)."),
+    ("YANLIŞ KANAL", "İzin anahtarı yanlış YouTube kanalına bağlı. get_token.bat'ı çalıştırıp kanal seçme "
+                     "ekranında doğru kanalı seç, anahtarı GitHub Secrets'ta güncelle."),
     ("quotaExceeded", "YouTube günlük API kotası doldu. Yarın kendiliğinden devam eder."),
     ("uploadLimitExceeded", "YouTube günlük yükleme sınırı doldu. Yarın kendiliğinden devam eder."),
     ("Authentication error", "Cloudflare anahtarı geçersiz. Görseller yedek kaynaktan alınır; "
@@ -954,7 +956,24 @@ def clear_old_localizations():
         log(f"Eski çeviriler kaldırılamadı: {str(e)[:200]}")
 
 
+def check_channel():
+    """İzin anahtarı bu config'in kanalına mı bağlı? Değilse hiçbir şey yüklemeden dur."""
+    if DRY_RUN or CFG.get("uploader", "youtube") != "youtube" or not os.getenv("YT_REFRESH_TOKEN"):
+        return
+    try:
+        title = publish.my_channel_title()
+    except Exception as e:
+        log(f"Kanal adı kontrol edilemedi: {str(e)[:150]}")
+        return
+    norm = lambda x: (x or "").replace("İ", "i").replace("I", "ı").lower().replace(" ", "")
+    if title and norm(title) != norm(CFG["channel_name"]):
+        raise RuntimeError(f"YANLIŞ KANAL: izin anahtarı '{title}' kanalına bağlı, beklenen "
+                           f"'{CFG['channel_name']}'. Hiçbir şey yüklenmedi; get_token.bat ile doğru kanalı seç.")
+    log(f"Kanal doğrulandı: {title}")
+
+
 def run_once():
+    check_channel()
     ensure_branding()
     clear_old_localizations()
     retry_pending_captions()

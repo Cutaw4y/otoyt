@@ -313,3 +313,9 @@ def clear_localizations():
             yt.videos().update(part="snippet,localizations", body=body).execute()
             n += 1
     return n
+
+
+def my_channel_title():
+    """İzin anahtarının bağlı olduğu kanalın adı (yanlış kanala yüklemeyi önlemek için)."""
+    items = _yt().channels().list(part="snippet", mine=True).execute().get("items", [])
+    return items[0]["snippet"]["title"] if items else None
