@@ -1,0 +1,6 @@
+out/
+selftest_out/
+__pycache__/
+client_secret.json
+youtube_anahtarlar.txt
+instagram_anahtarlar.txt

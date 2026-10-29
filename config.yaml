@@ -1,0 +1,77 @@
+# ======================= KANAL KİMLİĞİ =======================
+# Niş: Education & Science (2026 verisinde en yüksek medyan RPM'li kategori)
+channel_name: "Cutaway"        # kanal adını değiştirirsen burayı da değiştir
+channel_brief: >
+  Science and engineering behind everyday things and
+  giant systems. Each video takes ONE thing (a jet engine, a dam, GPS, a
+  refrigerator, a container port, a nuclear reactor, why glass is transparent)
+  and explains how it works, step by step, with a surprising "aha" moment.
+  Also covers the cost/economics side when it helps understanding. No real
+  people as main subjects, no investment/medical/legal advice, no politics,
+  no current news (content must stay true for years).
+audience: "curious adults 18-55 in the US, UK, Canada, Australia"
+tone: "calm documentary narrator, clear, curious, occasional dry humor"
+language: "English"
+language_code: "en"
+
+script_rules: >
+  Open with a surprising question or fact in the first sentence. Explain like a
+  great teacher: one idea per scene, everyday analogies, build from simple to
+  deep. Only well-established science and engineering facts; if a number is
+  uncertain give a range or say "roughly". No filler, no "in today's video", no
+  "smash the like button", no clickbait the video doesn't deliver. End with a
+  one-line takeaway.
+
+content_pillars:
+  - "How a machine or device works, from the inside (engines, fridges, batteries, phones)"
+  - "Giant infrastructure explained (power grids, dams, ports, bridges, internet cables)"
+  - "Everyday science mysteries (why ice floats, why the sky is blue, how soap works)"
+  - "How it's made and what it really costs (steel, glass, chips, paper, concrete)"
+
+# Kanalın görsel kimliği: her diyagram bu stilde üretilir → tutarlı marka görünümü
+visual_style: >
+  clean modern educational illustration, cutaway / cross-section where useful,
+  flat vector look with soft gradients, dark navy background, glowing cyan and
+  warm orange accents, clear arrows showing flow, no text or labels, 16:9
+thumbnail_style: "bold, high contrast, dramatic lighting, one clear object, cinematic, vivid colors"
+
+made_for_kids: false
+declare_synthetic: true        # AI içerik beyanı (YouTube politikası)
+
+# ======================= MODELLER (HEPSİ ÜCRETSİZ) =======================
+# Gemini ücretsiz katman. Sırayla denenir: ilki olmazsa (kota/hata) sonrakine geçer.
+text_models: ["gemini-flash-latest", "gemini-flash-lite-latest"]   # fikir + senaryo
+judge_models: ["gemini-flash-latest", "gemini-flash-lite-latest"]  # editör + thumbnail hakemi
+factcheck_models: ["gemini-flash-latest"]                          # Google aramalı doğrulama
+# Görseller: Cloudflare Workers AI FLUX.1 schnell (günde ~170 görsel ücretsiz).
+# Kota biterse otomatik olarak Pexels fotoğraflarına geçer.
+
+# Seslendirme: Kokoro (açık kaynak, GitHub sunucusunda çalışır)
+voice:
+  name: "af_heart"             # en yüksek kaliteli ses. Erkek: "am_michael" / İngiliz: "bm_george" (lang "b")
+  lang: "a"                    # a = Amerikan İngilizcesi, b = İngiliz İngilizcesi
+  speed: 0.95                  # belgesel temposu
+
+# ======================= KALİTE =======================
+target_words: 1400             # ~9-10 dakika (8+ dk = ara reklam imkânı)
+min_diagram_ratio: 0.4         # sahnelerin en az %40'ı AI diyagram olsun
+min_quality_score: 7           # 5 editör kriterinin hepsi en az bu puan
+max_rewrites: 2
+max_factcheck_rounds: 2
+require_web_factcheck: true    # doğrulama çalışmazsa video ÜRETİLMEZ
+fallback_broll: "industrial machinery close up"
+explore_rate: 0.25             # %25 ihtimalle yeni konu türü dener (öğrenme için)
+
+# ======================= YAYIN =======================
+uploader: "youtube"            # youtube (ücretsiz) | ayrshare (ÜCRETLİ B planı, denetim reddedilirse)
+category_id: "27"              # 27 = Education
+publish_mode: "private"        # ÖNCE "private" ile test et → sonra "scheduled"
+publish_delay_hours: 6         # ana video üretimden 6 saat sonra yayında (kontrol penceresi)
+make_shorts: true
+shorts_delay_hours: 30         # Short ertesi gün yayınlanır
+
+# ======================= INSTAGRAM =======================
+instagram_enabled: false       # IG anahtarları eklenince true yap
+instagram_ai_label: true       # Reel'e "AI ile üretildi" etiketi
+# Not: Instagram'da zamanlama yok; Reel üretim anında yayınlanır.
+# publish_mode "private" iken Instagram'a HİÇ gönderilmez (test güvenliği).
