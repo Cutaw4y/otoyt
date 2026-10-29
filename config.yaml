@@ -35,6 +35,18 @@ visual_style: >
   warm orange accents, clear arrows showing flow, no text or labels, 16:9
 thumbnail_style: "bold, high contrast, dramatic lighting, one clear object, cinematic, vivid colors"
 
+# Kanal sayfası (ilk gerçek çalışmada bir kez otomatik ayarlanır)
+branding:
+  banner: "assets/cutaway_banner.jpg"
+  country: "TR"
+  keywords: "how things work engineering science explained infrastructure machines education cutaway"
+  description: >
+    How things actually work. Cutaway takes one everyday thing or giant system —
+    a jet engine, a power grid, a container port, a fridge — and explains how it
+    really works, step by step, with clear diagrams and real footage.
+    New videos every Monday, Wednesday and Friday.
+    Narration uses an AI voice; every script is fact-checked before publishing.
+
 made_for_kids: false
 declare_synthetic: true        # AI içerik beyanı (YouTube politikası)
 

@@ -38,11 +38,20 @@ def log(msg):
 
 
 def notify(text):
+    """Telegram ve/veya WhatsApp'a (CallMeBot) bildirim. Hangisinin anahtarı varsa ona gider."""
     tok, chat = os.getenv("TELEGRAM_BOT_TOKEN"), os.getenv("TELEGRAM_CHAT_ID")
     if tok and chat:
         try:
             requests.post(f"https://api.telegram.org/bot{tok}/sendMessage",
                           json={"chat_id": chat, "text": text[:4000]}, timeout=20)
+        except Exception:
+            pass
+    phone, key = os.getenv("WHATSAPP_PHONE"), os.getenv("WHATSAPP_APIKEY")
+    if phone and key:
+        try:
+            requests.get("https://api.callmebot.com/whatsapp.php",
+                         params={"phone": phone.replace(" ", ""), "text": text[:1000], "apikey": key},
+                         timeout=30)
         except Exception:
             pass
 
@@ -416,7 +425,27 @@ def meta(title, desc, tags, publish_at, is_short=False):
             "publish_at": publish_at, "is_short": is_short}
 
 
+BRAND_DONE = ROOT / "assets" / "branding_done.json"
+
+
+def ensure_branding():
+    """İlk gerçek çalışmada kanal afişini ve açıklamasını bir kez ayarlar."""
+    b = CFG.get("branding") or {}
+    if DRY_RUN or not b or BRAND_DONE.exists() or not os.getenv("YT_REFRESH_TOKEN"):
+        return
+    try:
+        cid = publish.set_branding(banner=ROOT / b["banner"] if b.get("banner") else None,
+                                   description=b.get("description"), keywords=b.get("keywords"),
+                                   country=b.get("country"), lang=CFG["language_code"])
+        save_json(BRAND_DONE, {"date": datetime.now().isoformat(timespec="minutes"), "channel": cid})
+        notify("🎨 Kanal afişi ve açıklaması ayarlandı.")
+    except Exception as e:  # marka ayarı başarısız olsa da video üretimi devam etsin
+        log(f"Kanal markası ayarlanamadı: {e}")
+        notify(f"⚠️ Kanal afişi ayarlanamadı (video üretimi devam ediyor): {str(e)[:300]}")
+
+
 def run_once():
+    ensure_branding()
     history = load_json(HISTORY, [])
     ledger = media.AssetLedger(ROOT / "assets_used.json")
 

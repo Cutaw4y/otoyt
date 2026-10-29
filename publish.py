@@ -120,6 +120,29 @@ def ayrshare_upload(video, meta, thumb=None):
     return _retry(do, tries=2, what="Ayrshare paylaşım")
 
 
+def set_branding(banner=None, description=None, keywords=None, country=None, lang=None):
+    """Kanal afişini ve 'Hakkında' bilgilerini API ile ayarlar (profil resmi API ile değiştirilemez)."""
+    from googleapiclient.http import MediaFileUpload
+    yt = _yt()
+    ch = yt.channels().list(part="brandingSettings", mine=True).execute()["items"][0]
+    bs = ch.get("brandingSettings", {})
+    bs.setdefault("channel", {})
+    if description:
+        bs["channel"]["description"] = description[:1000]
+    if keywords:
+        bs["channel"]["keywords"] = keywords[:500]
+    if country:
+        bs["channel"]["country"] = country
+    if lang:
+        bs["channel"]["defaultLanguage"] = lang
+    if banner:
+        url = yt.channelBanners().insert(
+            media_body=MediaFileUpload(str(banner), mimetype="image/jpeg")).execute()["url"]
+        bs.setdefault("image", {})["bannerExternalUrl"] = url
+    yt.channels().update(part="brandingSettings", body={"id": ch["id"], "brandingSettings": bs}).execute()
+    return ch["id"]
+
+
 def upload(video, meta, thumb=None, uploader="youtube"):
     return ayrshare_upload(video, meta, thumb) if uploader == "ayrshare" else youtube_upload(video, meta, thumb)
 

@@ -11,7 +11,7 @@ on:
         default: false
 
 permissions:
-  contents: write
+  contents: write               # history.json / assets_used.json kaydı için
 
 concurrency: otoyt
 
@@ -25,7 +25,7 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
-      - name: Ses modeli önbelleği
+      - name: Ses modeli önbelleği (her seferinde indirmesin)
         uses: actions/cache@v4
         with:
           path: ~/.cache/huggingface
@@ -52,8 +52,10 @@ jobs:
           IG_USER_ID: ${{ secrets.IG_USER_ID }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          WHATSAPP_PHONE: ${{ secrets.WHATSAPP_PHONE }}
+          WHATSAPP_APIKEY: ${{ secrets.WHATSAPP_APIKEY }}
         run: python pipeline.py
-      - name: Üretilen videoyu sakla
+      - name: Üretilen videoyu sakla (test modu veya yükleme hatası)
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -66,7 +68,7 @@ jobs:
         run: |
           git config user.name "otoyt-bot"
           git config user.email "otoyt@users.noreply.github.com"
-          for f in history.json assets_used.json; do [ -f "$f" ] && git add "$f"; done
+          for f in history.json assets_used.json assets/branding_done.json; do [ -f "$f" ] && git add "$f"; done
           git diff --cached --quiet && exit 0
           git commit -m "otoyt: $(date -u +%F)"
           git pull --rebase -q && git push
