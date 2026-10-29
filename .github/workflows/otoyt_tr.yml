@@ -85,4 +85,9 @@ jobs:
           git add -A data/golgedefter
           git diff --cached --quiet && exit 0
           git commit -m "golgedefter: $(date -u +%F)"
-          git pull --rebase -q && git push
+          # aynı anda repoya başka değişiklik gelmişse: çakışmada botun kayıtları geçerli olsun, 3 kez dene
+          for i in 1 2 3; do
+            git pull --rebase -X theirs -q && git push && exit 0
+            git rebase --abort 2>/dev/null; sleep 5
+          done
+          exit 1
