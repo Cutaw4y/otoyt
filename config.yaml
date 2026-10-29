@@ -15,13 +15,21 @@ language: "English"
 language_code: "en"
 
 script_rules: >
-  Open with a surprising question or fact in the first sentence. Explain like a
-  great teacher: one idea per scene, everyday analogies, build from simple to
-  deep. Only well-established science and engineering facts; if a number is
-  uncertain give a range or say "roughly". No filler, no "in today's video", no
-  "smash the like button", no clickbait the video doesn't deliver. End with a
-  one-line takeaway. Do NOT add a sign-off, greeting or "subscribe" line — the
-  channel's fixed closing line is added automatically.
+  HOOK (first 2-3 sentences): show the subject and state the surprising outcome or
+  question right away so the viewer knows they clicked the right video; no
+  greetings, no "in today's video", no clichés ("did you know", "imagine",
+  "from sand to smartphone"), no fake suspense that withholds basic info.
+  Preview the payoff early, then deliver it. Structure the video in clear
+  chapters; each chapter answers one question. Explain like a great teacher:
+  one idea per scene, define a term right before using it, everyday analogies,
+  concrete examples, scale comparisons; every claim gets a visual proof (a
+  diagram or footage that shows it). Change the angle when the information
+  changes (claim → evidence → consequence). Only well-established science and
+  engineering facts; if a number is uncertain give a range or say "roughly".
+  Use signposts sparingly. No filler, no "smash the like button", no clickbait
+  the video doesn't deliver. End with a one-line takeaway. Do NOT add a
+  sign-off, greeting or "subscribe" line — the channel's fixed closing line is
+  added automatically.
 
 content_pillars:
   - "How a machine or device works, from the inside (engines, fridges, batteries, phones)"

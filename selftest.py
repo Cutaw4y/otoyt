@@ -16,11 +16,13 @@ W = REPO + "/selftest_out"
 shutil.rmtree(W, ignore_errors=True); os.makedirs(W)
 shutil.copytree(REPO + "/assets", W + "/assets"); pipeline.ROOT = __import__("pathlib").Path(W); pipeline.HISTORY = pipeline.ROOT / "history.json"
 pipeline.OUT = pipeline.ROOT / "out"; pipeline.BRAND_DONE = pipeline.ROOT / "bd.json"; pipeline.RUNLOG = pipeline.ROOT / "run.txt"
-pipeline.CFG["publish_mode"] = "scheduled"; pipeline.CFG["branding"] = {}; pipeline.DRY_RUN = True
+pipeline.CFG["publish_mode"] = "scheduled"; pipeline.CFG["branding"] = {}; pipeline.DRY_RUN = True; pipeline.CFG["target_words"] = 150
 pipeline.notify = lambda t: print("  📨", t.splitlines()[0])
 # --- içerik
 scenes = [{"narration": f"This is sentence number {i} about jet engines. It explains part {i} clearly.",
-           "visual": "diagram" if i % 3 == 0 else "footage", "broll_query": "jet", "image_prompt": "p"} for i in range(14)]
+           "visual": "diagram" if i % 3 == 0 else "footage", "broll_query": "jet", "image_prompt": "p",
+           "chapter": {0: "The Big Question", 4: "Inside the Compressor", 8: "Fire and Thrust", 11: "Why It Matters"}.get(i, ""),
+           "callout": {2: "1,400 °C", 6: "40:1 PRESSURE", 9: "10,000 RPM"}.get(i, "")} for i in range(14)]
 script = {"title": "How a Jet Engine Works", "description": "Desc #a #b #c", "tags": ["jet", "engine", "science"],
           "thumbnail_concepts": [{"image_prompt": "x", "text": "JET"}] * 3, "short_title": "Jet secret",
           "shorts": [{"start_scene": 0, "end_scene": 2, "title": "Hook one"},
@@ -38,7 +40,8 @@ def fake_llm(system, user, required=(), images=None, judge=False):
         return {"lines": ["TR: " + l for l in lines]}
     if "short_titles" in user:
         d = json.loads(user.split("\nReturn JSON")[0])
-        return {"title": "Jet motoru nasıl çalışır", "description": "Açıklama", "short_titles": ["TR " + t for t in d["short_titles"]]}
+        return {"title": "Jet motoru nasıl çalışır", "description": "Açıklama", "short_titles": ["TR " + t for t in d["short_titles"]],
+                "chapters": ["TR " + c for c in d.get("chapters", [])]}
     raise AssertionError(user[:80])
 pipeline.llm_json = fake_llm
 def fake_synth(text, v, lang, speed):
@@ -66,3 +69,12 @@ pipeline.run_once()
 import glob
 out = pipeline.OUT
 print("OUT dosyaları:", sorted(p.name for p in out.glob("*")) if out.exists() else "-")
+
+sc = json.load(open(W + "/out/script.json"))
+chs = sc.get("_chapters")
+print("BÖLÜMLER:", chs)
+assert chs and chs[0][0] == 0 and len(chs) >= 3
+assert all(b[0] - a[0] >= 12 for a, b in zip(chs, chs[1:]))
+print(pipeline.chapters_text(chs, ["TR " + c[1] for c in chs], "Bölümler"))
+ass = open(W + "/captions.ass", encoding="utf-8").read() if os.path.exists(W + "/captions.ass") else ""
+print("✅ selftest tamam")

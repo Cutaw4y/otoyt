@@ -143,7 +143,12 @@ SCRIPT_SCHEMA = (
     'CTA to watch the full video on YouTube via link in bio, then 5-8 relevant hashtags",'
     '"scenes":[{"narration":"2-3 sentences","visual":"footage or diagram",'
     '"broll_query":"2-4 word English stock footage query",'
-    '"image_prompt":"explanatory illustration of exactly what this scene explains"}]}\n'
+    '"image_prompt":"explanatory illustration of exactly what this scene explains",'
+    '"chapter":"short chapter title (2-5 words) ONLY if a new chapter starts at this scene, else empty",'
+    '"callout":"on-screen label, max 5 words: the key number, term or comparison of this scene, or empty"}]}\n'
+    "Split the video into 4-7 chapters; scene 0 must start the first chapter. Chapter titles are clear "
+    "section names (not clickbait). Give a callout to roughly every second scene (numbers, units, key terms), "
+    "never a full sentence.\n"
     "Give exactly 3 thumbnail_concepts with different ideas. EVERY scene needs BOTH broll_query and image_prompt. "
     "Use visual=diagram whenever a mechanism, inside view, process, comparison or scale must be SHOWN; "
     "use footage for real-world context. At least {ratio}% of scenes must be diagram. "
@@ -600,7 +605,14 @@ def assemble(script, workdir, music):
             own["t0"] = t  # sahnenin ana videodaki başlangıç anı (Short altyazıları için)
         words += [{"word": x["word"], "start": x["start"] + t, "end": x["end"] + t} for x in ws]
         t += media.duration(a)
-    ass = media.write_ass_long(words, w / "captions.ass") if CFG.get("burn_captions", True) else None
+    script["_chapters"] = build_chapters(script, t)
+    chap_ev = [(ct, title, k + 1) for k, (ct, title) in enumerate(script["_chapters"]) if k > 0]
+    chap_starts = {round(c[0], 2) for c in chap_ev}
+    callouts = [(s["t0"] + 0.5, s["callout"].strip()) for s in sc
+                if s.get("callout") and s.get("callout").strip() and round(s.get("t0", -1), 2) not in chap_starts
+                and len(s["callout"].split()) <= 6]
+    ass = media.write_ass_long(words if CFG.get("burn_captions", True) else [], w / "captions.ass",
+                               chapters=chap_ev, callouts=callouts)
     final = media.mux_master(video, nar, w / "final.mp4", ass=ass, music=music,
                              music_db=CFG.get("music_db", -21.0))
     return final, words
@@ -638,8 +650,10 @@ def local_meta(script, shorts, lang_name):
         data = llm_json(
             f"You localize YouTube metadata into natural {lang_name}. Keep curiosity and meaning; no clickbait.",
             json.dumps({"title": script["title"], "description": script["description"],
-                        "short_titles": [s["title"] for s in shorts]}, ensure_ascii=False)
-            + '\nReturn JSON: {"title":"<=90 chars","description":"...","short_titles":["..."]}',
+                        "short_titles": [s["title"] for s in shorts],
+                        "chapters": [c[1] for c in script.get("_chapters", [])]}, ensure_ascii=False)
+            + '\nReturn JSON: {"title":"<=90 chars","description":"...","short_titles":["..."],'
+              '"chapters":["... same count and order"]}',
             required=("title", "description"), judge=True)
         return data
     except Exception as e:
@@ -655,6 +669,60 @@ def shift_blocks(blocks, start, length):
             continue
         res.append((max(a - start, 0), min(b - start, length), t))
     return res
+
+
+def build_chapters(script, total_len, min_len=12.0):
+    """Sahnelerdeki 'chapter' alanlarından YouTube bölümleri: [(saniye, başlık)].
+    Kurallar: ilk bölüm 0:00, en az 3 bölüm, her bölüm ≥10 sn (güvenlik için 12)."""
+    sc = script["scenes"]
+    raw = []
+    for i, s in enumerate(sc):
+        t = (s.get("chapter") or "").strip()
+        if i == 0:
+            raw.append((0.0, t or "Introduction"))
+        elif t:
+            raw.append((s.get("t0", 0.0), t))
+    out = []
+    for t, title in raw:
+        if out and t - out[-1][0] < min_len:
+            continue  # çok kısa bölümü bir öncekine kat
+        out.append((t, title[:60]))
+    if out and total_len - out[-1][0] < min_len:
+        out.pop()
+    return out if len(out) >= 3 else []
+
+
+def fmt_ts(t):
+    t = int(t)
+    return f"{t // 3600}:{t % 3600 // 60:02d}:{t % 60:02d}" if t >= 3600 else f"{t // 60}:{t % 60:02d}"
+
+
+def chapters_text(chapters, titles=None, header="Chapters"):
+    if not chapters:
+        return ""
+    titles = titles if titles and len(titles) == len(chapters) else [c[1] for c in chapters]
+    return f"\n\n{header}:\n" + "\n".join(f"{fmt_ts(t)} {ti}" for (t, _), ti in zip(chapters, titles))
+
+
+ERROR_GUIDE = [
+    ("invalid_grant", "YouTube izni geçersiz ya da süresi dolmuş. Çözüm: get_token.bat'ı çalıştır, "
+                      "çıkan YT_REFRESH_TOKEN'ı GitHub Secrets'ta güncelle."),
+    ("API_KEY_INVALID", "Gemini API anahtarı geçersiz. Çözüm: aistudio.google.com'dan yeni anahtar al, "
+                        "GitHub'da GEMINI_API_KEY'i güncelle."),
+    ("API key not valid", "Gemini API anahtarı geçersiz. Çözüm: GEMINI_API_KEY'i yenile."),
+    ("quotaExceeded", "YouTube günlük API kotası doldu. Yarın kendiliğinden devam eder."),
+    ("uploadLimitExceeded", "YouTube günlük yükleme sınırı doldu. Yarın kendiliğinden devam eder."),
+    ("Authentication error", "Cloudflare anahtarı geçersiz. Görseller yedek kaynaktan alınır; "
+                             "istersen CLOUDFLARE_API_TOKEN'ı yenile."),
+    ("No space left", "Sunucu diski doldu (geçici). Bir sonraki çalışmada düzelir."),
+]
+
+
+def explain_error(text):
+    for key, msg in ERROR_GUIDE:
+        if key.lower() in text.lower():
+            return msg
+    return None
 
 
 def tr_title(tr_meta, en_title):
@@ -693,7 +761,8 @@ def make_thumbnails(script, workdir, ledger):
     for i, c in enumerate(script["thumbnail_concepts"][:3]):
         raw = gen_image(f"{c['image_prompt']}. {CFG['thumbnail_style']}. No text, no letters, no logos.",
                         workdir / f"thumb_raw_{i}.jpg", script["scenes"][0].get("broll_query"), ledger)
-        cands.append(media.compose_thumbnail(raw, c["text"], workdir / f"thumb_{i}.jpg"))
+        cands.append(media.compose_thumbnail(raw, c["text"], workdir / f"thumb_{i}.jpg",
+                                             logo=ROOT / "assets" / "cutaway_logo.png"))
     sheet = media.contact_sheet(cands, workdir / "thumbs_sheet.jpg")
     try:
         pick = llm_json(
@@ -905,11 +974,15 @@ def run_once():
 
         global UPLOAD_STARTED
         UPLOAD_STARTED = True
-        desc = script["description"] + "\n\nStock footage: Pixabay / Pexels. Narration: AI voice."
+        chs = script.get("_chapters") or []
+        desc = (script["description"] + chapters_text(chs)
+                + "\n\nStock footage: Pixabay / Pexels. Narration: AI voice.")
         m_long = meta(script["title"], desc, script["tags"], at(CFG["publish_delay_hours"]))
         if tr_meta:
+            tr_desc = (tr_meta["description"] + chapters_text(chs, tr_meta.get("chapters"), "Bölümler")
+                       + "\n\nStok görüntüler: Pixabay / Pexels. Seslendirme: yapay zekâ sesi.")
             m_long["localizations"] = {sub_lang["code"]: {"title": tr_meta["title"][:100],
-                                                          "description": tr_meta["description"][:4900]}}
+                                                          "description": tr_desc[:4900]}}
         vid = publish.upload(final, m_long, thumb, up)
         cap_warned = False
         for srt_path, code, name in ((en_srt, "en", "English"),
@@ -1001,6 +1074,10 @@ if __name__ == "__main__":
         log("HATA:\n" + err)
         last = [l for l in err.strip().splitlines() if l.strip()][-1][:300]
         retry = (not UPLOAD_STARTED) and os.getenv("OTOYT_ATTEMPT", "1") == "1"
-        notify(f"❌ Hata oluştu: {last}\n" + ("🔄 10 dakika sonra otomatik olarak yeniden denenecek."
+        guide = explain_error(err)
+        if guide and any(k in guide for k in ("get_token", "anahtar")):
+            retry = False  # izin/anahtar sorununu beklemek çözmez
+        notify(f"❌ Hata oluştu: {last}\n" + (f"💡 {guide}\n" if guide else "")
+               + ("🔄 10 dakika sonra otomatik olarak yeniden denenecek."
                if retry else "Claude'a bu mesajı iletebilirsin (ayrıntı: logs/last_run.txt)."))
         sys.exit(3 if retry else 1)

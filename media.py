@@ -60,10 +60,16 @@ class AssetLedger:
 FONTS_DIR = Path(__file__).parent / "assets" / "fonts"
 
 
+# Farklı kaynaklardan gelen stok görüntüye kanalın tek tip "görünüşü":
+# hafif kontrast, biraz düşük doygunluk, serin gölgeler, kenar gölgesi (sinematik, tutarlı)
+LOOK = ("eq=contrast=1.06:saturation=0.90:gamma=0.98,"
+        "colorbalance=bs=0.04:bm=0.01:bh=-0.03:rh=0.02,vignette=angle=PI/5")
+
+
 def render_footage(clip, frames, out, start=0.0):
     """Stok klipten tam 'frames' karelik, ekranı dolduran (16:9) çekim."""
     sh(["ffmpeg", "-y", "-ss", f"{max(start, 0):.2f}", "-stream_loop", "-1", "-i", clip,
-        "-vf", f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},fps={FPS},format=yuv420p",
+        "-vf", f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},fps={FPS},{LOOK},format=yuv420p",
         "-frames:v", int(frames), "-an", "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", out])
     return out
 
@@ -144,8 +150,11 @@ def _ass_esc(t):
     return t.replace("\\", "").replace("{", "(").replace("}", ")").replace("\n", " ")
 
 
-def write_ass_long(words, out, per_line=7):
-    """Uzun video: sade, okunaklı alt yazı (beyaz, ince kontur, yumuşak gölge)."""
+def write_ass_long(words, out, per_line=7, chapters=(), callouts=()):
+    """Uzun video katmanları (hep aynı görsel kural):
+    - Alt yazı: altta, beyaz, ince kontur
+    - Bölüm kartı: sol üstte, 'BÖLÜM n' + başlık, kayarak gelir (3.2 sn)
+    - Bilgi kartı: sağ üstte, turuncu çerçeveli kısa etiket (sayı/terim), 3 sn"""
     head = f"""[Script Info]
 ScriptType: v4.00+
 PlayResX: {W}
@@ -155,12 +164,23 @@ WrapStyle: 0
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
 Style: Cap,Inter Display,54,&H00FFFFFF,&H00FFFFFF,&H00201812,&H80000000,-1,0,0,0,100,100,0,0,1,3,2,2,160,160,64,1
+Style: ChapNum,Inter Display,30,&H00F0E05E,&H00FFFFFF,&H00201B0B,&H00000000,-1,0,0,0,100,100,3,0,3,14,0,7,90,90,78,1
+Style: ChapTitle,Inter Display,58,&H00FAF4EE,&H00FFFFFF,&H00201B0B,&H00000000,-1,0,0,0,100,100,0,0,3,18,0,7,90,90,128,1
+Style: Callout,Inter Display,50,&H00201B0B,&H00FFFFFF,&H003CA0FF,&H00000000,-1,0,0,0,100,100,1,0,3,12,0,9,90,90,84,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 """
     ev = [f"Dialogue: 0,{_ass_time(a)},{_ass_time(b + 0.15)},Cap,,0,0,0,,{_ass_esc(t)}"
           for a, b, t in srt_blocks(words, per_line)]
+    for t, title, n in chapters:
+        a, b = _ass_time(t + 0.2), _ass_time(t + 3.4)
+        ev.append(f"Dialogue: 2,{a},{b},ChapNum,,0,0,0,,{{\\fad(250,300)\\move(60,78,90,78)}}CHAPTER {n}")
+        ev.append(f"Dialogue: 2,{a},{b},ChapTitle,,0,0,0,,{{\\fad(300,300)\\move(60,128,90,128)}}"
+                  f"{_ass_esc(title.upper())}")
+    for t, text in callouts:
+        ev.append(f"Dialogue: 1,{_ass_time(t)},{_ass_time(t + 3.0)},Callout,,0,0,0,,"
+                  f"{{\\fad(200,250)}}{_ass_esc(text.upper())}")
     Path(out).write_text(head + "\n".join(ev) + "\n", encoding="utf-8")
     return out
 
@@ -277,7 +297,8 @@ def make_short(parts, out, workdir, music=None, tag="short", max_len=58.0):
 
 # ---------------------------------------------------------------- thumbnail
 def _font(size):
-    for f in (FONT_BOLD, "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"):
+    for f in (str(FONTS_DIR / "InterDisplay-Black.otf"), FONT_BOLD,
+              "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"):
         try:
             return ImageFont.truetype(f, size)
         except OSError:
@@ -299,7 +320,7 @@ def _wrap(draw, text, font, max_w):
     return lines
 
 
-def compose_thumbnail(image, text, out, accent=(255, 214, 0)):
+def compose_thumbnail(image, text, out, accent=(255, 168, 60), logo=None):
     """Yazıyı otomatik sığdırır (en fazla 2 satır), okunabilirlik için alt gölge ekler."""
     im = Image.open(image).convert("RGB")
     im = im.resize((1280, int(im.height * 1280 / im.width)))
@@ -326,9 +347,17 @@ def compose_thumbnail(image, text, out, accent=(255, 214, 0)):
     lh = int(size * 1.08)
     y = 720 - 50 - lh * len(lines)
     for i, line in enumerate(lines):
-        fill = accent if i == len(lines) - 1 else (255, 255, 255)
+        fill = accent if (i == len(lines) - 1 and len(lines) > 1) else (255, 255, 255)
         d.text((60, y + i * lh), line, font=f, fill=fill, stroke_width=max(4, size // 14), stroke_fill="black")
-    im.save(out, quality=90)
+    if logo and Path(logo).exists():  # sağ üstte küçük kanal rozeti (marka tanınırlığı)
+        lg = Image.open(logo).convert("RGB").resize((112, 112), Image.LANCZOS)
+        mk = Image.new("L", (112, 112), 0)
+        ImageDraw.Draw(mk).ellipse([0, 0, 111, 111], fill=255)
+        ring = Image.new("L", (124, 124), 0)
+        ImageDraw.Draw(ring).ellipse([0, 0, 123, 123], fill=255)
+        im.paste((255, 255, 255), (1280 - 154, 30), ring)
+        im.paste(lg, (1280 - 148, 36), mk)
+    im.save(out, quality=92)
     return out
 
 
