@@ -704,6 +704,61 @@ def make_thumbnails(script, workdir, ledger):
     return cands[idx]
 
 
+# ---------------------------------------------------------------- senaryo üretim döngüsü
+QKEYS = ("originality", "hook", "clarity", "value_density", "audience_fit")
+
+
+def _score(review):
+    vals = [float(review.get(k, 0) or 0) for k in QKEYS]
+    return (min(vals), sum(vals) / len(vals))
+
+
+def produce_script(history, report):
+    """Kaliteli senaryo bulana kadar dener: aynı konuda revizyon, olmazsa yeni konu.
+    Hiçbiri barajı geçmezse, bilgi hatası olmayan en iyi senaryo alt sınırın üstündeyse kullanılır."""
+    best = None  # (skor, fikir, senaryo)
+    tried = []
+    for topic_try in range(CFG.get("max_topic_attempts", 3)):
+        idea = pick_topic(history + [{"title": t, "type": "long"} for t in tried], report)
+        tried.append(idea["title"])
+        log(f"Konu ({topic_try+1}): {idea['title']}  [{idea['pillar']}]")
+        script = ensure_length(write_script(idea))
+        log(f"Senaryo yazıldı: {len(script['scenes'])} sahne, {word_count(script)} kelime")
+        script, facts_ok = verify_loop(script)
+        if not facts_ok:
+            log("Bilgi doğrulamadan geçemedi → yeni konu")
+            continue
+        for attempt in range(CFG["max_rewrites"] + 1):
+            ok, review = quality_gate(script)
+            sc = _score(review)
+            log(f"Editör (min {sc[0]:.0f}, ort {sc[1]:.1f}): {review}")
+            if best is None or sc > best[0]:
+                best = (sc, idea, script)
+            if ok:
+                return idea, script
+            if attempt == CFG["max_rewrites"]:
+                break
+            notes = "\n".join(f"- {p}" for p in review.get("problems", []))
+            if float(review.get("hook", 10) or 10) < CFG["min_quality_score"]:
+                notes += ("\n- Rewrite the FIRST scene: open with one concrete, surprising, specific fact or "
+                          "question nobody expects (no clichés, no 'did you know', no 'imagine'). "
+                          "The first sentence must make the viewer need the answer.")
+            revised = ensure_length(revise_script(script, notes))
+            revised, facts_ok = verify_loop(revised)
+            if not facts_ok:
+                log("Revizyon bilgi hatası getirdi → önceki sürümde kalınıyor")
+                break
+            script = revised
+        log(f"Konu kalite barajını geçemedi: {idea['title']}")
+    floor = CFG.get("min_quality_floor", 6)
+    if best and best[0][0] >= floor:
+        log(f"Baraj geçilemedi; en iyi senaryo kullanılıyor (min {best[0][0]:.0f}, ort {best[0][1]:.1f})")
+        return best[1], best[2]
+    notify("⛔ Bugün video üretilmedi: hiçbir senaryo kalite alt sınırını geçemedi. Bir sonraki çalışmada tekrar denenecek.")
+    log("Hiçbir senaryo alt sınırı geçemedi, video üretilmedi.")
+    return None, None
+
+
 # ---------------------------------------------------------------- ana akış
 def meta(title, desc, tags, publish_at, is_short=False):
     return {"title": title, "description": desc, "tags": [t for t in tags if len(t) >= 2][:15],
@@ -777,31 +832,9 @@ def run_once():
 
     report = publish.performance_report(history)
     log(f"Analitik: {report['n']} video ölçüldü, sütun puanları: {report['pillar_scores']}")
-    idea = pick_topic(history, report)
-    log(f"Konu: {idea['title']}  [{idea['pillar']}]")
-    script = ensure_length(write_script(idea))
-    log(f"Senaryo yazıldı: {len(script['scenes'])} sahne, "
-        f"{sum(len(s['narration'].split()) for s in script['scenes'])} kelime")
-
-    script, facts_ok = verify_loop(script)
-    if not facts_ok:
-        notify(f"⛔ İptal (bilgi doğrulanamadı): {script['title']}")
-        log("Bilgi doğrulamadan geçemedi, bu tur atlanıyor.")
-        return
-
-    for attempt in range(CFG["max_rewrites"] + 1):
-        ok, review = quality_gate(script)
-        log(f"Editör: {review}")
-        if ok:
-            break
-        if attempt == CFG["max_rewrites"]:
-            notify(f"⛔ İptal (kalite düşük): {script['title']}\n{review.get('problems')}")
-            return
-        script = revise_script(script, "\n".join(f"- {p}" for p in review.get("problems", [])))
-        script, facts_ok = verify_loop(script)
-        if not facts_ok:
-            notify(f"⛔ İptal (revizyon sonrası bilgi hatası): {script['title']}")
-            return
+    idea, script = produce_script(history, report)
+    if script is None:
+        return False
 
     with tempfile.TemporaryDirectory() as tmp:
         w = Path(tmp)
@@ -944,8 +977,8 @@ if __name__ == "__main__":
     ai.LOG = log
     log(f"Başladı (test modu: {DRY_RUN}, yayın: {CFG['publish_mode']})")
     try:
-        run_once()
-        log("Başarıyla bitti.")
+        res = run_once()
+        log("Bitti: video üretilmedi." if res is False else "Başarıyla bitti.")
     except Exception:
         err = redact(traceback.format_exc())
         log("HATA:\n" + err)
