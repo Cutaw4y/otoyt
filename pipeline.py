@@ -303,8 +303,9 @@ def quality_gate(script):
         "You are a strict senior YouTube editor. Score honestly; average AI scripts deserve 5-6.",
         f"Audience: {CFG['audience']}\nTitle: {script['title']}\nScript:\n{text}\n\n"
         "Score 1-10: originality, hook (first 15 seconds), clarity (would a curious non-expert truly "
-        "understand?), value_density, audience_fit. Return JSON: {\"originality\":0,\"hook\":0,\"clarity\":0,"
-        "\"value_density\":0,\"audience_fit\":0,\"problems\":[\"...\"]}",
+        "understand?), value_density, audience_fit. Also write 'problems_tr': the same problems summarized in "
+        "one or two short Turkish sentences. Return JSON: {\"originality\":0,\"hook\":0,\"clarity\":0,"
+        "\"value_density\":0,\"audience_fit\":0,\"problems\":[\"...\"],\"problems_tr\":\"...\"}",
         required=("problems",), judge=True)
     keys = ("originality", "hook", "clarity", "value_density", "audience_fit")
     scores = [float(r.get(k, 0)) for k in keys]
@@ -655,6 +656,11 @@ def shift_blocks(blocks, start, length):
     return res
 
 
+def tr_title(tr_meta, en_title):
+    t = (tr_meta or {}).get("title")
+    return f"{t}\n({en_title})" if t else en_title
+
+
 # ---------------------------------------------------------------- 6b. shorts planı
 def plan_shorts(script):
     """Senaryodaki short planını doğrular; bozuksa ilk sahnelerden tek short'a düşer."""
@@ -717,6 +723,7 @@ def produce_script(history, report):
     """Kaliteli senaryo bulana kadar dener: aynı konuda revizyon, olmazsa yeni konu.
     Hiçbiri barajı geçmezse, bilgi hatası olmayan en iyi senaryo alt sınırın üstündeyse kullanılır."""
     best = None  # (skor, fikir, senaryo)
+    last_tr = ""
     tried = []
     for topic_try in range(CFG.get("max_topic_attempts", 3)):
         idea = pick_topic(history + [{"title": t, "type": "long"} for t in tried], report)
@@ -734,6 +741,7 @@ def produce_script(history, report):
             log(f"Editör (min {sc[0]:.0f}, ort {sc[1]:.1f}): {review}")
             if best is None or sc > best[0]:
                 best = (sc, idea, script)
+            last_tr = review.get("problems_tr") or ""
             if ok:
                 return idea, script
             if attempt == CFG["max_rewrites"]:
@@ -753,8 +761,11 @@ def produce_script(history, report):
     floor = CFG.get("min_quality_floor", 6)
     if best and best[0][0] >= floor:
         log(f"Baraj geçilemedi; en iyi senaryo kullanılıyor (min {best[0][0]:.0f}, ort {best[0][1]:.1f})")
+        notify(f"ℹ️ Senaryo hedef kaliteyi (7/10) tam tutturamadı; en iyi deneme kullanılıyor "
+               f"(en düşük puan {best[0][0]:.0f}/10, ortalama {best[0][1]:.1f}/10).")
         return best[1], best[2]
-    notify("⛔ Bugün video üretilmedi: hiçbir senaryo kalite alt sınırını geçemedi. Bir sonraki çalışmada tekrar denenecek.")
+    notify("⛔ Bugün video üretilmedi: hiçbir senaryo kalite alt sınırını geçemedi. "
+           f"Bir sonraki çalışmada tekrar denenecek.\nEditör notu: {last_tr}"[:1500])
     log("Hiçbir senaryo alt sınırı geçemedi, video üretilmedi.")
     return None, None
 
@@ -882,7 +893,7 @@ def run_once():
 
         if DRY_RUN:
             ledger.save()
-            notify(f"🧪 Test videosu hazır (yüklenmedi): {script['title']}")
+            notify(f"🧪 Test videosu hazır (YouTube'a yüklenmedi): {tr_title(tr_meta, script['title'])}")
             log("DRY_RUN: yükleme atlandı, dosyalar out/ klasöründe.")
             return
 
@@ -916,7 +927,7 @@ def run_once():
                         "title": script["title"], "pillar": idea["pillar"], "video_id": vid})
         save_json(HISTORY, history)
         ledger.save()
-        notify(f"✅ Yüklendi: {script['title']}\nhttps://youtu.be/{vid}\n"
+        notify(f"✅ Video yüklendi: {tr_title(tr_meta, script['title'])}\nhttps://youtu.be/{vid}\n"
                f"Yayın: {CFG['publish_delay_hours']} saat sonra. Beğenmezsen Studio'dan sil.")
 
         for k, sh_ in enumerate(shorts):
@@ -946,7 +957,9 @@ def run_once():
                 history.append({"date": datetime.now().isoformat(timespec="minutes"), "type": "short",
                                 "title": sh_["title"], "pillar": idea["pillar"], "video_id": sid, "parent": vid})
                 save_json(HISTORY, history)
-                notify(f"📱 Short {k+1}/{len(shorts)} yüklendi ({delay} saat sonra yayında): https://youtu.be/{sid}")
+                trs = ((tr_meta or {}).get("short_titles") or [None] * (k + 1))
+                notify(f"📱 Short {k+1}/{len(shorts)} yüklendi: {trs[k] if k < len(trs) and trs[k] else sh_['title']}\n"
+                       f"({delay} saat sonra yayında) https://youtu.be/{sid}")
             except Exception as e:
                 notify(f"⚠️ Short {k+1} yüklenemedi: {str(e)[:300]}")
                 if "quota" in str(e).lower() or "uploadLimit" in str(e):
@@ -982,5 +995,7 @@ if __name__ == "__main__":
     except Exception:
         err = redact(traceback.format_exc())
         log("HATA:\n" + err)
-        notify(f"❌ OtoYT hata:\n{err[-3000:]}")
+        last = [l for l in err.strip().splitlines() if l.strip()][-1][:300]
+        notify(f"❌ Hata oluştu, video üretilemedi. Claude'a bu mesajı iletebilirsin.\nHata: {last}\n"
+               f"(Ayrıntı GitHub'daki logs/last_run.txt dosyasında)")
         sys.exit(1)
