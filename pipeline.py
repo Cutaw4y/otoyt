@@ -591,6 +591,39 @@ def meta(title, desc, tags, publish_at, is_short=False):
 
 
 BRAND_DONE = ROOT / "assets" / "branding_done.json"
+PENDING_CAPS = ROOT / "pending_captions"
+
+
+def save_pending_caption(video_id, srt_path, lang, name):
+    """Yüklenemeyen altyazıyı repoda saklar; izin yenilenince sonraki çalışma yükler."""
+    PENDING_CAPS.mkdir(exist_ok=True)
+    dst = PENDING_CAPS / f"{video_id}__{lang}.srt"
+    shutil.copy(srt_path, dst)
+    (PENDING_CAPS / f"{video_id}__{lang}.json").write_text(json.dumps({"name": name}), encoding="utf-8")
+
+
+def retry_pending_captions():
+    if DRY_RUN or not PENDING_CAPS.exists() or CFG.get("uploader", "youtube") != "youtube":
+        return
+    files = sorted(PENDING_CAPS.glob("*.srt"))
+    if not files:
+        return
+    done = 0
+    for f in files:
+        vid, lang = f.stem.split("__")
+        meta_f = f.with_suffix(".json")
+        name = json.loads(meta_f.read_text(encoding="utf-8")).get("name", lang) if meta_f.exists() else lang
+        try:
+            publish.upload_caption(vid, f, lang, name)
+            f.unlink()
+            meta_f.unlink(missing_ok=True)
+            done += 1
+        except Exception as e:
+            log(f"Bekleyen altyazı yüklenemedi ({f.name}): {str(e)[:150]}")
+            break  # izin hâlâ yoksa diğerlerini de zorlamayalım
+    if done:
+        log(f"Bekleyen {done} altyazı geriye dönük yüklendi")
+        notify(f"📝 Önceki videoların {done} altyazısı yüklendi.")
 
 
 def ensure_branding():
@@ -611,6 +644,7 @@ def ensure_branding():
 
 def run_once():
     ensure_branding()
+    retry_pending_captions()
     history = load_json(HISTORY, [])
     ledger = media.AssetLedger(ROOT / "assets_used.json")
 
@@ -715,9 +749,10 @@ def run_once():
                 log(f"Altyazı eklendi: {name}")
             except Exception as e:
                 log(f"Altyazı eklenemedi ({name}): {str(e)[:200]}")
+                save_pending_caption(vid, srt_path, code, name)
                 if not cap_warned and ("insufficient" in str(e).lower() or "403" in str(e)):
-                    notify("⚠️ Altyazılar yüklenemedi: YouTube izninin yenilenmesi gerekiyor "
-                           "(get_token.bat bir kez daha çalıştırılmalı). Video normal yüklendi.")
+                    notify("⚠️ Altyazılar şimdilik yüklenemedi: YouTube izninin yenilenmesi gerekiyor "
+                           "(get_token.bat bir kez). Altyazılar saklandı, izin yenilenince otomatik yüklenecek.")
                     cap_warned = True
         history.append({"date": datetime.now().isoformat(timespec="minutes"), "type": "long",
                         "title": script["title"], "pillar": idea["pillar"], "video_id": vid})
@@ -739,14 +774,17 @@ def run_once():
                         "title": str(trt[k])[:90] + " #Shorts",
                         "description": f"{trt[k]}\n\nVideonun tamamı: https://youtu.be/{vid}\n#Shorts"}}
                 sid = publish.upload(sh_["file"], m_short, None, up)
-                if tr_blocks and up == "youtube" and not cap_warned:
+                if tr_blocks and up == "youtube":
+                    off = sum(s["duration"] for s in script["scenes"][:sh_["start"]])
+                    sp = media.write_srt_blocks(shift_blocks(tr_blocks, off, sh_["len"]),
+                                                w / f"short{k+1}_{sub_lang['code']}.srt")
                     try:
-                        off = sum(s["duration"] for s in script["scenes"][:sh_["start"]])
-                        sp = media.write_srt_blocks(shift_blocks(tr_blocks, off, sh_["len"]),
-                                                    w / f"short{k+1}_{sub_lang['code']}.srt")
+                        if cap_warned:
+                            raise RuntimeError("izin yok, sonraya bırakıldı")
                         publish.upload_caption(sid, sp, sub_lang["code"], sub_lang["label"])
                     except Exception as e:
                         log(f"Short {k+1} altyazısı eklenemedi: {str(e)[:200]}")
+                        save_pending_caption(sid, sp, sub_lang["code"], sub_lang["label"])
                 history.append({"date": datetime.now().isoformat(timespec="minutes"), "type": "short",
                                 "title": sh_["title"], "pillar": idea["pillar"], "video_id": sid, "parent": vid})
                 save_json(HISTORY, history)
