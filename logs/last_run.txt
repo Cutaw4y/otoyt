@@ -1,2 +1,25 @@
-[18:51:32] Başladı (test modu: False, yayın: private)
-[18:51:35] Analitik: 0 video ölçüldü, sütun puanları: {}
+[18:53:42] Başladı (test modu: False, yayın: private)
+[18:53:42] Analitik: 0 video ölçüldü, sütun puanları: {}
+[18:53:42] Gemini gemini-flash-latest günlük kotası doldu → sonraki modele geçiliyor
+[18:53:44] Konu: Why Silicon Wafers Cost More Than Gold (Per Gram)  [How it's made and what it really costs (steel, glass, chips, paper, concrete)]
+[18:54:15] Senaryo yazıldı: 28 sahne, 1686 kelime
+[18:54:15] Gemini gemini-flash-lite-latest 429 → 15 sn bekleniyor (1/2)
+[18:54:31] Gemini gemini-flash-lite-latest 429 → 30 sn bekleniyor (2/2)
+[18:55:01] Gemini gemini-flash-latest 429 → 15 sn bekleniyor (1/2)
+[18:55:16] Gemini gemini-flash-latest 429 → 30 sn bekleniyor (2/2)
+[18:55:46] Google aramalı doğrulama kullanılamadı (Gemini yanıt vermedi: 429 {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check ) → Wikipedia'ya geçiliyor
+[18:55:48] Doğrulama kaynağı: Wikipedia (4 makale)
+[18:55:51] Doğrulama turu 1: 12 iddia, 0 yanlış, 3 belirsiz
+[18:56:05] Doğrulama kaynağı: Wikipedia (4 makale)
+[18:56:08] Doğrulama turu 2: 15 iddia, 0 yanlış, 0 belirsiz
+[18:56:13] Editör: {'originality': 7, 'hook': 6, 'clarity': 8, 'value_density': 8, 'audience_fit': 9, 'problems': ["The hook relies on a slightly cliché 'gold vs sand' comparison that feels a bit slow to set up the premise.", 'Some chemical processes (like trichlorosilane production) are described a bit densely without an immediate everyday analogy for the non-expert.']}
+[18:56:29] Doğrulama kaynağı: Wikipedia (4 makale)
+[18:56:31] Doğrulama turu 1: 10 iddia, 0 yanlış, 0 belirsiz
+[18:56:37] Editör: {'originality': 6, 'hook': 7, 'clarity': 8, 'value_density': 8, 'audience_fit': 8, 'problems': ["The hook is a bit cliché (using the 'sand to tech' trope which has been done frequently in tech documentaries).", 'Some explanations of chemical processes (like trichlorosilane production) are a bit dense and could use stronger analogies to keep casual viewers engaged.']}
+[18:56:53] Doğrulama kaynağı: Wikipedia (4 makale)
+[18:56:55] Doğrulama turu 1: 9 iddia, 0 yanlış, 0 belirsiz
+[18:57:01] Editör: {'originality': 7, 'hook': 6, 'clarity': 8, 'value_density': 8, 'audience_fit': 8, 'problems': ["The hook uses a slightly cliché 'smartphone powered by dirt/sand' comparison, though it quickly recovers with strong descriptive imagery.", 'The transition between the chemical purification phase and the Czoktralski crystal growing process is a bit dense with technical jargon, though well-explained for the target audience.']}
+[18:57:01] Başarıyla bitti.
