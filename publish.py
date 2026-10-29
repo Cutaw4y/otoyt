@@ -285,3 +285,31 @@ def performance_report(history, min_age_days=4):
     rows.sort(key=lambda r: r["score"], reverse=True)
     return {"pillar_scores": {p: sum(v) / len(v) for p, v in by_pillar.items()},
             "best": rows[:5], "worst": rows[-5:] if len(rows) >= 10 else [], "n": len(rows)}
+
+
+def clear_localizations():
+    """Kanaldaki tüm videolardan çeviri başlık/açıklamalarını kaldırır (herkes ana dili görür).
+    Dönüş: temizlenen video sayısı."""
+    yt = _yt()
+    ch = yt.channels().list(part="contentDetails", mine=True).execute()["items"][0]
+    uploads = ch["contentDetails"]["relatedPlaylists"]["uploads"]
+    ids, tok = [], None
+    while True:
+        r = yt.playlistItems().list(part="contentDetails", playlistId=uploads, maxResults=50,
+                                    pageToken=tok).execute()
+        ids += [i["contentDetails"]["videoId"] for i in r.get("items", [])]
+        tok = r.get("nextPageToken")
+        if not tok:
+            break
+    n = 0
+    for k in range(0, len(ids), 50):
+        for v in yt.videos().list(part="snippet,localizations", id=",".join(ids[k:k + 50])).execute().get("items", []):
+            if not v.get("localizations"):
+                continue
+            sn = v["snippet"]
+            body = {"id": v["id"], "localizations": {},
+                    "snippet": {k2: sn[k2] for k2 in ("title", "description", "categoryId", "tags",
+                                                      "defaultLanguage", "defaultAudioLanguage") if k2 in sn}}
+            yt.videos().update(part="snippet,localizations", body=body).execute()
+            n += 1
+    return n

@@ -73,7 +73,9 @@ factcheck_models: ["gemini-flash-lite-latest", "gemini-flash-latest"]  # Google 
 voice:
   name: "af_heart"             # en yüksek kaliteli ses. Erkek: "am_michael" / İngiliz: "bm_george" (lang "b")
   lang: "a"                    # a = Amerikan İngilizcesi, b = İngiliz İngilizcesi
-  speed: 0.95                  # belgesel temposu
+  speed: 0.86                  # sakin belgesel temposu (0.95 hızlı bulundu)
+  sentence_gap: 0.5            # cümleler arası nefes payı (sn)
+  scene_gap: 0.8               # sahne geçişlerinde duraklama (sn)
 
 # ======================= KURGU / MARKA =======================
 use_intro: true                # 1. sahneden (merak uyandıran açılış) sonra 2.6 sn logo animasyonu
@@ -102,7 +104,9 @@ uploader: "youtube"            # youtube (ücretsiz) | ayrshare (ÜCRETLİ B pla
 category_id: "27"              # 27 = Education
 publish_mode: "private"        # ÖNCE "private" ile test et → sonra "scheduled"
 publish_delay_hours: 6         # ana video üretimden 6 saat sonra yayında (kontrol penceresi)
-# Altyazı izleri: İngilizce (orijinal) + çeviri. Türk izleyici Türkçe altyazı ve Türkçe başlık görür.
+# Altyazı izleri: İngilizce (orijinal) + Türkçe çeviri izi (izleyici CC'den açar).
+# Başlık, açıklama ve Shorts açıklamaları HER ZAMAN İngilizce (Türkçe çeviri başlık eklenmez).
+localize_metadata: false
 subtitle_translation:
   code: "tr"
   name: "Turkish"

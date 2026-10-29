@@ -132,7 +132,8 @@ uploader: "youtube"
 category_id: "27"
 publish_mode: "private"        # API denetimi onaylanınca "scheduled"
 publish_delay_hours: 6
-# Altyazı izleri: Türkçe (orijinal) + İngilizce çeviri (yabancı izleyici de anlasın)
+# Başlık/açıklama yalnızca Türkçe (çeviri başlık eklenmez). Altyazı: Türkçe + İngilizce çeviri izi (CC'den açılır)
+localize_metadata: false
 subtitle_translation:
   code: "en"
   name: "English"

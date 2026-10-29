@@ -347,8 +347,9 @@ def _tts(scenes, workdir):
     v = CFG["voice"]
     if v.get("provider") == "gemini":
         return voice.narrate_gemini(scenes, workdir, voice=v.get("name", "Charon"), style=v.get("style"),
-                                    models=v.get("models"))
-    return voice.narrate(scenes, workdir, voice=v["name"], lang=v["lang"], speed=v.get("speed", 1.0))
+                                    models=v.get("models"), scene_gap=v.get("scene_gap", 0.45))
+    return voice.narrate(scenes, workdir, voice=v["name"], lang=v["lang"], speed=v.get("speed", 1.0),
+                         sentence_gap=v.get("sentence_gap", 0.28), scene_gap=v.get("scene_gap", 0.45))
 
 
 def narrate(script, workdir):
@@ -738,6 +739,8 @@ ERROR_GUIDE = [
     ("API_KEY_INVALID", "Gemini API anahtarı geçersiz. Çözüm: aistudio.google.com'dan yeni anahtar al, "
                         "GitHub'da GEMINI_API_KEY'i güncelle."),
     ("API key not valid", "Gemini API anahtarı geçersiz. Çözüm: GEMINI_API_KEY'i yenile."),
+    ("günlük ücretsiz kota doldu", "Gemini'nin günlük ücretsiz hakkı bitti; yarın sıfırlanır. Kalıcı çözüm: "
+                                   "ücretli Gemini anahtarı (GEMINI_PAID_API_KEY)."),
     ("quotaExceeded", "YouTube günlük API kotası doldu. Yarın kendiliğinden devam eder."),
     ("uploadLimitExceeded", "YouTube günlük yükleme sınırı doldu. Yarın kendiliğinden devam eder."),
     ("Authentication error", "Cloudflare anahtarı geçersiz. Görseller yedek kaynaktan alınır; "
@@ -936,8 +939,24 @@ def ensure_branding():
         notify(f"⚠️ Kanal afişi ayarlanamadı (video üretimi devam ediyor): {str(e)[:300]}")
 
 
+def clear_old_localizations():
+    """localize_metadata kapalıysa daha önce eklenen çeviri başlık/açıklamaları bir kez kaldırır."""
+    flag = DATA / "localizations_cleared.json"
+    if CFG.get("localize_metadata", True) or DRY_RUN or flag.exists() or not os.getenv("YT_REFRESH_TOKEN"):
+        return
+    try:
+        n = publish.clear_localizations()
+        save_json(flag, {"date": datetime.now().isoformat(timespec="minutes"), "videos": n})
+        log(f"Eski videolardan çeviri başlık/açıklama kaldırıldı: {n} video")
+        if n:
+            notify(f"🧹 {n} eski videonun Türkçe başlık/açıklaması kaldırıldı; artık her şey İngilizce.")
+    except Exception as e:
+        log(f"Eski çeviriler kaldırılamadı: {str(e)[:200]}")
+
+
 def run_once():
     ensure_branding()
+    clear_old_localizations()
     retry_pending_captions()
     history = load_json(HISTORY, [])
     ledger = media.AssetLedger(DATA / "assets_used.json")
@@ -1009,7 +1028,7 @@ def run_once():
         desc = (script["description"] + chapters_text(chs, header=CFG.get("chapters_heading", "Chapters"))
                 + "\n\n" + CFG.get("desc_footer", "Stock footage: Pixabay / Pexels. Narration: AI voice."))
         m_long = meta(script["title"], desc, script["tags"], at(CFG["publish_delay_hours"]))
-        if tr_meta:
+        if tr_meta and CFG.get("localize_metadata", True):
             tr_desc = (tr_meta["description"]
                        + chapters_text(chs, tr_meta.get("chapters"), sub_lang.get("chapters_heading", "Bölümler"))
                        + "\n\n" + sub_lang.get("desc_footer",
@@ -1047,7 +1066,7 @@ def run_once():
                 delay = CFG["shorts_delay_hours"] + k * CFG.get("shorts_gap_hours", 16)
                 m_short = meta(title, sdesc, script["tags"], at(delay), is_short=True)
                 trt = (tr_meta or {}).get("short_titles") or []
-                if k < len(trt) and trt[k]:
+                if k < len(trt) and trt[k] and CFG.get("localize_metadata", True):
                     m_short["localizations"] = {sub_lang["code"]: {
                         "title": str(trt[k])[:90] + " #Shorts",
                         "description": f"{trt[k]}\n\n{sub_lang.get('full_video_text', 'Videonun tamamı:')} "
