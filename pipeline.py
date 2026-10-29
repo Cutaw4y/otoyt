@@ -727,13 +727,16 @@ def retry_pending_captions():
 def ensure_branding():
     """İlk gerçek çalışmada kanal afişini ve açıklamasını bir kez ayarlar."""
     b = CFG.get("branding") or {}
-    if DRY_RUN or not b or BRAND_DONE.exists() or not os.getenv("YT_REFRESH_TOKEN"):
+    ver = b.get("version", 1)
+    done = load_json(BRAND_DONE, {}) if BRAND_DONE.exists() else {}
+    if DRY_RUN or not b or not os.getenv("YT_REFRESH_TOKEN") or done.get("version", 1) >= ver and done:
         return
     try:
         cid = publish.set_branding(banner=ROOT / b["banner"] if b.get("banner") else None,
                                    description=b.get("description"), keywords=b.get("keywords"),
                                    country=b.get("country"), lang=CFG["language_code"])
-        save_json(BRAND_DONE, {"date": datetime.now().isoformat(timespec="minutes"), "channel": cid})
+        save_json(BRAND_DONE, {"date": datetime.now().isoformat(timespec="minutes"), "channel": cid,
+                               "version": ver})
         notify("🎨 Kanal afişi ve açıklaması ayarlandı.")
     except Exception as e:  # marka ayarı başarısız olsa da video üretimi devam etsin
         log(f"Kanal markası ayarlanamadı: {e}")

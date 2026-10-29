@@ -34,28 +34,37 @@ def font(name, size):
 
 
 # ------------------------------------------------------------------ çizim
+def _ring_sector(d, c, R, r, a0, a1, fill, steps=140):
+    pts = []
+    for k in range(steps + 1):
+        a = math.radians(a0 + (a1 - a0) * k / steps)
+        pts.append((c[0] + R * math.cos(a), c[1] + R * math.sin(a)))
+    for k in range(steps, -1, -1):
+        a = math.radians(a0 + (a1 - a0) * k / steps)
+        pts.append((c[0] + r * math.cos(a), c[1] + r * math.sin(a)))
+    d.polygon(pts, fill=fill)
+
+
+CREAM = (255, 238, 205)
+C_GAP = 42  # C'nin ağız açısı (±derece)
+
+
 def emblem(size, open_frac=1.0, S=3):
-    """Katmanlı çekirdek; sağ üst çeyrek open_frac oranında dışarı çekilir (0=kapalı, 1=açık)."""
+    """Cutaway işareti: kalın 'C' + ağzından dışarı çekilen katmanlı kesit dilimi.
+    open_frac: 0 = dilim yerinde (tam halka), 1 = dışarı çekilmiş (logo hali)."""
     Wd = size * S
     im = Image.new("RGBA", (Wd, Wd), (0, 0, 0, 0))
     d = ImageDraw.Draw(im)
-    c, R = Wd / 2, Wd * 0.36
-    layers = [(1.00, NAVY2, ORANGE_D), (0.80, (28, 48, 78), ORANGE), (0.60, (36, 64, 100), ORANGE_L),
-              (0.38, CYAN_D, (255, 236, 190)), (0.18, CYAN, WHITE)]
-    a0, a1 = -90, 0
-    for k, body, _ in layers:
-        r = R * k
-        d.pieslice([c - r, c - r, c + r, c + r], a1, a0 + 360, fill=body)
-    d.arc([c - R, c - R, c + R, c + R], a1, a0 + 360, fill=CYAN, width=int(Wd * 0.018))
-    mid = math.radians((a0 + a1) / 2)
-    off = Wd * 0.075 * open_frac
-    ox, oy = c + off * math.cos(mid), c + off * math.sin(mid)
-    for k, body, cut in layers:
-        r = R * k
-        col = tuple(int(body[i] + (cut[i] - body[i]) * min(1, open_frac * 1.2)) for i in range(3))
-        d.pieslice([ox - r, oy - r, ox + r, oy + r], a0, a1, fill=col)
-    if open_frac > 0.05:
-        d.arc([ox - R, oy - R, ox + R, oy + R], a0, a1, fill=ORANGE_L, width=int(Wd * 0.012))
+    c = (Wd * .47, Wd * .5)
+    R, r = Wd * .36, Wd * .17
+    _ring_sector(d, c, R, r, C_GAP, 360 - C_GAP, WHITE)                      # C harfi
+    _ring_sector(d, c, r + Wd * .018, r, C_GAP, 360 - C_GAP, CYAN)            # iç kenar vurgusu
+    t = max(0.0, min(1.0, open_frac))
+    oc = (c[0] + Wd * .085 * t, c[1])
+    b1, b2 = R - (R - r) * .36, R - (R - r) * .70
+    g = C_GAP - 4 - 6 * t                                                     # açıldıkça dilim hafif incelir
+    for a, b, col in ((R, b1, ORANGE), (b1, b2, ORANGE_L), (b2, r, CREAM)):
+        _ring_sector(d, oc, a, b, -g, g, col)
     return im.resize((size, size), Image.LANCZOS)
 
 
@@ -262,9 +271,53 @@ def make_outro_card(out):
     return out
 
 
+def make_avatar(out, size=1024):
+    """YouTube profil resmi (daire içinde kırpılır)."""
+    S = 2
+    Wd = size * S
+    im = Image.new("RGB", (Wd, Wd), NAVY)
+    g = Image.new("RGBA", (Wd, Wd), (0, 0, 0, 0))
+    ImageDraw.Draw(g).ellipse([Wd * .14, Wd * .14, Wd * .86, Wd * .86], fill=(30, 95, 135, 120))
+    g = g.filter(ImageFilter.GaussianBlur(Wd * .11))
+    im.paste(g, (0, 0), g)
+    e = emblem(int(Wd * .86))
+    im.paste(e, (int(Wd * .07), int(Wd * .07)), e)
+    im.resize((size, size), Image.LANCZOS).save(out)
+    return out
+
+
+def make_banner(out):
+    """Kanal afişi 2560x1440; yazı/logo tüm cihazlarda görünen güvenli alanda (1546x423 ortada)."""
+    Wb, Hb = 2560, 1440
+    im = Image.new("RGB", (Wb, Hb), NAVY)
+    d = ImageDraw.Draw(im)
+    for y in range(Hb):
+        t = abs(y - Hb / 2) / (Hb / 2)
+        d.line([(0, y), (Wb, y)], fill=tuple(int(NAVY2[i] * (1 - t) + NAVY[i] * t) for i in range(3)))
+    gr = Image.new("RGBA", (Wb, Hb), (0, 0, 0, 0))
+    gd = ImageDraw.Draw(gr)
+    for x in range(0, Wb, 64):
+        gd.line([(x, 0), (x, Hb)], fill=(94, 224, 240, 12))
+    for y in range(0, Hb, 64):
+        gd.line([(0, y), (Wb, y)], fill=(94, 224, 240, 12))
+    im.paste(gr, (0, 0), gr)
+    for (x, y, s, a) in [(-260, 760, 1000, 12), (1950, -320, 900, 10)]:
+        e = emblem(s)
+        e.putalpha(e.getchannel("A").point(lambda v: v * a // 255))
+        im.paste(e, (x, y), e)
+    e = emblem(400)
+    im.paste(e, (540, 520), e)
+    d.text((1000, 548), "CUTAWAY", font=font("InterDisplay-Black.otf", 190), fill=WHITE)
+    d.text((1006, 770), "How things actually work.", font=font("InterDisplay-Medium.otf", 64), fill=CYAN)
+    d.text((1006, 868), "NEW VIDEOS  ·  MON  ·  WED  ·  FRI", font=font("InterDisplay-Bold.otf", 40), fill=ORANGE)
+    im.save(out, quality=92)
+    return out
+
+
 def build_all(force=False):
     A.mkdir(exist_ok=True)
-    jobs = [("intro.mp4", make_intro), ("outro.png", make_outro_card)]
+    jobs = [("intro.mp4", make_intro), ("outro.png", make_outro_card),
+            ("cutaway_logo.png", make_avatar), ("cutaway_banner.jpg", make_banner)]
     for name, fn in jobs:
         if force or not (A / name).exists():
             fn(A / name)

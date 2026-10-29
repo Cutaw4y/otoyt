@@ -38,6 +38,7 @@ thumbnail_style: "bold, high contrast, dramatic lighting, one clear object, cine
 
 # Kanal sayfası (ilk gerçek çalışmada bir kez otomatik ayarlanır)
 branding:
+  version: 2                   # afiş/açıklama değişince artır → bir sonraki çalışmada kanala yeniden uygulanır
   banner: "assets/cutaway_banner.jpg"
   country: "TR"
   keywords: "how things work engineering science explained infrastructure machines education cutaway"
