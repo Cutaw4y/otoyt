@@ -1358,25 +1358,19 @@ def make_manual_package(script, idea, shorts, thumb, main_srt, sub_srt, history,
         where = f"📱 Google Drive: {drive_link}\n"
     elif rel_link:
         where = (f"📥 İndir: {rel_link}\n"
-                 "Telefonda: bağlantıyı aç → en alttaki 'Assets' → videoya dokun → indir → Paylaş → 'Videoyu Kaydet' "
-                 "→ YouTube uygulaması → + → yükle. Bilgisayarda: dosyaya tıkla, iner.\n")
+                 "Sayfanın altındaki 'Assets' bölümünde her video ayrı dosya: dokun, iner.\n")
     else:
         where = f"İndir: {link}\nSayfanın en altındaki 'Artifacts' → paketi indir.\n"
     notify(f"📦 Yeni video paketi hazır ({len(items)} video).\n{where}\n"
            "YAPMAN GEREKEN: her videoyu YouTube'a yükle, BAŞLIĞA aşağıdakini yapıştır, "
            "'çocuklara özel değil', görünürlük = Özel/Gizli.\n"
            "Açıklama, etiketler, küçük resim, altyazılar, oynatma listesi, yayın saati ve yorumu sistem ekler.\n"
-           "Önce uzun videoyu (1) yükle. Başlıklar aşağıda tek tek geliyor, dokununca kopyalanır. "
-           "Shorts videoları da aşağıda doğrudan geliyor: videoya basılı tut → 'Galeriye kaydet'.\n\n"
+           "Önce uzun videoyu (1) yükle. Aşağıda her video için ayrı mesaj var: dosya adı + başlığı "
+           "(başlığa dokununca kopyalanır).\n\n"
            + titles)
     for i, it in enumerate(items):  # her başlık ayrı mesaj: telefonda tek dokunuşla kopyalansın
-        f = OUT / f"{it['marker']}.mp4"
-        if it["kind"] == "short" and f.exists() and f.stat().st_size <= TG_MAX:
-            # Short'u doğrudan Telegram'a gönder: telefonda dokun → Galeriye kaydet → YouTube'a yükle
-            if tg_send_video(f, f"{i + 1}) SHORT — başlık (dokun, kopyalanır):", it["title"]):
-                continue
-        notify(f"{i + 1}) {'UZUN VİDEO' if it['kind'] == 'long' else 'SHORT'} — dosya: {it['marker']}.mp4",
-               code=it["title"])
+        notify(f"{i + 1}) {'UZUN VİDEO' if it['kind'] == 'long' else 'SHORT'}\n"
+               f"Dosya: {it['marker']}.mp4\nBaşlık (dokun, kopyalanır):", code=it["title"])
     log(f"Elle yükleme paketi hazır: {sorted(p.name for p in OUT.glob('*'))}")
 
 
