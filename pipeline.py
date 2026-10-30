@@ -1362,15 +1362,43 @@ def make_manual_package(script, idea, shorts, thumb, main_srt, sub_srt, history,
            "YAPMAN GEREKEN: her videoyu YouTube'a yükle, BAŞLIĞA aşağıdakini yapıştır, "
            "'çocuklara özel değil', görünürlük = Özel/Gizli.\n"
            "Açıklama, etiketler, küçük resim, altyazılar, oynatma listesi, yayın saati ve yorumu sistem ekler.\n"
-           "Önce uzun videoyu (1) yükle. Başlıklar aşağıda tek tek geliyor, basılı tutup kopyala.\n\n"
+           "Önce uzun videoyu (1) yükle. Başlıklar aşağıda tek tek geliyor, dokununca kopyalanır. "
+           "Shorts videoları da aşağıda doğrudan geliyor: videoya basılı tut → 'Galeriye kaydet'.\n\n"
            + titles)
     for i, it in enumerate(items):  # her başlık ayrı mesaj: telefonda tek dokunuşla kopyalansın
+        f = OUT / f"{it['marker']}.mp4"
+        if it["kind"] == "short" and f.exists() and f.stat().st_size <= TG_MAX:
+            # Short'u doğrudan Telegram'a gönder: telefonda dokun → Galeriye kaydet → YouTube'a yükle
+            if tg_send_video(f, f"{i + 1}) SHORT — başlık (dokun, kopyalanır):", it["title"]):
+                continue
         notify(f"{i + 1}) {'UZUN VİDEO' if it['kind'] == 'long' else 'SHORT'} — dosya: {it['marker']}.mp4",
                code=it["title"])
     log(f"Elle yükleme paketi hazır: {sorted(p.name for p in OUT.glob('*'))}")
 
 
 TG_MAX = 49 * 1024 * 1024  # Telegram botları en fazla 50 MB dosya gönderebiliyor
+
+
+def tg_send_video(path, text, code):
+    """Videoyu Telegram'a (sıkıştırmadan) gönderir; açıklamada dokununca kopyalanan başlık. Başarılıysa True."""
+    import html as _h
+    tok, chat = os.getenv("TELEGRAM_BOT_TOKEN"), os.getenv("TELEGRAM_CHAT_ID")
+    if not (tok and chat):
+        return False
+    cap = (f"{CFG['notify_prefix']} " if CFG.get("notify_prefix") else "") + text
+    try:
+        with open(path, "rb") as fh:
+            r = requests.post(f"https://api.telegram.org/bot{tok}/sendVideo", timeout=600,
+                              data={"chat_id": chat, "parse_mode": "HTML", "supports_streaming": "true",
+                                    "width": 1080, "height": 1920,
+                                    "caption": f"{_h.escape(cap)}\n<code>{_h.escape(code)}</code>"[:1000]},
+                              files={"video": (Path(path).name, fh, "video/mp4")})
+        if r.ok:
+            return True
+        log(f"Telegram video gönderilemedi: {r.status_code} {r.text[:150]}")
+    except Exception as e:
+        log(f"Telegram video gönderilemedi: {str(e)[:150]}")
+    return False
 
 
 def tg_send_file(path, caption=""):
