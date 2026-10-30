@@ -133,3 +133,26 @@ try:
     print(f"::notice title=Yedek Türkçe ses (Edge)::çalışıyor, {a.size / voice.SR:.1f} sn ses üretildi")
 except Exception as e:
     print(f"::error title=Yedek Türkçe ses (Edge)::{str(e)[:200]}")
+
+
+# İstenirse Telegram'a örnek Türkçe ses gönder (SES_ORNEGI=1)
+if os.getenv("SES_ORNEGI") and os.getenv("TELEGRAM_BOT_TOKEN"):
+    import subprocess, voice
+    metin = ("Yıl bin dokuz yüz elli dokuz. Ural Dağları'nda dokuz genç dağcı, bir daha geri dönmeyecekleri "
+             "bir yolculuğa çıktı. Kurtarma ekibi çadırı bulduğunda, gördükleri şey herkesi şaşkına çevirdi. "
+             "Çadır dışarıdan değil, içeriden kesilerek açılmıştı. Peki eksi otuz derecelik bir gecede, "
+             "insanları sıcak çadırlarını terk etmeye ne zorlamış olabilirdi?")
+    for name, label in (("tr-TR-AhmetNeural", "Ahmet (erkek)"), ("tr-TR-EmelNeural", "Emel (kadın)")):
+        try:
+            a = voice.synth_edge(metin, name, speed=0.95)
+            wav = voice.write_wav(a, f"/tmp/{name}.wav")
+            mp3 = f"/tmp/{name}.mp3"
+            subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(wav), "-b:a", "128k", mp3], check=True)
+            with open(mp3, "rb") as fh:
+                r = requests.post(f"https://api.telegram.org/bot{os.getenv('TELEGRAM_BOT_TOKEN')}/sendAudio",
+                                  data={"chat_id": os.getenv("TELEGRAM_CHAT_ID"), "title": f"Gölgedefter örnek ses – {label}",
+                                        "caption": f"🎧 Örnek ses: Microsoft {label}. Dinle, beğenip beğenmediğini Claude'a yaz."},
+                                  files={"audio": (f"{name}.mp3", fh, "audio/mpeg")}, timeout=120)
+            print(f"::notice title=Örnek ses {label}::Telegram {r.status_code}")
+        except Exception as e:
+            print(f"::error title=Örnek ses {label}::{str(e)[:200]}")
