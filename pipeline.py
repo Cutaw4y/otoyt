@@ -1854,6 +1854,27 @@ def clear_old_localizations():
 CHANNEL_ID = None
 
 
+def _check_gemini_key():
+    """Kanalın Gemini anahtarı çalışmıyorsa (ör. ön ödemeli bakiye bitti/henüz yüklenmedi → 402) öbür anahtara geç."""
+    key = os.getenv("GEMINI_API_KEY", "")
+    if not key or DRY_RUN and os.getenv("SELFTEST"):
+        return
+    try:
+        r = requests.post(f"{ai.GEMINI}/gemini-flash-lite-latest:generateContent", headers={"x-goog-api-key": key},
+                          json={"contents": [{"parts": [{"text": "ok"}]}]}, timeout=60)
+    except Exception:
+        return
+    if r.status_code in (402, 403):
+        alt = next((k for k in ai.TTS_KEYS if k and k != key), None)
+        if alt:
+            os.environ["GEMINI_API_KEY"] = alt
+            ai.TTS_KEYS = [alt] + [k for k in ai.TTS_KEYS if k not in (alt, key)]
+            CFG["paid_tier"] = False
+            log(f"Gemini anahtarı çalışmıyor ({r.status_code}) → öbür kanalın anahtarına geçildi")
+            notify("⚠️ Ücretli Gemini hesabında bakiye görünmüyor (ödeme henüz yansımamış olabilir). "
+                   "Video bugün ücretsiz anahtarla üretiliyor, senden bir şey gerekmiyor; Claude'a haber ver.")
+
+
 def check_channel():
     """İzin anahtarı bu config'in kanalına mı bağlı? Değilse hiçbir şey yüklemeden dur."""
     if DRY_RUN or CFG.get("uploader", "youtube") != "youtube" or not os.getenv("YT_REFRESH_TOKEN"):
@@ -2061,6 +2082,7 @@ if __name__ == "__main__":
         RUNLOG.write_text("", encoding="utf-8")
     ai.LOG = log
     log(f"Başladı (test modu: {DRY_RUN}, yayın: {CFG['publish_mode']})")
+    _check_gemini_key()
     if not CFG.get("paid_tier"):
         ai.TTS_GAP = 21.0
     else:
