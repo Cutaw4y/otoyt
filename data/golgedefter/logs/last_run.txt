@@ -1,2 +1,2 @@
-[14:17:16] Başladı (test modu: False, yayın: manual)
-[14:17:16] Kanal doğrulandı: GölgeDefter
+[17:04:05] Başladı (test modu: False, yayın: manual)
+[17:04:06] Kanal adı kontrol edilemedi: <HttpError 403 when requesting https://youtube.googleapis.com/youtube/v3/channels?part=snippet&mine=true&alt=json returned "The request cannot be comp
