@@ -69,7 +69,7 @@ if os.getenv("YT_REFRESH_TOKEN"):
             for x in caps:
                 if x["snippet"].get("trackKind") != "asr" and v["id"] == ids[0]:
                     try:
-                        raw = yt.captions().download(id=x["id"], tfmt="srv3").execute()
+                        raw = yt.captions().download(id=x["id"]).execute()
                         raw = raw.decode("utf-8", "ignore") if isinstance(raw, bytes) else raw
                         top = "ÜST" if ('ap="1"' in raw) else "alt/varsayılan"
                         print(f"::notice title=İz {x['snippet']['language']}::konum={top} | " + raw[:160].replace(chr(10), " "))
