@@ -168,28 +168,55 @@ def _pad_sentences(a, bounds, min_gap, sr=SR):
     return np.concatenate(pieces), new
 
 
-def narrate_gemini(scenes, workdir, voice="Charon", style=None, models=None, scene_gap=0.45, sentence_gap=0.0):
-    """Her sahneyi tek istekte seslendirir (doğal akış), cümle sınırlarını sessizliklerden bulur."""
+def _groups(scenes, per_request, max_chars):
+    g, cur, n = [], [], 0
+    for i, sc in enumerate(scenes):
+        L = len(sc["narration"])
+        if cur and (len(cur) >= per_request or n + L > max_chars):
+            g.append(cur)
+            cur, n = [], 0
+        cur.append(i)
+        n += L
+    if cur:
+        g.append(cur)
+    return g
+
+
+def narrate_gemini(scenes, workdir, voice="Charon", style=None, models=None, scene_gap=0.45, sentence_gap=0.0,
+                   scenes_per_request=6, max_chars=1800):
+    """Birkaç sahneyi tek istekte seslendirir (ücretsiz katmanın günlük istek sınırına sığmak ve sesin
+    sahneler arasında doğal akması için), cümle ve sahne sınırlarını sessizliklerden bulur."""
     import ai
     workdir = Path(workdir)
-    files, durs, words, offset = [], [], [], 0.0
-    for i, sc in enumerate(scenes):
-        sents = split_sentences(sc["narration"])
-        a = _trim(ai.gemini_tts(sc["narration"], voice=voice, style=style,
+    per_scene = {}
+    for grp in _groups(scenes, max(1, scenes_per_request), max_chars):
+        sents = [split_sentences(scenes[i]["narration"]) for i in grp]
+        flat = [x for ss in sents for x in ss]
+        a = _trim(ai.gemini_tts(" ".join(scenes[i]["narration"] for i in grp), voice=voice, style=style,
                                 models=models or ("gemini-3.1-flash-tts-preview",)))
-        bounds = sentence_bounds(a, len(sents))
-        if bounds is not None:
-            a, bounds = _pad_sentences(a, bounds, sentence_gap)
-        d = a.size / SR
+        bounds = sentence_bounds(a, len(flat))
         if bounds is None:  # sessizlik bulunamazsa metin uzunluğuna göre orantıla
-            lens = [len(s) + 4 for s in sents]
+            lens = [len(x) + 4 for x in flat]
             tot, t, bounds = sum(lens), 0.0, []
+            d = a.size / SR
             for L in lens:
                 bounds.append((t, t + d * L / tot))
                 t += d * L / tot
-        for s, (b0, b1) in zip(sents, bounds):
-            words += word_timings(s, offset + b0, max(b1 - b0, 0.2))
-        full = np.concatenate([a, np.zeros(int(scene_gap * SR), dtype=np.float32)])
+        k = 0
+        for i, ss in zip(grp, sents):
+            b = bounds[k:k + len(ss)]
+            k += len(ss)
+            s0, s1 = b[0][0], b[-1][1]
+            seg = a[int(s0 * SR):int(s1 * SR)]
+            local = [(x0 - s0, x1 - s0) for x0, x1 in b]
+            seg, local = _pad_sentences(seg, local, sentence_gap)
+            per_scene[i] = (seg, ss, local)
+    files, durs, words, offset = [], [], [], 0.0
+    for i in range(len(scenes)):
+        seg, ss, local = per_scene[i]
+        for x, (b0, b1) in zip(ss, local):
+            words += word_timings(x, offset + b0, max(b1 - b0, 0.2))
+        full = np.concatenate([seg, np.zeros(int(scene_gap * SR), dtype=np.float32)])
         f = write_wav(full, workdir / f"vo_{i:02d}.wav")
         dur = full.size / SR
         files.append(f)

@@ -141,14 +141,15 @@ paid_tier: false               # şimdilik ücretsiz katman (ayrı projenin kend
 
 # ======================= MODELLER (ücretli Gemini anahtarı) =======================
 text_models: ["gemini-flash-latest", "gemini-flash-lite-latest"]   # ücretli katmanda: gemini-pro-latest başa
-judge_models: ["gemini-flash-latest", "gemini-flash-lite-latest"]
-factcheck_models: ["gemini-flash-latest", "gemini-flash-lite-latest"]
+judge_models: ["gemini-flash-lite-latest", "gemini-flash-latest"]
+factcheck_models: ["gemini-flash-lite-latest", "gemini-flash-latest"]
 
 voice:
   provider: "gemini"
   name: "Charon"               # derin, bilgilendirici erkek sesi. Alternatif: "Enceladus" (fısıltılı), "Algenib" (boğuk)
   style: "Türkçe, kısık ve sakin bir sesle, gizemli bir belgesel anlatıcısı gibi, acele etmeden ve cümle aralarında kısa duraklarla oku"
   sentence_gap: 0.33           # cümle arası en az 0.33 sn (belgesel ağırlığı)
+  scenes_per_request: 6        # 6 sahne tek istekte → video başına ~6 ses isteği (ücretsiz günlük sınıra sığar)
   scene_gap: 0.6
   models: ["gemini-3.1-flash-tts-preview", "gemini-2.5-pro-preview-tts", "gemini-2.5-flash-preview-tts"]
   lang: "tr"

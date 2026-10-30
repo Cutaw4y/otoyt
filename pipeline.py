@@ -380,7 +380,8 @@ def _tts(scenes, workdir):
     if v.get("provider") == "gemini":
         return voice.narrate_gemini(scenes, workdir, voice=v.get("name", "Charon"), style=v.get("style"),
                                     models=v.get("models"), scene_gap=v.get("scene_gap", 0.45),
-                                    sentence_gap=v.get("sentence_gap", 0.0))
+                                    sentence_gap=v.get("sentence_gap", 0.0),
+                                    scenes_per_request=v.get("scenes_per_request", 6))
     return voice.narrate(scenes, workdir, voice=v["name"], lang=v["lang"], speed=v.get("speed", 1.0),
                          sentence_gap=v.get("sentence_gap", 0.28), scene_gap=v.get("scene_gap", 0.45))
 
