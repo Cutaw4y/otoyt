@@ -1339,6 +1339,37 @@ def make_manual_package(script, idea, shorts, thumb, main_srt, sub_srt, history,
     log(f"Elle yükleme paketi hazır: {sorted(p.name for p in OUT.glob('*'))}")
 
 
+def post_reels(script, idea, shorts, history, parent=None):
+    """Shorts'u Instagram Reels olarak yayınlar (YouTube manuel moddayken de çalışır)."""
+    if not shorts or not CFG.get("instagram_enabled") or CFG["publish_mode"] == "private" or DRY_RUN:
+        return
+    if not (os.getenv("IG_ACCESS_TOKEN") and os.getenv("IG_USER_ID")):
+        log("Instagram anahtarları yok; Reel atlandı.")
+        return
+    try:
+        days = publish.instagram_refresh()
+        if days is not None and days < 10:
+            notify(f"⚠️ Instagram anahtarının süresi {days} gün sonra doluyor, yenilenmesi gerekiyor.")
+    except Exception as e:
+        log(f"Instagram token yenilenemedi: {str(e)[:200]}")
+    tr = CFG.get("language_code") == "tr"
+    for k, sh_ in enumerate(shorts[:int(CFG.get("instagram_reels_per_video", 1))]):
+        try:
+            title = sh_.get("title") or script.get("short_title", script["title"])
+            cap = (script.get("ig_caption") if k == 0 else None) or (
+                f"{title}\n\n"
+                + ("Videonun tamamı YouTube kanalımızda (link profilde)." if tr
+                   else "Full video on our YouTube channel (link in bio).") + "\n\n"
+                + " ".join("#" + re.sub(r"\W", "", t) for t in script.get("tags", [])[:6]))
+            mid, link = publish.instagram_reel(sh_["file"], cap, ai_label=CFG.get("instagram_ai_label", True))
+            history.append({"date": datetime.now().isoformat(timespec="minutes"), "type": "reel",
+                            "title": title, "pillar": idea["pillar"], "video_id": mid, "parent": parent})
+            save_json(HISTORY, history)
+            notify(f"📸 Instagram Reel yayında: {link or mid}")
+        except Exception as e:
+            notify(f"⚠️ Instagram Reel yüklenemedi: {str(e)[:300]}")
+
+
 MANUAL_DIR = DATA / "manual"
 MANUAL_PENDING = DATA / "manual_pending.json"
 
@@ -1703,6 +1734,7 @@ def run_once():
 
         if CFG["publish_mode"] == "manual" and not DRY_RUN:
             # YouTube API onayı gelene kadar: sistem üretir, sahibi Studio'dan elle yükler (kilit yok)
+            post_reels(script, idea, shorts, history)  # Instagram'a otomatik (paket dosyaları silinmeden önce)
             make_manual_package(script, idea, shorts, thumb, en_srt, tr_srt, history, ledger)
             return
 
@@ -1807,20 +1839,7 @@ def run_once():
                 if "quota" in str(e).lower() or "uploadLimit" in str(e):
                     break  # günlük yükleme hakkı doldu; kalanları zorlamayalım
 
-        if short and CFG.get("instagram_enabled") and CFG["publish_mode"] != "private":
-            try:
-                cap = script.get("ig_caption") or (
-                    f"{script.get('short_title', script['title'])}\n\n"
-                    "Full video on our YouTube channel (link in bio).\n\n"
-                    + " ".join("#" + re.sub(r"\W", "", t) for t in script["tags"][:6]))
-                mid, link = publish.instagram_reel(short, cap, ai_label=CFG.get("instagram_ai_label", True))
-                history.append({"date": datetime.now().isoformat(timespec="minutes"), "type": "reel",
-                                "title": script.get("short_title", script["title"]),
-                                "pillar": idea["pillar"], "video_id": mid, "parent": vid})
-                save_json(HISTORY, history)
-                notify(f"📸 Instagram Reel yayında: {link or mid}")
-            except Exception as e:
-                notify(f"⚠️ Instagram Reel yüklenemedi: {e}")
+        post_reels(script, idea, shorts, history, parent=vid)
         for f in OUT.glob("*"):
             f.unlink()
     log(f"Bitti: https://youtu.be/{vid}")

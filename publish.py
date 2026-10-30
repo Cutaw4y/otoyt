@@ -229,9 +229,27 @@ def upload(video, meta, thumb=None, uploader="youtube"):
 
 
 # ================================================================ Instagram Reels
-# Facebook Login for Business varyantı: yerel dosyayı doğrudan Meta'ya yükler
-# (videoyu herkese açık bir sunucuda barındırmak gerekmez).
-IG = "https://graph.facebook.com"
+# Yerel dosyayı doğrudan Meta'ya yükler (videoyu herkese açık bir sunucuda barındırmak gerekmez).
+# İki giriş türü desteklenir:
+#  - "Instagram girişi" token'ı (IG... ile başlar) → graph.instagram.com, 60 gün geçerli, her çalışmada yenilenir
+#  - "Facebook girişi" Page token'ı (EA... ile başlar) → graph.facebook.com, süresiz
+def _ig_base(token):
+    return "https://graph.instagram.com" if token.startswith("IG") else "https://graph.facebook.com"
+
+
+def instagram_refresh():
+    """Instagram girişi token'ının süresini 60 güne uzatır. Kalan gün sayısını döner (Page token'da None)."""
+    token = os.environ.get("IG_ACCESS_TOKEN", "")
+    if not token.startswith("IG"):
+        return None
+    r = requests.get("https://graph.instagram.com/refresh_access_token",
+                     params={"grant_type": "ig_refresh_token", "access_token": token}, timeout=30)
+    if not r.ok:
+        raise RuntimeError(f"Instagram token yenileme: {_ig_err(r)}")
+    j = r.json()
+    if j.get("access_token") and j["access_token"] != token:
+        os.environ["IG_ACCESS_TOKEN"] = j["access_token"]  # bu çalışma boyunca yenisini kullan
+    return int(j.get("expires_in", 0)) // 86400
 
 
 def _ig_err(r):
@@ -245,6 +263,7 @@ def _ig_err(r):
 def instagram_reel(video, caption, ai_label=True, poll_every=20, max_wait=900):
     """Reel yayınlar, (media_id, permalink) döner."""
     token, ig_id = os.environ["IG_ACCESS_TOKEN"], os.environ["IG_USER_ID"]
+    IG = _ig_base(token)
     auth = {"Authorization": f"OAuth {token}"}
 
     def create_and_upload():

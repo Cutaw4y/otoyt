@@ -217,5 +217,6 @@ shorts_per_video: 3
 shorts_delay_hours: 20
 shorts_gap_hours: 20
 
-instagram_enabled: false
+instagram_enabled: true          # anahtar yoksa sessizce atlanır
+instagram_reels_per_video: 1     # her videodan Instagram'a kaç Reel
 instagram_ai_label: true
