@@ -18,7 +18,7 @@ jobs:
       - run: sudo apt-get install -y -qq ffmpeg >/dev/null && pip install -q google-api-python-client google-auth requests numpy edge-tts
       - env:
           GITHUB_TOKEN: ${{ github.token }}
-          SES_ORNEGI: ${{ inputs.ses_ornegi && 'gemini' || '' }}
+          SES_ORNEGI: ${{ inputs.ses_ornegi && '1' || '' }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
