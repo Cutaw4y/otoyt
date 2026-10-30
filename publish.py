@@ -260,8 +260,8 @@ def _ig_err(r):
         return f"{r.status_code} {r.text[:300]}"
 
 
-def instagram_reel(video, caption, ai_label=True, poll_every=20, max_wait=900):
-    """Reel yayınlar, (media_id, permalink) döner."""
+def instagram_reel(video, caption, ai_label=True, poll_every=20, max_wait=900, dry=False):
+    """Reel yayınlar, (media_id, permalink) döner. dry=True: yükler ve işlenmesini bekler ama YAYINLAMAZ (test)."""
     token, ig_id = os.environ["IG_ACCESS_TOKEN"], os.environ["IG_USER_ID"]
     IG = _ig_base(token)
     if token.startswith("IG"):
@@ -303,6 +303,8 @@ def instagram_reel(video, caption, ai_label=True, poll_every=20, max_wait=900):
             raise RuntimeError(f"Instagram işleme {max_wait} sn'de bitmedi: {s}")
         time.sleep(poll_every)
         waited += poll_every
+    if dry:
+        return cid, "(test: yüklendi ve işlendi, yayınlanmadı)"
 
     def pub():
         r = requests.post(f"{IG}/{ig_id}/media_publish", headers=auth, data={"creation_id": cid}, timeout=120)

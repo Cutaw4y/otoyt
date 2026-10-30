@@ -338,7 +338,7 @@ def make_short(parts, out, workdir, music=None, tag="short", max_len=58.0):
         af = "[1:a]aresample=48000,loudnorm=I=-14:TP=-1.5[a]"
     sh(["ffmpeg", "-y", *ins, "-filter_complex", vf + ";" + af, "-map", "[v]", "-map", "[a]",
         "-t", f"{total:.3f}", "-c:v", "libx264", "-preset", "faster", "-crf", "21", "-maxrate", "6M", "-bufsize", "12M",
-        "-c:a", "aac", "-b:a", "192k", "-map_metadata", "-1", "-movflags", "+faststart", out])
+        "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k", "-map_metadata", "-1", "-movflags", "+faststart", out])
     return out, total
 
 

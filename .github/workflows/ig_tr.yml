@@ -8,7 +8,7 @@ on:
 permissions:
   contents: write               # ig_queue.json / history.json kaydı + Release'teki videolar
 
-concurrency: otoyt
+concurrency: ig-golgedefter
 
 env:
   OTOYT_CONFIG: channels/golgedefter.yaml

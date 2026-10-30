@@ -191,7 +191,7 @@ SCRIPT_SCHEMA = (
     '"ig_caption":"Instagram caption for the first clip (see IG rules)",'
     '"ig_hashtags_note":"IG rules: first line = hook that contains the exact words people would search on '
     'Instagram for this topic (Instagram search reads captions); then 1-2 short lines that add a surprising fact '
-    'NOT in the clip; then a question that invites comments; then a CTA to the full video via link in bio; '
+    'NOT in the clip; then a question that invites comments; then a CTA to watch the full video by searching the channel name on YouTube (do NOT say link in bio); '
     'last line EXACTLY 5 hashtags (Instagram allows max 5): 1 broad niche tag, 2 specific to this clip\'s subject '
     '(names, places, events), 1 mid-size community tag, 1 brand tag given in the brief. No spaces inside a tag, '
     'no punctuation, written in the video language",'
@@ -1367,8 +1367,8 @@ def _reel_caption(script, sh_, first):
         tags = [re.sub(r"\W", "", t) for t in script.get("tags", [])]
         tags = [t for t in tags if 3 <= len(t) <= 22][:4]
         cap = (f"{title}\n\n"
-               + ("Videonun tamamı YouTube kanalımızda (link profilde)." if tr
-                  else "Full video on our YouTube channel (link in bio).") + "\n\n"
+               + (f"Videonun tamamı YouTube'da: {CFG.get('channel_name', '')}" if tr
+                  else f"Full video on YouTube: {CFG.get('channel_name', '')}") + "\n\n"
                + " ".join("#" + t for t in tags))
     return fix_hashtags(cap, CFG.get("ig_brand_tag"))
 
