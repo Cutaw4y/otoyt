@@ -1,0 +1,6 @@
+{
+  "PLAadc2Jx5MSg": {
+    "fail": 1,
+    "err": "<HttpError 400 when requesting https://youtube.googleapis.com/upload/youtube/v3/playlistImages?part=snippet&alt=json&uploadType=multipart returned \"Th"
+  }
+}
