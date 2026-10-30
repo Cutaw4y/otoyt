@@ -1126,17 +1126,137 @@ def make_manual_package(script, idea, shorts, thumb, main_srt, sub_srt, history,
                                f"[uzun videonun bağlantısını buraya yapıştır]\n\n{hashtags} #Shorts",
                   "İLGİLİ VİDEO: Yükleme ekranında 'İlgili video' olarak uzun videoyu seç."]
     (OUT / "0-YUKLEME-BILGILERI.txt").write_text("\n".join(lines), encoding="utf-8")
+    # tamamlayıcı için kayıt: sahibi yalnızca dosyayı + başlığı yükler, gerisini sistem ekler
+    key = datetime.now().strftime("%Y%m%d-%H%M") + "-" + base[:30]
+    keep = MANUAL_DIR / key
+    keep.mkdir(parents=True, exist_ok=True)
+    caps = []
+    if thumb:
+        shutil.copy(thumb, keep / "thumb.jpg")
+    if main_srt:
+        shutil.copy(main_srt, keep / f"cap_{lc}.srt")
+        caps.append([f"cap_{lc}.srt", lc, CFG.get("caption_label", "English")])
+    if sub_srt:
+        shutil.copy(sub_srt, keep / f"cap_{sub.get('code')}.srt")
+        caps.append([f"cap_{sub.get('code')}.srt", sub.get("code"), sub.get("label")])
+    iso_ = lambda t: t.strftime("%Y-%m-%dT%H:%M:%SZ")
+    items = [{"kind": "long", "title": script["title"][:100], "marker": f"1-VIDEO-{base}",
+              "description": desc, "tags": script.get("tags", []), "publish_at": iso_(main_t),
+              "thumb": "thumb.jpg" if thumb else None, "captions": caps, "playlist": pl,
+              "comment": script.get("pinned_comment", "")}]
+    for k, sh_ in enumerate(shorts):
+        items.append({"kind": "short", "title": (sh_["title"][:90].rstrip() + " #Shorts"),
+                      "marker": f"{k + 2}-SHORT-{slug(sh_['title'], 40)}",
+                      "description": f"{sh_['title']}\n\n{CFG.get('full_video_text', 'Watch the full video:')} "
+                                     f"{{LONG_URL}}\n\n{hashtags} #Shorts",
+                      "tags": script.get("tags", []), "publish_at": iso_(short_ts[k])})
+    pend = load_json(MANUAL_PENDING, []) if MANUAL_PENDING.exists() else []
+    pend.append({"key": key, "created": datetime.now().isoformat(timespec="minutes"), "items": items})
+    save_json(MANUAL_PENDING, pend)
     history.append({"date": datetime.now().isoformat(timespec="minutes"), "type": "long",
                     "title": script["title"], "pillar": idea["pillar"], "video_id": None, "manual": True})
     save_json(HISTORY, history)
     ledger.save()
     run = os.getenv("GITHUB_RUN_ID")
     link = f"https://github.com/{os.getenv('GITHUB_REPOSITORY', 'Cutaw4y/otoyt')}/actions/runs/{run}" if run else ""
-    notify(f"📦 Yeni video paketi hazır: {tr_title(None, script['title'])}\n"
-           f"1 uzun video + {len(shorts)} Short. İndir: {link}\n"
-           f"(Sayfanın altındaki 'Artifacts' → paketi indir, 0-YUKLEME-BILGILERI.txt'yi aç)\n"
-           f"Önerilen yayın: {fmt_local(main_t)}. Paket 3 gün saklanır.")
+    titles = "\n".join(f"{i + 1}) {it['title']}" for i, it in enumerate(items))
+    notify(f"📦 Yeni video paketi hazır ({len(items)} video). İndir: {link}\n"
+           "Sayfanın en altındaki 'Artifacts' → paketi indir (3 gün saklanır).\n\n"
+           "YAPMAN GEREKEN: her videoyu YouTube'a yükle, BAŞLIĞA aşağıdakini yapıştır, görünürlük = Özel.\n"
+           "Açıklama, etiketler, küçük resim, altyazılar, oynatma listesi, yayın saati ve yorumu sistem ekler.\n\n"
+           + titles)
     log(f"Elle yükleme paketi hazır: {sorted(p.name for p in OUT.glob('*'))}")
+
+
+MANUAL_DIR = DATA / "manual"
+MANUAL_PENDING = DATA / "manual_pending.json"
+
+
+def _tnorm(t):
+    return re.sub(r"\s+", " ", (t or "").strip().lower())
+
+
+def finish_manual_uploads():
+    """Sahibinin elle yüklediği videoları başlığından bulur; açıklama, etiket, küçük resim, altyazı, oynatma listesi,
+    yayın zamanı ve yorumu ekler. Shorts'un açıklamasına uzun videonun bağlantısını koyar."""
+    if DRY_RUN or not MANUAL_PENDING.exists() or not os.getenv("YT_REFRESH_TOKEN"):
+        return
+    pend = load_json(MANUAL_PENDING, [])
+    if not pend:
+        return
+    try:
+        ups = publish.recent_uploads()
+    except Exception as e:
+        log(f"Kanal videoları okunamadı: {str(e)[:150]}")
+        return
+    used = set()
+    for pk in pend:
+        folder = MANUAL_DIR / pk["key"]
+        long_item = next((it for it in pk["items"] if it["kind"] == "long"), None)
+        for it in pk["items"]:
+            if it.get("done"):
+                continue
+            if it["kind"] == "short" and not (long_item and long_item.get("video_id")):
+                continue  # önce uzun video bulunmalı (Short açıklamasına bağlantısı girecek)
+            v = next((u for u in ups if u["id"] not in used and
+                      _tnorm(u["title"]) in (_tnorm(it["title"]), _tnorm(it["marker"]),
+                                             _tnorm(it["title"].replace(" #Shorts", "")))), None)
+            if not v:
+                continue
+            used.add(v["id"])
+            desc = it["description"].replace("{LONG_URL}", f"https://youtu.be/{long_item['video_id']}"
+                                             if long_item and long_item.get("video_id") else "")
+            m = meta(it["title"], desc, it["tags"], it.get("publish_at"), is_short=it["kind"] == "short")
+            thumb = folder / it["thumb"] if it.get("thumb") and (folder / it["thumb"]).exists() else None
+            try:
+                notes = publish.finish_video(v, m, thumb)
+            except Exception as e:
+                log(f"Elle yüklenen video tamamlanamadı ({v['id']}): {str(e)[:200]}")
+                continue
+            for fn, code, name in it.get("captions", []):
+                if (folder / fn).exists():
+                    try:
+                        publish.upload_caption(v["id"], folder / fn, code, name)
+                    except Exception as e:
+                        notes.append(f"altyazı {code}: {str(e)[:100]}")
+            if it.get("playlist"):
+                add_to_pillar_playlist_by_title(v["id"], it["playlist"])
+            if it.get("comment"):
+                queue_comment(v["id"], it["comment"])
+            it["done"], it["video_id"] = True, v["id"]
+            log(f"Elle yüklenen video tamamlandı: {v['id']} {it['title']} {notes}")
+            notify(f"✅ Elle yüklediğin video tamamlandı: {it['title']}\nhttps://youtu.be/{v['id']}\n"
+                   "Açıklama, etiketler, küçük resim, altyazı, oynatma listesi ve yayın saati eklendi."
+                   + (f"\n⚠️ {'; '.join(notes)}" if notes else ""))
+            hist = load_json(HISTORY, [])
+            for h in reversed(hist):
+                if h.get("manual") and not h.get("video_id") and it["kind"] == "long" and \
+                        _tnorm(h["title"])[:60] == _tnorm(it["title"])[:60]:
+                    h["video_id"] = v["id"]
+                    break
+            else:
+                if it["kind"] == "short":
+                    hist.append({"date": datetime.now().isoformat(timespec="minutes"), "type": "short",
+                                 "title": it["title"], "video_id": v["id"], "manual": True})
+            save_json(HISTORY, hist)
+    keep = []
+    for pk in pend:
+        age = (datetime.now() - datetime.fromisoformat(pk["created"])).days
+        if all(it.get("done") for it in pk["items"]) or age > 21:
+            shutil.rmtree(MANUAL_DIR / pk["key"], ignore_errors=True)
+        else:
+            keep.append(pk)
+    save_json(MANUAL_PENDING, keep)
+
+
+def add_to_pillar_playlist_by_title(video_id, title):
+    cache = load_json(PLAYLISTS, {}) if PLAYLISTS.exists() else {}
+    try:
+        pid = publish.ensure_playlist(title, f"{CFG['channel_name']}: {title}", CFG["language_code"], cache)
+        save_json(PLAYLISTS, cache)
+        publish.add_to_playlist(pid, video_id)
+    except Exception as e:
+        log(f"Oynatma listesine eklenemedi: {str(e)[:150]}")
 
 
 def produce_script(history, report):
@@ -1303,6 +1423,7 @@ def run_once():
 
     report = publish.performance_report(history)
     log(f"Analitik: {report['n']} video ölçüldü, sütun puanları: {report['pillar_scores']}")
+    finish_manual_uploads()
     post_due_comments()
     maybe_swap_thumbnails(history)
     idea, script = produce_script(history, report)
@@ -1498,6 +1619,11 @@ if __name__ == "__main__":
             if CFG.get("paid_" + k):
                 CFG[k] = CFG["paid_" + k]
         log("Ücretli Gemini anahtarı kullanılıyor")
+    if os.getenv("FINISH_ONLY"):  # sadece elle yüklenen videoları tamamla + bekleyen yorumlar (hafif, sık çalışır)
+        check_channel()
+        finish_manual_uploads()
+        post_due_comments()
+        sys.exit(0)
     if os.getenv("BRANDING_ONLY"):  # sadece kanal açıklaması/afiş/anahtar kelimeler (video üretmez)
         check_channel()
         ensure_branding()

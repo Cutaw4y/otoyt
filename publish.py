@@ -367,3 +367,49 @@ def add_to_playlist(playlist_id, video_id):
 def set_thumbnail(video_id, path):
     from googleapiclient.http import MediaFileUpload
     _yt().thumbnails().set(videoId=video_id, media_body=MediaFileUpload(str(path))).execute()
+
+
+def recent_uploads(n=50):
+    """Kanalın son yüklenen videoları: [{id, title, privacy, publishAt}] (elle yüklenenleri bulmak için)."""
+    yt = _yt()
+    up = yt.channels().list(part="contentDetails", mine=True).execute()["items"][0][
+        "contentDetails"]["relatedPlaylists"]["uploads"]
+    r = yt.playlistItems().list(part="contentDetails", playlistId=up, maxResults=n).execute()
+    ids = [i["contentDetails"]["videoId"] for i in r.get("items", [])]
+    if not ids:
+        return []
+    out = []
+    for v in yt.videos().list(part="snippet,status", id=",".join(ids)).execute().get("items", []):
+        out.append({"id": v["id"], "title": v["snippet"]["title"], "snippet": v["snippet"], "status": v["status"]})
+    return out
+
+
+def finish_video(video, meta, thumb=None):
+    """Elle yüklenmiş videoya başlık/açıklama/etiket/kategori/dil, yapay içerik beyanı, (gizliyse) yayın zamanı
+    ve küçük resim uygular. Gizlilik durumunu herkese açığa ÇEVİRMEZ."""
+    from googleapiclient.http import MediaFileUpload
+    yt = _yt()
+    sn = {"title": meta["title"][:100], "description": meta["description"][:4900], "tags": meta["tags"],
+          "categoryId": meta["category_id"], "defaultLanguage": meta["lang"], "defaultAudioLanguage": meta["lang"]}
+    st = dict(video["status"])
+    status = {"privacyStatus": st.get("privacyStatus", "private"),
+              "selfDeclaredMadeForKids": meta.get("made_for_kids", False),
+              "containsSyntheticMedia": meta.get("synthetic", True),
+              "embeddable": st.get("embeddable", True), "license": st.get("license", "youtube"),
+              "publicStatsViewable": st.get("publicStatsViewable", True)}
+    if st.get("publishAt"):
+        status["publishAt"] = st["publishAt"]
+    elif status["privacyStatus"] == "private" and meta.get("publish_at"):
+        status["publishAt"] = meta["publish_at"]  # sahibi "Özel" yüklediyse planlanan saatte yayına girer
+    notes = []
+    try:
+        yt.videos().update(part="snippet,status", body={"id": video["id"], "snippet": sn, "status": status}).execute()
+    except Exception as e:  # zamanlama/durum reddedilirse en azından bilgileri yaz
+        notes.append(f"durum ayarlanamadı: {str(e)[:120]}")
+        yt.videos().update(part="snippet", body={"id": video["id"], "snippet": sn}).execute()
+    if thumb:
+        try:
+            yt.thumbnails().set(videoId=video["id"], media_body=MediaFileUpload(str(thumb))).execute()
+        except Exception as e:
+            notes.append(f"küçük resim: {str(e)[:120]}")
+    return notes

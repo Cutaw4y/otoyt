@@ -1,0 +1,43 @@
+name: Elle yüklenenleri tamamla
+on:
+  schedule:
+    - cron: "23 4,7,10,13,16,19 * * *"   # TR 07:23-22:23 arası 3 saatte bir
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency: otoyt-finisher
+jobs:
+  finish:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    strategy:
+      max-parallel: 1
+      fail-fast: false
+      matrix:
+        config: [config.yaml, channels/golgedefter.yaml]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: pip install -q requests pyyaml pillow numpy google-api-python-client google-auth
+      - name: Tamamla
+        env:
+          FINISH_ONLY: "1"
+          OTOYT_CONFIG: ${{ matrix.config }}
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+          YT2_REFRESH_TOKEN: ${{ secrets.YT2_REFRESH_TOKEN }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_PAID_API_KEY: ${{ secrets.GEMINI_PAID_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python pipeline.py
+      - name: Kaydet
+        if: always()
+        run: |
+          git config user.name "otoyt-bot"; git config user.email "otoyt@users.noreply.github.com"
+          for f in history.json pending_comments.json playlists.json manual_pending.json; do [ -f "$f" ] && git add "$f"; done
+          for d in manual data/golgedefter; do [ -d "$d" ] && git add -A "$d"; done
+          git diff --cached --quiet && exit 0
+          git commit -q -m "tamamlayıcı" && for i in 1 2 3; do git pull --rebase -X theirs -q && git push -q && exit 0; git rebase --abort 2>/dev/null; sleep 5; done; exit 1
