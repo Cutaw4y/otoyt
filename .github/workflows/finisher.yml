@@ -15,21 +15,15 @@ jobs:
   finish:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
-    strategy:
-      max-parallel: 1
-      fail-fast: false
-      matrix:
-        config: [config.yaml, channels/golgedefter.yaml]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
-        with: {python-version: "3.12"}
+        with: {python-version: "3.12", cache: pip}
       - run: pip install -q requests pyyaml pillow numpy google-api-python-client google-auth
       - name: Tamamla
         env:
           FINISH_ONLY: "1"
           ADD_TRANSLATION: ${{ inputs.add_translation }}
-          OTOYT_CONFIG: ${{ matrix.config }}
           YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
           YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
           YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
@@ -42,7 +36,10 @@ jobs:
           GDRIVE_CLIENT_ID: ${{ secrets.GDRIVE_CLIENT_ID }}
           GDRIVE_CLIENT_SECRET: ${{ secrets.GDRIVE_CLIENT_SECRET }}
           GDRIVE_REFRESH_TOKEN: ${{ secrets.GDRIVE_REFRESH_TOKEN }}
-        run: python pipeline.py
+        # iki kanal tek işte sırayla (GitHub her işi en az 1 dk sayar → aylık dakika yarıya iner)
+        run: |
+          OTOYT_CONFIG=config.yaml python pipeline.py || echo "::warning::Cutaway tamamlayıcı hata verdi"
+          OTOYT_CONFIG=channels/golgedefter.yaml python pipeline.py || echo "::warning::Gölgedefter tamamlayıcı hata verdi"
       - name: Kaydet
         if: always()
         run: |
