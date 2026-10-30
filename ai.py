@@ -158,54 +158,62 @@ def cloudflare_image(prompt, out, model="@cf/black-forest-labs/flux-1-schnell", 
 TTS_GAP = 21.0  # ses istekleri arası en az bekleme (ücretsiz katman: dakikada ~3 istek)
 
 
+TTS_KEYS = []  # pipeline doldurur: kanalın anahtarı + öbür kanalın anahtarı (yedek ses hakkı)
+
+
 def gemini_tts(text, voice="Charon", style=None, models=("gemini-3.1-flash-tts-preview",), tries=5):
     """Gemini ile seslendirme (Türkçe dahil). Dönüş: 24 kHz mono float32 numpy dizisi.
-    'style' doğal dille üslup talimatıdır (ör. 'kısık, gizemli bir belgesel anlatıcısı gibi oku')."""
+    'style' doğal dille üslup talimatıdır (ör. 'kısık, gizemli bir belgesel anlatıcısı gibi oku').
+    Bir anahtarın günlük ücretsiz ses hakkı biterse sıradaki anahtara (öbür Google projesi) geçer."""
     import numpy as np
-    key = os.environ["GEMINI_API_KEY"]
+    keys = []
+    for k in (TTS_KEYS or [os.environ["GEMINI_API_KEY"]]):
+        if k and k not in keys:
+            keys.append(k)
     prompt = f"{style}:\n{text}" if style else text
     body = {"contents": [{"role": "user", "parts": [{"text": prompt}]}],
             "generationConfig": {"responseModalities": ["AUDIO"],
                                  "speechConfig": {"voiceConfig": {"prebuiltVoiceConfig": {"voiceName": voice}}}}}
     last = None
-    for model in models:
-        if (model, "tts") in _exhausted:
-            continue
-        for attempt in range(tries):
-            wait = _last_call.get(("tts", model), 0) + TTS_GAP - time.time()
-            if wait > 0:  # dakika sınırı (ücretsiz katmanda dakikada birkaç istek)
-                time.sleep(wait)
-            _last_call[("tts", model)] = time.time()
-            try:
-                r = requests.post(f"{GEMINI}/{model}:generateContent", headers={"x-goog-api-key": key},
-                                  json=body, timeout=300)
-            except requests.RequestException as e:
-                last = e
-                time.sleep(10 * (attempt + 1))
+    for ki, key in enumerate(keys):
+        for model in models:
+            if (model, "tts", ki) in _exhausted:
                 continue
-            if r.status_code == 429 and ("PerDay" in r.text or "limit: 0" in r.text):
-                _exhausted.add((model, "tts"))  # bu model bu hesapta yok / günlük hak bitti → hemen sonrakine
-                last = f"{model}: günlük ses kotası doldu"
-                LOG(f"Gemini TTS {model}: kota yok/doldu → sonraki model")
-                break
-            if r.status_code in (429, 500, 502, 503, 504):
-                last = f"{r.status_code} {r.text[:200]}"
-                wait = _retry_delay(r, attempt)
-                LOG(f"Gemini TTS {model} {r.status_code} → {wait:.0f} sn bekleniyor")
-                time.sleep(wait)
-                continue
-            if r.status_code in (400, 403, 404):
-                last = f"{model}: {r.status_code} {r.text[:300]}"
-                LOG(f"Gemini TTS {model} kullanılamadı: {r.status_code} {r.text[:150]}")
-                break
-            try:
-                parts = r.json()["candidates"][0]["content"]["parts"]
-                b64 = next(p["inlineData"]["data"] for p in parts if "inlineData" in p)
-                pcm = np.frombuffer(base64.b64decode(b64), dtype="<i2").astype(np.float32) / 32768.0
-                if pcm.size > 2400:
-                    return pcm
-                last = "boş ses"
-            except Exception as e:
-                last = f"yanıt çözülemedi: {e}"
-            time.sleep(5)
+            for attempt in range(tries):
+                wait = _last_call.get(("tts", model, ki), 0) + TTS_GAP - time.time()
+                if wait > 0:  # dakika sınırı (ücretsiz katmanda dakikada birkaç istek)
+                    time.sleep(wait)
+                _last_call[("tts", model, ki)] = time.time()
+                try:
+                    r = requests.post(f"{GEMINI}/{model}:generateContent", headers={"x-goog-api-key": key},
+                                      json=body, timeout=300)
+                except requests.RequestException as e:
+                    last = e
+                    time.sleep(10 * (attempt + 1))
+                    continue
+                if r.status_code == 429 and ("PerDay" in r.text or "limit: 0" in r.text):
+                    _exhausted.add((model, "tts", ki))  # bu anahtarda bu modelin günlük hakkı bitti → sıradakine
+                    last = f"{model}: günlük ses kotası doldu"
+                    LOG(f"Gemini TTS {model} (anahtar {ki + 1}/{len(keys)}): kota yok/doldu → sıradaki")
+                    break
+                if r.status_code in (429, 500, 502, 503, 504):
+                    last = f"{r.status_code} {r.text[:200]}"
+                    wait = _retry_delay(r, attempt)
+                    LOG(f"Gemini TTS {model} {r.status_code} → {wait:.0f} sn bekleniyor")
+                    time.sleep(wait)
+                    continue
+                if r.status_code in (400, 403, 404):
+                    last = f"{model}: {r.status_code} {r.text[:300]}"
+                    LOG(f"Gemini TTS {model} kullanılamadı: {r.status_code} {r.text[:150]}")
+                    break
+                try:
+                    parts = r.json()["candidates"][0]["content"]["parts"]
+                    b64 = next(p["inlineData"]["data"] for p in parts if "inlineData" in p)
+                    pcm = np.frombuffer(base64.b64decode(b64), dtype="<i2").astype(np.float32) / 32768.0
+                    if pcm.size > 2400:
+                        return pcm
+                    last = "boş ses"
+                except Exception as e:
+                    last = f"yanıt çözülemedi: {e}"
+                time.sleep(5)
     raise RuntimeError(f"Gemini TTS ses üretemedi: {last}")

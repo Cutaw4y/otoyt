@@ -32,9 +32,14 @@ ROOT = Path(__file__).parent
 CONFIG_PATH = ROOT / os.getenv("OTOYT_CONFIG", "config.yaml")
 CFG = yaml.safe_load(CONFIG_PATH.read_text(encoding="utf-8"))
 # Kanal başına anahtar eşlemesi (ör. YT_REFRESH_TOKEN ← YT2_REFRESH_TOKEN)
+# seslendirme için öbür kanalın anahtarı da yedek olarak kullanılır (iki kanal farklı günlerde üretiyor;
+# Google'ın ücretsiz günlük ses hakkı anahtar/proje başına → toplam ses hakkı iki katına çıkar)
+_tts_keys = [os.getenv("GEMINI_API_KEY", ""), os.getenv("GEMINI_PAID_API_KEY", "")] + \
+    [k.strip() for k in os.getenv("GEMINI_TTS_EXTRA_KEYS", "").split(",")]
 for _k, _v in (CFG.get("env_map") or {}).items():
     if os.getenv(_v):
         os.environ[_k] = os.environ[_v]
+ai.TTS_KEYS = [os.environ.get("GEMINI_API_KEY", "")] + [k for k in _tts_keys if k]  # önce kanalın kendi anahtarı
 DATA = ROOT / CFG.get("data_dir", ".")          # kanalın geçmiş/kayıt dosyaları
 ASSETS = ROOT / CFG.get("assets_dir", "assets")  # kanalın logo/intro/müzik dosyaları
 DATA.mkdir(parents=True, exist_ok=True)
@@ -484,9 +489,10 @@ def _tts(scenes, workdir):
         except Exception as e:  # Gemini sesi alınamazsa video yine çıksın: yedek ses
             fb = v["fallback"]
             log(f"Gemini sesi alınamadı ({str(e)[:120]}) → yedek ses ({fb.get('name')})")
+            extra = {"synth": voice.synth_edge} if fb.get("provider") == "edge" else {}
             return voice.narrate(scenes, workdir, voice=fb["name"], lang=fb.get("lang", "a"), speed=fb.get("speed", 1.0),
                                  sentence_gap=fb.get("sentence_gap", 0.28), scene_gap=fb.get("scene_gap", 0.45),
-                                 synth=voice.synth_edge if fb.get("provider") == "edge" else None)
+                                 **extra)
     if v.get("provider") == "gemini":
         return voice.narrate_gemini(scenes, workdir, voice=v.get("name", "Charon"), style=v.get("style"),
                                     models=v.get("models"), scene_gap=v.get("scene_gap", 0.45),
