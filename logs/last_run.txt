@@ -1,26 +1,20 @@
-[18:59:54] Başladı (test modu: False, yayın: private)
-[18:59:54] Analitik: 0 video ölçüldü, sütun puanları: {}
-[19:10:17] Gemini gemini-flash-latest 503 → 60 sn bekleniyor (3/6)
-[19:11:17] Gemini gemini-flash-latest günlük kotası doldu → sonraki modele geçiliyor
-[19:11:19] Konu (1): The Trillion-Dollar Recipe: How Pure Silicon Becomes a Microchip  [How it's made and what it really costs (steel, glass, chips, paper, concrete)]
-[19:11:35] Senaryo kısa (964/1400 kelime) → genişletiliyor (1)
-[19:11:44] Senaryo kısa (1030/1400 kelime) → genişletiliyor (2)
-[19:12:05] Senaryo uzunluğu: 1098 kelime
-[19:12:05] Senaryo yazıldı: 32 sahne, 1098 kelime
-[19:12:05] Gemini gemini-flash-lite-latest 429 → 15 sn bekleniyor (1/2)
-[19:12:20] Gemini gemini-flash-lite-latest 429 → 30 sn bekleniyor (2/2)
-[19:12:50] Gemini gemini-flash-latest 429 → 15 sn bekleniyor (1/2)
-[19:13:06] Gemini gemini-flash-latest 429 → 30 sn bekleniyor (2/2)
-[19:13:36] Google aramalı doğrulama kullanılamadı (Gemini yanıt vermedi: 429 {
+[09:55:18] Başladı (test modu: False, yayın: private)
+[09:55:19] Kanal doğrulandı: Cutaway
+[09:55:21] Eski videolardan çeviri başlık/açıklama kaldırıldı: 0 video
+[09:55:51] Bekleyen altyazı yüklenemedi (VID0xxxxxx__en.srt): en altyazı 2 denemede başarısız: <HttpError 404 when requesting https://youtube.googleapis.com/upload/youtube/v3/captions?part=snippet&alt=json&upload
+[09:55:51] Analitik: 0 video ölçüldü, sütun puanları: {}
+[10:00:10] Konu (1): Why Microwaves Can't Actually Melt Pure Ice  [Everyday science mysteries (why ice floats, why the sky is blue, how soap works)]
+[10:00:14] Gemini gemini-flash-latest 503 → 15 sn bekleniyor (1/6)
+[10:01:39] Senaryo yazıldı: 34 sahne, 2113 kelime
+[10:01:39] Gemini gemini-flash-lite-latest 429 → 15 sn bekleniyor (1/2)
+[10:01:54] Gemini gemini-flash-lite-latest 429 → 30 sn bekleniyor (2/2)
+[10:02:24] Gemini gemini-flash-latest 429 → 15 sn bekleniyor (1/2)
+[10:02:39] Gemini gemini-flash-latest 429 → 30 sn bekleniyor (2/2)
+[10:03:09] Google aramalı doğrulama kullanılamadı (Gemini yanıt vermedi: 429 {
   "error": {
     "code": 429,
     "message": "You exceeded your current quota, please check ) → Wikipedia'ya geçiliyor
-[19:13:37] Doğrulama kaynağı: Wikipedia (4 makale)
-[19:13:39] Doğrulama turu 1: 7 iddia, 0 yanlış, 0 belirsiz
-[19:13:51] Editör (min 7, ort 7.6): {'originality': 7, 'hook': 8, 'clarity': 7, 'value_density': 8, 'audience_fit': 8, 'problems': ['The transition into the chemical distillation details is a bit dry for a casual viewer, though the whiskey analogy helps.', "A few technical terms like 'trichlorosilane' are introduced quickly, requiring close attention from the audience."]}
-[19:13:51] Seslendirme başlıyor (Kokoro)...
-[19:21:35] Seslendirme: 438 sn
-[19:21:35] Sahne 1/32 (footage, 17.9 sn, 4 çekim)
-[22:52:35] Doğrulama kaynağı: Google araması
-[22:52:35] Cloudflare günlük ücretsiz kota doldu: {"errors": [{"message": "you have used up your daily free allocation of 10,000 neurons"}]} → bu video için Pexels fotoğraflarına geçiliyor
-[03:10:06] Thumbnail sıralaması: [2, 3, 1] - test
+[10:03:11] Doğrulama kaynağı: Wikipedia (4 makale)
+[10:03:13] Doğrulama turu 1: 8 iddia, 0 yanlış, 0 belirsiz
+[10:03:20] Editör (min 8, ort 8.4): {'originality': 8, 'hook': 8, 'clarity': 8, 'value_density': 9, 'audience_fit': 9, 'problems': ['The script is quite long for a standard short-form video and leans more toward an essay or documentary narration.', "Some technical terms like 'epsilon double prime' and 'Ice Ih' are introduced quickly and might require slightly more visual grounding."], 'problems_tr': 'Metin standart bir video için biraz uzun ve bir deneme veya belgesel anlatısına benziyor. Bazı teknik terimler izleyiciyi zorlayabilir.'}
+[10:03:20] Seslendirme başlıyor (Kokoro)...
