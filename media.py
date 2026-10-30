@@ -177,7 +177,7 @@ WrapStyle: 0
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: Cap,Inter Display,54,&H00FFFFFF,&H00FFFFFF,&H00201812,&H80000000,-1,0,0,0,100,100,0,0,1,3,2,2,160,160,64,1
+Style: Cap,Inter Display,66,&H00FFFFFF,&H00FFFFFF,&H00101010,&HA0000000,-1,0,0,0,100,100,0,0,1,4,2,2,140,140,60,1
 Style: ChapNum,Inter Display,30,{THEME['chap_num']},&H00FFFFFF,{THEME['chap_box']},&H00000000,-1,0,0,0,100,100,3,0,3,14,0,7,90,90,78,1
 Style: ChapTitle,Inter Display,58,&H00FAF4EE,&H00FFFFFF,{THEME['chap_box']},&H00000000,-1,0,0,0,100,100,0,0,3,18,0,7,90,90,128,1
 Style: Callout,Inter Display,50,{THEME['callout_text']},&H00FFFFFF,{THEME['callout_box']},&H00000000,-1,0,0,0,100,100,1,0,3,12,0,9,90,90,84,1
