@@ -479,7 +479,8 @@ def _tts(scenes, workdir):
             return voice.narrate_gemini(scenes, workdir, voice=v.get("name", "Charon"), style=v.get("style"),
                                         models=v.get("models"), scene_gap=v.get("scene_gap", 0.45),
                                         sentence_gap=v.get("sentence_gap", 0.0),
-                                        scenes_per_request=v.get("scenes_per_request", 6))
+                                        scenes_per_request=v.get("scenes_per_request", 6),
+                                        max_chars=v.get("max_chars", 1800))
         except Exception as e:  # Gemini sesi alınamazsa video yine çıksın: yedek ses
             fb = v["fallback"]
             log(f"Gemini sesi alınamadı ({str(e)[:120]}) → yedek ses ({fb.get('name')})")
@@ -489,7 +490,8 @@ def _tts(scenes, workdir):
         return voice.narrate_gemini(scenes, workdir, voice=v.get("name", "Charon"), style=v.get("style"),
                                     models=v.get("models"), scene_gap=v.get("scene_gap", 0.45),
                                     sentence_gap=v.get("sentence_gap", 0.0),
-                                    scenes_per_request=v.get("scenes_per_request", 6))
+                                    scenes_per_request=v.get("scenes_per_request", 6),
+                                        max_chars=v.get("max_chars", 1800))
     return voice.narrate(scenes, workdir, voice=v["name"], lang=v["lang"], speed=v.get("speed", 1.0),
                          sentence_gap=v.get("sentence_gap", 0.28), scene_gap=v.get("scene_gap", 0.45))
 
@@ -952,6 +954,10 @@ def chapters_text(chapters, titles=None, header="Chapters"):
 
 
 ERROR_GUIDE = [
+    ("ses kotası doldu", "Google'ın günlük ücretsiz SES (seslendirme) hakkı bitmiş. Hak her gün öğlen yenileniyor; "
+                         "sistem ertesi gün aynı saatte kendisi tekrar deneyecek, senden bir şey gerekmiyor."),
+    ("TTS ses üretemedi", "Seslendirme yapılamadı (Google'ın ücretsiz ses hakkı). Sistem ertesi gün kendisi "
+                          "tekrar deneyecek, senden bir şey gerekmiyor."),
     ("invalid_grant", "YouTube izni geçersiz ya da süresi dolmuş. Çözüm: get_token.bat'ı çalıştır, "
                       "çıkan YT_REFRESH_TOKEN'ı GitHub Secrets'ta güncelle."),
     ("API_KEY_INVALID", "Gemini API anahtarı geçersiz. Çözüm: aistudio.google.com'dan yeni anahtar al, "
@@ -2058,6 +2064,13 @@ if __name__ == "__main__":
             if CFG.get("paid_" + k):
                 CFG[k] = CFG["paid_" + k]
         log("Ücretli Gemini anahtarı kullanılıyor")
+    if os.getenv("CATCHUP"):  # telafi çalışması: önceki gün ses hakkı yüzünden video çıkmadıysa üret
+        mf = DATA / "missed.json"
+        if not mf.exists():
+            log("Telafi gerekmiyor.")
+            sys.exit(0)
+        mf.unlink()
+        log("Telafi çalışması: dünkü üretim yapılamamıştı, şimdi üretiliyor.")
     if os.getenv("ADD_TRANSLATION"):  # yüklenmiş videoya eksik çeviri altyazısını ekle: video kimlikleri, virgülle
         check_channel()
         sub = CFG.get("subtitle_translation") or {}
@@ -2107,6 +2120,8 @@ if __name__ == "__main__":
     try:
         res = run_once()
         log("Bitti: video üretilmedi." if res is False else "Başarıyla bitti.")
+        if res is not False and not DRY_RUN:
+            (DATA / "missed.json").unlink(missing_ok=True)
     except Exception:
         err = redact(traceback.format_exc())
         log("HATA:\n" + err)
@@ -2116,8 +2131,13 @@ if __name__ == "__main__":
         guide = explain_error(err)
         if guide and any(k in guide for k in ("get_token", "anahtar")):
             retry = False  # izin/anahtar sorununu beklemek çözmez
+        tts_fail = ("TTS" in err or "ses kotası" in err) and not DRY_RUN
+        if tts_fail:
+            retry = False  # günlük ses hakkı 10 dk'da yenilenmez → ertesi gün telafi çalışması
+            save_json(DATA / "missed.json", {"date": datetime.now().isoformat(timespec="minutes")})
         notify("❌ Video üretimi sırasında bir hata oluştu. Teknik ayrıntı Claude için kayda yazıldı.\n"
                + (f"💡 {guide}\n" if guide else "")
-               + ("🔄 10 dakika sonra otomatik olarak yeniden denenecek, senden bir şey gerekmiyor."
-               if retry else "Claude'a 'üretim hatası' yazman yeterli, kayıttan bakar."))
+               + ("🔄 10 dakika sonra otomatik olarak yeniden denenecek, senden bir şey gerekmiyor." if retry else
+                  "📅 Yarın aynı saatte otomatik telafi üretimi yapılacak, senden bir şey gerekmiyor." if tts_fail else
+                  "Claude'a 'üretim hatası' yazman yeterli, kayıttan bakar."))
         sys.exit(3 if retry else 1)

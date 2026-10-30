@@ -154,7 +154,8 @@ voice:
   name: "Charon"               # derin, bilgilendirici erkek sesi. Alternatif: "Enceladus" (fısıltılı), "Algenib" (boğuk)
   style: "Türkçe, kısık ve sakin bir sesle, gizemli bir belgesel anlatıcısı gibi, acele etmeden ve cümle aralarında kısa duraklarla oku"
   sentence_gap: 0.33           # cümle arası en az 0.33 sn (belgesel ağırlığı)
-  scenes_per_request: 6        # 6 sahne tek istekte → video başına ~6 ses isteği (ücretsiz günlük sınıra sığar)
+  scenes_per_request: 8        # 8 sahne tek istekte → video başına ~5 ses isteği (ücretsiz günlük ses hakkı çok az)
+  max_chars: 2600
   scene_gap: 0.6
   models: ["gemini-3.1-flash-tts-preview", "gemini-2.5-flash-preview-tts"]   # ikisi de ücretsiz katmanda çalışıyor (test edildi)
   lang: "tr"

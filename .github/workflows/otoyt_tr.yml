@@ -2,6 +2,7 @@ name: OtoYT (Gölgedefter)
 
 on:
   schedule:
+    - cron: "41 8 * * 0,3,5"   # telafi: önceki gün ses hakkı yüzünden video çıkmadıysa (yoksa 1 dk'da kapanır)
     - cron: "41 8 * * 2,4,6"   # Sal/Per/Cmt 08:41 UTC (11:41 TR): Google ücretsiz günlük kotası (ABD gece yarısı = TR 10:00/11:00) yenilendikten SONRA → paket ~13:00
   workflow_dispatch:            # "Run workflow" butonu = senin "Çalıştır" tuşun
     inputs:
@@ -24,22 +25,31 @@ jobs:
     timeout-minutes: 150
     steps:
       - uses: actions/checkout@v4
+      - name: Telafi gerekli mi
+        run: |
+          if [ "${{ github.event.schedule }}" = "41 8 * * 0,3,5" ]; then
+            if [ -f data/golgedefter/missed.json ]; then echo "CATCHUP=1" >> $GITHUB_ENV; else echo "SKIP=1" >> $GITHUB_ENV; fi
+          fi
       - uses: actions/setup-python@v5
+        if: env.SKIP != '1'
         with:
           python-version: "3.12"
           cache: pip
       - name: Ses modeli önbelleği (her seferinde indirmesin)
+        if: env.SKIP != '1'
         uses: actions/cache@v4
         with:
           path: ~/.cache/huggingface
           key: kokoro-${{ hashFiles('config.yaml') }}
           restore-keys: kokoro-
       - name: Bağımlılıklar
+        if: env.SKIP != '1'
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg fonts-dejavu-core espeak-ng
           pip install -q torch --index-url https://download.pytorch.org/whl/cpu
           pip install -q -r requirements.txt
       - name: Video üret ve yükle
+        if: env.SKIP != '1'
         env:
           DRY_RUN: ${{ inputs.dry_run && '1' || '' }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -75,7 +85,7 @@ jobs:
           fi
           exit $code
       - name: Paket 1 – uzun video
-        if: always() && hashFiles('out/ARTIFACT_NEEDED') != ''
+        if: always() && env.SKIP != '1' && hashFiles('out/ARTIFACT_NEEDED') != ''
         uses: actions/upload-artifact@v4
         with:
           name: golgedefter-${{ github.run_number }}-1-uzun-video
@@ -84,7 +94,7 @@ jobs:
           retention-days: 2
           compression-level: 0
       - name: Paket 2 – Shorts, küçük resim, altyazılar, yükleme bilgileri
-        if: always() && hashFiles('out/ARTIFACT_NEEDED') != ''
+        if: always() && env.SKIP != '1' && hashFiles('out/ARTIFACT_NEEDED') != ''
         uses: actions/upload-artifact@v4
         with:
           name: golgedefter-${{ github.run_number }}-2-shorts-ve-bilgiler
@@ -95,7 +105,7 @@ jobs:
           retention-days: 2
           compression-level: 0
       - name: Geçmişi kaydet
-        if: always()
+        if: always() && env.SKIP != '1'
         run: |
           git config user.name "otoyt-bot"
           git config user.email "otoyt@users.noreply.github.com"
