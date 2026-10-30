@@ -252,7 +252,7 @@ def to_wav(src, out, sr=24000, frames=None):
 
 
 # ---------------------------------------------------------------- final montaj
-def mux_master(video, narration, out, ass=None, music=None, music_db=-21.0, fade_out=1.5, j_cut=0.0):
+def mux_master(video, narration, out, ass=None, music=None, music_db=-21.0, fade_out=1.5, j_cut=0.0, sfx=None):
     """Görüntü + anlatım + (konuşurken kısılan) müzik + altyazı → yayın kalitesinde çıktı.
     j_cut: görüntü sesin bu kadar gerisinden gelir → yeni sahnenin sesi görüntü değişmeden önce başlar
     (kurgucuların J-cut geçişi; slayt gösterisi hissini kırar)."""
@@ -261,12 +261,22 @@ def mux_master(video, narration, out, ass=None, music=None, music_db=-21.0, fade
     vf = f"[0:v]tpad=start_duration={j_cut:.3f}:start_mode=clone," if j_cut > 0 else "[0:v]"
     vf += f"{_ass_filter(ass)}," if ass else ""
     vf += f"fade=t=out:st={max(total - fade_out, 0):.2f}:d={fade_out}[v]"
+    sfx_chain, sfx_lbl = "", ""
     if music and Path(music).exists():
         ins += ["-stream_loop", "-1", "-i", music]
+        if sfx and sfx[1]:  # bölüm geçişlerinde hafif "vınn" (dikkati tazeler)
+            ins += ["-i", sfx[0]]
+            n = len(sfx[1])
+            sfx_chain = f"[3:a]aresample=48000,volume=0.35,asplit={n}" + "".join(f"[s{i}]" for i in range(n)) + ";"
+            sfx_chain += "".join(f"[s{i}]adelay={int(max(t - 0.35, 0) * 1000)}|{int(max(t - 0.35, 0) * 1000)}[d{i}];"
+                                 for i, t in enumerate(sfx[1]))
+            sfx_chain += "".join(f"[d{i}]" for i in range(n)) + f"amix=inputs={n}:normalize=0[sfx];"
+            sfx_lbl = "[sfx]"
         af = (f"[1:a]aresample=48000,asplit=2[nar][key];"
               f"[2:a]aresample=48000,volume={music_db}dB[mus];"
               f"[mus][key]sidechaincompress=threshold=0.015:ratio=8:attack=20:release=450[duck];"
-              f"[nar][duck]amix=inputs=2:duration=first:normalize=0,"
+              + sfx_chain +
+              f"[nar][duck]{sfx_lbl}amix=inputs={3 if sfx_lbl else 2}:duration=first:normalize=0,"
               f"loudnorm=I=-15:TP=-1.5:LRA=11,afade=t=out:st={max(total - fade_out, 0):.2f}:d={fade_out}[a]")
     else:
         af = (f"[1:a]aresample=48000,loudnorm=I=-15:TP=-1.5:LRA=11,"

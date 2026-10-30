@@ -377,6 +377,17 @@ def quality_gate(script):
 def _tts(scenes, workdir):
     """Kanalın ses sağlayıcısı: kokoro (ücretsiz, İngilizce) veya gemini (Türkçe dahil, doğal)."""
     v = CFG["voice"]
+    if v.get("provider") == "gemini" and v.get("fallback"):
+        try:
+            return voice.narrate_gemini(scenes, workdir, voice=v.get("name", "Charon"), style=v.get("style"),
+                                        models=v.get("models"), scene_gap=v.get("scene_gap", 0.45),
+                                        sentence_gap=v.get("sentence_gap", 0.0),
+                                        scenes_per_request=v.get("scenes_per_request", 6))
+        except Exception as e:  # Gemini sesi alınamazsa video yine çıksın: yedek ses
+            fb = v["fallback"]
+            log(f"Gemini sesi alınamadı ({str(e)[:120]}) → yedek ses ({fb.get('name')})")
+            return voice.narrate(scenes, workdir, voice=fb["name"], lang=fb["lang"], speed=fb.get("speed", 1.0),
+                                 sentence_gap=fb.get("sentence_gap", 0.28), scene_gap=fb.get("scene_gap", 0.45))
     if v.get("provider") == "gemini":
         return voice.narrate_gemini(scenes, workdir, voice=v.get("name", "Charon"), style=v.get("style"),
                                     models=v.get("models"), scene_gap=v.get("scene_gap", 0.45),
@@ -679,7 +690,9 @@ def assemble(script, workdir, music):
                 and len(s["callout"].split()) <= 6]
     ass = media.write_ass_long(words if CFG.get("burn_captions", True) else [], w / "captions.ass",
                                chapters=chap_ev, callouts=callouts)
-    final = media.mux_master(video, nar, w / "final.mp4", ass=ass, music=music,
+    whoosh = ASSETS / "whoosh.wav"
+    sfx = (whoosh, [ct for ct, _, _ in chap_ev]) if whoosh.exists() and chap_ev else None
+    final = media.mux_master(video, nar, w / "final.mp4", ass=ass, music=music, sfx=sfx,
                              music_db=CFG.get("music_db", -21.0), j_cut=CFG.get("j_cut_seconds", 0.0))
     return final, words
 
@@ -761,6 +774,17 @@ def build_chapters(script, total_len, min_len=12.0):
 def fmt_ts(t):
     t = int(t)
     return f"{t // 3600}:{t % 3600 // 60:02d}:{t % 60:02d}" if t >= 3600 else f"{t // 60}:{t % 60:02d}"
+
+
+def watch_next_line(pillar):
+    """Açıklamaya 'sıradaki video' bağlantısı: aynı konudaki en son video (yoksa en son video).
+    İzleyiciyi kanalda tutar (oturum süresi YouTube için önemli)."""
+    hist = [h for h in load_json(HISTORY, []) if h.get("type") == "long" and h.get("video_id")]
+    if not hist:
+        return ""
+    same = [h for h in hist if h.get("pillar") == pillar]
+    h = (same or hist)[-1]
+    return f"\n\n{CFG.get('watch_next_text', '▶ Watch next:')} {h['title']}\nhttps://youtu.be/{h['video_id']}"
 
 
 def chapters_text(chapters, titles=None, header="Chapters"):
@@ -1094,7 +1118,8 @@ def make_manual_package(script, idea, shorts, thumb, main_srt, sub_srt, history,
     sub_link = (f"\n\n{CFG.get('subscribe_text', '🔔 Subscribe:')} "
                 f"https://www.youtube.com/channel/{CHANNEL_ID}?sub_confirmation=1") if CHANNEL_ID else ""
     desc = (script["description"] + chapters_text(chs, header=CFG.get("chapters_heading", "Chapters"))
-            + sub_link + "\n\n" + CFG.get("desc_footer", "Stock footage: Pixabay / Pexels. Narration: AI voice."))
+            + watch_next_line(idea["pillar"]) + sub_link + "\n\n"
+            + CFG.get("desc_footer", "Stock footage: Pixabay / Pexels. Narration: AI voice."))
     hashtags = " ".join((re.findall(r"#\w+", script.get("description", "")) or [])[:3])
     pl = (CFG.get("playlists") or {}).get(idea["pillar"], "")
     main_t, short_ts = plan_times(datetime.now(timezone.utc), len(shorts))
@@ -1447,7 +1472,8 @@ def run_once():
         narrate(script, w)
         log(f"Seslendirme: {sum(s['duration'] for s in script['scenes']):.0f} sn")
         build_scene_videos(script, w, ledger)
-        music = ASSETS / "music.mp3"
+        variants = sorted(ASSETS.glob("music_*.mp3"))
+        music = random.choice(variants) if variants else ASSETS / "music.mp3"  # her videoda farklı müzik
         final, words = assemble(script, w, music)
         log(f"Ana video: {media.duration(final):.0f} sn")
 
@@ -1509,7 +1535,8 @@ def run_once():
         sub_link = (f"\n\n{CFG.get('subscribe_text', '🔔 Subscribe for more:')} "
                     f"https://www.youtube.com/channel/{CHANNEL_ID}?sub_confirmation=1") if CHANNEL_ID else ""
         desc = (script["description"] + chapters_text(chs, header=CFG.get("chapters_heading", "Chapters"))
-                + sub_link + "\n\n" + CFG.get("desc_footer", "Stock footage: Pixabay / Pexels. Narration: AI voice."))
+                + watch_next_line(idea["pillar"]) + sub_link + "\n\n"
+                + CFG.get("desc_footer", "Stock footage: Pixabay / Pexels. Narration: AI voice."))
         m_long = meta(script["title"], desc, script["tags"], iso(main_t))
         if tr_meta and CFG.get("localize_metadata", True):
             tr_desc = (tr_meta["description"]

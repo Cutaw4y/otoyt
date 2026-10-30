@@ -42,7 +42,9 @@ script_rules: >
   bilimin cevabını mutlaka ver; spekülasyon üretme, bilgiye dayalı merak uyandır. Kan, vahşet, intihar ayrıntısı yok; ölümler
   ağırbaşlı ve kısa anlatılır. Yaşayan sıradan kişileri suçlama. Tarih ve sayılar
   emin değilse "yaklaşık", "kayıtlara göre" de. Sahne başına tek fikir; gerilimi
-  sorularla taşı. İlk 15 saniyede yerel bir merak boşluğu aç ("Kimsenin fark etmediği
+  sorularla taşı. İlk cümle başlığın ve küçük resmin vaat ettiğini hemen karşılasın (kandırmaca yok).
+  Her 30-40 saniyede merakı tazeleyen küçük bir dönüş olsun ("Ama asıl tuhaflık burada başlıyor",
+  yeni bir tanık, beklenmedik bir belge). İlk 15 saniyede yerel bir merak boşluğu aç ("Kimsenin fark etmediği
   o ayrıntı...", "Her şey o gece tek bir sesle başladı..."); olayın insani tarafını
   (korku, kayıp, inanç, cesaret) hissettir. Çeviri Türkçesi kullanma: gereksiz "bir"
   tekrarlarını sil ("bir adam bir gün bir karar verdi" değil "O gün adam kararını verdi").
@@ -96,6 +98,7 @@ visual_style: >
   fog, old parchment and ancient stone textures, muted desaturated colors with warm
   amber highlights, mysterious silhouettes, no gore, no blood, no faces of religious
   figures, no text or letters, 16:9
+watch_next_text: "▶ Sıradaki sayfa:"
 thumbnail_rules: >
   Gölgedefter look: one mysterious subject (ancient artifact, ruin, lone silhouette, sealed
   door, strange symbol) in fog with candle or moon light, amber highlights on deep shadow.
@@ -165,7 +168,7 @@ burn_captions: true
 music_db: -20
 
 # ======================= KALİTE =======================
-target_words: 1300             # Türkçe kelimeler uzundur: ~10 dakika
+target_words: 1700             # ~15-16 dk: Türkçe gizem kanallarında izleyici uzun belgesel seviyor (Gerçeği Bul ort. ~29 dk)
 min_length_ratio: 0.85
 max_expand_rounds: 2
 min_diagram_ratio: 0.5         # sahnelerin en az yarısı atmosferik AI görseli

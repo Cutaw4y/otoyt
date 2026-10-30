@@ -30,7 +30,9 @@ script_rules: >
   diagram or footage that shows it). Change the angle when the information
   changes (claim → evidence → consequence). Only well-established science and
   engineering facts; if a number is uncertain give a range or say "roughly".
-  Use signposts sparingly. No filler, no "smash the like button", no clickbait
+  The opening line must deliver exactly what the title and thumbnail promise (no bait-and-switch).
+  Every 30-40 seconds add a small turn that renews curiosity (a question, a surprising number, a
+  "but here's the catch"). Use signposts sparingly. No filler, no "smash the like button", no clickbait
   the video doesn't deliver. End with a one-line takeaway. Do NOT add a
   sign-off, greeting or "subscribe" line — the channel's fixed closing line is
   added automatically.
@@ -76,10 +78,12 @@ visual_style: >
   clean modern educational illustration, 3D cutaway / exploded view / cross-section where useful,
   flat vector look with soft gradients, dark navy background, glowing cyan and
   warm orange accents, clear arrows showing flow, no text or labels, 16:9
+watch_next_text: "▶ Watch next:"
 thumbnail_rules: >
   Cutaway look: the real object shown as a photoreal 3D cutaway or exploded view with glowing
   internals, or the object at an extreme moment (red-hot, cracked, giant next to a tiny human
-  for scale). Orange-and-teal contrast, dark background.
+  for scale). Orange-and-teal contrast, dark background. When it fits, add one small human figure
+  with a clear reaction or for scale (an invented person, never a real one): emotion lifts clicks.
 thumbnail_style: "bold, high contrast, dramatic lighting, one clear object, cinematic, vivid colors"
 
 # Kanal sayfası (ilk gerçek çalışmada bir kez otomatik ayarlanır)
@@ -114,12 +118,22 @@ factcheck_models: ["gemini-flash-lite-latest", "gemini-flash-latest"]  # Google 
 # Kota biterse otomatik olarak Pexels fotoğraflarına geçer.
 
 # Seslendirme: Kokoro (açık kaynak, GitHub sunucusunda çalışır)
+# Ses: Gemini (doğal, vurgulu; robotik ses ilk 45 sn'de izleyici kaybettiriyor). Ücretsiz katman, Cutaway'in
+# kendi Google projesinin kotası. Alınamazsa video yine çıksın diye yedek: Kokoro (ücretsiz, yerel).
 voice:
-  name: "af_heart"             # en yüksek kaliteli ses. Erkek: "am_michael" / İngiliz: "bm_george" (lang "b")
-  lang: "a"                    # a = Amerikan İngilizcesi, b = İngiliz İngilizcesi
-  speed: 0.88                  # sakin ama canlı belgesel temposu (0.95 hızlı bulundu)
-  sentence_gap: 0.35           # cümleler arası nefes payı (sn)
-  scene_gap: 0.6               # sahne geçişlerinde duraklama (sn)
+  provider: "gemini"
+  name: "Sadaltager"           # "bilgili" tonlu erkek ses. Alternatif: "Charon" (bilgilendirici), "Iapetus" (net)
+  style: "Read in clear American English like a calm, curious science documentary narrator, with natural emphasis on key numbers and short pauses between sentences"
+  models: ["gemini-3.1-flash-tts-preview", "gemini-2.5-flash-preview-tts"]
+  sentence_gap: 0.3
+  scene_gap: 0.6
+  scenes_per_request: 6
+  fallback:
+    name: "af_heart"
+    lang: "a"
+    speed: 0.88
+    sentence_gap: 0.35
+    scene_gap: 0.6
 
 # ======================= KURGU / MARKA =======================
 use_intro: true                # 1. sahneden (merak uyandıran açılış) sonra 2.6 sn logo animasyonu
