@@ -1,20 +1,64 @@
-[09:55:18] Başladı (test modu: False, yayın: private)
-[09:55:19] Kanal doğrulandı: Cutaway
-[09:55:21] Eski videolardan çeviri başlık/açıklama kaldırıldı: 0 video
-[09:55:51] Bekleyen altyazı yüklenemedi (VID0xxxxxx__en.srt): en altyazı 2 denemede başarısız: <HttpError 404 when requesting https://youtube.googleapis.com/upload/youtube/v3/captions?part=snippet&alt=json&upload
-[09:55:51] Analitik: 0 video ölçüldü, sütun puanları: {}
-[10:00:10] Konu (1): Why Microwaves Can't Actually Melt Pure Ice  [Everyday science mysteries (why ice floats, why the sky is blue, how soap works)]
-[10:00:14] Gemini gemini-flash-latest 503 → 15 sn bekleniyor (1/6)
-[10:01:39] Senaryo yazıldı: 34 sahne, 2113 kelime
-[10:01:39] Gemini gemini-flash-lite-latest 429 → 15 sn bekleniyor (1/2)
-[10:01:54] Gemini gemini-flash-lite-latest 429 → 30 sn bekleniyor (2/2)
-[10:02:24] Gemini gemini-flash-latest 429 → 15 sn bekleniyor (1/2)
-[10:02:39] Gemini gemini-flash-latest 429 → 30 sn bekleniyor (2/2)
-[10:03:09] Google aramalı doğrulama kullanılamadı (Gemini yanıt vermedi: 429 {
+[10:13:39] Başladı (test modu: False, yayın: manual)
+[10:13:39] Kanal doğrulandı: Cutaway
+[10:14:10] Bekleyen altyazı yüklenemedi (VID0xxxxxx__en.srt): en altyazı 2 denemede başarısız: <HttpError 404 when requesting https://youtube.googleapis.com/upload/youtube/v3/captions?part=snippet&alt=json&upload
+[10:14:10] Analitik: 0 video ölçüldü, sütun puanları: {}
+[10:19:01] Konu (1): What Actually Happens When a Blast Furnace Freezes  [How it's made and what it really costs (steel, glass, chips, paper, concrete)]
+[10:23:46] Senaryo yazıldı: 34 sahne, 1436 kelime
+[10:23:46] Gemini gemini-flash-lite-latest 429 → 15 sn bekleniyor (1/2)
+[10:24:02] Gemini gemini-flash-lite-latest 429 → 30 sn bekleniyor (2/2)
+[10:24:32] Gemini gemini-flash-latest 429 → 15 sn bekleniyor (1/2)
+[10:24:47] Gemini gemini-flash-latest 429 → 30 sn bekleniyor (2/2)
+[10:25:17] Google aramalı doğrulama kullanılamadı (Gemini yanıt vermedi: 429 {
   "error": {
     "code": 429,
     "message": "You exceeded your current quota, please check ) → Wikipedia'ya geçiliyor
-[10:03:11] Doğrulama kaynağı: Wikipedia (4 makale)
-[10:03:13] Doğrulama turu 1: 8 iddia, 0 yanlış, 0 belirsiz
-[10:03:20] Editör (min 8, ort 8.4): {'originality': 8, 'hook': 8, 'clarity': 8, 'value_density': 9, 'audience_fit': 9, 'problems': ['The script is quite long for a standard short-form video and leans more toward an essay or documentary narration.', "Some technical terms like 'epsilon double prime' and 'Ice Ih' are introduced quickly and might require slightly more visual grounding."], 'problems_tr': 'Metin standart bir video için biraz uzun ve bir deneme veya belgesel anlatısına benziyor. Bazı teknik terimler izleyiciyi zorlayabilir.'}
-[10:03:20] Seslendirme başlıyor (Kokoro)...
+[10:25:19] Doğrulama kaynağı: Wikipedia (4 makale)
+[10:25:21] Doğrulama turu 1: 6 iddia, 0 yanlış, 1 belirsiz
+[10:27:22] Doğrulama kaynağı: Wikipedia (4 makale)
+[10:27:24] Doğrulama turu 2: 3 iddia, 0 yanlış, 0 belirsiz
+[10:27:30] Editör (min 7, ort 7.8): {'originality': 8, 'hook': 8, 'clarity': 7, 'value_density': 8, 'audience_fit': 8, 'problems': ["Some technical terms like 'eutectic mixture' and 'refractory' are introduced without brief explanations, slightly testing the clarity for a general audience.", 'The pacing is a bit dense in the middle explanations of chemistry and thermodynamics.'], 'problems_tr': 'Bazı teknik terimler yeterince açıklanmamış ve orta kısımdaki kimyasal detaylar genel izleyici için biraz yoğun gelebilir.'}
+[10:27:30] Seslendirme başlıyor (Kokoro)...
+[10:37:57] Seslendirme: 623 sn
+[10:37:57] Sahne 1/34 (diagram, 21.4 sn, 5 çekim)
+[10:37:57] Cloudflare günlük ücretsiz kota doldu: {"errors":[{"message":"AiError: AiError: you have used up your daily free allocation of 10,000 neurons, please upgrade to Cloudflare's Workers Paid plan if you would like to continue usage. (36ab8064- → bu video için Pexels fotoğraflarına geçiliyor
+[10:38:15] Sahne 2/34 (diagram, 18.9 sn, 4 çekim)
+[10:38:30] Sahne 3/34 (footage, 21.4 sn, 5 çekim)
+[10:39:42] Sahne 4/34 (footage, 15.0 sn, 3 çekim)
+[10:40:31] Sahne 5/34 (diagram, 16.0 sn, 4 çekim)
+[10:41:06] Sahne 6/34 (diagram, 19.1 sn, 4 çekim)
+[10:41:45] Sahne 7/34 (diagram, 17.4 sn, 4 çekim)
+[10:42:21] Sahne 8/34 (footage, 16.5 sn, 4 çekim)
+[10:43:08] Sahne 9/34 (diagram, 18.2 sn, 4 çekim)
+[10:43:44] Sahne 10/34 (footage, 18.0 sn, 4 çekim)
+[10:44:39] Sahne 11/34 (diagram, 19.6 sn, 4 çekim)
+[10:45:22] Sahne 12/34 (diagram, 19.8 sn, 4 çekim)
+[10:45:59] Sahne 13/34 (footage, 22.0 sn, 5 çekim)
+[10:47:09] Sahne 14/34 (footage, 16.5 sn, 4 çekim)
+[10:48:00] Sahne 15/34 (diagram, 19.7 sn, 4 çekim)
+[10:48:34] Sahne 16/34 (footage, 14.0 sn, 3 çekim)
+[10:49:16] Sahne 17/34 (footage, 12.7 sn, 3 çekim)
+[10:49:53] Sahne 18/34 (diagram, 22.2 sn, 5 çekim)
+[10:50:29] Sahne 19/34 (diagram, 18.6 sn, 4 çekim)
+[10:51:08] Sahne 20/34 (footage, 17.7 sn, 4 çekim)
+[10:52:02] Sahne 21/34 (diagram, 18.3 sn, 4 çekim)
+[10:52:48] Sahne 22/34 (diagram, 15.8 sn, 4 çekim)
+[10:53:19] Sahne 23/34 (footage, 18.2 sn, 4 çekim)
+[10:54:13] Sahne 24/34 (footage, 15.6 sn, 3 çekim)
+[10:55:02] Sahne 25/34 (diagram, 20.3 sn, 5 çekim)
+[10:55:42] Sahne 26/34 (footage, 17.3 sn, 4 çekim)
+[10:56:34] Sahne 27/34 (diagram, 15.7 sn, 3 çekim)
+[10:57:00] Sahne 28/34 (diagram, 20.7 sn, 5 çekim)
+[10:57:36] Sahne 29/34 (footage, 17.2 sn, 4 çekim)
+[10:58:29] Sahne 30/34 (footage, 20.2 sn, 4 çekim)
+[10:59:31] Sahne 31/34 (diagram, 18.8 sn, 4 çekim)
+[11:00:07] Sahne 32/34 (footage, 18.9 sn, 4 çekim)
+[11:01:08] Sahne 33/34 (footage, 20.8 sn, 5 çekim)
+[11:02:12] Sahne 34/34 (footage, 20.1 sn, 4 çekim)
+[11:25:08] Ana video: 637 sn
+[11:26:43] Short 1: sahne 0-2, 40 sn — Why You Can Never Turn Off a Blast Furnace
+[11:28:17] Short 2: sahne 17-19, 41 sn — The Water Leak That Kills a Blast Furnace
+[11:30:27] Short 3: sahne 28-30, 56 sn — Dynamiting a Frozen Iron Salamander
+[11:30:37] Thumbnail sıralaması: [1, 2, 3] - Thumbnail #1 provides strong night contrast and an intriguing curiosity gap ('1,500° TO SOLID ICE') that directly complements the title. #2 features a classic high-stakes industrial hook ('$100M MISTAKE') with clear daytime visibility, though slightly generic. #3 uses an unrelated image of bread, which creates confusion and lacks relevance to a blast furnace.
+[11:30:37] Altyazı çevirisi: Turkish (206 satır)
+[11:31:12] Elle yükleme paketi hazır: ['0-YUKLEME-BILGILERI.txt', '1-KUCUK-RESIM.jpg', '1-VIDEO-frozen-blast-furnace.mp4', '1-altyazi-en.srt', '2-SHORT-why-you-can-never-turn-off-a-blast-furna.mp4', '3-SHORT-the-water-leak-that-kills-a-blast-furnac.mp4', '4-SHORT-dynamiting-a-frozen-iron-salamander.mp4']
+[11:31:12] Başarıyla bitti.
