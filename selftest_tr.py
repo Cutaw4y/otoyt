@@ -18,6 +18,8 @@ W = Path(REPO) / "selftest_tr_out"
 shutil.rmtree(W, ignore_errors=True); W.mkdir()
 pipeline.ROOT = W; pipeline.HISTORY = W / "history.json"; pipeline.DATA = W
 pipeline.OUT = W / "out"; pipeline.BRAND_DONE = W / "bd.json"; pipeline.RUNLOG = W / "run.txt"; pipeline.PENDING_CAPS = W / "pc"
+pipeline.PENDING_COMMENTS = W / "pcm.json"; pipeline.PLAYLISTS = W / "pl.json"; pipeline.THUMB_ALT = W / "ta"
+pipeline.MANUAL_DIR = W / "manual"; pipeline.MANUAL_PENDING = W / "mp.json"
 pipeline.CFG["branding"] = {}; pipeline.DRY_RUN = True; pipeline.CFG["target_words"] = 120
 sent = []
 pipeline.notify = lambda t: (sent.append(t), print("  📨", t.splitlines()[0]))

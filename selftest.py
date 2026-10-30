@@ -16,6 +16,9 @@ W = REPO + "/selftest_out"
 shutil.rmtree(W, ignore_errors=True); os.makedirs(W)
 shutil.copytree(REPO + "/assets", W + "/assets"); pipeline.ROOT = __import__("pathlib").Path(W); pipeline.HISTORY = pipeline.ROOT / "history.json"
 pipeline.OUT = pipeline.ROOT / "out"; pipeline.BRAND_DONE = pipeline.ROOT / "bd.json"; pipeline.RUNLOG = pipeline.ROOT / "run.txt"
+pipeline.DATA = pipeline.ROOT; pipeline.PENDING_CAPS = pipeline.ROOT / "pc"; pipeline.PENDING_COMMENTS = pipeline.ROOT / "pcm.json"
+pipeline.PLAYLISTS = pipeline.ROOT / "pl.json"; pipeline.THUMB_ALT = pipeline.ROOT / "ta"
+pipeline.MANUAL_DIR = pipeline.ROOT / "manual"; pipeline.MANUAL_PENDING = pipeline.ROOT / "mp.json"
 pipeline.CFG["publish_mode"] = "scheduled"; pipeline.CFG["branding"] = {}; pipeline.DRY_RUN = True; pipeline.CFG["target_words"] = 150
 pipeline.notify = lambda t: print("  📨", t.splitlines()[0])
 # --- içerik
