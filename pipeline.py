@@ -1343,7 +1343,35 @@ def make_manual_package(script, idea, shorts, thumb, main_srt, sub_srt, history,
     for i, it in enumerate(items):  # her başlık ayrı mesaj: telefonda tek dokunuşla kopyalansın
         notify(f"{i + 1}) {'UZUN VİDEO' if it['kind'] == 'long' else 'SHORT'} — dosya: {it['marker']}.mp4",
                code=it["title"])
+        tg_send_file(OUT / f"{it['marker']}.mp4", f"{i + 1}) {it['title']}")
+    tg_send_file(OUT / "1-KUCUK-RESIM.jpg", "Küçük resim")
     log(f"Elle yükleme paketi hazır: {sorted(p.name for p in OUT.glob('*'))}")
+
+
+TG_MAX = 49 * 1024 * 1024  # Telegram botları en fazla 50 MB dosya gönderebiliyor
+
+
+def tg_send_file(path, caption=""):
+    """Dosyayı Telegram'a orijinal kalitede (belge olarak) gönderir; telefondan tek dokunuşla indirilir.
+    50 MB'tan büyükse gönderemez, bunu mesajla bildirir."""
+    tok, chat = os.getenv("TELEGRAM_BOT_TOKEN"), os.getenv("TELEGRAM_CHAT_ID")
+    path = Path(path)
+    if not (tok and chat and path.exists()):
+        return
+    size = path.stat().st_size
+    if size > TG_MAX:
+        notify(f"ℹ️ {path.name} {size / 1048576:.0f} MB, Telegram sınırı 50 MB: bu dosyayı paketin GitHub "
+               "linkinden (Artifacts) indir.")
+        return
+    try:
+        with open(path, "rb") as fh:
+            r = requests.post(f"https://api.telegram.org/bot{tok}/sendDocument",
+                              data={"chat_id": chat, "caption": caption[:1000]},
+                              files={"document": (path.name, fh)}, timeout=600)
+        if not r.ok:
+            log(f"Telegram dosya gönderilemedi: {r.status_code} {r.text[:150]}")
+    except Exception as e:
+        log(f"Telegram dosya gönderilemedi: {str(e)[:150]}")
 
 
 def fix_hashtags(caption, brand=None, limit=5):
