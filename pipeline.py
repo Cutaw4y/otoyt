@@ -21,6 +21,7 @@ import requests
 import yaml
 
 import ai
+import drive
 import media
 import publish
 import voice
@@ -75,18 +76,24 @@ def log(msg):
         pass
 
 
-def notify(text):
-    """Telegram ve/veya WhatsApp'a (CallMeBot) bildirim. Hangisinin anahtarı varsa ona gider."""
+def notify(text, code=None):
+    """Telegram ve/veya WhatsApp'a (CallMeBot) bildirim. Hangisinin anahtarı varsa ona gider.
+    code: Telegram'da dokununca kopyalanan kutu içinde gösterilir (başlık gibi)."""
     if CFG.get("notify_prefix"):  # birden çok kanal: mesaj hangi kanaldan geliyor belli olsun
         text = f"{CFG['notify_prefix']} {text}"
     tok, chat = os.getenv("TELEGRAM_BOT_TOKEN"), os.getenv("TELEGRAM_CHAT_ID")
     if tok and chat:
         try:
-            requests.post(f"https://api.telegram.org/bot{tok}/sendMessage",
-                          json={"chat_id": chat, "text": text[:4000]}, timeout=20)
+            import html as _h
+            body = ({"chat_id": chat, "parse_mode": "HTML",
+                     "text": f"{_h.escape(text)}\n<code>{_h.escape(code)}</code>"[:4000]} if code else
+                    {"chat_id": chat, "text": text[:4000]})
+            requests.post(f"https://api.telegram.org/bot{tok}/sendMessage", json=body, timeout=20)
         except Exception:
             pass
     phone, key = os.getenv("WHATSAPP_PHONE"), os.getenv("WHATSAPP_APIKEY")
+    if code:
+        text = f"{text}\n{code}"
     if phone and key:
         try:
             requests.get("https://api.callmebot.com/whatsapp.php",
@@ -1175,8 +1182,18 @@ def make_manual_package(script, idea, shorts, thumb, main_srt, sub_srt, history,
                       "description": f"{sh_['title']}\n\n{CFG.get('full_video_text', 'Watch the full video:')} "
                                      f"{{LONG_URL}}\n\n{hashtags} #Shorts",
                       "tags": script.get("tags", []), "publish_at": iso_(short_ts[k])})
+    entry = {"key": key, "created": datetime.now().isoformat(timespec="minutes"), "items": items}
+    drive_link = ""
+    if drive.enabled() and not DRY_RUN:
+        try:  # telefondan yükleyebilsin diye videoları Google Drive'a da koy
+            vids = sorted(OUT.glob("*.mp4"))
+            entry["drive_folder"], drive_link = drive.upload_package(
+                vids, CFG["channel_name"], f"{datetime.now():%d.%m} {script['title'][:60]}")
+            log(f"Paket Google Drive'a yüklendi: {drive_link}")
+        except Exception as e:
+            log(f"Google Drive'a yüklenemedi: {str(e)[:200]}")
     pend = load_json(MANUAL_PENDING, []) if MANUAL_PENDING.exists() else []
-    pend.append({"key": key, "created": datetime.now().isoformat(timespec="minutes"), "items": items})
+    pend.append(entry)
     save_json(MANUAL_PENDING, pend)
     history.append({"date": datetime.now().isoformat(timespec="minutes"), "type": "long",
                     "title": script["title"], "pillar": idea["pillar"], "video_id": None, "manual": True})
@@ -1185,11 +1202,18 @@ def make_manual_package(script, idea, shorts, thumb, main_srt, sub_srt, history,
     run = os.getenv("GITHUB_RUN_ID")
     link = f"https://github.com/{os.getenv('GITHUB_REPOSITORY', 'Cutaw4y/otoyt')}/actions/runs/{run}" if run else ""
     titles = "\n".join(f"{i + 1}) {it['title']}" for i, it in enumerate(items))
-    notify(f"📦 Yeni video paketi hazır ({len(items)} video). İndir: {link}\n"
-           "Sayfanın en altındaki 'Artifacts' → paketi indir (3 gün saklanır).\n\n"
-           "YAPMAN GEREKEN: her videoyu YouTube'a yükle, BAŞLIĞA aşağıdakini yapıştır, görünürlük = Özel.\n"
-           "Açıklama, etiketler, küçük resim, altyazılar, oynatma listesi, yayın saati ve yorumu sistem ekler.\n\n"
+    where = (f"📱 Telefondan: Google Drive → {drive_link}\n💻 Bilgisayardan: {link} (en alttaki Artifacts)\n"
+             if drive_link else
+             f"İndir: {link}\nSayfanın en altındaki 'Artifacts' → paketi indir (3 gün saklanır).\n")
+    notify(f"📦 Yeni video paketi hazır ({len(items)} video).\n{where}\n"
+           "YAPMAN GEREKEN: her videoyu YouTube'a yükle, BAŞLIĞA aşağıdakini yapıştır, "
+           "'çocuklara özel değil', görünürlük = Özel/Gizli.\n"
+           "Açıklama, etiketler, küçük resim, altyazılar, oynatma listesi, yayın saati ve yorumu sistem ekler.\n"
+           "Önce uzun videoyu (1) yükle. Başlıklar aşağıda tek tek geliyor, basılı tutup kopyala.\n\n"
            + titles)
+    for i, it in enumerate(items):  # her başlık ayrı mesaj: telefonda tek dokunuşla kopyalansın
+        notify(f"{i + 1}) {'UZUN VİDEO' if it['kind'] == 'long' else 'SHORT'} — dosya: {it['marker']}.mp4",
+               code=it["title"])
     log(f"Elle yükleme paketi hazır: {sorted(p.name for p in OUT.glob('*'))}")
 
 
@@ -1276,6 +1300,8 @@ def finish_manual_uploads():
         age = (datetime.now() - datetime.fromisoformat(pk["created"])).days
         if all(it.get("done") for it in pk["items"]) or age > 21:
             shutil.rmtree(MANUAL_DIR / pk["key"], ignore_errors=True)
+            if pk.get("drive_folder") and drive.enabled():
+                drive.trash(pk["drive_folder"])  # Drive dolmasın: tamamlanan paket çöpe
         else:
             keep.append(pk)
     save_json(MANUAL_PENDING, keep)

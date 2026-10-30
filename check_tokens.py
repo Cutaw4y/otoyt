@@ -48,3 +48,16 @@ for model in ("gemini-3.1-flash-tts-preview", "gemini-2.5-flash-preview-tts", "g
         print(f"::notice title=TTS {model}::HTTP {r.status_code} {msg}")
     except Exception as e:
         print(f"::error title=TTS {model}::{str(e)[:200]}")
+
+
+# Google Drive (telefondan yükleme paketleri)
+import drive
+if drive.enabled():
+    try:
+        d = drive._drive()
+        d.files().list(pageSize=1, fields="files(id)").execute()
+        print("::notice title=Google Drive::bağlantı tamam (paketler 'OtoYT YÜKLEME' klasörüne gidecek)")
+    except Exception as e:
+        print(f"::error title=Google Drive::{str(e)[:200]}")
+else:
+    print("::warning title=Google Drive::GDRIVE_* anahtarları yok")
