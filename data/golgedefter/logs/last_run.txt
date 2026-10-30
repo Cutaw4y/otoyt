@@ -1,28 +1,80 @@
-[20:19:01] Başladı (test modu: True, yayın: private)
-[20:19:01] Analitik: 0 video ölçüldü, sütun puanları: {}
-[20:19:01] Gemini gemini-pro-latest günlük kotası doldu → sonraki modele geçiliyor
-[20:23:45] Gemini gemini-flash-latest günlük kotası doldu → sonraki modele geçiliyor
-[20:23:45] HATA:
-Traceback (most recent call last):
-  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 1114, in <module>
-    res = run_once()
-          ^^^^^^^^^^
-  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 947, in run_once
-    idea, script = produce_script(history, report)
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 830, in produce_script
-    idea = pick_topic(history + [{"title": t, "type": "long"} for t in tried], report)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 134, in pick_topic
-    data = llm_json(
-           ^^^^^^^^^
-  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 101, in llm_json
-    return ai.gemini_json(system, user, models=models, required=required, images=images,
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/otoyt/otoyt/ai.py", line 124, in gemini_json
-    data = extract_json(gemini(user, system=system + "\nReply with valid JSON only.", models=models,
-                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/otoyt/otoyt/ai.py", line 117, in gemini
-    raise RuntimeError(f"Gemini yanıt vermedi: {last}")
-RuntimeError: Gemini yanıt vermedi: gemini-flash-latest: günlük ücretsiz kota doldu
-
+[08:13:13] Başladı (test modu: True, yayın: private)
+[08:13:13] Analitik: 0 video ölçüldü, sütun puanları: {}
+[08:14:33] Konu (1): Göbeklitepe’yi İnşa Edenler Eserlerini Neden Kendi Elleriyle Gömdü?  [Kayıp medeniyetler ve antik gizemler (Göbeklitepe, Sümerler, Nazca, Atlantis efsanesi, Mohenjo-daro)]
+[08:14:36] Gemini gemini-flash-latest 503 → 15 sn bekleniyor (1/6)
+[08:18:09] Senaryo kısa (1071/1300 kelime) → genişletiliyor (1)
+[08:18:11] Gemini gemini-flash-latest 503 → 15 sn bekleniyor (1/6)
+[08:20:19] Senaryo yazıldı: 26 sahne, 1150 kelime
+[08:20:19] Gemini gemini-flash-lite-latest 429 → 15 sn bekleniyor (1/2)
+[08:20:34] Gemini gemini-flash-lite-latest 429 → 30 sn bekleniyor (2/2)
+[08:21:04] Gemini gemini-flash-latest 429 → 15 sn bekleniyor (1/2)
+[08:21:20] Gemini gemini-flash-latest 429 → 30 sn bekleniyor (2/2)
+[08:21:50] Google aramalı doğrulama kullanılamadı (Gemini yanıt vermedi: 429 {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check ) → Wikipedia'ya geçiliyor
+[08:21:52] Doğrulama kaynağı: Wikipedia (4 makale)
+[08:21:54] Doğrulama turu 1: 7 iddia, 0 yanlış, 0 belirsiz
+[08:22:00] Editör (min 8, ort 8.4): {'originality': 8, 'hook': 8, 'clarity': 9, 'value_density': 8, 'audience_fit': 9, 'problems': ['Historical documentary scripts can sometimes feel repetitive when transitioning between different archaeological theories.'], 'problems_tr': 'Arkeolojik teoriler arasında geçiş yapılırken anlatım yer yer tekrara düşebilir.'}
+[08:22:00] Seslendirme başlıyor (Gemini Charon)...
+[08:24:45] Gemini TTS gemini-2.5-pro-preview-tts 429 → 90 sn bekleniyor
+[08:26:15] Gemini TTS gemini-2.5-pro-preview-tts 429 → 90 sn bekleniyor
+[08:27:45] Gemini TTS gemini-2.5-pro-preview-tts 429 → 90 sn bekleniyor
+[08:29:15] Gemini TTS gemini-2.5-pro-preview-tts 429 → 90 sn bekleniyor
+[08:30:46] Gemini TTS gemini-2.5-pro-preview-tts 429 → 90 sn bekleniyor
+[08:35:29] Gemini TTS gemini-3.1-flash-tts-preview 429 → 90 sn bekleniyor
+[08:37:47] Gemini TTS gemini-2.5-pro-preview-tts 429 → 90 sn bekleniyor
+[08:39:18] Gemini TTS gemini-2.5-pro-preview-tts 429 → 90 sn bekleniyor
+[08:40:48] Gemini TTS gemini-2.5-pro-preview-tts 429 → 90 sn bekleniyor
+[08:42:18] Gemini TTS gemini-2.5-pro-preview-tts 429 → 90 sn bekleniyor
+[08:43:48] Gemini TTS gemini-2.5-pro-preview-tts 429 → 90 sn bekleniyor
+[08:46:39] Gemini TTS gemini-3.1-flash-tts-preview 429 → 90 sn bekleniyor
+[08:48:47] Gemini TTS gemini-3.1-flash-tts-preview 429 → 90 sn bekleniyor
+[08:50:17] Gemini TTS gemini-3.1-flash-tts-preview 429 → 90 sn bekleniyor
+[08:51:48] Gemini TTS gemini-2.5-pro-preview-tts 429 → 90 sn bekleniyor
+[08:53:18] Gemini TTS gemini-2.5-pro-preview-tts 429 → 90 sn bekleniyor
+[08:54:48] Gemini TTS gemini-2.5-pro-preview-tts 429 → 90 sn bekleniyor
+[08:56:19] Gemini TTS gemini-2.5-pro-preview-tts 429 → 90 sn bekleniyor
+[08:57:49] Gemini TTS gemini-2.5-pro-preview-tts 429 → 90 sn bekleniyor
+[09:00:04] Gemini TTS gemini-3.1-flash-tts-preview 429 → 90 sn bekleniyor
+[09:01:34] Gemini TTS gemini-3.1-flash-tts-preview 429 → 90 sn bekleniyor
+[09:03:49] Gemini TTS gemini-3.1-flash-tts-preview 429 → 90 sn bekleniyor
+[09:05:19] Gemini TTS gemini-3.1-flash-tts-preview 429 → 90 sn bekleniyor
+[09:06:49] Gemini TTS gemini-2.5-pro-preview-tts 429 → 90 sn bekleniyor
+[09:08:19] Gemini TTS gemini-2.5-pro-preview-tts 429 → 90 sn bekleniyor
+[09:09:49] Gemini TTS gemini-2.5-pro-preview-tts 429 → 90 sn bekleniyor
+[09:11:19] Gemini TTS gemini-2.5-pro-preview-tts 429 → 90 sn bekleniyor
+[09:12:50] Gemini TTS gemini-2.5-pro-preview-tts 429 → 90 sn bekleniyor
+[09:16:46] Gemini TTS gemini-3.1-flash-tts-preview 429 → 90 sn bekleniyor
+[09:18:16] Gemini TTS gemini-3.1-flash-tts-preview 429 → 90 sn bekleniyor
+[09:19:47] Gemini TTS gemini-3.1-flash-tts-preview 429 → 90 sn bekleniyor
+[09:21:17] Gemini TTS gemini-3.1-flash-tts-preview 429 → 90 sn bekleniyor
+[09:22:47] Gemini TTS gemini-3.1-flash-tts-preview 429 → 90 sn bekleniyor
+[09:24:17] Gemini TTS gemini-2.5-pro-preview-tts 429 → 90 sn bekleniyor
+[09:25:47] Gemini TTS gemini-2.5-pro-preview-tts 429 → 90 sn bekleniyor
+[09:27:17] Gemini TTS gemini-2.5-pro-preview-tts 429 → 90 sn bekleniyor
+[09:28:48] Gemini TTS gemini-2.5-pro-preview-tts 429 → 90 sn bekleniyor
+[09:30:18] Gemini TTS gemini-2.5-pro-preview-tts 429 → 90 sn bekleniyor
+[09:32:14] Seslendirme: 864 sn
+[09:32:14] Sahne 1/26 (diagram, 32.4 sn, 6 çekim)
+[09:32:41] Sahne 2/26 (diagram, 26.9 sn, 5 çekim)
+[09:33:07] Sahne 3/26 (footage, 24.0 sn, 5 çekim)
+[09:34:20] Sahne 4/26 (diagram, 24.1 sn, 5 çekim)
+[09:34:57] Sahne 5/26 (footage, 22.9 sn, 5 çekim)
+[09:36:06] Sahne 6/26 (footage, 27.0 sn, 5 çekim)
+[09:37:28] Sahne 7/26 (diagram, 24.5 sn, 5 çekim)
+[09:38:15] Sahne 8/26 (diagram, 27.6 sn, 6 çekim)
+[09:38:15] Cloudflare günlük ücretsiz kota doldu: {"errors":[{"message":"AiError: AiError: you have used up your daily free allocation of 10,000 neurons, please upgrade to Cloudflare's Workers Paid plan if you would like to continue usage. (d67b8453- → bu video için Pexels fotoğraflarına geçiliyor
+[09:39:10] Sahne 9/26 (footage, 23.1 sn, 5 çekim)
+[09:40:16] Sahne 10/26 (footage, 17.9 sn, 4 çekim)
+[09:41:12] Sahne 11/26 (diagram, 15.5 sn, 3 çekim)
+[09:41:37] Sahne 12/26 (footage, 22.1 sn, 4 çekim)
+[09:42:38] Sahne 13/26 (diagram, 48.0 sn, 10 çekim)
+[09:44:09] Sahne 14/26 (footage, 16.5 sn, 3 çekim)
+[09:45:03] Sahne 15/26 (footage, 25.5 sn, 5 çekim)
+[09:46:17] Sahne 16/26 (diagram, 32.8 sn, 7 çekim)
+[09:47:09] Sahne 17/26 (diagram, 29.9 sn, 6 çekim)
+[09:48:08] Sahne 18/26 (footage, 25.8 sn, 5 çekim)
+[09:49:31] Sahne 19/26 (diagram, 26.2 sn, 5 çekim)
+[09:50:17] Sahne 20/26 (footage, 57.9 sn, 12 çekim)
+[09:53:25] Sahne 21/26 (diagram, 68.2 sn, 14 çekim)
