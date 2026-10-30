@@ -1423,6 +1423,12 @@ if __name__ == "__main__":
             if CFG.get("paid_" + k):
                 CFG[k] = CFG["paid_" + k]
         log("Ücretli Gemini anahtarı kullanılıyor")
+    if os.getenv("BRANDING_ONLY"):  # sadece kanal açıklaması/afiş/anahtar kelimeler (video üretmez)
+        check_channel()
+        ensure_branding()
+        clear_old_localizations()
+        log("Kanal ayarları tamam.")
+        sys.exit(0)
     missing = [k for k in CFG.get("require_env", []) if not os.getenv(k)]
     if missing and not DRY_RUN:
         # ör. 2. kanalın YouTube izni henüz yoksa video YANLIŞ kanala yüklenmesin
