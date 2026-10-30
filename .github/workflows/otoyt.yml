@@ -2,7 +2,7 @@ name: OtoYT (Cutaway)
 
 on:
   schedule:
-    - cron: "31 8 * * 1,3,5"   # Pzt/Çar/Cum 08:31 UTC (11:31 TR) — Gemini günlük kotası sıfırlandıktan sonra
+    - cron: "31 4 * * 1,3,5"   # Pzt/Çar/Cum 04:31 UTC (07:31 TR) → paket ~09:00 hazır, ofiste yüklenir
   workflow_dispatch:            # "Run workflow" butonu = senin "Çalıştır" tuşun
     inputs:
       dry_run:

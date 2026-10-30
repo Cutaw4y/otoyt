@@ -2,7 +2,7 @@ name: OtoYT (Gölgedefter)
 
 on:
   schedule:
-    - cron: "31 6 * * 2,4,6"   # Sal/Per/Cmt 06:31 UTC (09:31 TR) — Cmt 14:00 yayınına yetişsin; Cutaway ile aynı güne düşmez
+    - cron: "31 4 * * 2,4,6"   # Sal/Per/Cmt 04:31 UTC (07:31 TR) → paket ~09:00 hazır; Cutaway ile aynı güne düşmez
   workflow_dispatch:            # "Run workflow" butonu = senin "Çalıştır" tuşun
     inputs:
       dry_run:
