@@ -127,7 +127,7 @@ def _ts(t):
     return f"{ms//3600000:02d}:{ms//60000%60:02d}:{ms//1000%60:02d},{ms%1000:03d}"
 
 
-def srt_blocks(words, per_line=6, until=None, gap=0.6):
+def srt_blocks(words, per_line=6, until=None, gap=0.6, max_chars=42):
     """Kelime zamanlarından altyazı blokları: [(başlangıç, bitiş, metin)].
     Blok; kelime sınırına ulaşınca, cümle bitince ya da konuşmada boşluk (intro vb.) olunca kapanır."""
     ws = [w for w in words if until is None or w["end"] <= until + 0.05]
@@ -138,7 +138,8 @@ def srt_blocks(words, per_line=6, until=None, gap=0.6):
         sentence_end = (w["word"].strip()[-1:] in ".!?" and len(cur) >= 3
                         and not re.fullmatch(r"\d+\.", w["word"].strip()))
         pause = nxt is not None and nxt["start"] - w["end"] > gap
-        if len(cur) >= per_line or sentence_end or pause or nxt is None:
+        too_long = nxt is not None and len(" ".join(x["word"].strip() for x in cur + [nxt])) > max_chars
+        if len(cur) >= per_line or sentence_end or pause or too_long or nxt is None:
             out.append((cur[0]["start"], cur[-1]["end"], " ".join(x["word"].strip() for x in cur)))
             cur = []
     return out
@@ -177,7 +178,7 @@ WrapStyle: 0
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: Cap,Inter Display,66,&H00FFFFFF,&H00FFFFFF,&H00101010,&HA0000000,-1,0,0,0,100,100,0,0,1,4,2,2,140,140,60,1
+Style: Cap,Inter Display,58,&H00FFFFFF,&H00FFFFFF,&H00101010,&HA0000000,-1,0,0,0,100,100,0,0,1,3.5,2,2,160,160,56,1
 Style: ChapNum,Inter Display,30,{THEME['chap_num']},&H00FFFFFF,{THEME['chap_box']},&H00000000,-1,0,0,0,100,100,3,0,3,14,0,7,90,90,78,1
 Style: ChapTitle,Inter Display,58,&H00FAF4EE,&H00FFFFFF,{THEME['chap_box']},&H00000000,-1,0,0,0,100,100,0,0,3,18,0,7,90,90,128,1
 Style: Callout,Inter Display,50,{THEME['callout_text']},&H00FFFFFF,{THEME['callout_box']},&H00000000,-1,0,0,0,100,100,1,0,3,12,0,9,90,90,84,1
@@ -209,7 +210,7 @@ WrapStyle: 0
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: Big,Inter Display,92,&H00FFFFFF,&H00FFFFFF,&H00000000,&H90000000,-1,0,0,0,100,100,0,0,1,7,3,2,70,70,560,1
+Style: Big,Inter Display,84,&H00FFFFFF,&H00FFFFFF,&H00000000,&H90000000,-1,0,0,0,100,100,0,0,1,7,3,2,70,70,560,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
