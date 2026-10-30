@@ -155,6 +155,9 @@ def cloudflare_image(prompt, out, model="@cf/black-forest-labs/flux-1-schnell", 
     raise RuntimeError(f"Cloudflare görsel üretemedi: {last}")
 
 
+TTS_GAP = 21.0  # ses istekleri arası en az bekleme (ücretsiz katman: dakikada ~3 istek)
+
+
 def gemini_tts(text, voice="Charon", style=None, models=("gemini-3.1-flash-tts-preview",), tries=5):
     """Gemini ile seslendirme (Türkçe dahil). Dönüş: 24 kHz mono float32 numpy dizisi.
     'style' doğal dille üslup talimatıdır (ör. 'kısık, gizemli bir belgesel anlatıcısı gibi oku')."""
@@ -166,7 +169,13 @@ def gemini_tts(text, voice="Charon", style=None, models=("gemini-3.1-flash-tts-p
                                  "speechConfig": {"voiceConfig": {"prebuiltVoiceConfig": {"voiceName": voice}}}}}
     last = None
     for model in models:
+        if (model, "tts") in _exhausted:
+            continue
         for attempt in range(tries):
+            wait = _last_call.get(("tts", model), 0) + TTS_GAP - time.time()
+            if wait > 0:  # dakika sınırı (ücretsiz katmanda dakikada birkaç istek)
+                time.sleep(wait)
+            _last_call[("tts", model)] = time.time()
             try:
                 r = requests.post(f"{GEMINI}/{model}:generateContent", headers={"x-goog-api-key": key},
                                   json=body, timeout=300)
@@ -174,6 +183,11 @@ def gemini_tts(text, voice="Charon", style=None, models=("gemini-3.1-flash-tts-p
                 last = e
                 time.sleep(10 * (attempt + 1))
                 continue
+            if r.status_code == 429 and ("PerDay" in r.text or "limit: 0" in r.text):
+                _exhausted.add((model, "tts"))  # bu model bu hesapta yok / günlük hak bitti → hemen sonrakine
+                last = f"{model}: günlük ses kotası doldu"
+                LOG(f"Gemini TTS {model}: kota yok/doldu → sonraki model")
+                break
             if r.status_code in (429, 500, 502, 503, 504):
                 last = f"{r.status_code} {r.text[:200]}"
                 wait = _retry_delay(r, attempt)

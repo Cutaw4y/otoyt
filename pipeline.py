@@ -1488,6 +1488,10 @@ if __name__ == "__main__":
         RUNLOG.write_text("", encoding="utf-8")
     ai.LOG = log
     log(f"Başladı (test modu: {DRY_RUN}, yayın: {CFG['publish_mode']})")
+    if not CFG.get("paid_tier"):
+        ai.TTS_GAP = 21.0
+    else:
+        ai.TTS_GAP = 1.0
     if CFG.get("paid_tier") and os.getenv("GEMINI_PAID_API_KEY"):  # ücretli anahtar: dakika sınırları yüksek → beklemeleri kısalt
         ai.MIN_GAP.update({"lite": 1.0, "default": 2.0})
         for k in ("text_models", "judge_models", "factcheck_models"):
