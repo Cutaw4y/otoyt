@@ -41,6 +41,7 @@ jobs:
           DRY_RUN: ${{ inputs.dry_run && '1' || '' }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_PAID_API_KEY: ${{ secrets.GEMINI_PAID_API_KEY }}
+          GEMINI_TTS_EXTRA_KEYS: ${{ secrets.GEMINI_TTS_EXTRA_KEYS }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}

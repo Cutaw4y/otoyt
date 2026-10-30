@@ -54,6 +54,7 @@ jobs:
           DRY_RUN: ${{ inputs.dry_run && '1' || '' }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_PAID_API_KEY: ${{ secrets.GEMINI_PAID_API_KEY }}
+          GEMINI_TTS_EXTRA_KEYS: ${{ secrets.GEMINI_TTS_EXTRA_KEYS }}
           YT2_CLIENT_ID: ${{ secrets.YT2_CLIENT_ID }}
           YT2_CLIENT_SECRET: ${{ secrets.YT2_CLIENT_SECRET }}
           YT2_REFRESH_TOKEN: ${{ secrets.YT2_REFRESH_TOKEN }}
