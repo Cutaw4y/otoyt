@@ -60,7 +60,7 @@ if os.getenv("YT_REFRESH_TOKEN"):
         yt = build("youtube", "v3", credentials=c, cache_discovery=False)
         up = yt.channels().list(part="contentDetails", mine=True).execute()["items"][0][
             "contentDetails"]["relatedPlaylists"]["uploads"]
-        ids = [i["contentDetails"]["videoId"] for i in yt.playlistItems().list(
+        ids = ["5mnPjthOTDY"] + [i["contentDetails"]["videoId"] for i in yt.playlistItems().list(
             part="contentDetails", playlistId=up, maxResults=5).execute().get("items", [])]
         for v in yt.videos().list(part="snippet,status,processingDetails", id=",".join(ids)).execute()["items"]:
             caps = yt.captions().list(part="snippet", videoId=v["id"]).execute().get("items", [])
