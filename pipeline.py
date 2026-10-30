@@ -705,29 +705,52 @@ def assemble(script, workdir, music):
 
 
 # ---------------------------------------------------------------- 6a. altyazı çevirisi
-def translate_lines(lines, lang_name, chunk=60):
-    """Altyazı satırlarını sırası ve sayısı bozulmadan çevirir; başaramazsa None."""
-    out = []
+def translate_lines(lines, lang_name, chunk=30):
+    """Altyazı satırlarını sırası ve sayısı bozulmadan çevirir. Satırlar numaralı gider/gelir (sayı kaymasın).
+    Bir parça 3 denemede de olmazsa o parça orijinal kalır; parçaların çoğu başarısızsa None."""
+    out, failed = [], 0
     for i in range(0, len(lines), chunk):
         part = lines[i:i + chunk]
-        ok = False
-        for _ in range(2):
+        src = {str(k + 1): t for k, t in enumerate(part)}
+        got = None
+        for _ in range(3):
             try:
                 data = llm_json(
-                    f"You translate video subtitles into natural, fluent {lang_name}. Keep it short and readable; "
-                    "keep technical terms accurate; do not add or merge lines.",
-                    f"Translate each line into {lang_name}. Return exactly {len(part)} lines in the same order.\n"
-                    + json.dumps({"lines": part}, ensure_ascii=False) + '\nReturn JSON: {"lines":["..."]}',
+                    f"You translate video subtitles into natural, fluent {lang_name}. Keep each line short and "
+                    "readable; keep technical terms accurate. Every numbered line gets its own translation.",
+                    f"Translate every value into {lang_name}. Keep exactly the same keys 1..{len(part)}.\n"
+                    + json.dumps({"lines": src}, ensure_ascii=False) + '\nReturn JSON: {"lines":{"1":"...",...}}',
                     required=("lines",), judge=True)
-                if isinstance(data["lines"], list) and len(data["lines"]) == len(part):
-                    out += [str(x).strip() for x in data["lines"]]
-                    ok = True
+                d = data["lines"]
+                if isinstance(d, list) and len(d) == len(part):
+                    d = {str(k + 1): t for k, t in enumerate(d)}
+                if isinstance(d, dict) and all(str(k + 1) in d and str(d[str(k + 1)]).strip()
+                                               for k in range(len(part))):
+                    got = [str(d[str(k + 1)]).strip() for k in range(len(part))]
                     break
+                log(f"Çeviri parçası eksik geldi ({i}-{i + len(part)}), tekrar deneniyor")
             except Exception as e:
-                log(f"Çeviri hatası: {e}")
-        if not ok:
-            return None
+                log(f"Çeviri hatası: {str(e)[:150]}")
+        if got is None:
+            failed += 1
+            got = part
+        out += got
+    total = (len(lines) + chunk - 1) // chunk
+    if failed and failed * 4 > total:
+        log(f"Çeviri başarısız: {failed}/{total} parça")
+        return None
     return out
+
+
+def translate_srt(src, dst, lang_name):
+    """Hazır bir SRT'yi (zamanlamaları aynen koruyarak) başka dile çevirir; olmazsa None."""
+    blocks = media.read_srt_blocks(src)
+    if not blocks:
+        return None
+    tr = translate_lines([t for _, _, t in blocks], lang_name)
+    if not tr:
+        return None
+    return media.write_srt_blocks([(a, b, t) for (a, b, _), t in zip(blocks, tr)], dst)
 
 
 def local_meta(script, shorts, lang_name):
@@ -1269,7 +1292,17 @@ def finish_manual_uploads():
             except Exception as e:
                 log(f"Elle yüklenen video tamamlanamadı ({v['id']}): {str(e)[:200]}")
                 continue
-            for fn, code, name in it.get("captions", []):
+            caps = list(it.get("captions", []))
+            sub = CFG.get("subtitle_translation") or {}
+            if caps and sub.get("code") and not any(c[1] == sub["code"] for c in caps):
+                # paket çevirisiz kaldıysa ana altyazıdan şimdi çevir
+                try:
+                    tfile = translate_srt(folder / caps[0][0], folder / f"cap_{sub['code']}.srt", sub["name"])
+                    if tfile:
+                        caps.append([f"cap_{sub['code']}.srt", sub["code"], sub.get("label", sub["name"])])
+                except Exception as e:
+                    log(f"Eksik altyazı çevrilemedi: {str(e)[:150]}")
+            for fn, code, name in caps:
                 if (folder / fn).exists():
                     try:
                         publish.upload_caption(v["id"], folder / fn, code, name)
@@ -1706,6 +1739,33 @@ if __name__ == "__main__":
             if CFG.get("paid_" + k):
                 CFG[k] = CFG["paid_" + k]
         log("Ücretli Gemini anahtarı kullanılıyor")
+    if os.getenv("ADD_TRANSLATION"):  # yüklenmiş videoya eksik çeviri altyazısını ekle: video kimlikleri, virgülle
+        check_channel()
+        sub = CFG.get("subtitle_translation") or {}
+        for vid in [x.strip() for x in os.getenv("ADD_TRANSLATION").split(",") if x.strip()]:
+            try:
+                src = publish.download_caption(vid, CFG.get("language_code", "en"))
+            except Exception as e:  # video bu kanalın değil (iki kanal sırayla çalışır)
+                log(f"{vid}: bu kanalda değil ya da okunamadı: {str(e)[:120]}")
+                continue
+            main_lc = CFG.get("language_code", "en")
+            try:  # ana dil izini de üste taşı (gömülü yazıyla çakışmasın)
+                mp = Path(tempfile.mkdtemp()) / "main.srt"
+                mp.write_text(src, encoding="utf-8")
+                publish.replace_caption(vid, mp, main_lc, CFG.get("caption_label", "English"))
+            except Exception as e:
+                log(f"{vid}: ana altyazı üste taşınamadı: {str(e)[:150]}")
+            try:
+                f = translate_srt(src, Path(tempfile.mkdtemp()) / "t.srt", sub["name"]) if src else None
+                if not f:
+                    raise RuntimeError("ana altyazı bulunamadı ya da çeviri başarısız")
+                publish.upload_caption(vid, f, sub["code"], sub.get("label", sub["name"]))
+                log(f"{vid}: {sub['name']} altyazı eklendi")
+                notify(f"✅ {sub.get('label', sub['name'])} altyazı eklendi: https://youtu.be/{vid}")
+            except Exception as e:
+                log(f"{vid}: çeviri altyazısı eklenemedi: {str(e)[:200]}")
+                notify(f"⚠️ Altyazı eklenemedi ({vid}): {str(e)[:200]}")
+        sys.exit(0)
     if os.getenv("FINISH_ONLY"):  # sadece elle yüklenen videoları tamamla + bekleyen yorumlar (hafif, sık çalışır)
         check_channel()
         finish_manual_uploads()

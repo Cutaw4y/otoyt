@@ -151,6 +151,25 @@ def write_srt_blocks(blocks, out):
     return out
 
 
+def read_srt_blocks(path_or_text):
+    """SRT → [(başlangıç sn, bitiş sn, metin)]."""
+    import re as _re
+    txt = path_or_text if "\n" in str(path_or_text) else Path(path_or_text).read_text(encoding="utf-8-sig")
+    def sec(s):
+        h, mi, rest = s.strip().replace(".", ",").split(":")
+        se, ms = rest.split(",")
+        return int(h) * 3600 + int(mi) * 60 + int(se) + int(ms) / 1000
+    out = []
+    for blk in _re.split(r"\n\s*\n", txt.replace("\r", "").strip()):
+        ls = [l for l in blk.split("\n") if l.strip()]
+        i = next((k for k, l in enumerate(ls) if "-->" in l), None)
+        if i is None:
+            continue
+        a, b = ls[i].split("-->")
+        out.append((sec(a), sec(b.split()[0]), " ".join(ls[i + 1:]).strip()))
+    return out
+
+
 def write_srt(words, out, per_line=6, until=None):
     """words: [{'word','start','end'}]"""
     return write_srt_blocks(srt_blocks(words, per_line, until), out)

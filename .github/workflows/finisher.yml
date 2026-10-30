@@ -3,6 +3,11 @@ on:
   schedule:
     - cron: "23 4,7,10,13,16,19 * * *"   # TR 07:23-22:23 arası 3 saatte bir
   workflow_dispatch:
+    inputs:
+      add_translation:
+        description: "Çeviri altyazısı eklenecek video kimlikleri (virgülle). Boş = normal tamamlama"
+        required: false
+        default: ""
 permissions:
   contents: write
 concurrency: otoyt-finisher
@@ -23,6 +28,7 @@ jobs:
       - name: Tamamla
         env:
           FINISH_ONLY: "1"
+          ADD_TRANSLATION: ${{ inputs.add_translation }}
           OTOYT_CONFIG: ${{ matrix.config }}
           YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
           YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}

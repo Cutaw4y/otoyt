@@ -4,6 +4,7 @@ config.yaml > uploader: "youtube" | "ayrshare"
 """
 import math
 import os
+from pathlib import Path
 import time
 from datetime import date, datetime, timedelta
 
@@ -126,8 +127,37 @@ def ayrshare_upload(video, meta, thumb=None):
     return _retry(do, tries=2, what="Ayrshare paylaşım")
 
 
-def upload_caption(video_id, srt_path, lang, name):
-    """Videoya altyazı izi ekler (izleyici ayarlardan seçer). youtube.force-ssl izni gerekir."""
+def srt_to_ytt(srt_path, out_path, top=True):
+    """SRT → YouTube zamanlı metin (srv3). Seçilen altyazı EKRANIN ÜSTÜNDE görünür,
+    videoya gömülü alttaki yazıyla çakışmaz."""
+    import re
+    from xml.sax.saxutils import escape
+    txt = open(srt_path, encoding="utf-8-sig").read().replace("\r", "")
+    def ms(s):
+        h, m, rest = s.strip().replace(".", ",").split(":")
+        se, mi = rest.split(",")
+        return ((int(h) * 60 + int(m)) * 60 + int(se)) * 1000 + int(mi)
+    ps = []
+    for blk in re.split(r"\n\s*\n", txt.strip()):
+        ls = [l for l in blk.split("\n") if l.strip()]
+        i = next((k for k, l in enumerate(ls) if "-->" in l), None)
+        if i is None:
+            continue
+        a, b = ls[i].split("-->")
+        t0, t1 = ms(a), ms(b.split()[0])
+        body = escape(" ".join(ls[i + 1:]).strip())
+        if body:
+            ps.append(f'<p t="{t0}" d="{max(1, t1 - t0)}" wp="1" ws="1">{body}</p>')
+    pos = 'ap="1" ah="50" av="6"' if top else 'ap="7" ah="50" av="94"'
+    xml = ('<?xml version="1.0" encoding="utf-8"?>\n<timedtext format="3">\n<head>\n'
+           f'<wp id="1" {pos}/>\n<ws id="1" ju="2"/>\n</head>\n<body>\n' + "\n".join(ps) + "\n</body>\n</timedtext>\n")
+    open(out_path, "w", encoding="utf-8").write(xml)
+    return out_path
+
+
+def upload_caption(video_id, srt_path, lang, name, top=True):
+    """Videoya altyazı izi ekler (izleyici CC ile seçer). youtube.force-ssl izni gerekir.
+    top=True: iz ekranın üstünde gösterilir (gömülü alt yazıyla çakışmasın); olmazsa düz SRT yüklenir."""
     from googleapiclient.http import MediaFileUpload
     yt = _yt()
     try:  # aynı dilde elle eklenmiş (otomatik olmayan) iz varsa tekrar ekleme
@@ -138,10 +168,36 @@ def upload_caption(video_id, srt_path, lang, name):
     except Exception:
         pass
     body = {"snippet": {"videoId": video_id, "language": lang, "name": name, "isDraft": False}}
-    return _retry(lambda: yt.captions().insert(
-        part="snippet", body=body,
-        media_body=MediaFileUpload(str(srt_path), mimetype="application/octet-stream")).execute(),
-        tries=2, what=f"{lang} altyazı")["id"]
+    files = []
+    if top:
+        try:
+            files.append(srt_to_ytt(srt_path, str(srt_path) + ".srv3", top=True))
+        except Exception:
+            pass
+    files.append(str(srt_path))
+    err = None
+    for f in files:
+        try:
+            r = _retry(lambda: yt.captions().insert(
+                part="snippet", body=body,
+                media_body=MediaFileUpload(f, mimetype="application/octet-stream")).execute(),
+                tries=2, what=f"{lang} altyazı")["id"]
+            print(f"[altyazı] {video_id} {lang}: {'ÜSTTE (srv3)' if f.endswith('.srv3') else 'düz SRT'}")
+            return r
+        except Exception as e:
+            print(f"[altyazı] {video_id} {lang} {Path(f).suffix} reddedildi: {str(e)[:150]}")
+            err = e
+    raise err
+
+
+def replace_caption(video_id, srt_path, lang, name, top=True):
+    """Aynı dildeki elle eklenmiş izi silip yenisini (üstte konumlu) yükler."""
+    yt = _yt()
+    for c in yt.captions().list(part="snippet", videoId=video_id).execute().get("items", []):
+        s = c["snippet"]
+        if s.get("language") == lang and s.get("trackKind") != "asr":
+            yt.captions().delete(id=c["id"]).execute()
+    return upload_caption(video_id, srt_path, lang, name, top=top)
 
 
 def set_branding(banner=None, description=None, keywords=None, country=None, lang=None):
@@ -455,3 +511,14 @@ def set_playlist_image(playlist_id, path):
         body["id"] = existing[0]["id"]
         return yt.playlistImages().update(part="snippet", body=body, media_body=media).execute()
     return yt.playlistImages().insert(part="snippet", body=body, media_body=media).execute()
+
+
+def download_caption(video_id, lang):
+    """Videonun (otomatik olmayan) altyazı izini SRT metni olarak indirir; yoksa None."""
+    yt = _yt()
+    for c in yt.captions().list(part="snippet", videoId=video_id).execute().get("items", []):
+        s = c["snippet"]
+        if s.get("language", "").startswith(lang) and s.get("trackKind") != "asr":
+            data = yt.captions().download(id=c["id"], tfmt="srt").execute()
+            return data.decode("utf-8") if isinstance(data, bytes) else data
+    return None
