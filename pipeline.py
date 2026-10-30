@@ -683,17 +683,21 @@ def clip_matches(clip, sc, workdir):
         fr = Path(workdir) / (Path(clip).stem + "_chk.jpg")
         d = media.duration(clip)
         media.sh(["ffmpeg", "-y", "-ss", f"{d / 2:.2f}", "-i", clip, "-frames:v", "1", "-vf", "scale=480:-2", fr])
-        r = llm_json("You check stock footage for an explainer video. Be strict: generic or unrelated = no.",
+        lite = [m for m in CFG["judge_models"] if "lite" in m] or CFG["judge_models"][:1]
+        r = ai.gemini_json("You check stock footage for an explainer video. Be strict: generic or unrelated = no.",
                      f"Narration of this scene: {sc['narration']}\nSearch query used: {sc.get('broll_query', '')}\n"
                      "Would a viewer immediately see that this frame shows the thing being talked about "
                      "(same object, place, process or a very close real-world example)? "
                      'Return JSON: {"match": true or false, "seen": "what the frame shows, 5 words"}',
-                     images=[fr], required=("match",), judge=True)
+                     images=[fr], required=("match",), models=lite, temperature=0.2)
         ok = bool(r.get("match"))
         if not ok:
             log(f"   ilgisiz görüntü elendi: {r.get('seen', '')}")
         return ok
-    except Exception:
+    except Exception as e:
+        if "kota" in str(e) or "429" in str(e):  # ücretsiz hak bitti: kalan sahnelerde kontrolü bırak,
+            _CLIP_CHECKS = 10 ** 6                 # çeviri ve küçük resim hakemine hak kalsın
+            log("Görüntü kontrolü durduruldu (Gemini hakkı dolu)")
         return True
 
 
