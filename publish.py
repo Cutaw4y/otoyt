@@ -520,29 +520,30 @@ def finish_video(video, meta, thumb=None):
     return notes
 
 
-def set_playlist_image(playlist_id, path):
-    """Oynatma listesine özel kare kapak (playlistImages API). Varsa günceller."""
+def set_playlist_image(playlist_id, path, wide_path=None):
+    """Oynatma listesine özel kapak (playlistImages API, type=hero). Önce kare, olmazsa 16:9 dener."""
     from googleapiclient.http import MediaFileUpload
     yt = _yt()
-    media = MediaFileUpload(str(path), mimetype="image/jpeg")
     existing = []
     try:
         existing = yt.playlistImages().list(part="id,snippet", parent=playlist_id).execute().get("items", [])
     except Exception:
         pass
-    body = {"snippet": {"playlistId": playlist_id, "type": "hero", "width": 1280, "height": 1280}}
-    if existing:
-        body["id"] = existing[0]["id"]
-        return yt.playlistImages().update(part="snippet", body=body, media_body=media).execute()
-    return yt.playlistImages().insert(part="snippet", body=body, media_body=media).execute()
-
-
-def download_caption(video_id, lang):
-    """Videonun (otomatik olmayan) altyazı izini SRT metni olarak indirir; yoksa None."""
-    yt = _yt()
-    for c in yt.captions().list(part="snippet", videoId=video_id).execute().get("items", []):
-        s = c["snippet"]
-        if s.get("language", "").startswith(lang) and s.get("trackKind") != "asr":
-            data = yt.captions().download(id=c["id"], tfmt="srt").execute()
-            return data.decode("utf-8") if isinstance(data, bytes) else data
-    return None
+    errs = []
+    for p, wh in ((path, None), (path, (1280, 1280)), (wide_path, (1280, 720)), (wide_path, None)):
+        if not p:
+            continue
+        body = {"snippet": {"playlistId": playlist_id, "type": "hero"}}
+        if wh:
+            body["snippet"].update({"width": wh[0], "height": wh[1]})
+        try:
+            media = MediaFileUpload(str(p), mimetype="image/jpeg")
+            if existing:
+                body["id"] = existing[0]["id"]
+                return yt.playlistImages().update(part="snippet", body=body, media_body=media).execute()
+            return yt.playlistImages().insert(part="snippet", body=body, media_body=media).execute()
+        except Exception as e:
+            if "quota" in str(e).lower():
+                raise
+            errs.append(str(getattr(e, "content", b"") or e)[:300])
+    raise RuntimeError(" | ".join(errs)[:900])
