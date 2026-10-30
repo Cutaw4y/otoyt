@@ -2140,4 +2140,4 @@ if __name__ == "__main__":
                + ("🔄 10 dakika sonra otomatik olarak yeniden denenecek, senden bir şey gerekmiyor." if retry else
                   "📅 Yarın aynı saatte otomatik telafi üretimi yapılacak, senden bir şey gerekmiyor." if tts_fail else
                   "Claude'a 'üretim hatası' yazman yeterli, kayıttan bakar."))
-        sys.exit(3 if retry else 1)
+        sys.exit(3 if retry else 4)  # 4 = hata Telegram'a Türkçe bildirildi

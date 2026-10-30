@@ -83,6 +83,8 @@ jobs:
             echo "Yükleme öncesi hata → 10 dk sonra yeniden deneniyor"; sleep 600
             OTOYT_ATTEMPT=2 python pipeline.py; code=$?
           fi
+          # 3/4 = hata Telegram'a Türkçe bildirildi → GitHub ayrıca İngilizce "Run failed" e-postası atmasın
+          if [ $code -eq 3 ] || [ $code -eq 4 ]; then echo "::warning title=Üretim yapılamadı::Ayrıntı logs/last_run.txt"; exit 0; fi
           exit $code
       - name: Paket 1 – uzun video
         if: always() && env.SKIP != '1' && hashFiles('out/ARTIFACT_NEEDED') != ''
