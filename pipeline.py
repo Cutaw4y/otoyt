@@ -1725,8 +1725,9 @@ def produce_script(history, report):
     floor = CFG.get("min_quality_floor", 0)
     if best and best[0][0] >= floor:
         log(f"Baraj geçilemedi; en iyi senaryo kullanılıyor (min {best[0][0]:.0f}, ort {best[0][1]:.1f})")
-        notify(f"ℹ️ Senaryo hedef kaliteyi (7/10) tam tutturamadı; en iyi deneme kullanılıyor "
-               f"(en düşük puan {best[0][0]:.0f}/10, ortalama {best[0][1]:.1f}/10).")
+        if best[0][0] < CFG["min_quality_score"]:  # sadece gerçekten zayıfsa haber ver (7 ve üstü normal)
+            notify(f"ℹ️ Senaryo hedef kaliteyi tutturamadı; en iyi deneme kullanılıyor "
+                   f"(en düşük puan {best[0][0]:.0f}/10, ortalama {best[0][1]:.1f}/10).")
         return best[1], best[2]
     notify("⛔ Bugün video üretilmedi: hiçbir senaryo kalite alt sınırını geçemedi. "
            f"Bir sonraki çalışmada tekrar denenecek.\nEditör notu: {last_tr}"[:1500])
