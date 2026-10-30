@@ -1874,7 +1874,10 @@ def run_once():
 
         if DRY_RUN:
             ledger.save()
-            notify(f"🧪 Test videosu hazır (YouTube'a yüklenmedi): {tr_title(tr_meta, script['title'])}")
+            log("DRY_RUN anlatım metni:\n" + "\n".join(f"  [{k + 1}] {s['narration']}" for k, s in enumerate(script["scenes"])))
+            if tr_blocks:
+                log("DRY_RUN çeviri altyazı örneği:\n" + "\n".join(f"  {t}" for _, _, t in tr_blocks[:25]))
+            notify(f"🧪 Sistem testi (senden bir şey gerekmiyor, yüklenmeyecek): {tr_title(tr_meta, script['title'])}")
             log("DRY_RUN: yükleme atlandı, dosyalar out/ klasöründe.")
             return
 
