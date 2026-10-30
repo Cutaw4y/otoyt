@@ -93,6 +93,7 @@ jobs:
           for d in pending_captions thumb_alt manual; do [ -d "$d" ] && git add -A "$d"; done
           git diff --cached --quiet && exit 0
           git commit -m "otoyt: $(date -u +%F)"
+          git stash -u -q || true
           # aynı anda repoya başka değişiklik gelmişse: çakışmada botun kayıtları geçerli olsun, 3 kez dene
           for i in 1 2 3; do
             git pull --rebase -X theirs -q && git push && exit 0

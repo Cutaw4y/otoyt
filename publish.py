@@ -130,6 +130,13 @@ def upload_caption(video_id, srt_path, lang, name):
     """Videoya altyazı izi ekler (izleyici ayarlardan seçer). youtube.force-ssl izni gerekir."""
     from googleapiclient.http import MediaFileUpload
     yt = _yt()
+    try:  # aynı dilde elle eklenmiş (otomatik olmayan) iz varsa tekrar ekleme
+        for c in yt.captions().list(part="snippet", videoId=video_id).execute().get("items", []):
+            s = c["snippet"]
+            if s.get("language") == lang and s.get("trackKind") != "asr":
+                return c["id"]
+    except Exception:
+        pass
     body = {"snippet": {"videoId": video_id, "language": lang, "name": name, "isDraft": False}}
     return _retry(lambda: yt.captions().insert(
         part="snippet", body=body,
@@ -352,6 +359,19 @@ def ensure_playlist(title, description, lang, cache):
     """Konu sütunu için oynatma listesi (bir kez oluşturulur, kimliği cache'te saklanır)."""
     if title in cache:
         return cache[title]
+    try:  # önbellek kaybolduysa kanaldaki aynı adlı listeyi kullan (çift liste açma)
+        tok = None
+        while True:
+            r = _yt().playlists().list(part="snippet", mine=True, maxResults=50, pageToken=tok).execute()
+            for pl in r.get("items", []):
+                if pl["snippet"]["title"] == title[:150]:
+                    cache[title] = pl["id"]
+                    return pl["id"]
+            tok = r.get("nextPageToken")
+            if not tok:
+                break
+    except Exception:
+        pass
     body = {"snippet": {"title": title[:150], "description": description[:4900], "defaultLanguage": lang},
             "status": {"privacyStatus": "public"}}
     pid = _yt().playlists().insert(part="snippet,status", body=body).execute()["id"]
@@ -360,6 +380,11 @@ def ensure_playlist(title, description, lang, cache):
 
 
 def add_to_playlist(playlist_id, video_id):
+    try:  # zaten listedeyse tekrar ekleme
+        if _yt().playlistItems().list(part="id", playlistId=playlist_id, videoId=video_id).execute().get("items"):
+            return
+    except Exception:
+        pass
     body = {"snippet": {"playlistId": playlist_id, "resourceId": {"kind": "youtube#video", "videoId": video_id}}}
     _yt().playlistItems().insert(part="snippet", body=body).execute()
 
