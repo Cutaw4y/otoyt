@@ -1,2 +1,2 @@
-[12:08:52] Başladı (test modu: False, yayın: manual)
-[12:08:53] Kanal doğrulandı: GölgeDefter
+[12:17:13] Başladı (test modu: False, yayın: manual)
+[12:17:14] Kanal doğrulandı: GölgeDefter
