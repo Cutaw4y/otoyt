@@ -392,6 +392,14 @@ def _claims_prompt(script, how):
 _search_ok = True
 
 
+def _claims(data):
+    """Model bazen {"claims":[...]} yerine doğrudan liste döndürüyor: ikisini de kabul et."""
+    if isinstance(data, list):
+        return [c for c in data if isinstance(c, dict)]
+    c = data.get("claims", []) if isinstance(data, dict) else []
+    return [x for x in c if isinstance(x, dict)] if isinstance(c, list) else []
+
+
 def fact_check(script):
     """Önce Google aramalı Gemini; kota/izin yoksa Wikipedia kaynaklarıyla doğrulama."""
     global _search_ok
@@ -400,7 +408,7 @@ def fact_check(script):
             out = ai.gemini(_claims_prompt(script, "Verify EACH one with Google Search against reliable sources."),
                             models=CFG["factcheck_models"], search=True, temperature=0.1, tries=2)
             log("Doğrulama kaynağı: Google araması")
-            return ai.extract_json(out)["claims"]
+            return _claims(ai.extract_json(out))
         except Exception as e:
             _search_ok = False  # bu çalışmada tekrar deneyip zaman kaybetme
             log(f"Google aramalı doğrulama kullanılamadı ({str(e)[:120]}) → Wikipedia'ya geçiliyor")
@@ -412,7 +420,7 @@ def fact_check(script):
            "date the sources don't confirm.\n\nSOURCES:\n" + ("\n\n".join(sources) or "(no sources found)"))
     data = ai.extract_json(ai.gemini(_claims_prompt(script, how), models=CFG["judge_models"],
                                      json_mode=True, temperature=0.1))
-    return data["claims"]
+    return _claims(data)
 
 
 def verify_loop(script):
@@ -457,7 +465,8 @@ def quality_gate(script):
         required=("problems", "simplicity", "flow", "clarity"), judge=True)
     keys = ("originality", "hook", "clarity", "simplicity", "flow", "value_density", "audience_fit")
     scores = [float(r.get(k, 0)) for k in keys]
-    plain_ok = float(r.get("simplicity", 0)) >= 8 and float(r.get("flow", 0)) >= 8  # anlaşılırlık için baraj daha yüksek
+    plain_ok = float(r.get("simplicity", 0)) >= CFG.get("min_plain_score", 7) and \
+        float(r.get("flow", 0)) >= CFG.get("min_plain_score", 7)
     return min(scores) >= CFG["min_quality_score"] and plain_ok, r
 
 
@@ -1731,11 +1740,13 @@ def produce_script(history, report):
                 break
             script = revised
         log(f"Konu kalite barajını geçemedi: {idea['title']}")
+        if best and best[0][0] >= CFG["min_quality_score"] - 1:
+            break  # bilgisi doğru, puanı 6+ : yeni konuya geçip günlük ücretsiz hakkı tüketme
     floor = CFG.get("min_quality_floor", 0)
     if best and best[0][0] >= floor:
         log(f"Baraj geçilemedi; en iyi senaryo kullanılıyor (min {best[0][0]:.0f}, ort {best[0][1]:.1f})")
         notify(f"ℹ️ Senaryo kontrolü: yapay zekâ editörü senaryoya 10 üzerinden en düşük {best[0][0]:.0f}, "
-               f"ortalama {best[0][1]:.1f} puan verdi. Hedef her başlıkta en az 7, anlaşılırlık ve akışta en az 8. "
+               f"ortalama {best[0][1]:.1f} puan verdi. Hedef her başlıkta en az 7. "
                "Hedefin biraz altında kaldığı için en iyi deneme kullanılıyor. Video normal şekilde üretiliyor, "
                "senden bir şey gerekmiyor.")
         return best[1], best[2]
