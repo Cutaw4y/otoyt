@@ -66,6 +66,15 @@ if os.getenv("YT_REFRESH_TOKEN"):
             caps = yt.captions().list(part="snippet", videoId=v["id"]).execute().get("items", [])
             tr = "; ".join(f"{x['snippet']['language']}/{x['snippet'].get('trackKind')}/"
                            f"{x['snippet'].get('status')}/draft={x['snippet'].get('isDraft')}" for x in caps)
+            for x in caps:
+                if x["snippet"].get("trackKind") != "asr" and v["id"] == ids[0]:
+                    try:
+                        raw = yt.captions().download(id=x["id"], tfmt="srv3").execute()
+                        raw = raw.decode("utf-8", "ignore") if isinstance(raw, bytes) else raw
+                        top = "ÜST" if ('ap="1"' in raw) else "alt/varsayılan"
+                        print(f"::notice title=İz {x['snippet']['language']}::konum={top} | " + raw[:160].replace(chr(10), " "))
+                    except Exception as e:
+                        print(f"::warning title=İz {x['snippet']['language']}::{str(e)[:150]}")
             print(f"::notice title=Video {v['id']}::{v['snippet']['title'][:50]} | "
                   f"{v['status']['privacyStatus']} {v['status'].get('publishAt', '')} | "
                   f"işleme={v.get('processingDetails', {}).get('processingStatus')} | altyazı: {tr or 'YOK'}")
