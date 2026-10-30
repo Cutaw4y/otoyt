@@ -315,12 +315,20 @@ def plain_pass(script, extra=""):
             + f"\nWrite in {CFG['language']}.",
             (f"Specific problems an editor found (fix all of them):\n{extra}\n\n" if extra else "")
             + f"Script JSON:\n{json.dumps(script, ensure_ascii=False)}\n\n{_schema()}",
-            required=("title", "description", "tags", "thumbnail_concepts", "scenes"))
-        if len(r.get("scenes", [])) != len(script["scenes"]):
-            log("Sadeleştirme sahne sayısını bozdu → eski metin kalıyor")
+            required=("scenes",))
+        new = r.get("scenes") if isinstance(r, dict) else None
+        if not isinstance(new, list) or len(new) != len(script["scenes"]) or \
+                not all(isinstance(s, dict) and str(s.get("narration", "")).strip() for s in new):
+            log("Sadeleştirme sahne yapısını bozdu → eski metin kalıyor")
             return script
-        for k in script:  # modelin unuttuğu alanları koru
-            r.setdefault(k, script[k])
+        # yalnız anlatım ve görsel tarifleri alınır; başlık, Shorts, küçük resim vb. yapı aynen korunur
+        out = json.loads(json.dumps(script))
+        for old_s, new_s in zip(out["scenes"], new):
+            old_s["narration"] = str(new_s["narration"]).strip()
+            for k in ("image_prompt", "broll_query"):
+                if isinstance(new_s.get(k), str) and new_s[k].strip():
+                    old_s[k] = new_s[k].strip()
+        r = out
         log(f"Anlatım sadeleştirildi ({word_count(script)} → {word_count(r)} kelime)")
         return r
     except Exception as e:
@@ -2080,6 +2088,7 @@ if __name__ == "__main__":
     except Exception:
         err = redact(traceback.format_exc())
         log("HATA:\n" + err)
+        print("::error title=HATA ayrıntısı::" + err[-3000:].replace("%", "%25").replace("\r", "").replace("\n", "%0A"))
         last = [l for l in err.strip().splitlines() if l.strip()][-1][:300]
         retry = (not UPLOAD_STARTED) and os.getenv("OTOYT_ATTEMPT", "1") == "1"
         guide = explain_error(err)
