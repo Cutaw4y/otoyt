@@ -128,8 +128,7 @@ def ayrshare_upload(video, meta, thumb=None):
 
 
 def srt_to_ytt(srt_path, out_path, top=True):
-    """SRT → YouTube zamanlı metin (srv3). Seçilen altyazı EKRANIN ÜSTÜNDE görünür,
-    videoya gömülü alttaki yazıyla çakışmaz."""
+    """SRT → YouTube zamanlı metin (srv3). Seçilen altyazı gömülü yazının hemen üstünde görünür, çakışmaz."""
     import re
     from xml.sax.saxutils import escape
     txt = open(srt_path, encoding="utf-8-sig").read().replace("\r", "")
@@ -148,7 +147,9 @@ def srt_to_ytt(srt_path, out_path, top=True):
         body = escape(" ".join(ls[i + 1:]).strip())
         if body:
             ps.append(f'<p t="{t0}" d="{max(1, t1 - t0)}" wp="1" ws="1">{body}</p>')
-    pos = 'ap="1" ah="50" av="6"' if top else 'ap="7" ah="50" av="94"'
+    # üstte bölüm kartı (sol) ve bilgi kutusu (sağ) var; gömülü yazı en altta (~%82'den aşağı).
+    # Seçilen iz, gömülü yazının hemen ÜSTÜNE oturur: iki dilli altyazı gibi alt alta, hiçbir şeyle çakışmaz.
+    pos = 'ap="7" ah="50" av="78"' if top else 'ap="7" ah="50" av="94"'
     xml = ('<?xml version="1.0" encoding="utf-8"?>\n<timedtext format="3">\n<head>\n'
            f'<wp id="1" {pos}/>\n<ws id="1" ju="2"/>\n</head>\n<body>\n' + "\n".join(ps) + "\n</body>\n</timedtext>\n")
     open(out_path, "w", encoding="utf-8").write(xml)

@@ -1759,7 +1759,7 @@ if __name__ == "__main__":
                 f = translate_srt(src, Path(tempfile.mkdtemp()) / "t.srt", sub["name"]) if src else None
                 if not f:
                     raise RuntimeError("ana altyazı bulunamadı ya da çeviri başarısız")
-                publish.upload_caption(vid, f, sub["code"], sub.get("label", sub["name"]))
+                publish.replace_caption(vid, f, sub["code"], sub.get("label", sub["name"]))
                 log(f"{vid}: {sub['name']} altyazı eklendi")
                 notify(f"✅ {sub.get('label', sub['name'])} altyazı eklendi: https://youtu.be/{vid}")
             except Exception as e:
