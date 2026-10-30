@@ -186,9 +186,15 @@ SCRIPT_SCHEMA = (
     'curiosity (a shocking number, a contradiction, a question)"}],'
     '"short_title":"<=60 chars hook title for the Shorts cut",'
     '"shorts":[{"start_scene":0,"end_scene":2,"title":"<=60 chars curiosity hook title",'
-    '"hook":"why this clip works on its own"}],'
-    '"ig_caption":"Instagram Reel caption: 1-line hook, 2-3 short lines of value, '
-    'CTA to watch the full video on YouTube via link in bio, then 5-8 relevant hashtags",'
+    '"hook":"why this clip works on its own",'
+    '"ig_caption":"Instagram caption for THIS clip (see IG rules)"}],'
+    '"ig_caption":"Instagram caption for the first clip (see IG rules)",'
+    '"ig_hashtags_note":"IG rules: first line = hook that contains the exact words people would search on '
+    'Instagram for this topic (Instagram search reads captions); then 1-2 short lines that add a surprising fact '
+    'NOT in the clip; then a question that invites comments; then a CTA to the full video via link in bio; '
+    'last line EXACTLY 5 hashtags (Instagram allows max 5): 1 broad niche tag, 2 specific to this clip\'s subject '
+    '(names, places, events), 1 mid-size community tag, 1 brand tag given in the brief. No spaces inside a tag, '
+    'no punctuation, written in the video language",'
     '"scenes":[{"narration":"2-3 sentences","visual":"footage or diagram",'
     '"broll_query":"2-4 word English stock footage query",'
     '"image_prompt":"IN ENGLISH: illustration of exactly what this scene explains",'
@@ -972,7 +978,8 @@ def plan_shorts(script):
             continue
         used |= rng
         plans.append({"start": a, "end": b, "title": (s.get("title") or script.get("short_title")
-                                                       or script["title"]).strip()})
+                                                       or script["title"]).strip(),
+                      "ig_caption": (s.get("ig_caption") or "").strip()})
         if len(plans) >= want:
             break
     if not plans:
@@ -1339,14 +1346,31 @@ def make_manual_package(script, idea, shorts, thumb, main_srt, sub_srt, history,
     log(f"Elle yükleme paketi hazır: {sorted(p.name for p in OUT.glob('*'))}")
 
 
-def _reel_caption(script, title, first):
-    tr = CFG.get("language_code") == "tr"
-    return (script.get("ig_caption") if first else None) or (
-        f"{title}\n\n"
-        + ("Videonun tamamı YouTube kanalımızda (link profilde)." if tr
-           else "Full video on our YouTube channel (link in bio).") + "\n\n"
-        + " ".join("#" + re.sub(r"\W", "", t) for t in script.get("tags", [])[:6]))
+def fix_hashtags(caption, brand=None, limit=5):
+    """Instagram en fazla 5 etiket kabul ediyor: fazlasını siler, marka etiketini garanti eder, sona toplar."""
+    tags, seen = [], set()
+    for t in re.findall(r"#[\wçğıöşüÇĞİÖŞÜ]+", caption):
+        if t.lower() not in seen:
+            seen.add(t.lower())
+            tags.append(t)
+    body = re.sub(r"\s*#[\wçğıöşüÇĞİÖŞÜ]+", "", caption).rstrip()
+    if brand and brand.lower() not in seen:
+        tags = tags[:limit - 1] + [brand]
+    return (body + "\n\n" + " ".join(tags[:limit])).strip()
 
+
+def _reel_caption(script, sh_, first):
+    tr = CFG.get("language_code") == "tr"
+    title = sh_.get("title") or script.get("short_title", script["title"])
+    cap = sh_.get("ig_caption") or (script.get("ig_caption") if first else None)
+    if not cap:
+        tags = [re.sub(r"\W", "", t) for t in script.get("tags", [])]
+        tags = [t for t in tags if 3 <= len(t) <= 22][:4]
+        cap = (f"{title}\n\n"
+               + ("Videonun tamamı YouTube kanalımızda (link profilde)." if tr
+                  else "Full video on our YouTube channel (link in bio).") + "\n\n"
+               + " ".join("#" + t for t in tags))
+    return fix_hashtags(cap, CFG.get("ig_brand_tag"))
 
 IG_QUEUE = DATA / "ig_queue.json"
 IG_RELEASE = "ig-queue"   # sıradaki Reels videoları bu GitHub Release'te bekler (repoyu şişirmez)
@@ -1374,7 +1398,7 @@ def post_reels(script, idea, shorts, history, parent=None):
     n = int(CFG.get("instagram_reels_per_video", 1))
     for k, sh_ in enumerate(shorts[:n]):
         title = sh_.get("title") or script.get("short_title", script["title"])
-        cap = _reel_caption(script, title, k == 0)
+        cap = _reel_caption(script, sh_, k == 0)
         if k == 0:
             try:
                 mid, link = publish.instagram_reel(sh_["file"], cap, ai_label=CFG.get("instagram_ai_label", True))
