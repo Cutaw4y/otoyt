@@ -1,0 +1,84 @@
+"""Instagram sırası: her çalışmada sıradaki 1 Reel'i paylaşır.
+pipeline.py her videonun ilk Short'unu hemen paylaşır, kalanları GitHub Release'e ("ig-queue") yükleyip
+data/<kanal>/ig_queue.json'a ekler. Bu betik günde bir çalışır (ig_tr.yml)."""
+import json
+import os
+import subprocess
+import sys
+import tempfile
+from datetime import datetime
+from pathlib import Path
+
+import requests
+import yaml
+
+import publish
+
+ROOT = Path(__file__).parent
+CFG = yaml.safe_load((ROOT / os.getenv("OTOYT_CONFIG", "config.yaml")).read_text(encoding="utf-8"))
+DATA = ROOT / CFG.get("data_dir", ".")
+QUEUE = DATA / "ig_queue.json"
+HISTORY = DATA / "history.json"
+RELEASE = "ig-queue"
+
+
+def notify(text):
+    if CFG.get("notify_prefix"):
+        text = f"{CFG['notify_prefix']} {text}"
+    tok, chat = os.getenv("TELEGRAM_BOT_TOKEN"), os.getenv("TELEGRAM_CHAT_ID")
+    if tok and chat:
+        try:
+            requests.post(f"https://api.telegram.org/bot{tok}/sendMessage",
+                          json={"chat_id": chat, "text": text[:4000]}, timeout=20)
+        except Exception:
+            pass
+    print(text)
+
+
+def load(path, default):
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return default
+
+
+def save(path, data):
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def gh(*args):
+    return subprocess.run(["gh", *args], capture_output=True, text=True, timeout=600)
+
+
+def main():
+    if not CFG.get("instagram_enabled") or not (os.getenv("IG_ACCESS_TOKEN") and os.getenv("IG_USER_ID")):
+        print("Instagram kapalı ya da anahtar yok.")
+        return
+    q = load(QUEUE, [])
+    if not q:
+        print("Sıra boş.")
+        return
+    item = q[0]
+    tmp = Path(tempfile.mkdtemp())
+    r = gh("release", "download", RELEASE, "-p", item["asset"], "-D", str(tmp))
+    video = tmp / item["asset"]
+    if r.returncode != 0 or not video.exists():
+        notify(f"⚠️ Instagram sırasındaki video bulunamadı, atlandı: {item['title']}")
+        save(QUEUE, q[1:])
+        return
+    try:
+        mid, link = publish.instagram_reel(str(video), item["caption"], ai_label=CFG.get("instagram_ai_label", True))
+    except Exception as e:
+        notify(f"⚠️ Instagram Reel yüklenemedi (yarın tekrar denenecek): {str(e)[:300]}")
+        sys.exit(1)
+    hist = load(HISTORY, [])
+    hist.append({"date": datetime.now().isoformat(timespec="minutes"), "type": "reel", "title": item["title"],
+                 "pillar": item.get("pillar"), "video_id": mid, "parent": item.get("parent")})
+    save(HISTORY, hist)
+    save(QUEUE, q[1:])
+    gh("release", "delete-asset", RELEASE, item["asset"], "-y")
+    notify(f"📸 Instagram Reel yayında: {link or mid}  (sırada {len(q) - 1} kaldı)")
+
+
+if __name__ == "__main__":
+    main()

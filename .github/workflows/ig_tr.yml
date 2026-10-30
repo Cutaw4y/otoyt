@@ -1,0 +1,46 @@
+name: Instagram sırası (Gölgedefter)
+
+on:
+  schedule:
+    - cron: "17 15 * * *"      # her gün 15:17 UTC (18:17 TR): sıradaki 1 Reel
+  workflow_dispatch:
+
+permissions:
+  contents: write               # ig_queue.json / history.json kaydı + Release'teki videolar
+
+concurrency: otoyt
+
+env:
+  OTOYT_CONFIG: channels/golgedefter.yaml
+
+jobs:
+  post:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -q requests pyyaml
+      - name: Sıradaki Reel'i paylaş
+        env:
+          GH_TOKEN: ${{ github.token }}
+          IG_ACCESS_TOKEN: ${{ secrets.GD_IG_ACCESS_TOKEN }}
+          IG_USER_ID: ${{ secrets.GD_IG_USER_ID }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python ig_queue.py
+      - name: Kaydet
+        if: always()
+        run: |
+          git config user.name "otoyt-bot"
+          git config user.email "otoyt@users.noreply.github.com"
+          git add -A data/golgedefter
+          git diff --cached --quiet && exit 0
+          git commit -m "golgedefter instagram: $(date -u +%F)"
+          for i in 1 2 3; do
+            git pull --rebase -X theirs -q && git push && exit 0
+            git rebase --abort 2>/dev/null; sleep 5
+          done
+          exit 1

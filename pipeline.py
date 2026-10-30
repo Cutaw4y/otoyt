@@ -1339,8 +1339,27 @@ def make_manual_package(script, idea, shorts, thumb, main_srt, sub_srt, history,
     log(f"Elle yükleme paketi hazır: {sorted(p.name for p in OUT.glob('*'))}")
 
 
+def _reel_caption(script, title, first):
+    tr = CFG.get("language_code") == "tr"
+    return (script.get("ig_caption") if first else None) or (
+        f"{title}\n\n"
+        + ("Videonun tamamı YouTube kanalımızda (link profilde)." if tr
+           else "Full video on our YouTube channel (link in bio).") + "\n\n"
+        + " ".join("#" + re.sub(r"\W", "", t) for t in script.get("tags", [])[:6]))
+
+
+IG_QUEUE = DATA / "ig_queue.json"
+IG_RELEASE = "ig-queue"   # sıradaki Reels videoları bu GitHub Release'te bekler (repoyu şişirmez)
+
+
+def _gh(*args):
+    import subprocess
+    return subprocess.run(["gh", *args], capture_output=True, text=True, timeout=600)
+
+
 def post_reels(script, idea, shorts, history, parent=None):
-    """Shorts'u Instagram Reels olarak yayınlar (YouTube manuel moddayken de çalışır)."""
+    """İlk Short'u hemen Instagram Reels olarak yayınlar; kalanları günde bir paylaşılmak üzere sıraya koyar
+    (ig_queue.py her gün sıradakini paylaşır). YouTube manuel moddayken de çalışır."""
     if not shorts or not CFG.get("instagram_enabled") or CFG["publish_mode"] == "private" or DRY_RUN:
         return
     if not (os.getenv("IG_ACCESS_TOKEN") and os.getenv("IG_USER_ID")):
@@ -1352,22 +1371,37 @@ def post_reels(script, idea, shorts, history, parent=None):
             notify(f"⚠️ Instagram anahtarının süresi {days} gün sonra doluyor, yenilenmesi gerekiyor.")
     except Exception as e:
         log(f"Instagram token yenilenemedi: {str(e)[:200]}")
-    tr = CFG.get("language_code") == "tr"
-    for k, sh_ in enumerate(shorts[:int(CFG.get("instagram_reels_per_video", 1))]):
+    n = int(CFG.get("instagram_reels_per_video", 1))
+    for k, sh_ in enumerate(shorts[:n]):
+        title = sh_.get("title") or script.get("short_title", script["title"])
+        cap = _reel_caption(script, title, k == 0)
+        if k == 0:
+            try:
+                mid, link = publish.instagram_reel(sh_["file"], cap, ai_label=CFG.get("instagram_ai_label", True))
+                history.append({"date": datetime.now().isoformat(timespec="minutes"), "type": "reel",
+                                "title": title, "pillar": idea["pillar"], "video_id": mid, "parent": parent})
+                save_json(HISTORY, history)
+                notify(f"📸 Instagram Reel yayında: {link or mid}")
+            except Exception as e:
+                notify(f"⚠️ Instagram Reel yüklenemedi: {str(e)[:300]}")
+            continue
+        # sonrakiler: GitHub Release'e yükle, sıraya ekle
         try:
-            title = sh_.get("title") or script.get("short_title", script["title"])
-            cap = (script.get("ig_caption") if k == 0 else None) or (
-                f"{title}\n\n"
-                + ("Videonun tamamı YouTube kanalımızda (link profilde)." if tr
-                   else "Full video on our YouTube channel (link in bio).") + "\n\n"
-                + " ".join("#" + re.sub(r"\W", "", t) for t in script.get("tags", [])[:6]))
-            mid, link = publish.instagram_reel(sh_["file"], cap, ai_label=CFG.get("instagram_ai_label", True))
-            history.append({"date": datetime.now().isoformat(timespec="minutes"), "type": "reel",
-                            "title": title, "pillar": idea["pillar"], "video_id": mid, "parent": parent})
-            save_json(HISTORY, history)
-            notify(f"📸 Instagram Reel yayında: {link or mid}")
+            asset = f"{datetime.now(timezone.utc):%Y%m%d%H%M}-{slug(title, 40)}-{k + 1}.mp4"
+            tmp = Path(tempfile.gettempdir()) / asset
+            shutil.copy(sh_["file"], tmp)
+            _gh("release", "view", IG_RELEASE) .returncode == 0 or _gh(
+                "release", "create", IG_RELEASE, "--title", "Instagram sırası",
+                "--notes", "Otomatik: sırada bekleyen Reels videoları. Elle silme.")
+            r = _gh("release", "upload", IG_RELEASE, str(tmp), "--clobber")
+            if r.returncode != 0:
+                raise RuntimeError(r.stderr[:200])
+            q = load_json(IG_QUEUE, [])
+            q.append({"asset": asset, "caption": cap, "title": title, "pillar": idea["pillar"], "parent": parent})
+            save_json(IG_QUEUE, q)
+            log(f"Instagram sırasına eklendi: {title}")
         except Exception as e:
-            notify(f"⚠️ Instagram Reel yüklenemedi: {str(e)[:300]}")
+            log(f"Instagram sırasına eklenemedi: {str(e)[:200]}")
 
 
 MANUAL_DIR = DATA / "manual"

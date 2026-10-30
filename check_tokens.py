@@ -107,6 +107,15 @@ else:
         j = r.json()
         if r.ok:
             print(f"::notice title=Instagram (golge.defter)::bağlı hesap = @{j.get('username')}")
+            lim = requests.get(f"{base}/{'me' if tok.startswith('IG') else iid}/content_publishing_limit",
+                               params={"fields": "quota_usage,config"},
+                               headers={"Authorization": f"OAuth {tok}"}, timeout=30)
+            if lim.ok:
+                d = (lim.json().get("data") or [{}])[0]
+                print(f"::notice title=Instagram yayın izni::VAR (24 saatte {d.get('quota_usage', 0)}/"
+                      f"{(d.get('config') or {}).get('quota_total', 100)} paylaşım kullanıldı)")
+            else:
+                print(f"::error title=Instagram yayın izni::{lim.json().get('error', {}).get('message', lim.text)[:200]}")
         else:
             print(f"::error title=Instagram (golge.defter)::{j.get('error', {}).get('message', r.text)[:200]}")
     except Exception as e:

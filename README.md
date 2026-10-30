@@ -50,3 +50,9 @@ Zorunlu: `GEMINI_API_KEY`, `PIXABAY_API_KEY`, `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLA
 - Ücretsiz katmanların sınırları servis sahiplerince değiştirilebilir.
 - Gemini ücretsiz katmanında Google girdileri ürün geliştirmede kullanabilir; burada gönderilen her şey
   zaten herkese açık yayınlanacak içerik olduğu için sorun değildir — kişisel veri gönderme.
+
+## Instagram (Gölgedefter → @golge.defter)
+- Secrets: `GD_IG_ACCESS_TOKEN` (süresiz system-user token), `GD_IG_USER_ID`.
+- Her videonun 1. Short'u hemen Reels olarak paylaşılır; diğer 2'si `ig-queue` Release'inde bekler,
+  `ig_tr.yml` her gün 18:17 TR'de sıradakini paylaşır. Sıra: `data/golgedefter/ig_queue.json`.
+- Bağlantı testi: Actions → İzin kontrolü → Run workflow.
