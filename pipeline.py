@@ -1206,7 +1206,14 @@ def finish_manual_uploads():
             used.add(v["id"])
             desc = it["description"].replace("{LONG_URL}", f"https://youtu.be/{long_item['video_id']}"
                                              if long_item and long_item.get("video_id") else "")
-            m = meta(it["title"], desc, it["tags"], it.get("publish_at"), is_short=it["kind"] == "short")
+            pub = it.get("publish_at")
+            now_ = datetime.now(timezone.utc)
+            if pub and datetime.fromisoformat(pub.replace("Z", "+00:00")) < now_ + timedelta(minutes=20):
+                # planlanan saat geçtiyse bir sonraki uygun yayın saatine kaydır
+                slots = CFG.get("shorts_slots" if it["kind"] == "short" else "publish_slots")
+                nxt = next_slot(now_ + timedelta(minutes=30), slots) if slots else now_ + timedelta(hours=1)
+                pub = nxt.strftime("%Y-%m-%dT%H:%M:%SZ")
+            m = meta(it["title"], desc, it["tags"], pub, is_short=it["kind"] == "short")
             thumb = folder / it["thumb"] if it.get("thumb") and (folder / it["thumb"]).exists() else None
             try:
                 notes = publish.finish_video(v, m, thumb)
