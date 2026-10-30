@@ -148,7 +148,7 @@ explore_rate: 0.25             # %25 ihtimalle yeni konu türü dener (öğrenme
 # ======================= YAYIN =======================
 uploader: "youtube"            # youtube (ücretsiz) | ayrshare (ÜCRETLİ B planı, denetim reddedilirse)
 category_id: "27"              # 27 = Education
-publish_mode: "private"        # ÖNCE "private" ile test et → sonra "scheduled"
+publish_mode: "manual"         # API onayı gelene kadar: sistem üretir, sahibi Studio’dan elle yükler. Onaydan sonra "scheduled"
 publish_delay_hours: 6         # (yayın saatleri tanımlı değilse kullanılır)
 # ABD izleyicisi: uzun video 14:00 ET, Shorts akşam 18:00 ET (vidIQ 40 milyon video verisi)
 publish_slots: {tz: "America/New_York", times: {default: "14:00"}}

@@ -181,7 +181,7 @@ explore_rate: 0.25
 # ======================= YAYIN =======================
 uploader: "youtube"
 category_id: "27"
-publish_mode: "private"        # API denetimi onaylanınca "scheduled"
+publish_mode: "manual"         # API onayı gelene kadar: sistem üretir, sahibi Studio’dan elle yükler. Onaydan sonra "scheduled"
 publish_delay_hours: 6
 # Türkiye izleyicisi: hafta içi 19:00, hafta sonu 14:00; Shorts her akşam 20:30 (TR saati)
 publish_slots: {tz: "Europe/Istanbul", times: {default: "19:00", sat: "14:00", sun: "14:00"}}

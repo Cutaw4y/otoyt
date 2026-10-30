@@ -70,7 +70,8 @@ jobs:
           name: video-${{ github.run_number }}
           path: out/
           if-no-files-found: ignore
-          retention-days: 7
+          retention-days: 3
+          compression-level: 0
       - name: Geçmişi kaydet
         if: always()
         run: |

@@ -1074,6 +1074,71 @@ def post_due_comments():
     save_json(PENDING_COMMENTS, keep)
 
 
+def make_manual_package(script, idea, shorts, thumb, main_srt, sub_srt, history, ledger):
+    """Elle yükleme paketi: anlamlı adlı dosyalar + Türkçe yükleme rehberi (başlık, açıklama, etiketler...)."""
+    for f in OUT.glob("*"):
+        f.unlink()
+    lc = CFG.get("language_code", "en")
+    sub = CFG.get("subtitle_translation") or {}
+    base = slug(script.get("core_keyword") or script["title"])
+    shutil.copy(script["_final"], OUT / f"1-VIDEO-{base}.mp4")
+    if thumb:
+        shutil.copy(thumb, OUT / "1-KUCUK-RESIM.jpg")
+    if main_srt:
+        shutil.copy(main_srt, OUT / f"1-altyazi-{lc}.srt")
+    if sub_srt:
+        shutil.copy(sub_srt, OUT / f"1-altyazi-{sub.get('code', 'tr')}.srt")
+    for k, sh_ in enumerate(shorts):
+        shutil.copy(sh_["file"], OUT / f"{k + 2}-SHORT-{slug(sh_['title'], 40)}.mp4")
+    chs = script.get("_chapters") or []
+    sub_link = (f"\n\n{CFG.get('subscribe_text', '🔔 Subscribe:')} "
+                f"https://www.youtube.com/channel/{CHANNEL_ID}?sub_confirmation=1") if CHANNEL_ID else ""
+    desc = (script["description"] + chapters_text(chs, header=CFG.get("chapters_heading", "Chapters"))
+            + sub_link + "\n\n" + CFG.get("desc_footer", "Stock footage: Pixabay / Pexels. Narration: AI voice."))
+    hashtags = " ".join((re.findall(r"#\w+", script.get("description", "")) or [])[:3])
+    pl = (CFG.get("playlists") or {}).get(idea["pillar"], "")
+    main_t, short_ts = plan_times(datetime.now(timezone.utc), len(shorts))
+    lines = [
+        f"{CFG['channel_name'].upper()} – ELLE YÜKLEME PAKETİ",
+        "=" * 60,
+        "YouTube Studio → Oluştur → Video yükle. Her video için aşağıdaki bilgileri kopyala-yapıştır.",
+        "Her videoda: Çocuklara özel değil · Ayrıntılar → 'Değiştirilmiş veya yapay içerik' = EVET.",
+        f"Önerilen yayın saati (TR): {fmt_local(main_t)}  (Görünürlük → Planla)",
+        "",
+        "-" * 60, "1) UZUN VİDEO", "-" * 60,
+        f"Dosya: 1-VIDEO-{base}.mp4   ·   Küçük resim: 1-KUCUK-RESIM.jpg",
+        "", "BAŞLIK:", script["title"],
+        "", "AÇIKLAMA:", desc,
+        "", "ETİKETLER (Daha fazla göster → Etiketler kutusuna yapıştır):", ", ".join(script.get("tags", [])),
+        "", f"OYNATMA LİSTESİ: {pl}" if pl else "",
+        f"KATEGORİ: {'Eğitim' if str(CFG.get('category_id')) == '27' else CFG.get('category_id')}   ·   "
+        f"VİDEO DİLİ: {CFG.get('language')}",
+        f"ALTYAZILAR (Altyazılar → Dosya yükle → Zamanlamalı): 1-altyazi-{lc}.srt"
+        + (f" ve 1-altyazi-{sub.get('code')}.srt ({sub.get('label')})" if sub_srt else ""),
+        "", "YAYINDAN SONRA YAZILACAK VE SABİTLENECEK YORUM:", script.get("pinned_comment", ""),
+    ]
+    for k, sh_ in enumerate(shorts):
+        lines += ["", "-" * 60, f"{k + 2}) SHORT", "-" * 60,
+                  f"Dosya: {k + 2}-SHORT-{slug(sh_['title'], 40)}.mp4",
+                  f"Önerilen yayın (TR): {fmt_local(short_ts[k])}",
+                  "BAŞLIK:", sh_["title"][:90] + " #Shorts",
+                  "AÇIKLAMA:", f"{sh_['title']}\n\n{CFG.get('full_video_text', 'Watch the full video:')} "
+                               f"[uzun videonun bağlantısını buraya yapıştır]\n\n{hashtags} #Shorts",
+                  "İLGİLİ VİDEO: Yükleme ekranında 'İlgili video' olarak uzun videoyu seç."]
+    (OUT / "0-YUKLEME-BILGILERI.txt").write_text("\n".join(lines), encoding="utf-8")
+    history.append({"date": datetime.now().isoformat(timespec="minutes"), "type": "long",
+                    "title": script["title"], "pillar": idea["pillar"], "video_id": None, "manual": True})
+    save_json(HISTORY, history)
+    ledger.save()
+    run = os.getenv("GITHUB_RUN_ID")
+    link = f"https://github.com/{os.getenv('GITHUB_REPOSITORY', 'Cutaw4y/otoyt')}/actions/runs/{run}" if run else ""
+    notify(f"📦 Yeni video paketi hazır: {tr_title(None, script['title'])}\n"
+           f"1 uzun video + {len(shorts)} Short. İndir: {link}\n"
+           f"(Sayfanın altındaki 'Artifacts' → paketi indir, 0-YUKLEME-BILGILERI.txt'yi aç)\n"
+           f"Önerilen yayın: {fmt_local(main_t)}. Paket 3 gün saklanır.")
+    log(f"Elle yükleme paketi hazır: {sorted(p.name for p in OUT.glob('*'))}")
+
+
 def produce_script(history, report):
     """Kaliteli senaryo bulana kadar dener: aynı konuda revizyon, olmazsa yeni konu.
     Hiçbiri barajı geçmezse, bilgi hatası olmayan en iyi senaryo alt sınırın üstündeyse kullanılır."""
@@ -1286,11 +1351,17 @@ def run_once():
                 tr_srt = media.write_srt_blocks(tr_blocks, w / f"captions_{sub_lang['code']}.srt")
             tr_meta = local_meta(script, shorts, sub_lang["name"])
 
+        script["_final"] = str(final)
         OUT.mkdir(exist_ok=True)
         for f in [final, thumb, en_srt, tr_srt] + [s["file"] for s in shorts]:
             if f:
                 shutil.copy(f, OUT / Path(f).name)
         save_json(OUT / "script.json", script)
+
+        if CFG["publish_mode"] == "manual" and not DRY_RUN:
+            # YouTube API onayı gelene kadar: sistem üretir, sahibi Studio'dan elle yükler (kilit yok)
+            make_manual_package(script, idea, shorts, thumb, en_srt, tr_srt, history, ledger)
+            return
 
         if DRY_RUN:
             ledger.save()
