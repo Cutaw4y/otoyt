@@ -264,6 +264,8 @@ def instagram_reel(video, caption, ai_label=True, poll_every=20, max_wait=900):
     """Reel yayınlar, (media_id, permalink) döner."""
     token, ig_id = os.environ["IG_ACCESS_TOKEN"], os.environ["IG_USER_ID"]
     IG = _ig_base(token)
+    if token.startswith("IG"):
+        ig_id = "me"  # Instagram girişi token'ı kendi hesabını "me" ile bulur (ID farklılıklarına karşı güvenli)
     auth = {"Authorization": f"OAuth {token}"}
 
     def create_and_upload():
