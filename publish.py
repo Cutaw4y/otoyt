@@ -510,13 +510,13 @@ def finish_video(video, meta, thumb=None):
     try:
         yt.videos().update(part="snippet,status", body={"id": video["id"], "snippet": sn, "status": status}).execute()
     except Exception as e:  # zamanlama/durum reddedilirse en azından bilgileri yaz
-        notes.append(f"durum ayarlanamadı: {str(e)[:120]}")
+        notes.append("yayın saati/durumu ayarlanamadı")
         yt.videos().update(part="snippet", body={"id": video["id"], "snippet": sn}).execute()
     if thumb:
         try:
             yt.thumbnails().set(videoId=video["id"], media_body=MediaFileUpload(str(thumb))).execute()
         except Exception as e:
-            notes.append(f"küçük resim: {str(e)[:120]}")
+            notes.append("küçük resim konamadı")
     return notes
 
 

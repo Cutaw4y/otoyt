@@ -1491,7 +1491,8 @@ def post_reels(script, idea, shorts, history, parent=None):
                 save_json(HISTORY, history)
                 notify(f"📸 Instagram Reel yayında: {link or mid}")
             except Exception as e:
-                notify(f"⚠️ Instagram Reel yüklenemedi: {str(e)[:300]}")
+                notify("⚠️ Instagram'a Reel yüklenemedi (YouTube tarafı etkilenmedi). Teknik ayrıntı kayıtta; "
+                       "Claude'a 'Instagram hatası' demen yeterli.")
             continue
         # sonrakiler: GitHub Release'e yükle, sıraya ekle
         try:
@@ -1579,15 +1580,23 @@ def finish_manual_uploads():
                     try:
                         publish.upload_caption(v["id"], folder / fn, code, name)
                     except Exception as e:
-                        notes.append(f"altyazı {code}: {str(e)[:100]}")
+                        log(f"altyazı {code} eklenemedi: {str(e)[:150]}")
+                        notes.append(f"{name} altyazısı eklenemedi (Claude'a söylersen ekler)")
             if it.get("playlist"):
                 add_to_pillar_playlist_by_title(v["id"], it["playlist"])
             if it.get("comment"):
                 queue_comment(v["id"], it["comment"])
             it["done"], it["video_id"] = True, v["id"]
             log(f"Elle yüklenen video tamamlandı: {v['id']} {it['title']} {notes}")
-            notify(f"✅ Elle yüklediğin video tamamlandı: {it['title']}\nhttps://youtu.be/{v['id']}\n"
-                   "Açıklama, etiketler, küçük resim, altyazı, oynatma listesi ve yayın saati eklendi."
+            when = ""
+            try:
+                when = f"\n🕒 Yayına gireceği zaman (TR): {fmt_local(datetime.fromisoformat(m['publish_at'].replace('Z', '+00:00')))}" \
+                    if m.get("publish_at") else ""
+            except Exception:
+                pass
+            notify(f"✅ Yüklediğin video tamamlandı: {it['title']}\nhttps://youtu.be/{v['id']}\n"
+                   "Açıklama, etiketler, küçük resim, altyazılar, oynatma listesi ve yayın saati eklendi. "
+                   "Senden bir şey gerekmiyor." + when
                    + (f"\n⚠️ {'; '.join(notes)}" if notes else ""))
             hist = load_json(HISTORY, [])
             for h in reversed(hist):
@@ -1725,9 +1734,10 @@ def produce_script(history, report):
     floor = CFG.get("min_quality_floor", 0)
     if best and best[0][0] >= floor:
         log(f"Baraj geçilemedi; en iyi senaryo kullanılıyor (min {best[0][0]:.0f}, ort {best[0][1]:.1f})")
-        if best[0][0] < CFG["min_quality_score"]:  # sadece gerçekten zayıfsa haber ver (7 ve üstü normal)
-            notify(f"ℹ️ Senaryo hedef kaliteyi tutturamadı; en iyi deneme kullanılıyor "
-                   f"(en düşük puan {best[0][0]:.0f}/10, ortalama {best[0][1]:.1f}/10).")
+        notify(f"ℹ️ Senaryo kontrolü: yapay zekâ editörü senaryoya 10 üzerinden en düşük {best[0][0]:.0f}, "
+               f"ortalama {best[0][1]:.1f} puan verdi. Hedef her başlıkta en az 7, anlaşılırlık ve akışta en az 8. "
+               "Hedefin biraz altında kaldığı için en iyi deneme kullanılıyor. Video normal şekilde üretiliyor, "
+               "senden bir şey gerekmiyor.")
         return best[1], best[2]
     notify("⛔ Bugün video üretilmedi: hiçbir senaryo kalite alt sınırını geçemedi. "
            f"Bir sonraki çalışmada tekrar denenecek.\nEditör notu: {last_tr}"[:1500])
@@ -1799,7 +1809,7 @@ def ensure_branding():
         notify("🎨 Kanal afişi ve açıklaması ayarlandı.")
     except Exception as e:  # marka ayarı başarısız olsa da video üretimi devam etsin
         log(f"Kanal markası ayarlanamadı: {e}")
-        notify(f"⚠️ Kanal afişi ayarlanamadı (video üretimi devam ediyor): {str(e)[:300]}")
+        notify("⚠️ Kanal afişi/açıklaması güncellenemedi. Video üretimi etkilenmedi, devam ediyor.")
 
 
 def clear_old_localizations():
@@ -2011,7 +2021,7 @@ def run_once():
                        + (f"(yayın: {fmt_local(short_ts[k])} TR saati) " if sched else "(şimdilik gizli) ")
                        + f"https://youtu.be/{sid}")
             except Exception as e:
-                notify(f"⚠️ Short {k+1} yüklenemedi: {str(e)[:300]}")
+                notify(f"⚠️ {k+1}. Short YouTube'a yüklenemedi. Uzun video etkilenmedi; ayrıntı kayıtta.")
                 if "quota" in str(e).lower() or "uploadLimit" in str(e):
                     break  # günlük yükleme hakkı doldu; kalanları zorlamayalım
 
@@ -2062,7 +2072,7 @@ if __name__ == "__main__":
                 notify(f"✅ {sub.get('label', sub['name'])} altyazı eklendi: https://youtu.be/{vid}")
             except Exception as e:
                 log(f"{vid}: çeviri altyazısı eklenemedi: {str(e)[:200]}")
-                notify(f"⚠️ Altyazı eklenemedi ({vid}): {str(e)[:200]}")
+                notify(f"⚠️ Videoya çeviri altyazısı eklenemedi: https://youtu.be/{vid} (ayrıntı kayıtta).")
         sys.exit(0)
     if os.getenv("FINISH_ONLY"):  # sadece elle yüklenen videoları tamamla + bekleyen yorumlar (hafif, sık çalışır)
         check_channel()
@@ -2095,7 +2105,8 @@ if __name__ == "__main__":
         guide = explain_error(err)
         if guide and any(k in guide for k in ("get_token", "anahtar")):
             retry = False  # izin/anahtar sorununu beklemek çözmez
-        notify(f"❌ Hata oluştu: {last}\n" + (f"💡 {guide}\n" if guide else "")
-               + ("🔄 10 dakika sonra otomatik olarak yeniden denenecek."
-               if retry else "Claude'a bu mesajı iletebilirsin (ayrıntı: logs/last_run.txt)."))
+        notify("❌ Video üretimi sırasında bir hata oluştu. Teknik ayrıntı Claude için kayda yazıldı.\n"
+               + (f"💡 {guide}\n" if guide else "")
+               + ("🔄 10 dakika sonra otomatik olarak yeniden denenecek, senden bir şey gerekmiyor."
+               if retry else "Claude'a 'üretim hatası' yazman yeterli, kayıttan bakar."))
         sys.exit(3 if retry else 1)
