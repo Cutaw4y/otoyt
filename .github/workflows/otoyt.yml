@@ -52,6 +52,7 @@ jobs:
           IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
           IG_USER_ID: ${{ secrets.IG_USER_ID }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           GDRIVE_CLIENT_ID: ${{ secrets.GDRIVE_CLIENT_ID }}
           GDRIVE_CLIENT_SECRET: ${{ secrets.GDRIVE_CLIENT_SECRET }}
@@ -67,16 +68,16 @@ jobs:
           fi
           exit $code
       - name: Paket 1 – uzun video
-        if: always()
+        if: always() && hashFiles('out/ARTIFACT_NEEDED') != ''
         uses: actions/upload-artifact@v4
         with:
           name: video-${{ github.run_number }}-1-uzun-video
           path: out/1-VIDEO-*.mp4
           if-no-files-found: ignore
-          retention-days: 3
+          retention-days: 2
           compression-level: 0
       - name: Paket 2 – Shorts, küçük resim, altyazılar, yükleme bilgileri
-        if: always()
+        if: always() && hashFiles('out/ARTIFACT_NEEDED') != ''
         uses: actions/upload-artifact@v4
         with:
           name: video-${{ github.run_number }}-2-shorts-ve-bilgiler
@@ -84,7 +85,7 @@ jobs:
             out/*
             !out/1-VIDEO-*.mp4
           if-no-files-found: ignore
-          retention-days: 3
+          retention-days: 2
           compression-level: 0
       - name: Geçmişi kaydet
         if: always()

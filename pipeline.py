@@ -23,6 +23,7 @@ import yaml
 import ai
 import drive
 import media
+import release
 import publish
 import voice
 
@@ -1321,6 +1322,24 @@ def make_manual_package(script, idea, shorts, thumb, main_srt, sub_srt, history,
             log(f"Paket Google Drive'a yüklendi: {drive_link}")
         except Exception as e:
             log(f"Google Drive'a yüklenemedi: {str(e)[:200]}")
+    rel_link = ""
+    if release.enabled() and not DRY_RUN:
+        tag = f"paket-{key}"
+        for attempt in range(2):
+            try:  # telefondan zip'siz, dosya dosya indirilebilsin
+                entry["release_id"], rel_link = release.create(
+                    tag, f"{CFG['channel_name']} · {datetime.now():%d.%m} · {script['title'][:70]}",
+                    (OUT / "0-YUKLEME-BILGILERI.txt").read_text(encoding="utf-8"),
+                    sorted(OUT.glob("*.mp4")) + sorted(OUT.glob("*.jpg")))
+                entry["release_tag"] = tag
+                log(f"Paket yayında (Releases): {rel_link}")
+                break
+            except Exception as e:
+                log(f"Paket Releases'a konamadı ({attempt + 1}): {str(e)[:200]}")
+                if entry.get("release_id") is None:
+                    tag = f"paket-{key}-{attempt + 2}"
+    if not rel_link and not drive_link:
+        (OUT / "ARTIFACT_NEEDED").write_text("1")  # iş akışı yedek olarak artifact yüklesin
     pend = load_json(MANUAL_PENDING, []) if MANUAL_PENDING.exists() else []
     pend.append(entry)
     save_json(MANUAL_PENDING, pend)
@@ -1331,9 +1350,14 @@ def make_manual_package(script, idea, shorts, thumb, main_srt, sub_srt, history,
     run = os.getenv("GITHUB_RUN_ID")
     link = f"https://github.com/{os.getenv('GITHUB_REPOSITORY', 'Cutaw4y/otoyt')}/actions/runs/{run}" if run else ""
     titles = "\n".join(f"{i + 1}) {it['title']}" for i, it in enumerate(items))
-    where = (f"📱 Telefondan: Google Drive → {drive_link}\n💻 Bilgisayardan: {link} (en alttaki Artifacts)\n"
-             if drive_link else
-             f"İndir: {link}\nSayfanın en altındaki 'Artifacts' → paketi indir (3 gün saklanır).\n")
+    if drive_link:
+        where = f"📱 Google Drive: {drive_link}\n"
+    elif rel_link:
+        where = (f"📥 İndir: {rel_link}\n"
+                 "Telefonda: bağlantıyı aç → en alttaki 'Assets' → videoya dokun → indir → Paylaş → 'Videoyu Kaydet' "
+                 "→ YouTube uygulaması → + → yükle. Bilgisayarda: dosyaya tıkla, iner.\n")
+    else:
+        where = f"İndir: {link}\nSayfanın en altındaki 'Artifacts' → paketi indir.\n"
     notify(f"📦 Yeni video paketi hazır ({len(items)} video).\n{where}\n"
            "YAPMAN GEREKEN: her videoyu YouTube'a yükle, BAŞLIĞA aşağıdakini yapıştır, "
            "'çocuklara özel değil', görünürlük = Özel/Gizli.\n"
@@ -1549,11 +1573,14 @@ def finish_manual_uploads():
         age = (datetime.now() - datetime.fromisoformat(pk["created"])).days
         if all(it.get("done") for it in pk["items"]) or age > 21:
             shutil.rmtree(MANUAL_DIR / pk["key"], ignore_errors=True)
+            if pk.get("release_id") and release.enabled():
+                release.remove(pk["release_id"], pk.get("release_tag"))  # geçici paket kopyası silinir
             if pk.get("drive_folder") and drive.enabled():
                 drive.trash(pk["drive_folder"])  # Drive dolmasın: tamamlanan paket çöpe
         else:
             keep.append(pk)
     save_json(MANUAL_PENDING, keep)
+    sweep_releases({pk.get("release_tag") for pk in keep})
 
 
 PLAYLIST_COVERS = DATA / "playlist_covers.json"
@@ -1580,6 +1607,27 @@ def ensure_playlist_covers():
             done[pid] = {"fail": done.get(pid, {}).get("fail", 0) + 1, "err": str(e)[:150]}
             log(f"Oynatma listesi kapağı konamadı ({title}): {str(e)[:200]}")
     save_json(PLAYLIST_COVERS, done)
+
+
+def sweep_releases(keep_tags):
+    """Yarım kalmış/sahipsiz paket release'lerini temizler (bu kanalın, 2 günden eski, beklemede olmayan)."""
+    if not release.enabled() or DRY_RUN:
+        return
+    try:
+        import requests as rq
+        rels = rq.get(f"{release.API}/repos/{release._repo()}/releases?per_page=50", headers=release._h(),
+                      timeout=60).json()
+        prefix = CFG["channel_name"]
+        for r in rels:
+            tag = r.get("tag_name", "")
+            if not tag.startswith("paket-") or tag in keep_tags or not (r.get("name") or "").startswith(prefix):
+                continue
+            age = datetime.now(timezone.utc) - datetime.fromisoformat(r["created_at"].replace("Z", "+00:00"))
+            if age.days >= 2:
+                release.remove(r["id"], tag)
+                log(f"Sahipsiz paket temizlendi: {tag}")
+    except Exception as e:
+        log(f"Release temizliği yapılamadı: {str(e)[:120]}")
 
 
 def add_to_pillar_playlist_by_title(video_id, title):

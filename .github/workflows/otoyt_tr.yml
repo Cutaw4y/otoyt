@@ -2,7 +2,7 @@ name: OtoYT (Gölgedefter)
 
 on:
   schedule:
-    - cron: "31 4 * * 2,4,6"   # Sal/Per/Cmt 04:31 UTC (07:31 TR) → paket ~09:00 hazır; Cutaway ile aynı güne düşmez
+    - cron: "41 8 * * 2,4,6"   # Sal/Per/Cmt 08:41 UTC (11:41 TR): Google ücretsiz günlük kotası (ABD gece yarısı = TR 10:00/11:00) yenilendikten SONRA → paket ~13:00
   workflow_dispatch:            # "Run workflow" butonu = senin "Çalıştır" tuşun
     inputs:
       dry_run:
@@ -59,6 +59,7 @@ jobs:
           IG_USER_ID: ${{ secrets.GD_IG_USER_ID }}
           GH_TOKEN: ${{ github.token }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           GDRIVE_CLIENT_ID: ${{ secrets.GDRIVE_CLIENT_ID }}
           GDRIVE_CLIENT_SECRET: ${{ secrets.GDRIVE_CLIENT_SECRET }}
@@ -74,16 +75,16 @@ jobs:
           fi
           exit $code
       - name: Paket 1 – uzun video
-        if: always()
+        if: always() && hashFiles('out/ARTIFACT_NEEDED') != ''
         uses: actions/upload-artifact@v4
         with:
           name: golgedefter-${{ github.run_number }}-1-uzun-video
           path: out/1-VIDEO-*.mp4
           if-no-files-found: ignore
-          retention-days: 3
+          retention-days: 2
           compression-level: 0
       - name: Paket 2 – Shorts, küçük resim, altyazılar, yükleme bilgileri
-        if: always()
+        if: always() && hashFiles('out/ARTIFACT_NEEDED') != ''
         uses: actions/upload-artifact@v4
         with:
           name: golgedefter-${{ github.run_number }}-2-shorts-ve-bilgiler
@@ -91,7 +92,7 @@ jobs:
             out/*
             !out/1-VIDEO-*.mp4
           if-no-files-found: ignore
-          retention-days: 3
+          retention-days: 2
           compression-level: 0
       - name: Geçmişi kaydet
         if: always()

@@ -35,9 +35,9 @@ for label, key in (("Gemini GEMINI_API_KEY", os.getenv("GEMINI_API_KEY")),
         print(f"::error title={label}::{str(e)[:200]}")
 
 
-# Gölgedefter Türkçe ses (Gemini TTS) ücretsiz katman testi
+# Ses testi yalnızca istenirse (TTS_TEST=1): ücretsiz günlük ses hakkını boşa harcamasın
 key = os.getenv("GEMINI_PAID_API_KEY")
-for model in ("gemini-3.1-flash-tts-preview", "gemini-2.5-flash-preview-tts", "gemini-2.5-pro-preview-tts"):
+for model in (("gemini-3.1-flash-tts-preview", "gemini-2.5-flash-preview-tts") if os.getenv("TTS_TEST") else ()):
     try:
         r = requests.post(f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
                           headers={"x-goog-api-key": key}, timeout=120, json={
@@ -120,3 +120,16 @@ else:
             print(f"::error title=Instagram (golge.defter)::{j.get('error', {}).get('message', r.text)[:200]}")
     except Exception as e:
         print(f"::error title=Instagram (golge.defter)::{str(e)[:200]}")
+
+
+# Paket teslimi (GitHub Releases) deneme: küçük dosyalı release aç, yükle, sil
+import release
+if release.enabled():
+    try:
+        import tempfile, pathlib
+        t = pathlib.Path(tempfile.mkdtemp()) / "deneme.txt"
+        t.write_text("otoyt release testi")
+        rid, url = release.create("paket-test-kontrol", "TEST (silinecek)", "test", [t])
+        print(f"::notice title=Paket teslimi::release açıldı ve dosya yüklendi; siliniyor → {release.remove(rid, 'paket-test-kontrol')}")
+    except Exception as e:
+        print(f"::error title=Paket teslimi::{str(e)[:200]}")
