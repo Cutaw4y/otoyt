@@ -362,3 +362,8 @@ def ensure_playlist(title, description, lang, cache):
 def add_to_playlist(playlist_id, video_id):
     body = {"snippet": {"playlistId": playlist_id, "resourceId": {"kind": "youtube#video", "videoId": video_id}}}
     _yt().playlistItems().insert(part="snippet", body=body).execute()
+
+
+def set_thumbnail(video_id, path):
+    from googleapiclient.http import MediaFileUpload
+    _yt().thumbnails().set(videoId=video_id, media_body=MediaFileUpload(str(path))).execute()

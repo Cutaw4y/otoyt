@@ -96,6 +96,10 @@ visual_style: >
   fog, old parchment and ancient stone textures, muted desaturated colors with warm
   amber highlights, mysterious silhouettes, no gore, no blood, no faces of religious
   figures, no text or letters, 16:9
+thumbnail_rules: >
+  Gölgedefter look: one mysterious subject (ancient artifact, ruin, lone silhouette, sealed
+  door, strange symbol) in fog with candle or moon light, amber highlights on deep shadow.
+  No gore, no blood, never depict prophets or holy figures' faces. Thumbnail text in Turkish.
 thumbnail_style: "dark cinematic mystery, one striking subject, strong rim light, fog, high contrast, amber and deep shadow"
 thumbnail_accent: [232, 158, 68]
 caption_theme:            # bölüm kartı ve bilgi etiketleri: kehribar rengi (ASS &HAABBGGRR)

@@ -76,6 +76,10 @@ visual_style: >
   clean modern educational illustration, 3D cutaway / exploded view / cross-section where useful,
   flat vector look with soft gradients, dark navy background, glowing cyan and
   warm orange accents, clear arrows showing flow, no text or labels, 16:9
+thumbnail_rules: >
+  Cutaway look: the real object shown as a photoreal 3D cutaway or exploded view with glowing
+  internals, or the object at an extreme moment (red-hot, cracked, giant next to a tiny human
+  for scale). Orange-and-teal contrast, dark background.
 thumbnail_style: "bold, high contrast, dramatic lighting, one clear object, cinematic, vivid colors"
 
 # Kanal sayfası (ilk gerçek çalışmada bir kez otomatik ayarlanır)

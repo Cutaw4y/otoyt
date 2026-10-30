@@ -76,8 +76,9 @@ jobs:
         run: |
           git config user.name "otoyt-bot"
           git config user.email "otoyt@users.noreply.github.com"
-          for f in history.json assets_used.json assets/branding_done.json logs/last_run.txt; do [ -f "$f" ] && git add "$f"; done
-          [ -d pending_captions ] && git add -A pending_captions
+          for f in history.json assets_used.json assets/branding_done.json logs/last_run.txt \
+                   pending_comments.json playlists.json localizations_cleared.json; do [ -f "$f" ] && git add "$f"; done
+          for d in pending_captions thumb_alt; do [ -d "$d" ] && git add -A "$d"; done
           git diff --cached --quiet && exit 0
           git commit -m "otoyt: $(date -u +%F)"
           # aynı anda repoya başka değişiklik gelmişse: çakışmada botun kayıtları geçerli olsun, 3 kez dene

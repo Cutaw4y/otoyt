@@ -172,7 +172,11 @@ SCRIPT_SCHEMA = (
     'names/terms in the video, and related entities (people, places, organizations, objects). No generic words"],'
     '"pinned_comment":"one pointed A-or-B question about the topic that splits viewers into two camps and makes '
     'them answer in the comments; specific, respectful, no insults, no politics",'
-    '"thumbnail_concepts":[{"image_prompt":"IN ENGLISH: visual concept, NO text in image","text":"2-4 punchy words"}],'
+    '"thumbnail_concepts":[{"image_prompt":"IN ENGLISH: ONE striking subject, extreme close-up or dramatic '
+    'angle, big and on the RIGHT half, dark uncluttered space on the LEFT, cinematic rim light, high contrast, '
+    'something surprising/wrong/extreme visible (cutaway, cracked, glowing, giant scale). NO text in image",'
+    '"text":"1-3 words, max 18 characters, must NOT repeat the title: adds the missing piece that creates '
+    'curiosity (a shocking number, a contradiction, a question)"}],'
     '"short_title":"<=60 chars hook title for the Shorts cut",'
     '"shorts":[{"start_scene":0,"end_scene":2,"title":"<=60 chars curiosity hook title",'
     '"hook":"why this clip works on its own"}],'
@@ -189,7 +193,8 @@ SCRIPT_SCHEMA = (
     "(spoken in the first 20 seconds). Scenes 0 and 1 must be visual=diagram and their image_prompt must "
     "show EXACTLY what their narration says (the viewer sees the proof of the hook, never a generic image). Give a callout to roughly every second scene (numbers, units, key terms), "
     "never a full sentence.\n"
-    "Give exactly 3 thumbnail_concepts with different ideas. EVERY scene needs BOTH broll_query and image_prompt. "
+    "Give exactly 3 thumbnail_concepts with clearly DIFFERENT ideas (e.g. the object up close / the extreme "
+    "number or scale / the failure or contradiction). " + (CFG.get("thumbnail_rules", "") + " ") + "EVERY scene needs BOTH broll_query and image_prompt. "
     "Use visual=diagram whenever a mechanism, inside view, process, comparison or scale must be SHOWN; "
     "use footage for real-world context. At least {ratio}% of scenes must be diagram. "
     "Write narration for the ear: spell out numbers and units in words (\"about forty percent\"), no symbols, "
@@ -823,9 +828,12 @@ def plan_shorts(script):
 
 # ---------------------------------------------------------------- 7. thumbnail
 def make_thumbnails(script, workdir, ledger):
+    """3 farklı küçük resim adayı → yapay zekâ hakemi telefon boyutunda da bakıp sıralar.
+    Dönüş: (en iyi, yedek) — yedek, video beklenenden az tıklanırsa sonradan değiştirmek için saklanır."""
     cands = []
     for i, c in enumerate(script["thumbnail_concepts"][:3]):
-        raw = gen_image(f"{c['image_prompt']}. {CFG['thumbnail_style']}. No text, no letters, no logos.",
+        raw = gen_image(f"{c['image_prompt']}. {CFG['thumbnail_style']}. Main subject large on the right half, "
+                        "dark empty space on the left third. No text, no letters, no logos, no watermark.",
                         workdir / f"thumb_raw_{i}.jpg", script["scenes"][0].get("broll_query"), ledger)
         cands.append(media.compose_thumbnail(raw, c["text"], workdir / f"thumb_{i}.jpg",
                                              logo=ASSETS / CFG.get("logo_file", "cutaway_logo.png"),
@@ -833,18 +841,59 @@ def make_thumbnails(script, workdir, ledger):
     sheet = media.contact_sheet(cands, workdir / "thumbs_sheet.jpg")
     try:
         pick = llm_json(
-            "You are a YouTube thumbnail expert who knows what gets clicked on mobile.",
-            f"Video title: {script['title']}\nThe attached image shows 3 thumbnail candidates (#1, #2, #3). "
-            "Pick the one with the highest expected click-through rate: instantly readable on a small phone "
-            "screen, one clear focal point, strong curiosity that matches the title, no clutter. "
-            'Return JSON: {"best":1,"reason":"..."}',
-            images=[sheet], required=("best",), judge=True)
-        idx = min(max(int(pick["best"]) - 1, 0), len(cands) - 1)
-        log(f"Thumbnail seçimi: #{idx+1} - {pick.get('reason','')}")
+            "You are a top YouTube thumbnail designer. You judge like a viewer scrolling a phone feed in 0.5 s.",
+            f"Video title: {script['title']}\nThe attached image shows 3 thumbnail candidates (#1, #2, #3), "
+            "large on top and at REAL PHONE SIZE below. Rank them by expected click-through rate. Criteria: "
+            "readable at phone size, one clear focal subject, strong contrast and color pop, emotion or "
+            "tension, text + image + title together create a curiosity gap (title and text must not say the "
+            "same thing), looks premium not cheap, no clutter, nothing misleading. "
+            'Return JSON: {"ranking":[1,2,3],"reason":"..."}',
+            images=[sheet], required=("ranking",), judge=True)
+        order = [min(max(int(x) - 1, 0), len(cands) - 1) for x in pick["ranking"]]
+        order = list(dict.fromkeys(order + list(range(len(cands)))))
+        log(f"Thumbnail sıralaması: {[o + 1 for o in order]} - {pick.get('reason', '')}")
     except Exception as e:
         log(f"Thumbnail hakemi çalışmadı, ilki seçildi: {e}")
-        idx = 0
-    return cands[idx]
+        order = list(range(len(cands)))
+    return cands[order[0]], (cands[order[1]] if len(order) > 1 else None)
+
+
+THUMB_ALT = DATA / "thumb_alt"
+
+
+def maybe_swap_thumbnails(history):
+    """Yayından 3-10 gün sonra günlük izlenmesi kanal ortalamasının yarısından düşük kalan videonun
+    küçük resmini yedek adayla bir kez değiştirir (YouTube tıklama oranını API'ye vermiyor; izlenme hızı vekil)."""
+    if DRY_RUN or not os.getenv("YT_REFRESH_TOKEN") or not THUMB_ALT.exists():
+        return
+    now = datetime.now()
+    longs = [h for h in history if h.get("type") == "long" and h.get("video_id")]
+    age = {h["video_id"]: (now - datetime.fromisoformat(h["date"])).days for h in longs}
+    for f in THUMB_ALT.glob("*.jpg"):  # süresi geçen yedekleri temizle
+        if age.get(f.stem, 99) > 14:
+            f.unlink()
+    if len(longs) < 4:
+        return
+    stats = publish.video_stats([h["video_id"] for h in longs])
+    vpd = {v: stats[v]["views"] / max(a, 1) for v, a in age.items() if v in stats and a >= 3}
+    for h in longs:
+        v, alt = h["video_id"], THUMB_ALT / f"{h['video_id']}.jpg"
+        if h.get("thumb_swapped") or not alt.exists() or not (3 <= age[v] <= 10) or v not in vpd:
+            continue
+        others = sorted(x for k, x in vpd.items() if k != v)
+        if len(others) < 3:
+            continue
+        median = others[len(others) // 2]
+        if vpd[v] < 0.5 * median:
+            try:
+                publish.set_thumbnail(v, alt)
+                h["thumb_swapped"] = True
+                alt.unlink()
+                log(f"Küçük resim değiştirildi: {v} (günlük {vpd[v]:.0f} izlenme, kanal ortası {median:.0f})")
+                notify(f"🖼 Az izlenen videonun küçük resmi yedek tasarımla değiştirildi:\nhttps://youtu.be/{v}")
+            except Exception as e:
+                log(f"Küçük resim değiştirilemedi: {str(e)[:150]}")
+    save_json(HISTORY, history)
 
 
 # ---------------------------------------------------------------- senaryo üretim döngüsü
@@ -1189,6 +1238,7 @@ def run_once():
     report = publish.performance_report(history)
     log(f"Analitik: {report['n']} video ölçüldü, sütun puanları: {report['pillar_scores']}")
     post_due_comments()
+    maybe_swap_thumbnails(history)
     idea, script = produce_script(history, report)
     if script is None:
         return False
@@ -1220,7 +1270,7 @@ def run_once():
                 except Exception as e:
                     log(f"Short {k+1} üretilemedi: {e}")
         short = shorts[0]["file"] if shorts else None
-        thumb = make_thumbnails(script, w, ledger)
+        thumb, thumb_alt = make_thumbnails(script, w, ledger)
 
         # altyazı izleri: İngilizce (doğru metin) + Türkçe (çeviri)
         cap_blocks = media.srt_blocks(words, per_line=8)
@@ -1272,6 +1322,9 @@ def run_once():
         shutil.copy(final, named)
         vid = publish.upload(named, m_long, thumb, up)
         queue_comment(vid, script.get("pinned_comment"))
+        if thumb_alt:
+            THUMB_ALT.mkdir(parents=True, exist_ok=True)
+            shutil.copy(thumb_alt, THUMB_ALT / f"{vid}.jpg")
         cap_warned = False
         for srt_path, code, name in ((en_srt, CFG.get("language_code", "en"), CFG.get("caption_label", "English")),
                                      (tr_srt, sub_lang.get("code"), sub_lang.get("label"))):

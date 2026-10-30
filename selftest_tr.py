@@ -64,7 +64,7 @@ from PIL import Image
 def fake_img(prompt, out, fq=None, led=None):
     out = Path(out).with_suffix(".jpg"); Image.new("RGB", (1024, 1024), (40, 30, 30)).save(out); return out
 pipeline.gen_image = fake_img
-pipeline.make_thumbnails = lambda s, w, l: fake_img("", w / "thumb.jpg")
+pipeline.make_thumbnails = lambda s, w, l: (fake_img("", w / "thumb.jpg"), None)
 pipeline.run_once()
 outs = sorted(p.name for p in pipeline.OUT.glob("*"))
 print("OUT dosyaları:", outs)

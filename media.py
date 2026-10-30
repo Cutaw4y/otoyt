@@ -337,54 +337,92 @@ def _wrap(draw, text, font, max_w):
     return lines
 
 
-def compose_thumbnail(image, text, out, accent=(255, 168, 60), logo=None):
-    """Yazıyı otomatik sığdırır (en fazla 2 satır), okunabilirlik için alt gölge ekler."""
+def _busy(im, box):
+    """Bir bölgedeki ayrıntı yoğunluğu (kenar miktarı): yazı sakin tarafa konur."""
+    g = im.crop(box).convert("L").resize((160, 180)).filter(ImageFilter.FIND_EDGES)
+    return sum(g.getdata()) / (160 * 180)
+
+
+def compose_thumbnail(image, text, out, accent=(255, 168, 60), logo=None, side=None):
+    """Tıklatan küçük resim: canlı renk + keskinlik, konunun karşı tarafında 1-3 satır dev yazı
+    (kalın kontur + gölge), o tarafta yumuşak karartma, kenar kararması, küçük kanal rozeti."""
+    from PIL import ImageEnhance
     im = Image.open(image).convert("RGB")
     im = im.resize((1280, int(im.height * 1280 / im.width)))
     if im.height < 720:
         im = im.resize((int(im.width * 720 / im.height), 720))
     left, top = (im.width - 1280) // 2, (im.height - 720) // 2
     im = im.crop((left, top, left + 1280, top + 720))
-
+    # canlılık: telefonda soluk görünmesin
+    im = ImageEnhance.Contrast(im).enhance(1.18)
+    im = ImageEnhance.Color(im).enhance(1.25)
+    im = ImageEnhance.Sharpness(im).enhance(1.6)
+    # yazı hangi tarafa: istenmediyse ayrıntısı az olan yarı
+    if side not in ("left", "right"):
+        side = "left" if _busy(im, (0, 0, 560, 720)) <= _busy(im, (720, 0, 1280, 720)) else "right"
+    # yazı tarafına yumuşak karartma + genel kenar kararması
     shade = Image.new("L", (1280, 720), 0)
     sd = ImageDraw.Draw(shade)
-    for y in range(300, 720):
-        sd.line([(0, y), (1280, y)], fill=int(190 * (y - 300) / 420))
+    for x in range(1280):
+        t = (1 - x / 760) if side == "left" else (x - 520) / 760
+        sd.line([(x, 0), (x, 720)], fill=int(205 * max(0.0, min(1.0, t)) ** 1.3))
+    vig = Image.new("L", (1280, 720), 0)
+    ImageDraw.Draw(vig).ellipse([-260, -200, 1540, 920], fill=255)
+    vig = vig.filter(ImageFilter.GaussianBlur(140))
+    shade = Image.composite(shade, Image.new("L", (1280, 720), 120), vig)
     im = Image.composite(Image.new("RGB", im.size, (0, 0, 0)), im, shade)
 
     d = ImageDraw.Draw(im)
     text = up(text).strip()
-    size = 130
-    while size >= 56:
+    box_w = 570
+    size = 168
+    while size >= 60:
         f = _font(size)
-        lines = _wrap(d, text, f, 1160)
-        if len(lines) <= 2 and all(d.textlength(l, font=f) <= 1160 for l in lines):
+        lines = _wrap(d, text, f, box_w)
+        if len(lines) <= 3 and all(d.textlength(l, font=f) <= box_w for l in lines):
             break
         size -= 6
-    lh = int(size * 1.08)
-    y = 720 - 50 - lh * len(lines)
+    lh = int(size * 1.02)
+    y0 = (720 - lh * len(lines)) // 2 + 40
+    x0 = 56 if side == "left" else 1280 - 56 - max(d.textlength(l, font=f) for l in lines)
+    # gölge katmanı (yazıyı zeminden koparır)
+    sh_ = Image.new("L", (1280, 720), 0)
+    sdr = ImageDraw.Draw(sh_)
     for i, line in enumerate(lines):
-        fill = accent if (i == len(lines) - 1 and len(lines) > 1) else (255, 255, 255)
-        d.text((60, y + i * lh), line, font=f, fill=fill, stroke_width=max(4, size // 14), stroke_fill="black")
-    if logo and Path(logo).exists():  # sağ üstte küçük kanal rozeti (marka tanınırlığı)
-        lg = Image.open(logo).convert("RGB").resize((112, 112), Image.LANCZOS)
-        mk = Image.new("L", (112, 112), 0)
-        ImageDraw.Draw(mk).ellipse([0, 0, 111, 111], fill=255)
-        ring = Image.new("L", (124, 124), 0)
-        ImageDraw.Draw(ring).ellipse([0, 0, 123, 123], fill=255)
-        im.paste((255, 255, 255), (1280 - 154, 30), ring)
-        im.paste(lg, (1280 - 148, 36), mk)
-    im.save(out, quality=92)
+        sdr.text((x0 + 8, y0 + i * lh + 10), line, font=f, fill=230, stroke_width=max(6, size // 10), stroke_fill=230)
+    sh_ = sh_.filter(ImageFilter.GaussianBlur(10))
+    im = Image.composite(Image.new("RGB", im.size, (0, 0, 0)), im, sh_)
+    d = ImageDraw.Draw(im)
+    for i, line in enumerate(lines):
+        fill = accent if (len(lines) > 1 and i == len(lines) - 1) else (255, 255, 255)  # son satır vurgu rengi
+        d.text((x0, y0 + i * lh), line, font=f, fill=fill, stroke_width=max(5, size // 13), stroke_fill=(0, 0, 0))
+    if len(lines) == 1:  # tek satır: altına vurgu çizgisi
+        w_ = d.textlength(lines[0], font=f)
+        d.rectangle([x0, y0 + lh + 6, x0 + w_ * 0.55, y0 + lh + 20], fill=accent)
+    if logo and Path(logo).exists():  # yazının karşı üst köşesinde küçük kanal rozeti
+        lg = Image.open(logo).convert("RGB").resize((96, 96), Image.LANCZOS)
+        mk = Image.new("L", (96, 96), 0)
+        ImageDraw.Draw(mk).ellipse([0, 0, 95, 95], fill=255)
+        ring = Image.new("L", (106, 106), 0)
+        ImageDraw.Draw(ring).ellipse([0, 0, 105, 105], fill=255)
+        bx = 1280 - 136 if side == "left" else 30
+        im.paste((255, 255, 255), (bx, 28), ring)
+        im.paste(lg, (bx + 5, 33), mk)
+    im.save(out, quality=94)
     return out
 
 
 def contact_sheet(images, out):
-    """Hakem modele tek görsel olarak göstermek için adayları yan yana dizer."""
-    ims = [Image.open(i).convert("RGB").resize((640, 360)) for i in images]
-    sheet = Image.new("RGB", (640 * len(ims), 400), "white")
+    """Hakem modele tek görsel: üstte adaylar (640x360), altta telefondaki gerçek boyutları (246x138)."""
+    ims = [Image.open(i).convert("RGB") for i in images]
+    sheet = Image.new("RGB", (640 * len(ims), 600), "white")
     d = ImageDraw.Draw(sheet)
     for i, im in enumerate(ims):
-        sheet.paste(im, (640 * i, 40))
+        sheet.paste(im.resize((640, 360)), (640 * i, 40))
+        sheet.paste(im.resize((246, 138)), (640 * i + 197, 430))
         d.text((640 * i + 10, 5), f"#{i+1}", font=_font(30), fill="black")
+    d.text((10, 405), "phone size:", font=_font(22), fill="black")
     sheet.save(out, quality=85)
     return out
+
+

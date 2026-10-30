@@ -56,7 +56,7 @@ from PIL import Image
 def fake_img(prompt, out, fq=None, led=None):
     out = __import__("pathlib").Path(out).with_suffix(".jpg"); Image.new("RGB", (1024, 1024), (20, 40, 90)).save(out); return out
 pipeline.gen_image = fake_img
-pipeline.make_thumbnails = lambda s, w, l: fake_img("", w / "thumb.jpg")
+pipeline.make_thumbnails = lambda s, w, l: (fake_img("", w / "thumb.jpg"), None)
 ups, caps = [], []
 def fake_upload(video, meta, thumb=None, uploader="youtube"):
     vid = f"VID{len(ups)}xxxxxx"[:11]; ups.append((vid, meta, media.duration(video))); return vid
