@@ -1604,6 +1604,9 @@ def ensure_playlist_covers():
             done[pid] = {"v": ver, "title": title}
             log(f"Oynatma listesi kapağı kondu: {title}")
         except Exception as e:
+            if "quota" in str(e).lower():  # günlük YouTube hakkı bitti: deneme sayılmaz, yarın tekrar
+                log("Oynatma listesi kapağı: YouTube günlük hakkı dolu, sonra denenecek")
+                break
             done[pid] = {"fail": done.get(pid, {}).get("fail", 0) + 1, "err": str(e)[:150]}
             log(f"Oynatma listesi kapağı konamadı ({title}): {str(e)[:200]}")
     save_json(PLAYLIST_COVERS, done)
