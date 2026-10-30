@@ -142,17 +142,28 @@ if os.getenv("SES_ORNEGI") and os.getenv("TELEGRAM_BOT_TOKEN"):
              "bir yolculuğa çıktı. Kurtarma ekibi çadırı bulduğunda, gördükleri şey herkesi şaşkına çevirdi. "
              "Çadır dışarıdan değil, içeriden kesilerek açılmıştı. Peki eksi otuz derecelik bir gecede, "
              "insanları sıcak çadırlarını terk etmeye ne zorlamış olabilirdi?")
-    for name, label in (("tr-TR-AhmetNeural", "Ahmet (erkek)"), ("tr-TR-EmelNeural", "Emel (kadın)")):
+    import ai
+    for name, label in (("gemini", "Gemini Charon (şu anki ses)"), ("tr-TR-AhmetNeural", "Ahmet (erkek)"),
+                        ("tr-TR-EmelNeural", "Emel (kadın)")):
+        if os.getenv("SES_ORNEGI") == "gemini" and name != "gemini":
+            continue
         try:
-            a = voice.synth_edge(metin, name, speed=0.95)
+            if name == "gemini":  # Cutaway anahtarıyla (Gölgedefter'in ses hakkı harcanmasın)
+                a = ai.gemini_tts(metin, voice="Charon", models=("gemini-2.5-flash-preview-tts", "gemini-3.1-flash-tts-preview"),
+                                  style="Türkçe, kısık ve sakin bir sesle, gizemli bir belgesel anlatıcısı gibi, acele etmeden oku",
+                                  tries=2)
+            else:
+                a = voice.synth_edge(metin, name, speed=0.95)
             wav = voice.write_wav(a, f"/tmp/{name}.wav")
             mp3 = f"/tmp/{name}.mp3"
             subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(wav), "-b:a", "128k", mp3], check=True)
             with open(mp3, "rb") as fh:
                 r = requests.post(f"https://api.telegram.org/bot{os.getenv('TELEGRAM_BOT_TOKEN')}/sendAudio",
                                   data={"chat_id": os.getenv("TELEGRAM_CHAT_ID"), "title": f"Gölgedefter örnek ses – {label}",
-                                        "caption": f"🎧 Örnek ses: Microsoft {label}. Dinle, beğenip beğenmediğini Claude'a yaz."},
+                                        "caption": f"🎧 Örnek ses: {label}. Üçünü karşılaştır, hangisini seçtiğini Claude'a yaz."},
                                   files={"audio": (f"{name}.mp3", fh, "audio/mpeg")}, timeout=120)
             print(f"::notice title=Örnek ses {label}::Telegram {r.status_code}")
+            if name == "gemini":
+                import time as _t; _t.sleep(2)
         except Exception as e:
             print(f"::error title=Örnek ses {label}::{str(e)[:200]}")
