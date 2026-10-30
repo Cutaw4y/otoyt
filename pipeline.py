@@ -484,8 +484,9 @@ def _tts(scenes, workdir):
         except Exception as e:  # Gemini sesi alınamazsa video yine çıksın: yedek ses
             fb = v["fallback"]
             log(f"Gemini sesi alınamadı ({str(e)[:120]}) → yedek ses ({fb.get('name')})")
-            return voice.narrate(scenes, workdir, voice=fb["name"], lang=fb["lang"], speed=fb.get("speed", 1.0),
-                                 sentence_gap=fb.get("sentence_gap", 0.28), scene_gap=fb.get("scene_gap", 0.45))
+            return voice.narrate(scenes, workdir, voice=fb["name"], lang=fb.get("lang", "a"), speed=fb.get("speed", 1.0),
+                                 sentence_gap=fb.get("sentence_gap", 0.28), scene_gap=fb.get("scene_gap", 0.45),
+                                 synth=voice.synth_edge if fb.get("provider") == "edge" else None)
     if v.get("provider") == "gemini":
         return voice.narrate_gemini(scenes, workdir, voice=v.get("name", "Charon"), style=v.get("style"),
                                     models=v.get("models"), scene_gap=v.get("scene_gap", 0.45),

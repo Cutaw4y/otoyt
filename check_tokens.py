@@ -124,3 +124,12 @@ if release.enabled():
         print(f"::notice title=Paket teslimi::release açıldı ve dosya yüklendi; siliniyor → {release.remove(rid, 'paket-test-kontrol')}")
     except Exception as e:
         print(f"::error title=Paket teslimi::{str(e)[:200]}")
+
+
+# Ücretsiz yedek Türkçe ses (Edge) testi
+try:
+    import voice
+    a = voice.synth_edge("Anlatılana göre o gece rüzgâr hiç durmadı.", "tr-TR-AhmetNeural", speed=0.95)
+    print(f"::notice title=Yedek Türkçe ses (Edge)::çalışıyor, {a.size / voice.SR:.1f} sn ses üretildi")
+except Exception as e:
+    print(f"::error title=Yedek Türkçe ses (Edge)::{str(e)[:200]}")

@@ -159,6 +159,12 @@ voice:
   scene_gap: 0.6
   models: ["gemini-3.1-flash-tts-preview", "gemini-2.5-flash-preview-tts"]   # ikisi de ücretsiz katmanda çalışıyor (test edildi)
   lang: "tr"
+  fallback:                    # Gemini'nin ücretsiz günlük ses hakkı biterse: ücretsiz Microsoft sinir ağı Türkçe sesi
+    provider: "edge"
+    name: "tr-TR-AhmetNeural"
+    speed: 0.95                # belgesel temposu
+    sentence_gap: 0.35
+    scene_gap: 0.6
 
 # ======================= KURGU =======================
 use_intro: true

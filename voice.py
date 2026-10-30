@@ -50,6 +50,29 @@ def synth_sentence(text, voice, lang, speed):
     return np.concatenate(chunks)
 
 
+def synth_edge(text, voice, lang=None, speed=1.0):
+    """Ücretsiz yedek ses (Microsoft Edge sinir ağı sesleri, anahtar gerektirmez). Gemini ses hakkı
+    bittiğinde Türkçe kanal için kullanılır. lang kullanılmaz; speed → konuşma hızı yüzdesi."""
+    import asyncio, subprocess, tempfile
+    import edge_tts
+    rate = f"{int(round((speed - 1.0) * 100)):+d}%"
+    mp3 = Path(tempfile.mkstemp(suffix=".mp3")[1])
+    for attempt in range(3):
+        try:
+            asyncio.run(edge_tts.Communicate(text, voice, rate=rate).save(str(mp3)))
+            if mp3.stat().st_size > 1000:
+                break
+        except Exception:
+            if attempt == 2:
+                raise
+            import time
+            time.sleep(5 * (attempt + 1))
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-i", str(mp3), "-f", "f32le", "-ac", "1", "-ar", str(SR), "-"],
+                         capture_output=True, check=True).stdout
+    mp3.unlink(missing_ok=True)
+    return np.frombuffer(raw, dtype=np.float32).copy()
+
+
 def _trim(a, thr=0.01, pad=0.04):
     """Cümle başı/sonundaki sessizliği kırpar (daha akıcı anlatım, daha doğru altyazı)."""
     idx = np.where(np.abs(a) > thr)[0]
