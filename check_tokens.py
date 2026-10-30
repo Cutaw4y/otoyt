@@ -167,3 +167,18 @@ if os.getenv("SES_ORNEGI") and os.getenv("TELEGRAM_BOT_TOKEN"):
                 import time as _t; _t.sleep(2)
         except Exception as e:
             print(f"::error title=Örnek ses {label}::{str(e)[:200]}")
+
+
+# Ücretli katman testi: Google aramalı yanıt (ücretsiz katmanda 429 veriyordu) ve Pro model
+pk = os.getenv("GEMINI_PAID_API_KEY")
+if pk:
+    for model, search in (("gemini-flash-latest", True), ("gemini-pro-latest", False)):
+        try:
+            body = {"contents": [{"parts": [{"text": "Türkiye'nin başkenti neresi? Tek kelime."}]}]}
+            if search:
+                body["tools"] = [{"google_search": {}}]
+            r = requests.post(f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
+                              headers={"x-goog-api-key": pk}, json=body, timeout=120)
+            print(f"::notice title=Ücretli test {model}{' +arama' if search else ''}::HTTP {r.status_code} {r.text[:160].replace(chr(10), ' ')}")
+        except Exception as e:
+            print(f"::error title=Ücretli test {model}::{str(e)[:150]}")
