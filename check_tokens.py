@@ -93,3 +93,21 @@ if drive.enabled():
         print(f"::error title=Google Drive::{str(e)[:200]}")
 else:
     print("::warning title=Google Drive::GDRIVE_* anahtarları yok")
+
+
+# Gölgedefter Instagram bağlantısı (hiçbir şey paylaşmaz, sadece hesabı okur)
+tok, iid = os.getenv("GD_IG_ACCESS_TOKEN"), os.getenv("GD_IG_USER_ID")
+if not (tok and iid):
+    print("::warning title=Instagram (golge.defter)::anahtar yok")
+else:
+    try:
+        base = "https://graph.instagram.com" if tok.startswith("IG") else "https://graph.facebook.com"
+        r = requests.get(f"{base}/{'me' if tok.startswith('IG') else iid}",
+                         params={"fields": "username"}, headers={"Authorization": f"OAuth {tok}"}, timeout=30)
+        j = r.json()
+        if r.ok:
+            print(f"::notice title=Instagram (golge.defter)::bağlı hesap = @{j.get('username')}")
+        else:
+            print(f"::error title=Instagram (golge.defter)::{j.get('error', {}).get('message', r.text)[:200]}")
+    except Exception as e:
+        print(f"::error title=Instagram (golge.defter)::{str(e)[:200]}")

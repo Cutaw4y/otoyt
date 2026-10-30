@@ -18,4 +18,6 @@ jobs:
           GDRIVE_CLIENT_ID: ${{ secrets.GDRIVE_CLIENT_ID }}
           GDRIVE_CLIENT_SECRET: ${{ secrets.GDRIVE_CLIENT_SECRET }}
           GDRIVE_REFRESH_TOKEN: ${{ secrets.GDRIVE_REFRESH_TOKEN }}
+          GD_IG_ACCESS_TOKEN: ${{ secrets.GD_IG_ACCESS_TOKEN }}
+          GD_IG_USER_ID: ${{ secrets.GD_IG_USER_ID }}
         run: python check_tokens.py
