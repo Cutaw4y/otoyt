@@ -1,2 +1,3 @@
-[12:17:13] Başladı (test modu: False, yayın: manual)
-[12:17:14] Kanal doğrulandı: GölgeDefter
+[12:48:10] Başladı (test modu: False, yayın: manual)
+[12:48:11] Kanal doğrulandı: GölgeDefter
+[12:48:11] 5mnPjthOTDY: bu kanalda değil ya da okunamadı: <HttpError 404 when requesting https://youtube.googleapis.com/youtube/v3/captions?part=snippet&videoId=5mnPjthOTDY&alt=j
