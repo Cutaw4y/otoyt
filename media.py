@@ -437,3 +437,44 @@ def contact_sheet(images, out):
     return out
 
 
+
+
+def playlist_cover(title, out, logo=None, accent=(255, 168, 60), size=1280, bg_color=(14, 17, 24)):
+    """Oynatma listesi kapağı (kare). YouTube listede 16:9 kırpabildiği için her şey ortadaki 16:9 bantta:
+    koyu zemin + vurgu rengi ışıltı, üstte logo, altında büyük liste adı."""
+    band_top = (size - size * 9 // 16) // 2
+    band_h = size * 9 // 16
+    im = Image.new("RGB", (size, size), bg_color)
+    glow = Image.new("RGB", (size, size), tuple(accent))
+    mask = Image.new("L", (size, size), 0)
+    ImageDraw.Draw(mask).ellipse((size * 0.05, size * 0.15, size * 0.95, size * 0.85), fill=70)
+    im = Image.composite(glow, im, mask.filter(ImageFilter.GaussianBlur(size // 6))).convert("RGBA")
+    d = ImageDraw.Draw(im)
+    y = band_top + int(band_h * 0.08)
+    if logo and Path(logo).exists():
+        lg = Image.open(logo).convert("RGBA")
+        lw = int(band_h * 0.26)
+        lg = lg.resize((lw, int(lg.height * lw / lg.width)))
+        im.alpha_composite(lg, ((size - lw) // 2, y))
+        y += lg.height + int(band_h * 0.05)
+    bar_w = int(size * 0.14)
+    d.rectangle(((size - bar_w) // 2, y, (size + bar_w) // 2, y + 10), fill=tuple(accent) + (255,))
+    y += int(band_h * 0.06)
+    text = up(title)
+    room = band_top + band_h - int(band_h * 0.06) - y
+    fs = int(size * 0.095)
+    while fs > 36:
+        f = _font(fs)
+        lines = _wrap(d, text, f, size * 0.86)
+        if int(fs * 1.12) * len(lines) <= room and max(d.textlength(l, font=f) for l in lines) <= size * 0.9:
+            break
+        fs -= 4
+    lh = int(fs * 1.12)
+    y += (room - lh * len(lines)) // 2
+    for ln in lines:
+        w = d.textlength(ln, font=f)
+        d.text(((size - w) / 2, y), ln, font=f, fill=(255, 255, 255, 255),
+               stroke_width=max(2, fs // 22), stroke_fill=(0, 0, 0, 255))
+        y += lh
+    im.convert("RGB").save(out, quality=92)
+    return out

@@ -32,6 +32,6 @@ jobs:
       - name: Kaydet
         run: |
           git config user.name "otoyt-bot"; git config user.email "otoyt@users.noreply.github.com"
-          git add -A assets/branding_done.json localizations_cleared.json data/golgedefter 2>/dev/null || true
+          git add -A assets/branding_done.json localizations_cleared.json playlist_covers.json data/golgedefter 2>/dev/null || true
           git diff --cached --quiet && exit 0
           git commit -m "kanal ayarları" && { git stash -u -q || true; } && for i in 1 2 3; do git pull --rebase -X theirs -q && git push && exit 0; sleep 5; done

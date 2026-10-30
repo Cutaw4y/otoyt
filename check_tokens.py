@@ -50,6 +50,29 @@ for model in ("gemini-3.1-flash-tts-preview", "gemini-2.5-flash-preview-tts", "g
         print(f"::error title=TTS {model}::{str(e)[:200]}")
 
 
+# Son videoların altyazı izleri ve durumları (Cutaway)
+if os.getenv("YT_REFRESH_TOKEN"):
+    try:
+        from google.oauth2.credentials import Credentials
+        from googleapiclient.discovery import build
+        c = Credentials(None, refresh_token=os.getenv("YT_REFRESH_TOKEN"), client_id=cid, client_secret=sec,
+                        token_uri="https://oauth2.googleapis.com/token")
+        yt = build("youtube", "v3", credentials=c, cache_discovery=False)
+        up = yt.channels().list(part="contentDetails", mine=True).execute()["items"][0][
+            "contentDetails"]["relatedPlaylists"]["uploads"]
+        ids = [i["contentDetails"]["videoId"] for i in yt.playlistItems().list(
+            part="contentDetails", playlistId=up, maxResults=5).execute().get("items", [])]
+        for v in yt.videos().list(part="snippet,status,processingDetails", id=",".join(ids)).execute()["items"]:
+            caps = yt.captions().list(part="snippet", videoId=v["id"]).execute().get("items", [])
+            tr = "; ".join(f"{x['snippet']['language']}/{x['snippet'].get('trackKind')}/"
+                           f"{x['snippet'].get('status')}/draft={x['snippet'].get('isDraft')}" for x in caps)
+            print(f"::notice title=Video {v['id']}::{v['snippet']['title'][:50]} | "
+                  f"{v['status']['privacyStatus']} {v['status'].get('publishAt', '')} | "
+                  f"işleme={v.get('processingDetails', {}).get('processingStatus')} | altyazı: {tr or 'YOK'}")
+    except Exception as e:
+        print(f"::error title=Video kontrol::{str(e)[:200]}")
+
+
 # Google Drive (telefondan yükleme paketleri)
 import drive
 if drive.enabled():

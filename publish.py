@@ -438,3 +438,20 @@ def finish_video(video, meta, thumb=None):
         except Exception as e:
             notes.append(f"küçük resim: {str(e)[:120]}")
     return notes
+
+
+def set_playlist_image(playlist_id, path):
+    """Oynatma listesine özel kare kapak (playlistImages API). Varsa günceller."""
+    from googleapiclient.http import MediaFileUpload
+    yt = _yt()
+    media = MediaFileUpload(str(path), mimetype="image/jpeg")
+    existing = []
+    try:
+        existing = yt.playlistImages().list(part="id,snippet", parent=playlist_id).execute().get("items", [])
+    except Exception:
+        pass
+    body = {"snippet": {"playlistId": playlist_id, "type": "hero", "width": 1280, "height": 1280}}
+    if existing:
+        body["id"] = existing[0]["id"]
+        return yt.playlistImages().update(part="snippet", body=body, media_body=media).execute()
+    return yt.playlistImages().insert(part="snippet", body=body, media_body=media).execute()

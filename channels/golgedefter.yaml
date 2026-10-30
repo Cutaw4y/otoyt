@@ -105,6 +105,7 @@ thumbnail_rules: >
   No gore, no blood, never depict prophets or holy figures' faces. Thumbnail text in Turkish.
 thumbnail_style: "dark cinematic mystery, one striking subject, strong rim light, fog, high contrast, amber and deep shadow"
 thumbnail_accent: [232, 158, 68]
+cover_bg: [16, 12, 10]           # oynatma listesi kapağı zemini
 caption_theme:            # bölüm kartı ve bilgi etiketleri: kehribar rengi (ASS &HAABBGGRR)
   chap_num: "&H00449EE8"
   chap_box: "&H000F0B0D"

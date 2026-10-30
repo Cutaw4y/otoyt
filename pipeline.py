@@ -1307,6 +1307,32 @@ def finish_manual_uploads():
     save_json(MANUAL_PENDING, keep)
 
 
+PLAYLIST_COVERS = DATA / "playlist_covers.json"
+
+
+def ensure_playlist_covers():
+    """Her oynatma listesine markalı kare kapak koyar (bir kez; tasarım sürümü değişirse yeniler)."""
+    if DRY_RUN or not os.getenv("YT_REFRESH_TOKEN") or not PLAYLISTS.exists():
+        return
+    ver = 1
+    done = load_json(PLAYLIST_COVERS, {}) if PLAYLIST_COVERS.exists() else {}
+    for title, pid in load_json(PLAYLISTS, {}).items():
+        if done.get(pid, {}).get("v") == ver or done.get(pid, {}).get("fail", 0) >= 3:
+            continue
+        out = Path(tempfile.mkdtemp()) / "cover.jpg"
+        try:
+            media.playlist_cover(title, out, logo=ASSETS / CFG.get("logo_file", "cutaway_logo.png"),
+                                 accent=tuple(CFG.get("thumbnail_accent", (255, 168, 60))),
+                                 bg_color=tuple(CFG.get("cover_bg", (14, 17, 24))))
+            publish.set_playlist_image(pid, out)
+            done[pid] = {"v": ver, "title": title}
+            log(f"Oynatma listesi kapağı kondu: {title}")
+        except Exception as e:
+            done[pid] = {"fail": done.get(pid, {}).get("fail", 0) + 1, "err": str(e)[:150]}
+            log(f"Oynatma listesi kapağı konamadı ({title}): {str(e)[:200]}")
+    save_json(PLAYLIST_COVERS, done)
+
+
 def add_to_pillar_playlist_by_title(video_id, title):
     cache = load_json(PLAYLISTS, {}) if PLAYLISTS.exists() else {}
     try:
@@ -1483,6 +1509,7 @@ def run_once():
     log(f"Analitik: {report['n']} video ölçüldü, sütun puanları: {report['pillar_scores']}")
     finish_manual_uploads()
     post_due_comments()
+    ensure_playlist_covers()
     maybe_swap_thumbnails(history)
     idea, script = produce_script(history, report)
     if script is None:
@@ -1683,11 +1710,13 @@ if __name__ == "__main__":
         check_channel()
         finish_manual_uploads()
         post_due_comments()
+        ensure_playlist_covers()
         sys.exit(0)
     if os.getenv("BRANDING_ONLY"):  # sadece kanal açıklaması/afiş/anahtar kelimeler (video üretmez)
         check_channel()
         ensure_branding()
         clear_old_localizations()
+        ensure_playlist_covers()
         log("Kanal ayarları tamam.")
         sys.exit(0)
     missing = [k for k in CFG.get("require_env", []) if not os.getenv(k)]
