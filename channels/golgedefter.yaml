@@ -137,10 +137,10 @@ env_map:
   YT_REFRESH_TOKEN: "YT2_REFRESH_TOKEN"
   GEMINI_API_KEY: "GEMINI_PAID_API_KEY"
 require_env: ["YT2_REFRESH_TOKEN", "GEMINI_PAID_API_KEY"]   # eksikse video YANLIŞ kanala gitmesin diye çalışma atlanır
-paid_tier: true
+paid_tier: false               # şimdilik ücretsiz katman (ayrı projenin kendi kotası); ödeme açılınca true
 
 # ======================= MODELLER (ücretli Gemini anahtarı) =======================
-text_models: ["gemini-pro-latest", "gemini-flash-latest"]
+text_models: ["gemini-flash-latest", "gemini-flash-lite-latest"]   # ücretli katmanda: gemini-pro-latest başa
 judge_models: ["gemini-flash-latest", "gemini-flash-lite-latest"]
 factcheck_models: ["gemini-flash-latest", "gemini-flash-lite-latest"]
 

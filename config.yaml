@@ -101,10 +101,9 @@ made_for_kids: false
 declare_synthetic: true        # AI içerik beyanı (YouTube politikası)
 
 # ======================= MODELLER =======================
-# Ücretli anahtar (GEMINI_PAID_API_KEY, Ultra'nın aylık kredisi) GitHub'a eklenince otomatik ona geçilir.
-env_map:
-  GEMINI_API_KEY: "GEMINI_PAID_API_KEY"
-paid_tier: true
+# Cutaway kendi ücretsiz anahtarını (GEMINI_API_KEY) kullanır. GEMINI_PAID_API_KEY Gölgedefter'e aittir.
+# Ücretli katmana geçilirse: env_map ile GEMINI_API_KEY ← GEMINI_PAID_API_KEY ve paid_tier: true
+paid_tier: false
 paid_text_models: ["gemini-pro-latest", "gemini-flash-latest"]
 paid_judge_models: ["gemini-flash-latest", "gemini-flash-lite-latest"]
 # Gemini ücretsiz katman. Sırayla denenir: ilki olmazsa (kota/hata) sonrakine geçer.
