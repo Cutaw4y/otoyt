@@ -11,7 +11,7 @@ channel_brief: >
   people as main subjects, no investment/medical/legal advice, no politics,
   no current news (content must stay true for years).
 audience: "curious adults 18-55 in the US, UK, Canada, Australia"
-tone: "calm documentary narrator, clear, curious, occasional dry humor"
+tone: "a friendly, calm storyteller explaining to a smart friend who knows nothing about the topic; simple everyday words, clear, curious, occasional dry humor"
 language: "English"
 language_code: "en"
 
@@ -154,6 +154,15 @@ min_quality_score: 7           # 5 editör kriterinin hepsi en az bu puan (hedef
 min_quality_floor: 0           # 0 = hedef tutmasa da en iyi senaryo HER ZAMAN yayınlanır (videosuz gün olmaz)
 max_topic_attempts: 5          # baraj/bilgi kontrolü geçilemezse yeni konuyla tekrar dene
 max_rewrites: 2
+# ABD izleyicisi: önce ABD birimleri + herkesin gözünde canlanan karşılaştırma
+units_rule: >
+  The audience is American: use Fahrenheit, feet, miles, pounds and gallons first (you may add the metric
+  value once after it). Never use Celsius or metric alone. Always pair a number with a picture
+  ("two thousand seven hundred degrees Fahrenheit, about three times hotter than a pizza oven").
+plain_rules: >
+  Explain technical words as if to a friend over coffee: "slag, the stony waste that floats on top
+  of the melted iron like foam on soup". Prefer "melted" over "molten", "heat-proof bricks" over
+  "refractory" (or explain it), "mix" over "mixture" when the meaning is the same.
 max_factcheck_rounds: 2
 require_web_factcheck: true    # doğrulama çalışmazsa video ÜRETİLMEZ
 fallback_broll: "industrial machinery close up"

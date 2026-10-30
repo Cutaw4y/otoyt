@@ -177,6 +177,15 @@ min_quality_score: 7
 min_quality_floor: 0
 max_topic_attempts: 5
 max_rewrites: 2
+units_rule: >
+  Metrik birimler kullan (metre, kilometre, kilogram, derece). Her sayıyı göz önünde canlanan bir
+  karşılaştırmayla ver ("yaklaşık kırk metre, on katlı bir apartman kadar").
+plain_rules: >
+  Türkçe ve sade yaz: Osmanlıca, Arapça ya da akademik kelimeleri (ör. "rivayet", "kavim", "ahir zaman",
+  "tefsir", "hadis", "sur'a üflenmesi", "megalitik", "nekropol") ilk geçtiği yerde günlük dille açıkla:
+  "hadis, yani Peygamberimizin sözleri olarak aktarılan anlatımlar". Uzun, iç içe cümle kurma; devrik ve
+  süslü cümle yok. Her yer, kişi ve dönem için izleyicinin aklında resim oluşsun: "Mezopotamya, bugünkü
+  Irak topraklarında, iki büyük nehrin arasındaki bölge".
 max_factcheck_rounds: 2
 require_web_factcheck: true
 fallback_broll: "foggy forest night"

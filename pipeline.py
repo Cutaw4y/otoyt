@@ -205,11 +205,22 @@ SCRIPT_SCHEMA = (
     "Use visual=diagram whenever a mechanism, inside view, process, comparison or scale must be SHOWN; "
     "use footage for real-world context. At least {ratio}% of scenes must be diagram. "
     "Write narration for the ear: spell out numbers and units in words (\"about forty percent\"), no symbols, "
-    "no abbreviations, no parentheses.")
+    "no abbreviations, no parentheses. "
+    "PLAIN LANGUAGE (most important rule): write so that ANYONE understands every sentence on first listen, "
+    "even a 12-year-old with no science or history background. Short sentences (mostly under 15 words), "
+    "everyday words. Never assume the viewer knows a term, unit, place, person or concept: the first time it "
+    "appears, explain it in the same sentence in simple words (e.g. \"refractory bricks, special bricks that "
+    "don't melt even in fire\"), or replace it with a simple word. Avoid jargon that isn't needed at all. "
+    "Every big number, temperature, size or speed gets an everyday comparison the viewer can picture "
+    "(\"hot enough to melt a car in seconds\", \"as tall as a ten-storey building\"). {units} "
+    "Each scene: what it is → why it matters → a picture-in-your-head comparison. "
+    "Every image_prompt and broll_query must show the CONCRETE thing named in that scene's narration "
+    "(the real object, place or action), never a generic or mood-only picture.")
 
 
 def _schema():
-    return SCRIPT_SCHEMA.replace("{ratio}", str(int(CFG["min_diagram_ratio"] * 100)))
+    return (SCRIPT_SCHEMA.replace("{ratio}", str(int(CFG["min_diagram_ratio"] * 100)))
+            .replace("{units}", CFG.get("units_rule", "")))
 
 
 def write_script(idea):
@@ -260,6 +271,54 @@ def revise_script(script, notes):
         "Fix every problem. Replace wrong facts with the correct ones given; remove or soften anything "
         f"uncertain. Keep the same structure and length. {_schema()}",
         required=("title", "description", "tags", "thumbnail_concepts", "scenes"))
+
+
+PLAIN_EDITOR = (
+    "You are the final 'make it crystal clear' editor of a YouTube channel for the WIDEST possible audience: "
+    "people with no science or history background, tired, half-listening, maybe with weak reading skills. "
+    "If any sentence makes them think 'what does that mean?', they leave. Rewrite the narration so that "
+    "EVERYONE understands EVERY sentence the first time they hear it.\n"
+    "RULES:\n"
+    "1. Every term, unit, name, place, material or concept is explained the FIRST time it appears, in the same "
+    "or the next sentence, with everyday words (\"the hearth, the very bottom of the furnace where the melted "
+    "iron collects\"). If a term is not needed, replace it with a simple word.\n"
+    "2. Short sentences, mostly 8-15 words. One idea per sentence. Concrete, everyday words. No abstract or "
+    "academic phrasing, no passive voice where active works.\n"
+    "3. Every number, temperature, size, weight, speed or time gets a comparison anyone can picture "
+    "(\"about three thousand degrees, hotter than lava from a volcano\"). {units}\n"
+    "4. STORY FLOW: the whole narration must read like ONE continuous story told by a friend, not separate "
+    "facts. Each scene must connect to the previous one with a clear link (so, because, but, that's why, "
+    "which means, and here is the problem). The viewer must always know WHY they are hearing this now. "
+    "Before a new chapter, say in one simple sentence what question we answer next.\n"
+    "5. Visual match: each scene's image_prompt and broll_query must show EXACTLY the concrete thing the "
+    "narration of that scene talks about. If you change what a scene says, update its visuals to match.\n"
+    "6. Keep all facts, numbers and claims the same (do not add new facts or make anything up), keep the "
+    "same number of scenes in the same order, keep the hook strong and the length about the same "
+    "(explanations can add a few words). Keep title, description, tags, chapters, shorts and other fields "
+    "unless a field contradicts the new narration."
+)
+
+
+def plain_pass(script, extra=""):
+    """Anlatımı herkesin anlayacağı dile çevirir: terim açıklaması, kısa cümle, günlük karşılaştırma,
+    sahneler arası bağ, görsel-anlatım uyumu. Başarısız olursa senaryo aynen kalır."""
+    try:
+        r = llm_json(
+            PLAIN_EDITOR.replace("{units}", CFG.get("units_rule", "")) + "\n" + CFG.get("plain_rules", "")
+            + f"\nWrite in {CFG['language']}.",
+            (f"Specific problems an editor found (fix all of them):\n{extra}\n\n" if extra else "")
+            + f"Script JSON:\n{json.dumps(script, ensure_ascii=False)}\n\n{_schema()}",
+            required=("title", "description", "tags", "thumbnail_concepts", "scenes"))
+        if len(r.get("scenes", [])) != len(script["scenes"]):
+            log("Sadeleştirme sahne sayısını bozdu → eski metin kalıyor")
+            return script
+        for k in script:  # modelin unuttuğu alanları koru
+            r.setdefault(k, script[k])
+        log(f"Anlatım sadeleştirildi ({word_count(script)} → {word_count(r)} kelime)")
+        return r
+    except Exception as e:
+        log(f"Sadeleştirme yapılamadı: {str(e)[:150]}")
+        return script
 
 
 # ---------------------------------------------------------------- 3. bilgi doğrulama (Google aramalı)
@@ -371,13 +430,20 @@ def quality_gate(script):
         "You are a strict senior YouTube editor. Score honestly; average AI scripts deserve 5-6.",
         f"Audience: {CFG['audience']}\nTitle: {script['title']}\nScript:\n{text}\n\n"
         "Score 1-10: originality, hook (first 15 seconds), clarity (would a curious non-expert truly "
-        "understand?), value_density, audience_fit. Also write 'problems_tr': the same problems summarized in "
-        "one or two short Turkish sentences. Return JSON: {\"originality\":0,\"hook\":0,\"clarity\":0,"
+        "understand?), simplicity (could a 12-year-old with no background follow EVERY sentence on first "
+        "listen? any term, unit, name or concept used without a plain explanation, any long or abstract "
+        "sentence, any big number without an everyday comparison lowers it hard), flow (does it feel like ONE "
+        "connected story where each scene clearly follows from the last, or like separate facts glued together?), "
+        "value_density, audience_fit. "
+        "In 'problems', list EVERY unexplained term or hard sentence by quoting it, with the simpler fix. "
+        "Also write 'problems_tr': the same problems summarized in one or two short Turkish sentences. "
+        "Return JSON: {\"originality\":0,\"hook\":0,\"clarity\":0,\"simplicity\":0,\"flow\":0,"
         "\"value_density\":0,\"audience_fit\":0,\"problems\":[\"...\"],\"problems_tr\":\"...\"}",
-        required=("problems",), judge=True)
-    keys = ("originality", "hook", "clarity", "value_density", "audience_fit")
+        required=("problems", "simplicity", "flow", "clarity"), judge=True)
+    keys = ("originality", "hook", "clarity", "simplicity", "flow", "value_density", "audience_fit")
     scores = [float(r.get(k, 0)) for k in keys]
-    return min(scores) >= CFG["min_quality_score"], r
+    plain_ok = float(r.get("simplicity", 0)) >= 8 and float(r.get("flow", 0)) >= 8  # anlaşılırlık için baraj daha yüksek
+    return min(scores) >= CFG["min_quality_score"] and plain_ok, r
 
 
 # ---------------------------------------------------------------- 5. ses (Kokoro, ücretsiz)
@@ -596,6 +662,34 @@ def _clip_start(clip, frames):
         return 0.0
 
 
+_CLIP_CHECKS = 0
+
+
+def clip_matches(clip, sc, workdir):
+    """Stok videonun ortasından bir kare alıp yapay zekâya sorar: anlatılanla gerçekten ilgili mi?
+    İlgisiz görüntü izleyiciyi kaçırır; emin olunamazsa (hata) kabul edilir."""
+    global _CLIP_CHECKS
+    if not CFG.get("check_footage", True) or _CLIP_CHECKS >= CFG.get("max_footage_checks", 70):
+        return True  # günlük ücretsiz kota senaryoya kalsın
+    _CLIP_CHECKS += 1
+    try:
+        fr = Path(workdir) / (Path(clip).stem + "_chk.jpg")
+        d = media.duration(clip)
+        media.sh(["ffmpeg", "-y", "-ss", f"{d / 2:.2f}", "-i", clip, "-frames:v", "1", "-vf", "scale=480:-2", fr])
+        r = llm_json("You check stock footage for an explainer video. Be strict: generic or unrelated = no.",
+                     f"Narration of this scene: {sc['narration']}\nSearch query used: {sc.get('broll_query', '')}\n"
+                     "Would a viewer immediately see that this frame shows the thing being talked about "
+                     "(same object, place, process or a very close real-world example)? "
+                     'Return JSON: {"match": true or false, "seen": "what the frame shows, 5 words"}',
+                     images=[fr], required=("match",), judge=True)
+        ok = bool(r.get("match"))
+        if not ok:
+            log(f"   ilgisiz görüntü elendi: {r.get('seen', '')}")
+        return ok
+    except Exception:
+        return True
+
+
 def build_scene_videos(script, workdir, ledger):
     """Her sahneyi ~4-5 sn'lik çekimlere böler (profesyonel tempo), sahne videosunu döndürür."""
     style = CFG["visual_style"]
@@ -627,9 +721,12 @@ def build_scene_videos(script, workdir, ledger):
             use_still = img is not None and (k % 2 == 0 or i < hook_n)
             clip = None
             if not use_still:
-                clip = fetch_stock(q, workdir / f"raw_{i:02d}_{k:02d}.mp4", ledger) \
-                    or (fetch_stock(CFG["fallback_broll"], workdir / f"raw_{i:02d}_{k:02d}.mp4", ledger)
-                        if img is None else None)
+                # konuyla ilgili stok video: 3 aday dene; genel "yedek" görüntü kullanma, yoksa AI görsel
+                for t in range(3):
+                    clip = fetch_stock(q, workdir / f"raw_{i:02d}_{k:02d}_{t}.mp4", ledger)
+                    if not clip or clip_matches(clip, sc, workdir):
+                        break
+                    clip = None
             if clip:
                 media.render_footage(clip, fr, out, start=_clip_start(clip, fr))
             else:
@@ -716,8 +813,10 @@ def translate_lines(lines, lang_name, chunk=30):
         for _ in range(3):
             try:
                 data = llm_json(
-                    f"You translate video subtitles into natural, fluent {lang_name}. Keep each line short and "
-                    "readable; keep technical terms accurate. Every numbered line gets its own translation.",
+                    f"You translate video subtitles into natural, fluent, SIMPLE {lang_name} that anyone understands "
+                    "on first read (everyday words, no jargon, no academic or archaic words; if the original "
+                    "explains a term, keep the explanation). Keep each line short and readable; keep facts "
+                    "accurate; convert nothing that changes meaning. Every numbered line gets its own translation.",
                     f"Translate every value into {lang_name}. Keep exactly the same keys 1..{len(part)}.\n"
                     + json.dumps({"lines": src}, ensure_ascii=False) + '\nReturn JSON: {"lines":{"1":"...",...}}',
                     required=("lines",), judge=True)
@@ -952,7 +1051,7 @@ def maybe_swap_thumbnails(history):
 
 
 # ---------------------------------------------------------------- senaryo üretim döngüsü
-QKEYS = ("originality", "hook", "clarity", "value_density", "audience_fit")
+QKEYS = ("originality", "hook", "clarity", "simplicity", "flow", "value_density", "audience_fit")
 
 
 def _score(review):
@@ -1388,6 +1487,7 @@ def produce_script(history, report):
         log(f"Konu ({topic_try+1}): {idea['title']}  [{idea['pillar']}]")
         script = ensure_length(write_script(idea))
         log(f"Senaryo yazıldı: {len(script['scenes'])} sahne, {word_count(script)} kelime")
+        script = plain_pass(script)
         script, facts_ok = verify_loop(script)
         if not facts_ok:
             log("Bilgi doğrulamadan geçemedi → yeni konu")
@@ -1409,7 +1509,10 @@ def produce_script(history, report):
                 notes += ("\n- Rewrite the FIRST scene: open with one concrete, surprising, specific fact or "
                           "question nobody expects (no clichés, no 'did you know', no 'imagine'). "
                           "The first sentence must make the viewer need the answer.")
-            revised = ensure_length(revise_script(script, notes))
+            if float(review.get("simplicity", 10) or 10) < 8 or float(review.get("flow", 10) or 10) < 8:
+                revised = ensure_length(plain_pass(revise_script(script, notes), notes))
+            else:
+                revised = ensure_length(revise_script(script, notes))
             revised, facts_ok = verify_loop(revised)
             if not facts_ok:
                 log("Revizyon bilgi hatası getirdi → önceki sürümde kalınıyor")

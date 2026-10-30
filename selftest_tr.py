@@ -22,7 +22,7 @@ pipeline.PENDING_COMMENTS = W / "pcm.json"; pipeline.PLAYLISTS = W / "pl.json"; 
 pipeline.MANUAL_DIR = W / "manual"; pipeline.MANUAL_PENDING = W / "mp.json"
 pipeline.CFG["branding"] = {}; pipeline.DRY_RUN = True; pipeline.CFG["target_words"] = 120
 sent = []
-pipeline.notify = lambda t: (sent.append(t), print("  📨", t.splitlines()[0]))
+pipeline.notify = lambda t, **kw: (sent.append(t), print("  📨", t.splitlines()[0]))
 chap = {0: "Dağdaki Çadır", 4: "Kayıtlar Ne Diyor", 8: "Açıklamalar", 11: "Hâlâ Bilinmeyen"}
 scenes = [{"narration": f"Anlatılana göre {i}. gece rüzgâr şiddetliydi. Çadırın içi ışıksızdı ve sessizdi.",
            "visual": "diagram" if i % 2 == 0 else "footage", "broll_query": "snow mountain night", "image_prompt": "p",
@@ -39,9 +39,9 @@ pipeline.write_script = lambda idea: json.loads(json.dumps(script))
 pipeline.verify_loop = lambda s: (s, True)
 pipeline.quality_gate = lambda s: (True, {})
 def fake_llm(system, user, required=(), images=None, judge=False):
-    if "Translate each line" in user:
+    if "Translate every value" in user:
         lines = json.loads(user.split("\n", 1)[1].rsplit("\nReturn JSON", 1)[0])["lines"]
-        return {"lines": ["EN: " + l for l in lines]}
+        return {"lines": {k: "EN: " + v for k, v in lines.items()}}
     if "short_titles" in user:
         d = json.loads(user.split("\nReturn JSON")[0])
         return {"title": "Dyatlov Pass: Who Cut the Tent?", "description": "Desc", "short_titles": ["EN " + t for t in d["short_titles"]],

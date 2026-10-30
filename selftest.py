@@ -20,7 +20,7 @@ pipeline.DATA = pipeline.ROOT; pipeline.PENDING_CAPS = pipeline.ROOT / "pc"; pip
 pipeline.PLAYLISTS = pipeline.ROOT / "pl.json"; pipeline.THUMB_ALT = pipeline.ROOT / "ta"
 pipeline.MANUAL_DIR = pipeline.ROOT / "manual"; pipeline.MANUAL_PENDING = pipeline.ROOT / "mp.json"
 pipeline.CFG["publish_mode"] = "scheduled"; pipeline.CFG["branding"] = {}; pipeline.DRY_RUN = True; pipeline.CFG["target_words"] = 150
-pipeline.notify = lambda t: print("  📨", t.splitlines()[0])
+pipeline.notify = lambda t, **kw: print("  📨", t.splitlines()[0])
 # --- içerik
 scenes = [{"narration": f"This is sentence number {i} about jet engines. It explains part {i} clearly.",
            "visual": "diagram" if i % 3 == 0 else "footage", "broll_query": "jet", "image_prompt": "p",
@@ -38,9 +38,9 @@ pipeline.write_script = lambda idea: json.loads(json.dumps(script))
 pipeline.verify_loop = lambda s: (s, True)
 pipeline.quality_gate = lambda s: (True, {})
 def fake_llm(system, user, required=(), images=None, judge=False):
-    if "Translate each line" in user:
+    if "Translate every value" in user:
         lines = json.loads(user.split("\n", 1)[1].rsplit("\nReturn JSON", 1)[0])["lines"]
-        return {"lines": ["TR: " + l for l in lines]}
+        return {"lines": {k: "TR: " + v for k, v in lines.items()}}
     if "short_titles" in user:
         d = json.loads(user.split("\nReturn JSON")[0])
         return {"title": "Jet motoru nasıl çalışır", "description": "Açıklama", "short_titles": ["TR " + t for t in d["short_titles"]],
