@@ -1367,8 +1367,6 @@ def make_manual_package(script, idea, shorts, thumb, main_srt, sub_srt, history,
     for i, it in enumerate(items):  # her başlık ayrı mesaj: telefonda tek dokunuşla kopyalansın
         notify(f"{i + 1}) {'UZUN VİDEO' if it['kind'] == 'long' else 'SHORT'} — dosya: {it['marker']}.mp4",
                code=it["title"])
-        tg_send_file(OUT / f"{it['marker']}.mp4", f"{i + 1}) {it['title']}")
-    tg_send_file(OUT / "1-KUCUK-RESIM.jpg", "Küçük resim")
     log(f"Elle yükleme paketi hazır: {sorted(p.name for p in OUT.glob('*'))}")
 
 
