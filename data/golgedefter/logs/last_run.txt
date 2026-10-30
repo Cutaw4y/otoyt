@@ -1,2 +1,312 @@
-[17:04:05] Başladı (test modu: False, yayın: manual)
-[17:04:06] Kanal adı kontrol edilemedi: <HttpError 403 when requesting https://youtube.googleapis.com/youtube/v3/channels?part=snippet&mine=true&alt=json returned "The request cannot be comp
+[18:26:33] Başladı (test modu: True, yayın: manual)
+[18:26:33] Analitik: 0 video ölçüldü, sütun puanları: {}
+[18:31:44] Gemini gemini-flash-latest 503 → 30 sn bekleniyor (2/6)
+[18:32:16] Gemini gemini-flash-latest 503 → 60 sn bekleniyor (3/6)
+[18:37:03] Konu (1): Zülkarneyn'in Demir Seddi: 9. Yüzyılda Duvarı Aramaya Giden Abbasi Elçisinin Raporu  [İslam tarihi ve kutsal kıssalar (Ashab-ı Kehf, Zülkarneyn, İrem ve Ad kavmi, Semud, Nuh tufanı)]
+[18:37:17] Gemini gemini-flash-latest 503 → 15 sn bekleniyor (1/6)
+[18:42:16] Senaryo yazıldı: 33 sahne, 1482 kelime
+[18:43:52] Anlatım sadeleştirildi (1482 → 1202 kelime)
+[18:43:52] Gemini gemini-flash-lite-latest 429 → 15 sn bekleniyor (1/2)
+[18:44:08] Gemini gemini-flash-lite-latest 429 → 30 sn bekleniyor (2/2)
+[18:44:38] Gemini gemini-flash-latest 429 → 15 sn bekleniyor (1/2)
+[18:44:53] Gemini gemini-flash-latest 429 → 30 sn bekleniyor (2/2)
+[18:45:23] Google aramalı doğrulama kullanılamadı (Gemini yanıt vermedi: 429 {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check ) → Wikipedia'ya geçiliyor
+[18:45:26] Doğrulama kaynağı: Wikipedia (4 makale)
+[18:45:27] Doğrulama turu 1: 5 iddia, 0 yanlış, 0 belirsiz
+[18:45:34] Editör (min 7, ort 8.1): {'originality': 8, 'hook': 8, 'clarity': 8, 'simplicity': 7, 'flow': 9, 'value_density': 8, 'audience_fit': 9, 'problems': ["Quote: 'Hazar Kağanlığı'nı, yani Hazar Denizi çevresini yöneten Türk devletinin topraklarına ulaştılar.' -> Fix: 'Hazar Denizi çevresinde yaşayan Türk devleti Hazar Kağanlığı'nın topraklarına ulaştılar.'", "Quote: 'İbn Hurdâzbih gibi saygın bir bürokrat asılsız bir masala güvenip kitabına koymazdı.' -> Fix: 'İbn Hurdâzbih gibi önemli bir devlet görevlisi, uydurma bir hikayeye inanıp kitabına yazmazdı.'"], 'problems_tr': 'Metindeki bazı tarihi terimler ve unvanlar (Hazar Kağanlığı, bürokrat gibi) hedef kitle için daha sade bir dille açıklanarak basitleştirilebilir.'}
+[18:50:32] Gemini gemini-flash-latest 503 → 30 sn bekleniyor (2/6)
+[18:52:20] Gemini gemini-flash-latest 503 → 15 sn bekleniyor (1/6)
+[18:52:39] Gemini gemini-flash-latest 503 → 30 sn bekleniyor (2/6)
+[18:54:54] Anlatım sadeleştirildi (1202 → 1202 kelime)
+[18:54:54] Senaryo kısa (1202/1700 kelime) → genişletiliyor (1)
+[18:54:55] Gemini gemini-flash-latest günlük kotası doldu → sonraki modele geçiliyor
+[18:55:08] Senaryo kısa (1202/1700 kelime) → genişletiliyor (2)
+[18:55:24] Senaryo uzunluğu: 1269 kelime
+[18:55:26] Doğrulama kaynağı: Wikipedia (4 makale)
+[18:55:28] Doğrulama turu 1: 5 iddia, 0 yanlış, 1 belirsiz
+[18:55:50] Doğrulama kaynağı: Wikipedia (4 makale)
+[18:55:51] Doğrulama turu 2: 2 iddia, 1 yanlış, 0 belirsiz
+[18:56:14] Doğrulama kaynağı: Wikipedia (4 makale)
+[18:56:15] Doğrulama turu 3: 2 iddia, 0 yanlış, 0 belirsiz
+[18:56:22] Editör (min 6, ort 7.4): {'originality': 7, 'hook': 8, 'clarity': 7, 'simplicity': 6, 'flow': 7, 'value_density': 8, 'audience_fit': 9, 'problems': ["Quote: 'Hazar Kağanlığı'nın topraklarına ulaştılar.' -> Fix: 'Türk devletlerinden biri olan Hazar Kağanlığı'nın topraklarına ulaştılar.'", "Quote: 'İbn Hurdâzbih adlı eserine yazdı.' -> Fix: 'İbn Hurdâzbih adlı coğrafyacı bu anıları kitabına kaydetti.'", "Quote: 'Antik çağda Demir Kapı denen Baysun Boğazı'ydı.' -> Fix: 'Eski dönemlerde Demir Kapı denilen Baysun Boğazı'ydı.'"], 'problems_tr': 'Metinde geçen bazı tarihi isimler ve terimler (Hazar Kağanlığı, İbn Hurdâzbih gibi) hedef kitle için biraz daha basitleştirilerek açıklanabilirdi.'}
+[18:56:56] Anlatım sadeleştirildi (1276 → 1276 kelime)
+[18:56:56] Senaryo kısa (1276/1700 kelime) → genişletiliyor (1)
+[18:57:09] Senaryo kısa (1276/1700 kelime) → genişletiliyor (2)
+[18:57:24] Senaryo uzunluğu: 1276 kelime
+[18:57:26] Doğrulama kaynağı: Wikipedia (4 makale)
+[18:57:29] Doğrulama turu 1: 11 iddia, 0 yanlış, 5 belirsiz
+[18:58:06] Doğrulama kaynağı: Wikipedia (4 makale)
+[18:58:08] Doğrulama turu 2: 10 iddia, 0 yanlış, 1 belirsiz
+[18:58:29] Doğrulama kaynağı: Wikipedia (4 makale)
+[18:58:31] Doğrulama turu 3: 5 iddia, 2 yanlış, 0 belirsiz
+[18:58:31] Revizyon bilgi hatası getirdi → önceki sürümde kalınıyor
+[18:58:31] Konu kalite barajını geçemedi: Zülkarneyn'in Demir Seddi: 9. Yüzyılda Duvarı Aramaya Giden Abbasi Elçisinin Raporu
+[18:58:39] Konu (2): Voynich El Yazması'nın Çözülemeyen Şifresi: 600 Yıllık Kitabı Okumayı Başaran Yapay Zekâ Ne Söylüyor?  [Çözülemeyen şifreler, yasak bilgi ve antik astronot iddiaları (bilimin cevabıyla birlikte)]
+[18:59:03] Senaryo kısa (978/1700 kelime) → genişletiliyor (1)
+[18:59:14] Senaryo kısa (978/1700 kelime) → genişletiliyor (2)
+[18:59:25] Senaryo uzunluğu: 978 kelime
+[18:59:25] Senaryo yazıldı: 34 sahne, 978 kelime
+[18:59:35] Sadeleştirme sahne sayısını bozdu → eski metin kalıyor
+[18:59:38] Doğrulama kaynağı: Wikipedia (4 makale)
+[18:59:40] Doğrulama turu 1: 10 iddia, 0 yanlış, 10 belirsiz
+[18:59:54] Doğrulama kaynağı: Wikipedia (4 makale)
+[18:59:55] Doğrulama turu 2: 5 iddia, 0 yanlış, 2 belirsiz
+[19:00:10] Doğrulama kaynağı: Wikipedia (4 makale)
+[19:00:11] Doğrulama turu 3: 1 iddia, 0 yanlış, 1 belirsiz
+[19:00:19] Editör (min 5, ort 6.1): {'originality': 5, 'hook': 6, 'clarity': 7, 'simplicity': 6, 'flow': 6, 'value_density': 5, 'audience_fit': 8, 'problems': ["Quote: 'Dünyanın en gizemli kitabı olan voynich el yazması sırrı, altı yüz yıldır en zeki kriptologların zihnini kurcalıyor.' -> Fix: 'Kriptolog' kelimesi hedef kitle için biraz teknik kalabilir, 'şifre çözücülerin' olarak basitleştirilmeli.", "Quote: 'Dördüncü kısım farmakoloji yani ilaç yapımı üzerine' -> Fix: 'Farmakoloji' zaten açıklanmış ama cümle yapısı biraz daha akıcı hale getirilebilir."], 'problems_tr': "Metinde geçen 'kriptolog' gibi teknik terimler hedef kitle için daha anlaşılır kelimelerle (şifre çözücü) değiştirilebilir. Cümle geçişleri bazen bilgi yığını gibi hissettiriyor."}
+[19:00:38] Anlatım sadeleştirildi (518 → 511 kelime)
+[19:00:38] Senaryo kısa (511/1700 kelime) → genişletiliyor (1)
+[19:00:52] Senaryo kısa (868/1700 kelime) → genişletiliyor (2)
+[19:01:02] Senaryo uzunluğu: 870 kelime
+[19:01:05] Doğrulama kaynağı: Wikipedia (4 makale)
+[19:01:06] Doğrulama turu 1: 4 iddia, 0 yanlış, 0 belirsiz
+[19:01:13] Editör (min 5, ort 6.3): {'originality': 6, 'hook': 5, 'clarity': 7, 'simplicity': 6, 'flow': 6, 'value_density': 6, 'audience_fit': 8, 'problems': ["Quote: 'Karbon on dördü testi adı verilen bilimsel yaş tahlili yöntemi kitabın derisinin yaklaşık olarak bin dört yüz elli yıllarında üretildiğini kanıtladı.' -> Fix: 'Karbon 14 testi denilen yaş ölçme yöntemi, kitabın derisinin milattan sonra 1450 yıllarında yapıldığını ortaya çıkardı.'", "Quote: 'Yani bu rastgele karalanmış harflerden oluşan basit bir şaka değil; arkasında düzenli bir dilbilgisi kuralı var.' -> Fix: 'Yani bu rastgele karalanmış harflerden oluşan basit bir şaka değil; arkasında düzenli bir dil kuralı var.'"], 'problems_tr': 'Metinde geçen karbon 14 testi gibi bazı terimler daha basit bir dille açıklanabilirdi. Cümle akışı genel olarak iyi ancak bazı kısımlarda tekrara düşülmüş.'}
+[19:01:38] Anlatım sadeleştirildi (868 → 868 kelime)
+[19:01:38] Senaryo kısa (868/1700 kelime) → genişletiliyor (1)
+[19:01:49] Senaryo kısa (869/1700 kelime) → genişletiliyor (2)
+[19:02:01] Senaryo uzunluğu: 985 kelime
+[19:02:03] Doğrulama kaynağı: Wikipedia (4 makale)
+[19:02:05] Doğrulama turu 1: 4 iddia, 0 yanlış, 1 belirsiz
+[19:02:24] Doğrulama kaynağı: Wikipedia (4 makale)
+[19:02:25] Doğrulama turu 2: 2 iddia, 0 yanlış, 0 belirsiz
+[19:02:32] Editör (min 6, ort 6.6): {'originality': 6, 'hook': 6, 'clarity': 7, 'simplicity': 6, 'flow': 7, 'value_density': 6, 'audience_fit': 8, 'problems': ["Quote: 'Karbon on dört testi denilen yaş ölçme yöntemi, kitabın derisinin milattan sonra bin dört yüz elli yıllarında yapıldığını ortaya çıkardı.' -> Fix: Explain Carbon-14 briefly as a scientific dating method that measures the age of ancient materials.", "Quote: 'Üçüncü bölüm biyoloji olarak adlandırılıyor...' -> Fix: Briefly explain what 'anatomy' or biological drawings mean in this context for absolute beginners."], 'problems_tr': 'Karbon-14 testinin ne olduğu ve biyoloji terimlerinin biraz daha basitleştirilerek açıklanması iyi olurdu.'}
+[19:02:32] Konu kalite barajını geçemedi: Voynich El Yazması'nın Çözülemeyen Şifresi: 600 Yıllık Kitabı Okumayı Başaran Yapay Zekâ Ne Söylüyor?
+[19:02:41] Konu (3): Piri Reis Haritası'ndaki Antik Sır: 16. Yüzyılda Buzsuz Antarktika'yı Kim Çizdi?  [Çözülemeyen şifreler, yasak bilgi ve antik astronot iddiaları (bilimin cevabıyla birlikte)]
+[19:03:03] Senaryo kısa (893/1700 kelime) → genişletiliyor (1)
+[19:03:13] Senaryo kısa (893/1700 kelime) → genişletiliyor (2)
+[19:03:26] Senaryo uzunluğu: 1070 kelime
+[19:03:26] Senaryo yazıldı: 41 sahne, 1070 kelime
+[19:03:37] Anlatım sadeleştirildi (1070 → 1070 kelime)
+[19:03:40] Doğrulama kaynağı: Wikipedia (4 makale)
+[19:03:42] Doğrulama turu 1: 14 iddia, 0 yanlış, 5 belirsiz
+[19:04:02] Doğrulama kaynağı: Wikipedia (4 makale)
+[19:04:04] Doğrulama turu 2: 11 iddia, 1 yanlış, 0 belirsiz
+[19:04:23] Doğrulama kaynağı: Wikipedia (4 makale)
+[19:04:25] Doğrulama turu 3: 10 iddia, 0 yanlış, 0 belirsiz
+[19:04:32] Editör (min 5, ort 6.3): {'originality': 6, 'hook': 5, 'clarity': 7, 'simplicity': 6, 'flow': 6, 'value_density': 6, 'audience_fit': 8, 'problems': ["Quote: 'Harita üzerindeki koordinat sistemleri portolan tarzı dediğimiz özel bir çizim tekniğiyle yapılmıştır.' -> Fix: Portolan kelimesi ve bunun tam olarak ne olduğu daha basit bir cümleyle anlatılmalı.", "Quote: 'Uzmanlar, piri reis in farklı projeksiyonlardaki haritaları tek parşömene sığdırmaya çalıştığını söyler.' -> Fix: 'Projeksiyon' terimi hedef kitle için biraz teknik kalmış, harita çizim açısı veya yöntemi olarak basitleştirilmeli.", "Quote: 'Parşömenin üzerindeki her çizgi, insanlığın coğrafya tutkusunu ve çözülmemiş gizemlerini hatırlatmaya devam ediyor.' -> Fix: Biraz soyut bir kapanış, daha somut bir merak unsuruyla bitirilebilir."], 'problems_tr': "Metinde geçen 'portolan tarzı' ve 'projeksiyon' gibi bazı haritacılık terimleri yeterince açıklanmamış; ayrıca bazı kapanış cümleleri fazla soyut kalmış."}
+[19:05:00] Anlatım sadeleştirildi (1024 → 1068 kelime)
+[19:05:00] Senaryo kısa (1068/1700 kelime) → genişletiliyor (1)
+[19:05:11] Senaryo kısa (1074/1700 kelime) → genişletiliyor (2)
+[19:05:22] Senaryo uzunluğu: 1074 kelime
+[19:05:25] Doğrulama kaynağı: Wikipedia (4 makale)
+[19:05:27] Doğrulama turu 1: 10 iddia, 1 yanlış, 0 belirsiz
+[19:05:41] Doğrulama kaynağı: Wikipedia (4 makale)
+[19:05:43] Doğrulama turu 2: 10 iddia, 0 yanlış, 0 belirsiz
+[19:05:49] Editör (min 5, ort 6.3): {'originality': 6, 'hook': 6, 'clarity': 7, 'simplicity': 5, 'flow': 6, 'value_density': 6, 'audience_fit': 8, 'problems': ["Quote: 'Harita üzerindeki koordinat sistemleri portolan tarzı dediğimiz özel bir çizim tekniğiyle yapılmıştır.' -> Fix: Portolan tarzının ne olduğu kısaca açıklanmalı.", "Quote: 'Bilimsel konsensüse göre haritadaki güney kara parçası...' -> Fix: 'Bilimsel konsensüs' yerine 'Bilim insanlarının ortak kararına göre' denmeli."], 'problems_tr': "Metinde geçen 'portolan tarzı' gibi terimler ve 'bilimsel konsensüs' gibi ifadeler 12 yaşındaki bir çocuğun zorlanmadan anlayabileceği şekilde basitleştirilmelidir."}
+[19:06:09] Anlatım sadeleştirildi (452 → 473 kelime)
+[19:06:09] Senaryo kısa (473/1700 kelime) → genişletiliyor (1)
+[19:06:16] Senaryo kısa (473/1700 kelime) → genişletiliyor (2)
+[19:06:28] Senaryo uzunluğu: 758 kelime
+[19:06:30] Doğrulama kaynağı: Wikipedia (4 makale)
+[19:06:32] Doğrulama turu 1: 9 iddia, 0 yanlış, 1 belirsiz
+[19:06:48] Doğrulama kaynağı: Wikipedia (4 makale)
+[19:06:49] Doğrulama turu 2: 7 iddia, 0 yanlış, 0 belirsiz
+[19:06:57] Editör (min 5, ort 6.4): {'originality': 6, 'hook': 5, 'clarity': 7, 'simplicity': 6, 'flow': 7, 'value_density': 6, 'audience_fit': 8, 'problems': ["Quote: 'parşömen yani eski kurutulmuş hayvan derisi' -> Fix: Derinin kendisi zaten ilk cümlede ceylan derisi olarak söylenmişti, bu tanım akışı bölüyor.", "Quote: 'Portolan dediğimiz şey, denizcilerin yön bulmak için kullandığı kılavuz çizgilerle dolu özel haritalardır.' -> Fix: Tanım biraz geç geliyor ve teknik kalıyor, daha basitleştirilebilir.", "Quote: 'Terra Australis' -> Fix: Bu terim doğrudan verilmiş, 'güneydeki dev hayali kıta' diye hemen açıklanmalı.", "Quote: 'sismik ölçüm yani yer altı dalgalarıyla yapılan modern ölçüm yöntemleri' -> Fix: Anlaşılır ancak 12 yaşındaki bir çocuk için 'yer altı dalgaları' kavramı soyut kalabilir.", "Quote: 'özel iklimlendirme odalarında yani sıcaklık ve nemin sabit tutulduğu özel odalarda' -> Fix: İklimlendirme kelimesi zaten açıklanmış ama cümle gereksiz uzatılmış."], 'problems_tr': 'Metinde geçen bazı terimler (Portolan, Terra Australis gibi) ilk başta ham verilmiş veya cümleler çocukların anlamakta zorlanacağı kadar uzun ve tekrara düşen açıklamalar içerecek şekilde uzatılmış.'}
+[19:06:57] Konu kalite barajını geçemedi: Piri Reis Haritası'ndaki Antik Sır: 16. Yüzyılda Buzsuz Antarktika'yı Kim Çizdi?
+[19:07:05] Konu (4): Dyatlov Geçidi Vakası: Çadırlarını İçeriden Kesip Çıkan Dağcıları Ölümcül Geceye Ne Koştu?  [Açıklanamayan gerçek olaylar ve kayıplar (Dyatlov, Mary Celeste, Roanoke, Tunguska)]
+[19:07:27] Senaryo kısa (1022/1700 kelime) → genişletiliyor (1)
+[19:07:38] Senaryo kısa (1035/1700 kelime) → genişletiliyor (2)
+[19:07:50] Senaryo uzunluğu: 1077 kelime
+[19:07:50] Senaryo yazıldı: 28 sahne, 1077 kelime
+[19:08:01] Anlatım sadeleştirildi (1077 → 1033 kelime)
+[19:08:04] Doğrulama kaynağı: Wikipedia (4 makale)
+[19:08:05] Doğrulama turu 1: 8 iddia, 0 yanlış, 2 belirsiz
+[19:08:23] Doğrulama kaynağı: Wikipedia (4 makale)
+[19:08:25] Doğrulama turu 2: 11 iddia, 1 yanlış, 3 belirsiz
+[19:08:41] Doğrulama kaynağı: Wikipedia (4 makale)
+[19:08:43] HATA:
+Traceback (most recent call last):
+  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 2048, in <module>
+    res = run_once()
+          ^^^^^^^^^^
+  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 1815, in run_once
+    idea, script = produce_script(history, report)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 1656, in produce_script
+    script, facts_ok = verify_loop(script)
+                       ^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 413, in verify_loop
+    claims = fact_check(script)
+             ^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 407, in fact_check
+    return data["claims"]
+           ~~~~^^^^^^^^^^
+TypeError: list indices must be integers or slices, not str
+
+[19:18:43] Başladı (test modu: True, yayın: manual)
+[19:18:43] Analitik: 0 video ölçüldü, sütun puanları: {}
+[19:18:44] Gemini gemini-flash-latest günlük kotası doldu → sonraki modele geçiliyor
+[19:18:47] Konu (1): Dyatlov Geçidi'nin Gerçek Katili: Çığ Değil, 'Karmik' Bir Askeri Test mi?  [Açıklanamayan gerçek olaylar ve kayıplar (Dyatlov, Mary Celeste, Roanoke, Tunguska)]
+[19:19:08] Senaryo kısa (736/1700 kelime) → genişletiliyor (1)
+[19:19:20] Senaryo kısa (739/1700 kelime) → genişletiliyor (2)
+[19:19:30] Senaryo uzunluğu: 739 kelime
+[19:19:30] Senaryo yazıldı: 30 sahne, 739 kelime
+[19:19:39] Anlatım sadeleştirildi (739 → 753 kelime)
+[19:19:39] Gemini gemini-flash-lite-latest 429 → 15 sn bekleniyor (1/2)
+[19:19:54] Gemini gemini-flash-lite-latest 429 → 30 sn bekleniyor (2/2)
+[19:20:24] Gemini gemini-flash-latest 429 → 15 sn bekleniyor (1/2)
+[19:20:39] Gemini gemini-flash-latest 429 → 30 sn bekleniyor (2/2)
+[19:21:09] Google aramalı doğrulama kullanılamadı (Gemini yanıt vermedi: 429 {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check ) → Wikipedia'ya geçiliyor
+[19:21:12] Doğrulama kaynağı: Wikipedia (4 makale)
+[19:21:14] Doğrulama turu 1: 10 iddia, 0 yanlış, 5 belirsiz
+[19:21:30] Doğrulama kaynağı: Wikipedia (4 makale)
+[19:21:32] Doğrulama turu 2: 10 iddia, 0 yanlış, 0 belirsiz
+[19:21:39] Editör (min 6, ort 7.4): {'originality': 7, 'hook': 8, 'clarity': 7, 'simplicity': 6, 'flow': 8, 'value_density': 7, 'audience_fit': 9, 'problems': ["Adli tıp raporları, yani uzman doktorların hazırladığı ölüm raporları ölümlerin hipotermi yani donma olduğunu söylese de... ('Hipotermi' kelimesi daha önce açıklanabilirdi, 'yani donma' açıklaması fena değil ama cümle biraz uzun.)", "Katabatic rüzgârı adı verilen bu dikey hava hareketleri çadırı yerinden sökebilecek güçtedir. ('Katabatic' teknik bir terimdir, çocukların ilk dinlemede anlaması zor olabilir, 'aşağı doğru esen dikey rüzgar' diye basitleştirilmeli.)"], 'problems_tr': "Metin genel olarak anlaşılır ve akıcı ancak 'hipotermi' ve 'Katabatic rüzgârı' gibi bazı teknik terimler hedef kitle ve çocuklar için yeterince basitleştirilmeden kullanılmış.", 'score_explanation': 'Script, gizem ve tarih meraklılarına hitap eden popüler bir konuyu (Dyatlov Geçidi) çok iyi bir kanca ile açıyor ve akıcı bir şekilde anlatıyor. Ancak bazı teknik terimlerin (hipotermi, katabatic rüzgarı) ilk kullanımda tam basitleştirilmemiş olması nedeniyle sadakat ve anlaşılırlık puanından biraz kırıldı. Genel yapı profesyonel bir YouTube belgeseli tadında.'}
+[19:22:02] Anlatım sadeleştirildi (749 → 749 kelime)
+[19:22:02] Senaryo kısa (749/1700 kelime) → genişletiliyor (1)
+[19:22:13] Senaryo kısa (752/1700 kelime) → genişletiliyor (2)
+[19:22:23] Senaryo uzunluğu: 752 kelime
+[19:22:25] Doğrulama kaynağı: Wikipedia (4 makale)
+[19:22:26] Doğrulama turu 1: 6 iddia, 0 yanlış, 0 belirsiz
+[19:22:34] Editör (min 6, ort 6.9): {'originality': 6, 'hook': 6, 'clarity': 7, 'simplicity': 6, 'flow': 8, 'value_density': 7, 'audience_fit': 8, 'problems': ['"eksotuz dereceye varan, bir buzdolabının dondurucu bölmesinden bile soğuk havada kaçtı" - A bit clunky for a 12-year-old; simplify to "normal bir buzdolabından bile üç kat daha soğuk bir havaya...".', '"hipotermi yani vücut ısısının düşüp donma olmasından kaynaklandığını söylese de" - The definition is good, but could be simpler like "yani vücudun aşırı soğuktan donması...".', '"paraşüt mayınları veya sonik silahlar" - \'Sonik silahlar\' is used without a brief everyday explanation of what it means.', '"dikey rüzgar adı verilen bu hava hareketleri" - Good, but could be explained with a simpler analogy like "katatistik rüzgar denilen devasa hava dalgaları".'], 'problems_tr': "Metinde 'sonik silahlar' gibi bazı teknik terimler kısa bir açıklamaya ihtiyaç duyuyor ve bazı cümleler 12 yaşındaki bir çocuğun ilk dinlemede rahatça anlaması için biraz daha sadeleştirilebilir.", 'scores': {'originality': 6, 'hook': 6, 'clarity': 7, 'simplicity': 6, 'flow': 8, 'value_density': 7, 'audience_fit': 8}}
+[19:22:57] Anlatım sadeleştirildi (759 → 653 kelime)
+[19:22:57] Senaryo kısa (653/1700 kelime) → genişletiliyor (1)
+[19:23:06] Senaryo kısa (657/1700 kelime) → genişletiliyor (2)
+[19:23:18] Senaryo uzunluğu: 831 kelime
+[19:23:21] Doğrulama kaynağı: Wikipedia (4 makale)
+[19:23:22] Doğrulama turu 1: 2 iddia, 1 yanlış, 0 belirsiz
+[19:23:40] Doğrulama kaynağı: Wikipedia (4 makale)
+[19:23:42] Doğrulama turu 2: 6 iddia, 0 yanlış, 0 belirsiz
+[19:23:49] Editör (min 6, ort 7.4): {'originality': 7, 'hook': 8, 'clarity': 8, 'simplicity': 6, 'flow': 7, 'value_density': 7, 'audience_fit': 9, 'problems': ["Quote: 'Adli tıp raporuna göre bu kırıklar, beş tondan fazla bir ağırlığın ezmesiyle oluşabilecek türdendi.' -> Fix: 'Adli tıp raporuna göre bu kemikler, üzerine beş tonluk bir kamyon düşmüş gibi ezilmişti.'", "Quote: 'Dağcıların kıyafetlerinde normalin katlarca üstünde radyasyon, yani görünmez tehlikeli enerji kalıntıları tespit edilmişti.' -> Fix: 'Dağcıların kıyafetlerinde radyasyon bulundu; bu, vücuda zarar veren görünmez bir enerji türüdür.'"], 'problems_tr': "Metindeki 'radyasyon' ve 'adli tıp' gibi bazı kavramlar ilk dinlemede herkesin hemen anlamayacağı şekilde verilmiş; daha basit günlük benzetmelerle açıklanabilirdi."}
+[19:23:49] Konu kalite barajını geçemedi: Dyatlov Geçidi'nin Gerçek Katili: Çığ Değil, 'Karmik' Bir Askeri Test mi?
+[19:23:57] Konu (2): Yecüc ve Mecüc Seddi Hangi Dağın Ardında? Zülkarneyn'in İnşa Ettiği O Yapı Uydu Fotoğraflarında Görünüyor mu?  [Kıyamet alametleri ve ahir zaman anlatıları (ayet ve hadis kaynaklarıyla, tarih tahmini yok)]
+[19:24:17] Senaryo kısa (712/1700 kelime) → genişletiliyor (1)
+[19:24:26] Senaryo kısa (712/1700 kelime) → genişletiliyor (2)
+[19:24:37] Senaryo uzunluğu: 765 kelime
+[19:24:37] Senaryo yazıldı: 27 sahne, 765 kelime
+[19:24:47] Anlatım sadeleştirildi (765 → 765 kelime)
+[19:24:49] Doğrulama kaynağı: Wikipedia (4 makale)
+[19:24:51] Doğrulama turu 1: 5 iddia, 0 yanlış, 5 belirsiz
+[19:24:57] Gemini gemini-flash-lite-latest 503 → 15 sn bekleniyor (1/6)
+[19:25:25] Doğrulama kaynağı: Wikipedia (4 makale)
+[19:25:26] Doğrulama turu 2: 3 iddia, 0 yanlış, 0 belirsiz
+[19:25:34] Editör (min 6, ort 6.7): {'originality': 7, 'hook': 6, 'clarity': 7, 'simplicity': 6, 'flow': 7, 'value_density': 6, 'audience_fit': 8, 'problems': ["Quote: 'İbn Fadlan gibi eski seyyahlar, onuncu yüzyılda yani yaklaşık bin yüz yıl önce kuzeye doğru uzun ve tehlikeli bir yolculuğa çıktılar.' -> Fix: İbn Fadlan'ın kim olduğu (10. yüzyıl Türk ve İslam dünyasının ünlü seyyahı/gezgini) kısaca açıklanmalı.", "Quote: 'Bu yöntem, demirin paslanmasını önleyen ve binlerce yıl dayanmasını sağlayan erken dönem bir alaşım teknolojisidir.' -> Fix: Alaşım kelimesi ilk kez duyan bir çocuk için 'metal karışımı' olarak basitleştirilmeli.", "Quote: 'Metalurji uzmanları, bakır ile demirin doğru oranlarda karıştırılmasıyla inanılmaz dayanıklı alaşımlar elde edilebileceğini doğruluyor.' -> Fix: Metalurji uzmanı yerine 'maden ve metal bilimi uzmanları' denmeli.", "Quote: 'Tarihçi Taberi ve İbn Kesir gibi büyük İslam tarihçileri de eserlerinde bu coğrafi konumu Doğu ve Kuzey yönündeki en uzak dağlık bölgeler olarak tanımlamıştır.' -> Fix: Taberi ve İbn Kesir'in eski dönem İslam tarihçileri olduğu çok kısa belirtilmeli."], 'problems_tr': "Metinde geçen İbn Fadlan, Taberi, İbn Kesir gibi tarihi isimler ve 'alaşım', 'metalurji' gibi teknik terimler hedef kitledeki daha genç veya konuya yabancı dinleyiciler için açıklanmadan kullanılmıştır."}
+[19:25:57] Anlatım sadeleştirildi (755 → 758 kelime)
+[19:25:57] Senaryo kısa (758/1700 kelime) → genişletiliyor (1)
+[19:26:06] Senaryo kısa (758/1700 kelime) → genişletiliyor (2)
+[19:26:15] Senaryo uzunluğu: 758 kelime
+[19:26:17] Doğrulama kaynağı: Wikipedia (4 makale)
+[19:26:18] Doğrulama turu 1: 3 iddia, 0 yanlış, 0 belirsiz
+[19:26:26] Editör (min 5, ort 6.3): {'originality': 6, 'hook': 6, 'clarity': 6, 'simplicity': 5, 'flow': 7, 'value_density': 6, 'audience_fit': 8, 'problems': ["Quote: 'Kehf Suresi'nde, Zülkarneyn'in iki dağın arasına ulaştığında burada dillerini kimsenin anlamadığı bir kavimle karşılaştığı anlatılır.' -> Fix: Explain briefly who Zülkarneyn is for absolute beginners if mentioned again, but here it's okay if simplified.", "Quote: 'Bu yöntem, demirin paslanmasını önleyen ve binlerce yıl dayanmasını sağlayan erken dönem bir metal karışımı yani alaşım teknolojisidir.' -> Fix: Simplify 'alaşım' as 'metal karışımı' directly without using the technical term or explaining it instantly.", "Quote: 'Taberi ve İbn Kesir gibi eski dönem İslam tarihçileri olan büyük isimler de eserlerinde bu coğrafi konumu Doğu ve Kuzey yönündeki en uzak dağlık bölgeler olarak tanımlamıştır.' -> Fix: Avoid listing multiple old historian names like Taberi and İbn Kesir as it slows down a 12-year-old listener."], 'problems_tr': "Metinde geçen 'alaşım' gibi bazı teknik terimler ve Taberi ile İbn Kesir gibi tarihçi isimleri 12 yaşındaki bir dinleyici için fazla detaylı ve yorucu olabilir; daha sadeleştirilebilir."}
+[19:26:49] Anlatım sadeleştirildi (749 → 750 kelime)
+[19:26:49] Senaryo kısa (750/1700 kelime) → genişletiliyor (1)
+[19:26:59] Senaryo kısa (750/1700 kelime) → genişletiliyor (2)
+[19:27:09] Senaryo uzunluğu: 750 kelime
+[19:27:11] Doğrulama kaynağı: Wikipedia (4 makale)
+[19:27:12] Doğrulama turu 1: 5 iddia, 0 yanlış, 0 belirsiz
+[19:27:20] Editör (min 6, ort 7.1): {'originality': 7, 'hook': 8, 'clarity': 7, 'simplicity': 6, 'flow': 7, 'value_density': 6, 'audience_fit': 9, 'problems': ["Quote: 'Zülkarneyn, yani dünyayı gezip iyilik yayan güçlü hükümdar' - Fix: Zülkarneyn'in kim olduğu çok kısa ve net bir şekilde verilmiş ama 'dünyayı gezip iyilik yayan' kısmı biraz masalsı kaçmış, daha sade yapılabilirdi.", "Quote: 'Bu yöntem, demirin paslanmasını önleyen ve binlerce yıl dayanmasını sağlayan özel bir metal karışımı teknolojisidir.' - Fix: Bu metal karışımının (alaşım) ne olduğu 12 yaşındaki bir çocuğun anlayacağı şekilde daha somut açıklanabilirdi.", "Quote: 'Pamir Dağları ile Tien Şan Dağları arasındaki bazı dar geçitler hâlâ tam olarak haritalandırılmış değil.' - Fix: Tien Şan Dağları gibi coğrafi isimler hedef kitle için bilinmeyebilir, kısaca nerede oldukları söylenebilirdi.", "Quote: 'Maden ve metal bilimi uzmanları, bakır ile demirin doğru oranlarda karıştırılmasıyla inanılmaz dayanıklı alaşımlar elde edilebileceğini doğruluyor.' - Fix: 'Alaşımlar' kelimesi teknik kalabilir, 'karışımlar' denebilirdi."], 'problems_tr': "Metinde geçen bazı coğrafi isimler ve 'alaşım' gibi hafif teknik terimler 12 yaşındaki bir dinleyici için açıklama gerektirebilir. Genel akış ve kanca oldukça başarılı."}
+[19:27:20] Konu kalite barajını geçemedi: Yecüc ve Mecüc Seddi Hangi Dağın Ardında? Zülkarneyn'in İnşa Ettiği O Yapı Uydu Fotoğraflarında Görünüyor mu?
+[19:27:28] Konu (3): İrem Şehri Çölün Altında Neden Bulunamıyor? Kur'an'da Bahsi Geçen 'Sütunlar Sahibi' Kayıp Kentin Uydu Koordinatları  [İslam tarihi ve kutsal kıssalar (Ashab-ı Kehf, Zülkarneyn, İrem ve Ad kavmi, Semud, Nuh tufanı)]
+[19:27:52] Senaryo kısa (1102/1700 kelime) → genişletiliyor (1)
+[19:28:01] Senaryo kısa (1102/1700 kelime) → genişletiliyor (2)
+[19:28:12] Senaryo uzunluğu: 1104 kelime
+[19:28:12] Senaryo yazıldı: 24 sahne, 1104 kelime
+[19:28:22] Anlatım sadeleştirildi (1104 → 1105 kelime)
+[19:28:24] Doğrulama kaynağı: Wikipedia (4 makale)
+[19:28:26] Doğrulama turu 1: 6 iddia, 0 yanlış, 1 belirsiz
+[19:28:43] Doğrulama kaynağı: Wikipedia (4 makale)
+[19:28:45] Doğrulama turu 2: 9 iddia, 0 yanlış, 0 belirsiz
+[19:28:52] Editör (min 7, ort 7.9): {'originality': 7, 'hook': 8, 'clarity': 8, 'simplicity': 7, 'flow': 8, 'value_density': 8, 'audience_fit': 9, 'problems': ["Quote: 'Tefsir kitaplarına, yani kutsal kitabın açıklama ve yorum kitaplarına göre...' - Fix: 'Tefsir' is explained right after, but the sentence is a bit long for a 12-year-old.", "Quote: 'tütsü ticaret yolunun ta kendisiydi' - Fix: 'tütsü ticaret yolu' could briefly mention what they traded (like perfume ingredients) for better simplicity.", "Quote: 'kum tepelerinin üzerinden esen rüzgarların yarattığı akustik bir rezonans olduğunu söylüyor' - Fix: 'akustik bir rezonans' is slightly technical; 'ses dalgalarının oluşturduğu bir yankı' is simpler.", "Quote: 'antık polen analizleri, yani bitki kalıntısı incelemeleri' - Fix: Already explained, but can be phrased shorter for better flow."], 'problems_tr': "Metin genel olarak anlaşılır ve akıcı; ancak 'akustik rezonans' gibi bazı terimler 12 yaşındaki bir çocuğun ilk dinleyişte anlamakta zorlanabileceği kadar teknik kalmış."}
+[19:29:17] Anlatım sadeleştirildi (1103 → 1116 kelime)
+[19:29:17] Senaryo kısa (1116/1700 kelime) → genişletiliyor (1)
+[19:29:28] Senaryo kısa (1116/1700 kelime) → genişletiliyor (2)
+[19:29:38] Senaryo uzunluğu: 1116 kelime
+[19:29:40] Doğrulama kaynağı: Wikipedia (4 makale)
+[19:29:42] Doğrulama turu 1: 5 iddia, 0 yanlış, 0 belirsiz
+[19:29:49] Editör (min 6, ort 7.7): {'originality': 7, 'hook': 8, 'clarity': 8, 'simplicity': 6, 'flow': 8, 'value_density': 8, 'audience_fit': 9, 'problems': ["Quote: 'Rubu l Hali çölü, yani boş çeyrek adı verilen bu bölge' -> Fix: 'Rubu l Hali yani boş çeyrek adlı çöl' (The explanation is a bit clunky, keep it punchier).", "Quote: 'Tefsir kitaplarına, yani kutsal kitabın açıklama ve yorum yapan kitaplarına göre' -> Fix: 'Dini kaynaklara ve yorum kitaplarına göre'.", "Quote: 'tütsü ticaret yolunun, yani parfüm malzemeleri taşınan o meşhur yolun ta kendisiydi.' -> Fix: 'tütsü ve parfüm reçinelerinin taşındığı meşhur ticaret yoluydu.'", "Quote: 'Roma İmparatorluğu dönemine ve hatta milattan önce üçüncü bin yıla kadar uzanıyordu.' -> Fix: 'Günümüzden yaklaşık 5 bin yıl öncesine kadar uzanıyordu.'", "Quote: 'düşük frekanslı sesler çıkarır.' -> Fix: 'kalın uğultu sesleri çıkarır.'", "Quote: 'azametinden, yani büyüklüğünden uzun uzun bahseder.' -> Fix: 'büyüklüğünden ve ihtişamından bahseder.'"], 'problems_tr': 'Metinde geçen bazı terim açıklamaları (tefsir, frekans vb.) biraz yorucu ve uzun tutulmuş; milattan önce üçüncü bin yıl gibi soyut ifadeler yerine günümüze göre yıl hesabı verilirse 12 yaşındaki bir izleyici için daha anlaşılır olur.'}
+[19:30:13] Anlatım sadeleştirildi (1072 → 1072 kelime)
+[19:30:13] Senaryo kısa (1072/1700 kelime) → genişletiliyor (1)
+[19:30:45] Senaryo kısa (1072/1700 kelime) → genişletiliyor (2)
+[19:32:34] Senaryo uzunluğu: 1497 kelime
+[19:32:36] Doğrulama kaynağı: Wikipedia (4 makale)
+[19:32:38] Doğrulama turu 1: 10 iddia, 0 yanlış, 7 belirsiz
+[19:32:59] Doğrulama kaynağı: Wikipedia (4 makale)
+[19:33:01] Doğrulama turu 2: 12 iddia, 0 yanlış, 2 belirsiz
+[19:33:20] Doğrulama kaynağı: Wikipedia (4 makale)
+[19:33:31] Doğrulama turu 3: 7 iddia, 0 yanlış, 0 belirsiz
+[19:33:32] Editör (min 6, ort 7.3): {'originality': 7, 'hook': 7, 'clarity': 8, 'simplicity': 6, 'flow': 7, 'value_density': 7, 'audience_fit': 9, 'problems': ["Quote: 'tütsü ve parfüm reçinelerinin taşındığı meşhur ticaret yoluydu.' -> Fix: 'tütsü ve parfüm yapımında kullanılan, o dönem altından bile değerli olan mis kokulu reçinelerin taşındığı meşhur ticaret yoluydu.'", "Quote: 'kireç taşı tabakalarının üzerine kurulmuş devasa bir yer altı su mağarasının üzerindeydi.' -> Fix: 'zamanla eriyen kayaçların oluşturduğu ve içi su dolu devasa yer altı mağaralarının üzerindeydi.'", "Quote: 'insan kulağının duyabileceği en düşük frekansta bir uğultu üretir.' -> Fix: 'insan kulağının uzaktan rahatça duyabileceği derin ve kalın bir uğultu üretir.'"], 'problems_tr': "Metinde geçen 'reçine' ve 'frekans' gibi bazı terimler daha sade bir dille açıklanabilirdi."}
+[19:33:32] Konu kalite barajını geçemedi: İrem Şehri Çölün Altında Neden Bulunamıyor? Kur'an'da Bahsi Geçen 'Sütunlar Sahibi' Kayıp Kentin Uydu Koordinatları
+[19:33:41] Konu (4): Anadolu'nun Karanlık Yüzü: Alkarısı Sadece Bir Masal mı, Yoksa Lohusa Hummasının Arkasındaki Biyolojik ve Tarihsel Gerçek mi?  [Anadolu ve dünya efsaneleri, mitolojik varlıklar, halk inançları]
+[19:34:04] Senaryo kısa (1094/1700 kelime) → genişletiliyor (1)
+[19:34:15] Senaryo kısa (1094/1700 kelime) → genişletiliyor (2)
+[19:34:28] Senaryo uzunluğu: 1163 kelime
+[19:34:28] Senaryo yazıldı: 36 sahne, 1163 kelime
+[19:34:41] Anlatım sadeleştirildi (1163 → 1177 kelime)
+[19:34:43] Doğrulama kaynağı: Wikipedia (4 makale)
+[19:34:45] Doğrulama turu 1: 5 iddia, 0 yanlış, 0 belirsiz
+[19:34:52] Editör (min 7, ort 7.9): {'originality': 8, 'hook': 7, 'clarity': 8, 'simplicity': 7, 'flow': 8, 'value_density': 8, 'audience_fit': 9, 'problems': ['"Lohusa humması, yani doğumdan sonra gelen ölümcül ateşli hastalık adı verilen görünmez bir düşman" - Term should be explained even simpler for a 12-year-old.', '"Ignaz Semmelweis, bin sekiz yüz kırk sekiz yılında bu acı gerçeği fark etti." - Foreign name might slightly disrupt the flow for younger listeners without a tiny descriptor.', '"Antropologlar bu tür efsanelerin insan psikolojisindeki yerini araştırmaya devam ediyor." - \'Antropolog\' needs a brief plain definition like \'insan bilimi uzmanları\'.'], 'problems_tr': 'Metinde geçen lohusa humması ve antropolog gibi bazı terimler 12 yaşındaki bir dinleyici için daha basitçe açıklanabilirdi.'}
+[19:35:21] Anlatım sadeleştirildi (1181 → 1199 kelime)
+[19:35:21] Senaryo kısa (1199/1700 kelime) → genişletiliyor (1)
+[19:35:32] Senaryo kısa (1199/1700 kelime) → genişletiliyor (2)
+[19:35:44] Senaryo uzunluğu: 1199 kelime
+[19:35:46] Doğrulama kaynağı: Wikipedia (4 makale)
+[19:35:47] Doğrulama turu 1: 7 iddia, 0 yanlış, 0 belirsiz
+[19:35:54] Editör (min 6, ort 7.3): {'originality': 7, 'hook': 7, 'clarity': 8, 'simplicity': 6, 'flow': 7, 'value_density': 7, 'audience_fit': 9, 'problems': ["Quote: 'lohusa humması adı verilen o ölümcül ve ateşli hastalık' -> Fix: 'lohusa humması adı verilen, doğumdan sonra görülen o ölümcül ve ateşli hastalık'", "Quote: 'Tıp dilinde ödem adı verilen sıvı birikmesi, akciğerleri suyla doldururdu.' -> Fix: 'Vücutta sıvı birikmesi anlamına gelen ödem, akciğerleri suyla doldururdu.'", "Quote: 'Sosiyologlar, yani toplumun yapısını inceleyen bilim insanları bu durumu...' -> Fix: 'Toplumu inceleyen bilim insanları olan sosyologlar bu durumu...'"], 'problems_tr': 'Metinde geçen bazı bilimsel ve tıbbi terimler (lohusa humması, ödem, sosyologlar) ilk başta biraz daha açılabilirdi; ancak genel olarak akıcı ve hedef kitleye uygun bir dille yazılmış.'}
+[19:36:23] Anlatım sadeleştirildi (1198 → 1198 kelime)
+[19:36:23] Senaryo kısa (1198/1700 kelime) → genişletiliyor (1)
+[19:36:34] Senaryo kısa (1200/1700 kelime) → genişletiliyor (2)
+[19:36:47] Senaryo uzunluğu: 1200 kelime
+[19:36:49] Doğrulama kaynağı: Wikipedia (4 makale)
+[19:36:50] Doğrulama turu 1: 5 iddia, 0 yanlış, 0 belirsiz
+[19:36:57] Editör (min 6, ort 7.0): {'originality': 7, 'hook': 6, 'clarity': 8, 'simplicity': 6, 'flow': 7, 'value_density': 6, 'audience_fit': 9, 'problems': ["Quote: 'lohusa humması' -> Fix: 'doğum sonrasında görülen ateşli ve tehlikeli hastalık'", "Quote: 'Ignaz Semmelweis' -> Fix: 'Macar bir doktor'", "Quote: 'antropologlar bu tür efsanelerin insan psikolojisindeki yerini araştırmaya devam ediyor' -> Fix: 'insanları ve kültürlerini inceleyen bilim insanları bu efsanelerin nedenini araştırıyor'"], 'problems_tr': "Metinde geçen 'lohusa humması', 'Ignaz Semmelweis' ve 'antropologlar' gibi bazı terimler ilk başta her 12 yaşındaki dinleyicinin kolayca anlayamayacağı şekilde verilmiş, daha sade açıklanabilirdi."}
+[19:36:57] Konu kalite barajını geçemedi: Anadolu'nun Karanlık Yüzü: Alkarısı Sadece Bir Masal mı, Yoksa Lohusa Hummasının Arkasındaki Biyolojik ve Tarihsel Gerçek mi?
+[19:37:09] Konu (5): Mary Celeste Gemisindeki 10 Gizemli Boşluk: Kahve Fincanları Neden Hâlâ Sıcaktı?  [Açıklanamayan gerçek olaylar ve kayıplar (Dyatlov, Mary Celeste, Roanoke, Tunguska)]
+[19:37:34] Senaryo kısa (1249/1700 kelime) → genişletiliyor (1)
+[19:37:57] Senaryo kısa (1429/1700 kelime) → genişletiliyor (2)
+[19:38:15] Senaryo uzunluğu: 1429 kelime
+[19:38:15] Senaryo yazıldı: 92 sahne, 1429 kelime
+[19:38:34] Anlatım sadeleştirildi (1429 → 1477 kelime)
+[19:38:36] Doğrulama kaynağı: Wikipedia (4 makale)
+[19:38:38] Doğrulama turu 1: 11 iddia, 0 yanlış, 3 belirsiz
+[19:39:05] Doğrulama kaynağı: Wikipedia (4 makale)
+[19:39:07] Doğrulama turu 2: 11 iddia, 0 yanlış, 0 belirsiz
+[19:39:14] Editör (min 6, ort 7.1): {'originality': 7, 'hook': 8, 'clarity': 7, 'simplicity': 6, 'flow': 7, 'value_density': 6, 'audience_fit': 9, 'problems': ["Quote: 'Dei Gratia adlı başka bir geminin mürettebatı, yani gemide çalışan işçiler...'\nFix: 'Dei Gratia adlı başka bir geminin çalışanları...'", "Quote: 'Okyanus tabanında yaşanan büyük sarsıntılar, geminin etrafında devasa su kabarcıkları yaratabilir ve kaptanı korkutabilirdi.'\nFix: 'Okyanustaki depremler büyük kabarcıklar yaratabilirdi.'", "Quote: 'Mahkeme tarafından yapılan detaylı incelemede, o lekelerin kan değil, demir pası ve ahşabın doğal reçinesi olduğu kanıtlandı.'\nFix: 'Mahkeme lekelerin kan değil pas olduğunu kanıtladı.'"], 'problems_tr': 'Metinde geçen bazı tanımlamalar (reçine, sismik hareket vb.) hedef kitle için biraz daha sadeleştirilebilir ve cümleler kısaltılabilir.'}
+[19:39:56] Anlatım sadeleştirildi (1432 → 1432 kelime)
+[19:39:56] Senaryo kısa (1432/1700 kelime) → genişletiliyor (1)
+[19:40:14] Senaryo kısa (1432/1700 kelime) → genişletiliyor (2)
+[19:40:56] Senaryo uzunluğu: 1432 kelime
+[19:40:59] Doğrulama kaynağı: Wikipedia (4 makale)
+[19:41:01] Doğrulama turu 1: 12 iddia, 0 yanlış, 1 belirsiz
+[19:41:27] Doğrulama kaynağı: Wikipedia (4 makale)
+[19:41:30] Doğrulama turu 2: 15 iddia, 0 yanlış, 1 belirsiz
+[19:41:54] Doğrulama kaynağı: Wikipedia (4 makale)
+[19:41:57] Doğrulama turu 3: 15 iddia, 0 yanlış, 0 belirsiz
+[19:42:03] Editör (min 6, ort 7.3): {'originality': 7, 'hook': 6, 'clarity': 8, 'simplicity': 7, 'flow': 7, 'value_density': 7, 'audience_fit': 9, 'problems': ["Quote: 'Dei Gratia adlı başka bir geminin çalışanları' -> Fix: 'Dei Gratia adlı başka bir gemide çalışan denizciler'", "Quote: 'o devirde Atlas Okyanusu'nda korsanlık tamamen bitmemişti' -> Fix: 'o dönemde Atlas Okyanusu'nda hâlâ korsanlar vardı'", "Quote: 'herhangi bir sismik hareket kaydedilmemişti' -> Fix: 'hiçbir deprem veya yer sarsıntısı olmamıştı'"], 'problems_tr': "Metin genel olarak anlaşılır ve akıcı. Sadece 'Dei Gratia' gibi yabancı gemi isimleri ve 'sismik hareket' gibi bazı terimler hedef kitle için biraz daha sadeleştirilebilir."}
+[19:42:43] Anlatım sadeleştirildi (1395 → 1390 kelime)
+[19:42:43] Senaryo kısa (1390/1700 kelime) → genişletiliyor (1)
+[19:42:51] Senaryo kısa (1390/1700 kelime) → genişletiliyor (2)
+[19:43:09] Senaryo uzunluğu: 1390 kelime
+[19:43:12] Doğrulama kaynağı: Wikipedia (4 makale)
+[19:43:14] Doğrulama turu 1: 11 iddia, 0 yanlış, 0 belirsiz
+[19:43:20] Editör (min 6, ort 7.0): {'originality': 7, 'hook': 8, 'clarity': 7, 'simplicity': 6, 'flow': 7, 'value_density': 6, 'audience_fit': 8, 'problems': ["Quote: 'Dei Gratia adlı başka bir gemide çalışan denizciler' -> Fix: 'Dei Gratia adındaki başka bir gemideki denizciler'", "Quote: 'kargo ambarındaki bin yedi yüz varil ham alkol tamamen yerli yerindeydi' -> Fix: 'kargo ambarındaki 1700 varil saf alkol yerli yerindeydi'", "Quote: 'Kurtarma ödülü yasalarına göre terk edilmiş bir gemiyi bulanlar kargonun ve geminin değerinin büyük kısmını hak eder.' -> Fix: 'Denizcilik kanunlarına göre, boş bir gemiyi bulanlar onun değerinin büyük kısmını ödül olarak alırdı.'"], 'problems_tr': 'Metinde geçen bazı terimler ve ifadeler daha sadeleştirilebilir. Özellikle yabancı gemi isimleri ve denizcilik hukuku ile ilgili kısımlar ilk dinlemede daha anlaşılır hale getirilebilir.'}
+[19:43:20] Konu kalite barajını geçemedi: Mary Celeste Gemisindeki 10 Gizemli Boşluk: Kahve Fincanları Neden Hâlâ Sıcaktı?
+[19:43:20] Baraj geçilemedi; en iyi senaryo kullanılıyor (min 7, ort 7.9)
+[19:43:20] Seslendirme başlıyor (Gemini Charon)...
+[19:43:54] Gemini TTS gemini-3.1-flash-tts-preview: kota yok/doldu → sonraki model
+[19:47:52] Gemini TTS gemini-2.5-flash-preview-tts: kota yok/doldu → sonraki model
+[19:47:52] HATA:
+Traceback (most recent call last):
+  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 2048, in <module>
+    res = run_once()
+          ^^^^^^^^^^
+  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 1826, in run_once
+    narrate(script, w)
+  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 482, in narrate
+    files, durs, words = _tts(script["scenes"], workdir)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 472, in _tts
+    return voice.narrate_gemini(scenes, workdir, voice=v.get("name", "Charon"), style=v.get("style"),
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/otoyt/otoyt/voice.py", line 195, in narrate_gemini
+    a = _trim(ai.gemini_tts(" ".join(scenes[i]["narration"] for i in grp), voice=voice, style=style,
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/otoyt/otoyt/ai.py", line 211, in gemini_tts
+    raise RuntimeError(f"Gemini TTS ses üretemedi: {last}")
+RuntimeError: Gemini TTS ses üretemedi: gemini-2.5-flash-preview-tts: günlük ses kotası doldu
+
