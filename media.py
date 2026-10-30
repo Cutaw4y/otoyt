@@ -282,7 +282,7 @@ def mux_master(video, narration, out, ass=None, music=None, music_db=-21.0, fade
         af = (f"[1:a]aresample=48000,loudnorm=I=-15:TP=-1.5:LRA=11,"
               f"afade=t=out:st={max(total - fade_out, 0):.2f}:d={fade_out}[a]")
     sh(["ffmpeg", "-y", *ins, "-filter_complex", vf + ";" + af, "-map", "[v]", "-map", "[a]",
-        "-t", f"{total:.3f}", "-c:v", "libx264", "-preset", "faster", "-crf", "19",
+        "-t", f"{total:.3f}", "-c:v", "libx264", "-preset", "faster", "-crf", "21", "-maxrate", "6M", "-bufsize", "12M",
         "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-map_metadata", "-1", "-movflags", "+faststart", out])
     return out
 
@@ -318,7 +318,7 @@ def make_short(parts, out, workdir, music=None, tag="short", max_len=58.0):
     else:
         af = "[1:a]aresample=48000,loudnorm=I=-14:TP=-1.5[a]"
     sh(["ffmpeg", "-y", *ins, "-filter_complex", vf + ";" + af, "-map", "[v]", "-map", "[a]",
-        "-t", f"{total:.3f}", "-c:v", "libx264", "-preset", "faster", "-crf", "20",
+        "-t", f"{total:.3f}", "-c:v", "libx264", "-preset", "faster", "-crf", "21", "-maxrate", "6M", "-bufsize", "12M",
         "-c:a", "aac", "-b:a", "192k", "-map_metadata", "-1", "-movflags", "+faststart", out])
     return out, total
 

@@ -69,12 +69,23 @@ jobs:
             OTOYT_ATTEMPT=2 python pipeline.py; code=$?
           fi
           exit $code
-      - name: Üretilen videoyu sakla (test modu veya yükleme hatası)
+      - name: Paket 1 – uzun video
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: golgedefter-${{ github.run_number }}
-          path: out/
+          name: golgedefter-${{ github.run_number }}-1-uzun-video
+          path: out/1-VIDEO-*.mp4
+          if-no-files-found: ignore
+          retention-days: 3
+          compression-level: 0
+      - name: Paket 2 – Shorts, küçük resim, altyazılar, yükleme bilgileri
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: golgedefter-${{ github.run_number }}-2-shorts-ve-bilgiler
+          path: |
+            out/*
+            !out/1-VIDEO-*.mp4
           if-no-files-found: ignore
           retention-days: 3
           compression-level: 0
