@@ -1,3 +1,139 @@
-[10:55:45] Başladı (test modu: False, yayın: manual)
-[10:55:45] Ücretli Gemini anahtarı kullanılıyor
-[10:55:46] Kanal doğrulandı: GölgeDefter
+[09:17:58] Başladı (test modu: False, yayın: manual)
+[09:17:59] Ücretli Gemini anahtarı kullanılıyor
+[09:18:00] Kanal doğrulandı: GölgeDefter
+[09:18:02] Eski videolardan çeviri başlık/açıklama kaldırıldı: 0 video
+[09:18:02] Analitik: 0 video ölçüldü, sütun puanları: {}
+[09:18:23] Konu (1): Zülkarneyn'in Demir Seddi: Halifenin Gönderdiği Gizli Seferin Raporu  [İslam tarihi ve kutsal kıssalar (Ashab-ı Kehf, Zülkarneyn, İrem ve Ad kavmi, Semud, Nuh tufanı)]
+[09:20:11] Senaryo yazıldı: 34 sahne, 1511 kelime
+[09:22:26] Sadeleştirme sahne yapısını bozdu → eski metin kalıyor
+[09:24:35] Doğrulama kaynağı: Google araması
+[09:24:35] Doğrulama turu 1: 15 iddia, 4 yanlış, 0 belirsiz
+[09:27:36] Doğrulama kaynağı: Google araması
+[09:27:36] Doğrulama turu 2: 15 iddia, 1 yanlış, 0 belirsiz
+[09:30:22] Doğrulama kaynağı: Google araması
+[09:30:22] Doğrulama turu 3: 15 iddia, 2 yanlış, 0 belirsiz
+[09:30:22] Bilgi doğrulamadan geçemedi → yeni konu
+[09:30:48] Konu (2): Beşiğin Başındaki Görünmez Düşman: Anadolu'nun Alkarısı Dosyası  [Anadolu ve dünya efsaneleri, mitolojik varlıklar, halk inançları]
+[09:32:21] Senaryo yazıldı: 34 sahne, 1580 kelime
+[09:33:23] Sadeleştirme sahne yapısını bozdu → eski metin kalıyor
+[09:34:07] Doğrulama kaynağı: Google araması
+[09:34:07] Doğrulama turu 1: 13 iddia, 1 yanlış, 0 belirsiz
+[09:36:12] Doğrulama kaynağı: Google araması
+[09:36:12] Doğrulama turu 2: 15 iddia, 2 yanlış, 0 belirsiz
+[09:37:44] Doğrulama kaynağı: Google araması
+[09:37:44] Doğrulama turu 3: 11 iddia, 0 yanlış, 0 belirsiz
+[09:37:46] Editör (min 7, ort 8.6): {'originality': 8, 'hook': 9, 'clarity': 8, 'simplicity': 7, 'flow': 9, 'value_density': 9, 'audience_fit': 10, 'problems': ['"Ignaz Semmelweis" adından önce veya hemen sonra kim olduğu ve neden önemli olduğu kısaca verilmemişti, sadeleştirilmeli: \'Viyana\'daki bir hastanede genç bir doktor olan Ignaz Semmelweis...\'', '"deliryum, yani gerçeği ayırt edememe hali" tanımı iyi ama "deliryum" kelimesi tamamen çıkarılıp sadece "şiddetli bir zihin bulanıklığı" denirse 12 yaşındaki bir çocuk için daha basit olur.', '"hipnagojik halüsinasyon ve uyku felci" terimleri ağır, açıklamaları verilmiş ancak terimlerin kendisi 12 yaşındaki bir dinleyiciyi zorlayabilir, \'karabasan\' kelimesiyle basitleştirilmiş.', '"puerperal sepsis" tıbbi terimi açıklandığı için anlaşılır ancak "sepsis" kelimesi doğrudan kullanıldığında hafif karmaşa yaratabilir, \'kan zehirlenmesi\' denerek basitleştirildi.'], 'problems_tr': 'Metinde geçen Ignaz Semmelweis gibi özel isimler ve deliryum, sepsis gibi bazı tıbbi terimler 12 yaşındaki bir dinleyiciyi zorlayabilecek kadar ağırdı; daha günlük ve sade ifadelerle basitleştirilmelidir.'}
+[09:37:46] Seslendirme başlıyor (Gemini Charon)...
+[09:58:40] Seslendirme: 842 sn
+[09:58:40] Sahne 1/33 (diagram, 21.3 sn, 4 çekim)
+[09:59:00] Sahne 2/33 (diagram, 32.8 sn, 7 çekim)
+[09:59:25] Sahne 3/33 (footage, 22.4 sn, 4 çekim)
+[09:59:27]    ilgisiz görüntü elendi: old stone gothic architecture building
+[09:59:30]    ilgisiz görüntü elendi: pagoda temple at sunset sky
+[09:59:32]    ilgisiz görüntü elendi: people walking in snowy woods
+[09:59:40]    ilgisiz görüntü elendi: dark forest with sun flare
+[09:59:41]    ilgisiz görüntü elendi: an old man on street
+[09:59:43]    ilgisiz görüntü elendi: grain pouring out of bag
+[09:59:56]    ilgisiz görüntü elendi: old wooden door in stone wall
+[09:59:59]    ilgisiz görüntü elendi: shadow of a chair curtain
+[10:00:00]    ilgisiz görüntü elendi: close up of metal chain
+[10:00:04] Sahne 4/33 (footage, 27.2 sn, 5 çekim)
+[10:00:06]    ilgisiz görüntü elendi: person silhouette looking at city
+[10:00:26]    ilgisiz görüntü elendi: Full moon behind dark clouds
+[10:00:27]    ilgisiz görüntü elendi: Green landscape with flowers and mountains
+[10:00:30]    ilgisiz görüntü elendi: sunset over the ocean
+[10:00:40]    ilgisiz görüntü elendi: dark empty hallway with reflections
+[10:00:42]    ilgisiz görüntü elendi: aerial view of green mountains
+[10:00:44]    ilgisiz görüntü elendi: modern empty building corridor walkway
+[10:00:52] Sahne 5/33 (diagram, 21.2 sn, 4 çekim)
+[10:01:34]    ilgisiz görüntü elendi: a hawk perched on wood
+[10:01:38]    ilgisiz görüntü elendi: river flowing through rocky mountains
+[10:01:40]    ilgisiz görüntü elendi: red flowers in a field
+[10:01:50]    ilgisiz görüntü elendi: sunset over grassy field silhouette
+[10:01:51]    ilgisiz görüntü elendi: bridges over river at sunset
+[10:01:53]    ilgisiz görüntü elendi: red crested bird on branch
+[10:01:57] Sahne 6/33 (footage, 21.7 sn, 4 çekim)
+[10:01:58]    ilgisiz görüntü elendi: Woman touching a white wall
+[10:02:01]    ilgisiz görüntü elendi: aerial view of ancient pyramid
+[10:02:02]    ilgisiz görüntü elendi: aerial view of ancient pyramid
+[10:02:10]    ilgisiz görüntü elendi: waiter serving food in restaurant
+[10:02:12]    ilgisiz görüntü elendi: wine glasses on restaurant table
+[10:02:13]    ilgisiz görüntü elendi: Medieval castle among green trees
+[10:02:23]    ilgisiz görüntü elendi: hands chopping vegetables on board
+[10:02:26]    ilgisiz görüntü elendi: aerial view of old town
+[10:02:42] Sahne 7/33 (diagram, 23.4 sn, 5 çekim)
+[10:02:50]    ilgisiz görüntü elendi: aerial view of green river
+[10:02:51]    ilgisiz görüntü elendi: foggy mountains and forest landscape
+[10:02:53]    ilgisiz görüntü elendi: lush green forest path view
+[10:03:02]    ilgisiz görüntü elendi: aerial view of urban city
+[10:03:23] Sahne 8/33 (footage, 8.3 sn, 2 çekim)
+[10:03:25]    ilgisiz görüntü elendi: dark stone lion statue profile
+[10:03:26]    ilgisiz görüntü elendi: city harbor with bicycles parked
+[10:03:28]    ilgisiz görüntü elendi: person typing on a computer
+[10:03:34]    ilgisiz görüntü elendi: Woman using a digital tablet
+[10:03:36]    ilgisiz görüntü elendi: doctor using a digital tablet
+[10:03:40]    ilgisiz görüntü elendi: aerial view of geodesic dome
+[10:03:43] Sahne 9/33 (diagram, 16.5 sn, 3 çekim)
+[10:03:59]    ilgisiz görüntü elendi: green forest with mossy ground
+[10:04:02]    ilgisiz görüntü elendi: green river landscape with trees
+[10:04:04]    ilgisiz görüntü elendi: river flowing through rocky mountains
+[10:04:12] Sahne 10/33 (footage, 10.5 sn, 2 çekim)
+[10:04:15]    ilgisiz görüntü elendi: young man reading a book
+[10:04:17]    ilgisiz görüntü elendi: young man reading book library
+[10:04:18]    ilgisiz görüntü elendi: dark old church interior chandelier
+[10:04:27]    ilgisiz görüntü elendi: young man reading a book
+[10:04:28]    ilgisiz görüntü elendi: person taking book from shelf
+[10:04:31]    ilgisiz görüntü elendi: man reading book in library
+[10:04:34] Sahne 11/33 (footage, 23.2 sn, 5 çekim)
+[10:04:37]    ilgisiz görüntü elendi: dark sunset sky with clouds
+[10:04:39]    ilgisiz görüntü elendi: burning logs in a fire
+[10:04:40]    ilgisiz görüntü elendi: dark stormy night sky clouds
+[10:05:20]    ilgisiz görüntü elendi: open hood of vintage car
+[10:05:22]    ilgisiz görüntü elendi: dark clouds in night sky
+[10:05:24]    ilgisiz görüntü elendi: rippling water in the sea
+[10:05:50] Sahne 12/33 (diagram, 22.6 sn, 5 çekim)
+[10:06:03]    ilgisiz görüntü elendi: close up of burning candle
+[10:06:05]    ilgisiz görüntü elendi: close up of burning candles
+[10:06:07]    ilgisiz görüntü elendi: bald man holding sparklers
+[10:06:15]    ilgisiz görüntü elendi: A cat beside a candle
+[10:06:17]    ilgisiz görüntü elendi: modern female doctor examining boy
+[10:06:18]    ilgisiz görüntü elendi: modern doctor using a tablet
+[10:06:25] Sahne 13/33 (footage, 23.8 sn, 5 çekim)
+[10:06:27]    ilgisiz görüntü elendi: aerial view of river and forests
+[10:06:29]    ilgisiz görüntü elendi: aerial view of modern city
+[10:06:32]    ilgisiz görüntü elendi: snowy road between winter trees
+[10:06:59]    ilgisiz görüntü elendi: aerial view of rocky canyon
+[10:07:17] Sahne 14/33 (footage, 78.7 sn, 16 çekim)
+[10:11:44] Sahne 15/33 (diagram, 38.1 sn, 8 çekim)
+[10:12:59] Sahne 16/33 (footage, 28.9 sn, 6 çekim)
+[10:14:31] Sahne 17/33 (diagram, 34.8 sn, 7 çekim)
+[10:15:32] Sahne 18/33 (footage, 45.9 sn, 9 çekim)
+[10:17:49] Sahne 19/33 (diagram, 37.6 sn, 8 çekim)
+[10:19:02] Sahne 20/33 (diagram, 14.1 sn, 3 çekim)
+[10:19:31] Sahne 21/33 (diagram, 31.7 sn, 6 çekim)
+[10:21:02] Sahne 22/33 (footage, 15.5 sn, 3 çekim)
+[10:21:47] Sahne 23/33 (diagram, 10.4 sn, 2 çekim)
+[10:22:08] Sahne 24/33 (diagram, 10.2 sn, 2 çekim)
+[10:22:32] Sahne 25/33 (footage, 21.6 sn, 4 çekim)
+[10:23:39] Sahne 26/33 (footage, 10.1 sn, 2 çekim)
+[10:24:09] Sahne 27/33 (diagram, 24.6 sn, 5 çekim)
+[10:24:52] Sahne 28/33 (footage, 25.1 sn, 5 çekim)
+[10:26:04] Sahne 29/33 (footage, 48.0 sn, 10 çekim)
+[10:28:29] Sahne 30/33 (diagram, 23.2 sn, 5 çekim)
+[10:29:19] Sahne 31/33 (diagram, 33.1 sn, 7 çekim)
+[10:30:13] Sahne 32/33 (footage, 24.7 sn, 5 çekim)
+[10:31:32] Sahne 33/33 (diagram, 11.3 sn, 2 çekim)
+[10:51:28] Ana video: 861 sn
+[10:52:48] Short 1: sahne 0-2, 54 sn — Lohusa Yastığının Altındaki Paslı Makas
+[10:53:40] Short 2: sahne 7-9, 35 sn — Sümer Tabletlerindeki Alkarısı: Lamaştu
+[10:54:31] Short 3: sahne 16-19, 35 sn — Doktorların Ellerindeki Görünmez Katil
+[10:54:39] Thumbnail sıralaması: [1, 2, 3] - Candidate #1 has the strongest color pop with the vibrant red fabric and high-contrast white/gold typography ('AL TÜLÜN SIRRI'), creating an immediate visual hook and curiosity gap that complements the video title. Candidate #2 is decent with atmospheric lighting, but the text placement blends too much into the dark background. Candidate #3 is too dark and muddy at phone size, failing to establish a clear focal point quickly.
+[10:54:39] Altyazı çevirisi: English (317 satır)
+[10:54:49] Çeviri parçası eksik geldi (180-210), tekrar deneniyor
+[10:54:56] Çeviri parçası eksik geldi (300-317), tekrar deneniyor
+[10:54:57] Çeviri parçası eksik geldi (300-317), tekrar deneniyor
+[10:58:32] Instagram sırasına eklendi: Sümer Tabletlerindeki Alkarısı: Lamaştu
+[10:58:34] Instagram sırasına eklendi: Doktorların Ellerindeki Görünmez Katil
+[10:58:47] Paket yayında (Releases): https://github.com/Cutaw4y/otoyt/releases/tag/paket-20261031-1058-alkarisi-nedir
+[10:58:49] Elle yükleme paketi hazır: ['0-YUKLEME-BILGILERI.txt', '1-KUCUK-RESIM.jpg', '1-VIDEO-alkarisi-nedir.mp4', '1-altyazi-en.srt', '1-altyazi-tr.srt', '2-SHORT-lohusa-yastiginin-altindaki-pasli-makas.mp4', '3-SHORT-sumer-tabletlerindeki-alkarisi-lamastu.mp4', '4-SHORT-doktorlarin-ellerindeki-gorunmez-katil.mp4']
+[10:58:49] Başarıyla bitti.
