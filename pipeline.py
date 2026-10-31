@@ -1550,7 +1550,8 @@ def _reel_caption(script, sh_, first):
                + ("Videonun tamamı YouTube'da, link profilde 👆" if tr
                   else "Full video on YouTube, link in bio 👆") + "\n\n"
                + " ".join("#" + t for t in tags))
-    return fix_hashtags(cap, CFG.get("ig_brand_tag"))
+    return publish.ig_link_cta(fix_hashtags(cap, CFG.get("ig_brand_tag")), tr)
+
 
 IG_QUEUE = DATA / "ig_queue.json"
 IG_RELEASE = "ig-queue"   # sıradaki Reels videoları bu GitHub Release'te bekler (repoyu şişirmez)

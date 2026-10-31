@@ -547,3 +547,25 @@ def set_playlist_image(playlist_id, path, wide_path=None):
                 raise
             errs.append(str(getattr(e, "content", b"") or e)[:300])
     raise RuntimeError(" | ".join(errs)[:900])
+
+
+def ig_link_cta(caption, tr=True):
+    """Reel açıklamasında YouTube'a yönlendiren cümleyi tek ve sabit bir çağrıya çevirir:
+    YouTube geçen cümleler çıkarılır, hashtag satırının hemen üstüne "link profilde" satırı konur."""
+    import re as _re
+    cta = "Belgeselin tamamı YouTube'da, link profilde 👆" if tr else "Full video on YouTube, link in bio 👆"
+    lines = caption.rstrip().split("\n")
+    tag_i = len(lines)
+    while tag_i > 0 and (not lines[tag_i - 1].strip() or lines[tag_i - 1].strip().startswith("#")):
+        tag_i -= 1
+    body, tags = lines[:tag_i], [l for l in lines[tag_i:] if l.strip()]
+    out = []
+    for l in body:
+        parts = _re.split(r"(?<=[.!?])\s+", l)
+        kept = [p for p in parts if not _re.search(r"youtube|\blink\b", p, _re.I)]
+        if parts and not kept and l.strip():
+            continue  # satırın tamamı yönlendirmeydi
+        out.append(" ".join(kept))
+    while out and not out[-1].strip():
+        out.pop()
+    return "\n".join(out + [cta, ""] + tags).strip()

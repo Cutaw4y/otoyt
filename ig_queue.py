@@ -72,7 +72,8 @@ def main():
         save(QUEUE, q[1:])
         return
     try:
-        mid, link = publish.instagram_reel(str(video), item["caption"], ai_label=CFG.get("instagram_ai_label", True))
+        cap = publish.ig_link_cta(item["caption"], CFG.get("language_code") == "tr")  # "link profilde" çağrısı
+        mid, link = publish.instagram_reel(str(video), cap, ai_label=CFG.get("instagram_ai_label", True))
     except Exception as e:
         (DATA / "ig_last_error.txt").write_text(f"{datetime.now().isoformat(timespec='minutes')} "
                                                 f"{item['title']}\n{e}\n", encoding="utf-8")
