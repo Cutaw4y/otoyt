@@ -231,5 +231,6 @@ shorts_gap_hours: 20
 
 instagram_enabled: true          # anahtar yoksa sessizce atlanır
 ig_brand_tag: "#gölgedefter"    # her Reel'de olur; Instagram en fazla 5 etiket kabul ediyor
+yt_brand_tag: "#gölgedefter"    # YouTube hashtag satırında her zaman olur
 instagram_reels_per_video: 3     # 1.si hemen, kalanlar günde bir (ig_tr.yml)
 instagram_ai_label: true

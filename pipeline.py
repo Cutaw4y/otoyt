@@ -1519,14 +1519,19 @@ def retag_videos(ids):
         try:
             r = llm_json("You write YouTube hashtags.",
                          f"Video title: {sn['title']}\nDescription:\n{sn.get('description', '')[:3000]}\n\n"
-                         f"Language: {CFG.get('language', 'English')}. Return 12-15 hashtags in that language, most "
+                         f"Language: {CFG.get('language', 'English')}. Return 12-15 hashtags written ONLY in "
+                         f"{CFG.get('language', 'English')} (foreign words only for proper names), most "
                          "important first (top 3 show above the title): the core search phrase joined, the specific "
                          "names/places/events/terms of THIS video, then 3-4 niche tags people follow. Every one directly "
                          "about this video; no generic spam (#viral #fyp #trending #shorts); no spaces inside a hashtag. "
                          'JSON: {"hashtags":["#..."]}', required=("hashtags",))
             new = [("#" + re.sub(r"[^\wçğıöşüÇĞİÖŞÜ]", "", h)) for h in r["hashtags"] if isinstance(h, str)]
-            new = [h for h in new if len(h) > 2 and h.lower() != "#shorts"]
-            tmp = {"description": sn.get("description", "") + "\n\n" + " ".join(new)}
+            other = {"#shorts", "#cutaway", "#gölgedefter", "#golgedefter"}  # kanal etiketini sistem ekler
+            new = [h for h in new if len(h) > 2 and h.lower() not in other]
+            old = sn.get("description", "")
+            lines = [ln for ln in old.split("\n") if not re.fullmatch(r"\s*(#[\wçğıöşüÇĞİÖŞÜ]+\s*)+", ln)]
+            old = re.sub(r"\n{3,}", "\n\n", "\n".join(lines)).rstrip()  # eski etiket satırlarını at
+            tmp = {"description": old + "\n\n" + " ".join(new)}
             tags = tidy_hashtags(tmp)
             body = tmp["description"].rsplit("\n\n", 1)[0] if tags else tmp["description"]
             line = (short_hashtags({"description": " ".join(tags)}) + " #Shorts") if is_short else " ".join(tags)
