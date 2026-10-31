@@ -137,7 +137,7 @@ voice:
 
 # ======================= KURGU / MARKA =======================
 use_intro: true                # 1. sahneden (merak uyandıran açılış) sonra 2.6 sn logo animasyonu
-outro_line: "And that's how it actually works. See you in the next Cutaway."
+outro_line: "And that's how it actually works. If you're not subscribed yet, subscribing really helps the channel grow. And if you made it this far, a like goes a long way. See you in the next Cutaway."
 outro_hold_seconds: 8          # kapanış cümlesinden sonra kapanış kartı ekranda kalma süresi
 shot_seconds: 4.5              # bir görüntünün ortalama ekranda kalma süresi (profesyonel tempo 3-6 sn)
 hook_scenes: 2                 # ilk 2 sahnede görsel, anlatılanın birebir karşılığı (stok görüntü yok)

@@ -170,7 +170,7 @@ voice:
 
 # ======================= KURGU =======================
 use_intro: true
-outro_line: "Bu sayfa şimdilik kapanıyor. Gölgedefter'in bir sonraki sayfasında görüşmek üzere."
+outro_line: "Bu sayfa şimdilik kapanıyor. Henüz abone olmadıysanız, Gölgedefter'e destek olmak için abone olmayı unutmayın. Videoyu buraya kadar izlediyseniz, bir beğeni bırakmanız bizim için çok değerli. Bir sonraki sayfada görüşmek üzere."
 outro_hold_seconds: 8
 shot_seconds: 5.0              # gizem temposu: biraz daha uzun çekimler
 hook_scenes: 2
