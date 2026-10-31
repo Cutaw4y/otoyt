@@ -1543,7 +1543,8 @@ MANUAL_PENDING = DATA / "manual_pending.json"
 
 
 def _tnorm(t):
-    return re.sub(r"\s+", " ", (t or "").strip().lower())
+    """Başlık karşılaştırması: büyük/küçük harf, boşluk ve noktalama farkı önemsiz ("Nedir ?" = "Nedir?")."""
+    return re.sub(r"[\W_]+", "", (t or "").lower())
 
 
 def finish_manual_uploads():
