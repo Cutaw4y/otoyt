@@ -1,3 +1,4 @@
-[12:57:35] Başladı (test modu: False, yayın: manual)
-[12:57:36] Ücretli Gemini anahtarı kullanılıyor
-[12:57:36] Kanal doğrulandı: GölgeDefter
+[12:58:27] Başladı (test modu: False, yayın: manual)
+[12:58:28] Ücretli Gemini anahtarı kullanılıyor
+[12:58:28] Kanal doğrulandı: GölgeDefter
+[12:58:29] Elle yüklenen uzun video bulunamadı: 'Alkarısı Nedir? Beşiklerin Başındaki Bin Yıllık Korku'. Kanaldaki son yüklemeler: Doktorların Ellerindeki Görünmez Katil #shorts (private) | Sümer Tabletlerindeki Alkarısı: Lamaştu #shorts (private) | Lohusa Yastığının Altındaki Paslı Makas #shorts (private) | Alkarısı Nedir ? Beşiklerin Başındaki Bin Yıllık Korku  (private)
