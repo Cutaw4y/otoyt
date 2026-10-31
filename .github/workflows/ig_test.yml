@@ -1,5 +1,10 @@
 name: Instagram testi (yayınlamaz)
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      durations:
+        description: "Test videosu süreleri (sn, virgülle)"
+        default: "5"
 jobs:
   test:
     runs-on: ubuntu-24.04
@@ -12,4 +17,5 @@ jobs:
       - env:
           IG_ACCESS_TOKEN: ${{ secrets.GD_IG_ACCESS_TOKEN }}
           IG_USER_ID: ${{ secrets.GD_IG_USER_ID }}
+          IG_TEST_DURATIONS: ${{ inputs.durations || '5' }}
         run: python ig_test.py
