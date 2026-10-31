@@ -1572,6 +1572,9 @@ def finish_manual_uploads():
                       _tnorm(u["title"]) in (_tnorm(it["title"]), _tnorm(it["marker"]),
                                              _tnorm(it["title"].replace(" #Shorts", "")))), None)
             if not v:
+                if it["kind"] == "long":
+                    log(f"Elle yüklenen uzun video bulunamadı: '{it['title']}'. Kanaldaki son yüklemeler: "
+                        + " | ".join(f"{u['title']} ({u['status'].get('privacyStatus')})" for u in ups[:6]))
                 continue
             used.add(v["id"])
             desc = it["description"].replace("{LONG_URL}", f"https://youtu.be/{long_item['video_id']}"
