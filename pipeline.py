@@ -1505,8 +1505,10 @@ def short_hashtags(script, n=6):
 
 def retag_videos(ids):
     """Yüklenmiş videoların açıklamasındaki hashtag'leri yeni kurala göre yeniler (uzun: 10-15, Short: 6 + #Shorts)."""
+    print(f"::notice title=retag::başladı ({len(ids)} video)", flush=True)
     yt = publish._yt()
     items = yt.videos().list(part="snippet", id=",".join(ids)).execute().get("items", [])
+    print(f"::notice title=retag::{len(items)} video bulundu", flush=True)
     found = {v["id"] for v in items}
     for vid in ids:
         if vid not in found:
@@ -1533,9 +1535,11 @@ def retag_videos(ids):
                                                                  "defaultLanguage", "defaultAudioLanguage") if k in sn}}
             yt.videos().update(part="snippet", body=body_).execute()
             log(f"{v['id']}: hashtag'ler yenilendi: {line}")
+            print(f"::notice title=retag {v['id']}::{line}")
             notify(f"🏷 Hashtag'ler eklendi: {sn['title']}\nhttps://youtu.be/{v['id']}\n{line}")
         except Exception as e:
             log(f"{v['id']}: hashtag'ler yenilenemedi: {str(e)[:200]}")
+            print(f"::error title=retag {v['id']}::{str(e)[:300]}")
             notify(f"⚠️ Hashtag'ler eklenemedi: https://youtu.be/{v['id']} (ayrıntı kayıtta).")
 
 
