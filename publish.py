@@ -289,7 +289,7 @@ def instagram_reel(video, caption, ai_label=True, poll_every=20, max_wait=900, d
             raise RuntimeError(f"Instagram yükleme: {_ig_err(u)}")
         return cid
 
-    cid = _retry(create_and_upload, tries=3, base=15, what="Instagram yükleme")
+    cid = _retry(create_and_upload, tries=6, base=30, what="Instagram yükleme")  # Meta ara ara ProcessingFailedError veriyor; aralıklı tekrar geçiyor
 
     waited = 0
     while True:  # Meta videoyu işleyene kadar bekle
