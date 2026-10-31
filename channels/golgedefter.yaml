@@ -180,6 +180,7 @@ music_db: -20
 
 # ======================= KALİTE =======================
 target_words: 1700             # ~15-16 dk: Türkçe gizem kanallarında izleyici uzun belgesel seviyor (Gerçeği Bul ort. ~29 dk)
+words_per_minute: 110          # Türkçe anlatım hızı (bildirimdeki tahmini süre için)
 min_length_ratio: 0.85
 max_expand_rounds: 2
 min_diagram_ratio: 0.5         # sahnelerin en az yarısı atmosferik AI görseli

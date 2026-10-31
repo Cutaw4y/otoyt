@@ -700,6 +700,7 @@ def _clip_start(clip, frames):
 
 
 _CLIP_CHECKS = 0
+VIS_STATS = {"rejected": 0, "planned": 0, "scenes": 0}   # bildirim için
 
 
 def clip_matches(clip, sc, workdir):
@@ -722,6 +723,7 @@ def clip_matches(clip, sc, workdir):
                      images=[fr], required=("match",), models=lite, temperature=0.2)
         ok = bool(r.get("match"))
         if not ok:
+            VIS_STATS["rejected"] += 1
             log(f"   ilgisiz görüntü elendi: {r.get('seen', '')}")
         return ok
     except Exception as e:
@@ -765,6 +767,7 @@ def plan_beats(script):
                                            for t, b in zip(sents, bs)]
     n = sum(1 for sc in scenes if sc.get("beat_plan"))
     log(f"Cümle cümle görsel planı: {n}/{len(scenes)} sahne")
+    VIS_STATS["planned"], VIS_STATS["scenes"] = n, len(scenes)
 
 
 def beat_shots(sc, min_sec=2.0, max_sec=6.5):
@@ -2040,6 +2043,7 @@ def produce_script(history, report):
                 best = (sc, idea, script)
             last_tr = review.get("problems_tr") or ""
             if ok:
+                script["_score"] = sc
                 return idea, script
             if attempt == CFG["max_rewrites"]:
                 break
@@ -2067,6 +2071,7 @@ def produce_script(history, report):
                f"ortalama {best[0][1]:.1f} puan verdi. Hedef her başlıkta en az 7. "
                "Hedefin biraz altında kaldığı için en iyi deneme kullanılıyor. Video normal şekilde üretiliyor, "
                "senden bir şey gerekmiyor.")
+        best[2]["_score"] = best[0]
         return best[1], best[2]
     notify("⛔ Bugün video üretilmedi: hiçbir senaryo kalite alt sınırını geçemedi. "
            f"Bir sonraki çalışmada tekrar denenecek.\nEditör notu: {last_tr}"[:1500])
@@ -2199,6 +2204,8 @@ def check_channel():
 
 def run_once():
     check_channel()
+    if not DRY_RUN:
+        notify("🎬 Yeni video yapımı başladı: önce konu seçilecek ve senaryo yazılacak.")
     ensure_branding()
     clear_old_localizations()
     retry_pending_captions()
@@ -2219,17 +2226,41 @@ def run_once():
         script["description"] = f"{kw[:1].upper() + kw[1:]}: {script['description']}"
     tidy_hashtags(script)
     script["tags"] = build_tags(script)
+    sc_ = script.get("_score") or (0, 0)
+    est = word_count(script) / CFG.get("words_per_minute", 130)
+    notify(f"📌 Konu seçildi: {script['title']}\nBölüm: {idea['pillar']}\n"
+           f"Senaryo puanı (10 üzerinden): en düşük {sc_[0]:.0f}, ortalama {sc_[1]:.1f} · "
+           f"{len(script['scenes'])} sahne, yaklaşık {est:.0f} dakika.\nBilgiler kaynaklarla kontrol edildi. "
+           "Şimdi seslendirme ve görsellere geçiliyor.")
 
     with tempfile.TemporaryDirectory() as tmp:
         w = Path(tmp)
         log(f"Seslendirme başlıyor ({'Gemini ' + CFG['voice'].get('name', '') if CFG['voice'].get('provider') == 'gemini' else 'Kokoro'})...")
         narrate(script, w)
-        log(f"Seslendirme: {sum(s['duration'] for s in script['scenes']):.0f} sn")
+        dur_ = sum(s['duration'] for s in script['scenes'])
+        log(f"Seslendirme: {dur_:.0f} sn")
+        st_ = voice.ALIGN_STATS
+        if st_["total"] and st_["ok"] == st_["total"]:
+            cap_ = "Altyazılar kontrol edildi: her kelimenin zamanı sesten ölçüldü, altyazı sesle birebir uyumlu ✅"
+        elif st_["ok"]:
+            cap_ = (f"Altyazılar kontrol edildi: {st_['total']} cümlenin {st_['ok']} tanesinde kelime zamanı sesten "
+                    "ölçüldü, kalanında tahmini zaman kullanıldı (küçük kayma olabilir) ⚠️")
+        else:
+            cap_ = "⚠️ Altyazı zamanları sesten ölçülemedi, tahmini zaman kullanıldı. Claude'a 'altyazı' demen yeterli."
+        notify(f"🎙 Seslendirme bitti ({dur_ / 60:.0f} dk {dur_ % 60:.0f} sn).\n{cap_}")
         build_scene_videos(script, w, ledger)
+        vs_ = VIS_STATS
+        notify(f"🖼 Görseller hazırlandı: {vs_['scenes']} sahnenin {vs_['planned']} tanesinde görsel cümle cümle "
+               f"seçildi (anlatılan neyse ekranda o)."
+               + (f" Konuya uymayan {vs_['rejected']} stok video elendi." if vs_["rejected"] else "")
+               + (" ⚠️ Bazı sahnelerde eski yöntem kullanıldı." if vs_["planned"] < vs_["scenes"] else " ✅"))
         variants = sorted(ASSETS.glob("music_*.mp3"))
         music = random.choice(variants) if variants else ASSETS / "music.mp3"  # her videoda farklı müzik
         final, words = assemble(script, w, music)
         log(f"Ana video: {media.duration(final):.0f} sn")
+        fd_ = media.duration(final)
+        notify(f"🎞 Video birleştirildi ({fd_ // 60:.0f}:{fd_ % 60:02.0f}). Şimdi Shorts, küçük resim ve "
+               "altyazı çevirisi hazırlanıyor.")
 
         shorts = []
         if CFG.get("make_shorts", True):

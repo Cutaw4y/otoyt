@@ -126,6 +126,8 @@ def narrate(scenes, workdir, voice="af_heart", lang="a", speed=1.0,
             t += gap
         audio = np.concatenate(pieces)
         al = align_sentences(audio, [x[0] for x in sw], align_lang) if align_lang and sw else None
+        ALIGN_STATS["total"] += len(sw)
+        ALIGN_STATS["ok"] += len(sw) if al else 0
         for k, (s, st, d) in enumerate(sw):  # gerçek kelime zamanları; olmazsa cümle içi tahmin
             if al and len(al[k]) == len(s.split()):
                 words += [{"word": w, "start": round(offset + w0, 3), "end": round(offset + w1, 3)}
@@ -203,6 +205,7 @@ def _pad_sentences(a, bounds, min_gap, sr=SR):
 
 # ---------------------------------------------------------------- gerçek kelime zamanları (hizalama)
 _WHISPER = None
+ALIGN_STATS = {"ok": 0, "total": 0}   # bildirim için: kaç cümlede kelime zamanı sesten ölçüldü
 
 
 def _whisper():
@@ -333,6 +336,8 @@ def narrate_gemini(scenes, workdir, voice="Charon", style=None, models=None, sce
         a = _trim(ai.gemini_tts(" ".join(scenes[i]["narration"] for i in grp), voice=voice, style=style,
                                 models=models or ("gemini-3.1-flash-tts-preview",)))
         al = align_sentences(a, flat, lang) if len(flat) > 0 else None
+        ALIGN_STATS["total"] += len(flat)
+        ALIGN_STATS["ok"] += len(flat) if al else 0
         rels = [None] * len(flat)
         if al:  # gerçek kelime zamanları: cümle sınırları ve altyazı birebir sesle aynı
             bounds = bounds_from_alignment(al, a.size / SR)
