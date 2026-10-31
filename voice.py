@@ -2,6 +2,8 @@
 Ücretsiz seslendirme: Kokoro-82M (açık kaynak, Apache-2.0), GitHub sunucusunun CPU'sunda çalışır.
 Cümle cümle seslendirir; böylece altyazı zamanlaması da ayrı bir servise gerek kalmadan çıkar.
 """
+import difflib
+import os
 import re
 import wave
 from pathlib import Path
@@ -191,6 +193,111 @@ def _pad_sentences(a, bounds, min_gap, sr=SR):
     return np.concatenate(pieces), new
 
 
+# ---------------------------------------------------------------- gerçek kelime zamanları (hizalama)
+_WHISPER = None
+
+
+def _whisper():
+    global _WHISPER
+    if _WHISPER is None:
+        from faster_whisper import WhisperModel
+        _WHISPER = WhisperModel(os.getenv("ALIGN_MODEL", "small"), device="cpu", compute_type="int8")
+    return _WHISPER
+
+
+def _tok(w):
+    w = w.replace("İ", "i").replace("I", "ı").lower()
+    return re.sub(r"[^0-9a-zçğıöşüâîû]", "", w)
+
+
+def _fill_gaps(times, total):
+    """Eşleşmeyen kelimelere komşularının arasındaki süreyi eşit dağıtır; zamanları sıraya sokar."""
+    n, i = len(times), 0
+    while i < n:
+        if times[i] is None:
+            j = i
+            while j < n and times[j] is None:
+                j += 1
+            t0 = times[i - 1][1] if i > 0 else 0.0
+            t1 = times[j][0] if j < n else total
+            t1 = max(t1, t0 + 0.12 * (j - i))
+            step = (t1 - t0) / (j - i)
+            for k in range(i, j):
+                times[k] = (t0 + step * (k - i), t0 + step * (k - i + 1))
+            i = j
+        else:
+            i += 1
+    out, last = [], 0.0
+    for a, b in times:
+        a = max(a, last)
+        b = max(b, a + 0.05)
+        out.append((a, b))
+        last = a
+    return out
+
+
+def align_from_hyp(sentences, hyp, total):
+    """Senaryodaki kelimeleri, konuşma tanımanın bulduğu kelimelerle eşler.
+    hyp: [(kelime, başlangıç, bitiş)]. Dönüş: cümle başına [(başlangıç, bitiş)] listesi, ya da güvenilmezse None."""
+    sw = [w for s in sentences for w in s.split()]
+    st = [_tok(w) for w in sw]
+    hw = [(_tok(w), a, b) for w, a, b in hyp if _tok(w)]
+    if not sw or not hw:
+        return None
+    times, matched = [None] * len(sw), 0
+    sm = difflib.SequenceMatcher(None, st, [h[0] for h in hw], autojunk=False)
+    for tag, i1, i2, j1, j2 in sm.get_opcodes():
+        if tag == "equal":
+            for k in range(i2 - i1):
+                times[i1 + k] = (hw[j1 + k][1], hw[j1 + k][2])
+            matched += i2 - i1
+        elif tag == "replace":  # ör. "bin dokuz yüz" ↔ "1900": aynı süreyi harf sayısına göre paylaştır
+            t0, t1 = hw[j1][1], hw[j2 - 1][2]
+            L = [len(sw[i]) + 1 for i in range(i1, i2)]
+            tot, t = sum(L), t0
+            for k, i in enumerate(range(i1, i2)):
+                d = (t1 - t0) * L[k] / tot
+                times[i] = (t, t + d)
+                t += d
+    if matched < 0.5 * len(sw):
+        return None
+    times = _fill_gaps(times, total)
+    out, k = [], 0
+    for s in sentences:
+        n = len(s.split())
+        out.append(times[k:k + n])
+        k += n
+    return out
+
+
+def align_sentences(a, sentences, lang="tr", sr=SR):
+    """Ses kaydındaki her kelimenin gerçekte söylendiği anı bulur (faster-whisper, CPU, ücretsiz)."""
+    if os.getenv("ALIGN_OFF"):
+        return None
+    try:
+        x = a.astype(np.float32)
+        if sr != 16000:
+            n = int(x.size * 16000 / sr)
+            x = np.interp(np.linspace(0, x.size - 1, n), np.arange(x.size), x).astype(np.float32)
+        segs, _ = _whisper().transcribe(x, language=lang, word_timestamps=True, beam_size=1,
+                                        condition_on_previous_text=False, vad_filter=False)
+        hyp = [(w.word, w.start, w.end) for sg in segs for w in (sg.words or [])]
+        return align_from_hyp(sentences, hyp, a.size / sr)
+    except Exception as e:
+        print(f"kelime hizalama yapılamadı: {str(e)[:200]}")
+        return None
+
+
+def bounds_from_alignment(al, total):
+    """Cümle sınırları: iki cümle arasındaki sessizliğin ortası (ses kırpılmaz, boşluk kalmaz)."""
+    edges = [0.0]
+    for k in range(len(al) - 1):
+        end, nxt = al[k][-1][1], al[k + 1][0][0]
+        edges.append((end + nxt) / 2 if nxt > end else nxt)
+    edges.append(total)
+    return [(edges[i], edges[i + 1]) for i in range(len(al))]
+
+
 def _groups(scenes, per_request, max_chars):
     g, cur, n = [], [], 0
     for i, sc in enumerate(scenes):
@@ -206,7 +313,7 @@ def _groups(scenes, per_request, max_chars):
 
 
 def narrate_gemini(scenes, workdir, voice="Charon", style=None, models=None, scene_gap=0.45, sentence_gap=0.0,
-                   scenes_per_request=6, max_chars=1800):
+                   scenes_per_request=6, max_chars=1800, lang="tr"):
     """Birkaç sahneyi tek istekte seslendirir (ücretsiz katmanın günlük istek sınırına sığmak ve sesin
     sahneler arasında doğal akması için), cümle ve sahne sınırlarını sessizliklerden bulur."""
     import ai
@@ -217,7 +324,14 @@ def narrate_gemini(scenes, workdir, voice="Charon", style=None, models=None, sce
         flat = [x for ss in sents for x in ss]
         a = _trim(ai.gemini_tts(" ".join(scenes[i]["narration"] for i in grp), voice=voice, style=style,
                                 models=models or ("gemini-3.1-flash-tts-preview",)))
-        bounds = sentence_bounds(a, len(flat))
+        al = align_sentences(a, flat, lang) if len(flat) > 0 else None
+        rels = [None] * len(flat)
+        if al:  # gerçek kelime zamanları: cümle sınırları ve altyazı birebir sesle aynı
+            bounds = bounds_from_alignment(al, a.size / SR)
+            rels = [[(w0 - b0, w1 - b0) for w0, w1 in ws] for ws, (b0, _) in zip(al, bounds)]
+            print(f"kelime hizalama: {len(flat)} cümle, gerçek zamanlar kullanılıyor")
+        else:
+            bounds = sentence_bounds(a, len(flat))
         if bounds is None:  # sessizlik bulunamazsa metin uzunluğuna göre orantıla
             lens = [len(x) + 4 for x in flat]
             tot, t, bounds = sum(lens), 0.0, []
@@ -233,12 +347,16 @@ def narrate_gemini(scenes, workdir, voice="Charon", style=None, models=None, sce
             seg = a[int(s0 * SR):int(s1 * SR)]
             local = [(x0 - s0, x1 - s0) for x0, x1 in b]
             seg, local = _pad_sentences(seg, local, sentence_gap)
-            per_scene[i] = (seg, ss, local)
+            per_scene[i] = (seg, ss, local, rels[k - len(ss):k])
     files, durs, words, offset = [], [], [], 0.0
     for i in range(len(scenes)):
-        seg, ss, local = per_scene[i]
-        for x, (b0, b1) in zip(ss, local):
-            words += word_timings(x, offset + b0, max(b1 - b0, 0.2))
+        seg, ss, local, rl = per_scene[i]
+        for x, (b0, b1), r in zip(ss, local, rl):
+            if r and len(r) == len(x.split()):
+                words += [{"word": w, "start": round(offset + b0 + r0, 3), "end": round(offset + b0 + r1, 3)}
+                          for w, (r0, r1) in zip(x.split(), r)]
+            else:
+                words += word_timings(x, offset + b0, max(b1 - b0, 0.2))
         full = np.concatenate([seg, np.zeros(int(scene_gap * SR), dtype=np.float32)])
         f = write_wav(full, workdir / f"vo_{i:02d}.wav")
         dur = full.size / SR

@@ -488,7 +488,7 @@ def _tts(scenes, workdir):
                                         models=v.get("models"), scene_gap=v.get("scene_gap", 0.45),
                                         sentence_gap=v.get("sentence_gap", 0.0),
                                         scenes_per_request=v.get("scenes_per_request", 6),
-                                        max_chars=v.get("max_chars", 1800))
+                                        max_chars=v.get("max_chars", 1800), lang=CFG.get("language_code", "en"))
         except Exception as e:  # Gemini sesi alınamazsa video yine çıksın: yedek ses
             fb = v["fallback"]
             log(f"Gemini sesi alınamadı ({str(e)[:120]}) → yedek ses ({fb.get('name')})")
@@ -501,7 +501,7 @@ def _tts(scenes, workdir):
                                     models=v.get("models"), scene_gap=v.get("scene_gap", 0.45),
                                     sentence_gap=v.get("sentence_gap", 0.0),
                                     scenes_per_request=v.get("scenes_per_request", 6),
-                                        max_chars=v.get("max_chars", 1800))
+                                        max_chars=v.get("max_chars", 1800), lang=CFG.get("language_code", "en"))
     return voice.narrate(scenes, workdir, voice=v["name"], lang=v["lang"], speed=v.get("speed", 1.0),
                          sentence_gap=v.get("sentence_gap", 0.28), scene_gap=v.get("scene_gap", 0.45))
 
@@ -730,6 +730,77 @@ def clip_matches(clip, sc, workdir):
         return True
 
 
+def plan_beats(script):
+    """Her cümle için ayrı görsel planı: o cümlede adı geçen somut şey (nesne, yer, belge, olay).
+    Görüntü, cümle söylenirken değişir; böylece "Babil kil tabletleri" denince ekranda kil tablet olur."""
+    scenes = script["scenes"]
+    for i in range(0, len(scenes), 8):
+        chunk = list(range(i, min(i + 8, len(scenes))))
+        lines = []
+        for si in chunk:
+            for k, sent in enumerate(voice.split_sentences(scenes[si]["narration"])):
+                lines.append(f"{si}.{k}: {sent}")
+        try:
+            r = llm_json(
+                "You are a documentary picture editor. For EVERY numbered sentence pick the visual shown while it "
+                "is spoken.",
+                f"Video: {script['title']}\nSentences (scene.sentence: text):\n" + "\n".join(lines) + "\n\n"
+                "For each sentence return: query = 2-4 word ENGLISH stock-footage search for the CONCRETE thing named "
+                "in that sentence (the object, artifact, place, document, animal, action; e.g. 'babylonian clay "
+                "tablet', 'ancient cuneiform', 'midwife newborn baby'); image = ENGLISH illustration prompt showing "
+                "exactly that thing. If the sentence names nothing concrete, show the most concrete thing it refers "
+                "to from the surrounding sentences, never a generic mood shot. Never show faces of prophets or holy "
+                "figures, no gore. "
+                'JSON: {"beats":[{"id":"3.2","query":"...","image":"..."}]}', required=("beats",))
+        except Exception as e:
+            log(f"Cümle görselleri planlanamadı (sahne {i + 1}-{chunk[-1] + 1}): {str(e)[:150]}")
+            continue
+        got = {str(b.get("id", "")).strip(): b for b in r.get("beats", []) if isinstance(b, dict)}
+        for si in chunk:
+            sents = voice.split_sentences(scenes[si]["narration"])
+            bs = [got.get(f"{si}.{k}") for k in range(len(sents))]
+            if all(b and b.get("query") and b.get("image") for b in bs):
+                scenes[si]["beat_plan"] = [{"text": t, "query": b["query"], "image": b["image"]}
+                                           for t, b in zip(sents, bs)]
+    n = sum(1 for sc in scenes if sc.get("beat_plan"))
+    log(f"Cümle cümle görsel planı: {n}/{len(scenes)} sahne")
+
+
+def beat_shots(sc, min_sec=2.0, max_sec=6.5):
+    """Sahneyi cümle sınırlarından çekimlere böler. Dönüş: [(kare_sayısı, cümle_no)] (toplam = sahne karesi)
+    ya da None (kelime sayısı tutmazsa eski yönteme dönülür)."""
+    plan, ws, total = sc.get("beat_plan"), sc.get("words") or [], sc["frames"]
+    if not plan:
+        return None
+    counts = [len(b["text"].split()) for b in plan]
+    if sum(counts) != len(ws):
+        return None
+    fps, starts, k = media.FPS, [], 0
+    for c in counts:
+        starts.append(max(0.0, ws[k]["start"] - 0.12))  # görüntü kelimeden bir an önce gelsin
+        k += c
+    cuts = [0] + [min(total, int(round(t * fps))) for t in starts[1:]] + [total]
+    segs = [(cuts[j], cuts[j + 1], j) for j in range(len(plan)) if cuts[j + 1] > cuts[j]]
+    merged = []  # çok kısa cümle: bir önceki görüntü devam etsin (göz yorulmasın)
+    for a, b, j in segs:
+        if merged and (b - a) < min_sec * fps:
+            pa, _, pj = merged[-1]
+            merged[-1] = (pa, b, pj)
+        else:
+            merged.append((a, b, j))
+    if len(merged) > 1 and (merged[0][1] - merged[0][0]) < min_sec * fps:
+        a0, _, j0 = merged.pop(0)
+        merged[0] = (a0, merged[0][1], merged[0][2])
+    out = []
+    for a, b, j in merged:  # uzun cümle: aynı konunun iki-üç farklı görüntüsü
+        n = max(1, int(math.ceil((b - a) / (max_sec * fps))))
+        base = (b - a) // n
+        parts = [base] * n
+        parts[-1] += (b - a) - base * n
+        out += [(p, j) for p in parts]
+    return out
+
+
 def build_scene_videos(script, workdir, ledger):
     """Her sahneyi ~4-5 sn'lik çekimlere böler (profesyonel tempo), sahne videosunu döndürür."""
     style = CFG["visual_style"]
@@ -746,7 +817,14 @@ def build_scene_videos(script, workdir, ledger):
     for s in scenes[:hook_n]:
         s["visual"] = "diagram"  # ilk saniyeler: söylenenin birebir görseli
     shot_sec = CFG.get("shot_seconds", 4.5)
+    if CFG.get("visual_per_sentence", True):
+        plan_beats(script)
+    img_budget = [CFG.get("max_sentence_images", 60)]
     for i, sc in enumerate(scenes):
+        bshots = beat_shots(sc)
+        if bshots:
+            build_beat_scene(sc, i, bshots, workdir, ledger, style, i < hook_n, img_budget)
+            continue
         shots = media.split_frames(sc["frames"], shot_sec)
         log(f"Sahne {i+1}/{len(scenes)} ({sc.get('visual')}, {sc['duration']:.1f} sn, {len(shots)} çekim)")
         q = sc.get("broll_query") or CFG["fallback_broll"]
@@ -782,6 +860,51 @@ def build_scene_videos(script, workdir, ledger):
             files.append(out)
         sc["video"] = media.concat(files, workdir / f"scene_{i:02d}.mp4", workdir, f"scene_{i:02d}")
     return script
+
+
+def build_beat_scene(sc, i, bshots, workdir, ledger, style, hook, img_budget):
+    """Cümleye bağlı çekimler: her görüntü o an söylenen şeyi gösterir."""
+    plan = sc["beat_plan"]
+    log(f"Sahne {i+1} ({sc.get('visual')}, {sc['duration']:.1f} sn, {len(bshots)} çekim, cümleye bağlı)")
+    imgs, files, prev_j, part = {}, [], None, 0
+
+    def beat_image(j):
+        if j in imgs:
+            return imgs[j]
+        b = plan[j]
+        if img_budget[0] > 0:
+            img_budget[0] -= 1
+            imgs[j] = gen_image(f"{b['image']}. Style: {style}", workdir / f"img_{i:02d}_b{j:02d}.jpg",
+                                b["query"], ledger)
+        else:  # AI görsel bütçesi bitti: aynı konunun stok fotoğrafı
+            p = workdir / f"img_{i:02d}_b{j:02d}.jpg"
+            imgs[j] = fetch_stock_photo(b["query"], p, ledger) or gen_image(
+                f"{b['image']}. Style: {style}", p, b["query"], ledger)
+        return imgs[j]
+
+    for k, (fr, j) in enumerate(bshots):
+        part = part + 1 if j == prev_j else 0
+        prev_j = j
+        b = plan[j]
+        out = workdir / f"shot_{i:02d}_{k:02d}.mp4"
+        # diyagram sahnesi: önce cümlenin görseli, uzun cümlede ikinci çekim stok; stok sahne: tersi
+        want_still = hook or (sc.get("visual") == "diagram") == (part % 2 == 0)
+        clip = None
+        if not want_still:
+            for t in range(3):
+                clip = fetch_stock(b["query"], workdir / f"raw_{i:02d}_{k:02d}_{t}.mp4", ledger)
+                if not clip or clip_matches(clip, {"narration": b["text"], "broll_query": b["query"]}, workdir):
+                    break
+                clip = None
+        if clip:
+            media.render_footage(clip, fr, out, start=_clip_start(clip, fr))
+        else:
+            img = beat_image(j)
+            move = random.choice(["in", "out"]) if part == 0 else random.choice(["detail", "left", "right"])
+            media.render_still(img, fr, out, move=move,
+                               focus=(random.uniform(0.3, 0.7), random.uniform(0.3, 0.7)))
+        files.append(out)
+    sc["video"] = media.concat(files, workdir / f"scene_{i:02d}.mp4", workdir, f"scene_{i:02d}")
 
 
 def assemble(script, workdir, music):
@@ -833,7 +956,10 @@ def assemble(script, workdir, music):
                 if s.get("callout") and s.get("callout").strip() and round(s.get("t0", -1), 2) not in chap_starts
                 and len(s["callout"].split()) <= 6]
     ass = media.write_ass_long(words if CFG.get("burn_captions", True) else [], w / "captions.ass",
-                               chapters=chap_ev, callouts=callouts)
+                               chapters=chap_ev, callouts=callouts,
+                               per_line=CFG.get("caption_words_per_line", 7),
+                               highlight=(CFG.get("caption_theme") or {}).get("chap_num", "&H0044A8E8")
+                               if CFG.get("caption_word_highlight") else None)
     whoosh = ASSETS / "whoosh.wav"
     sfx = (whoosh, [ct for ct, _, _ in chap_ev]) if whoosh.exists() and chap_ev else None
     final = media.mux_master(video, nar, w / "final.mp4", ass=ass, music=music, sfx=sfx,

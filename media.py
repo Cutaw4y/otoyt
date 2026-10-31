@@ -139,7 +139,9 @@ def srt_blocks(words, per_line=6, until=None, gap=0.6, max_chars=42):
                         and not re.fullmatch(r"\d+\.", w["word"].strip()))
         pause = nxt is not None and nxt["start"] - w["end"] > gap
         too_long = nxt is not None and len(" ".join(x["word"].strip() for x in cur + [nxt])) > max_chars
-        if len(cur) >= per_line or sentence_end or pause or too_long or nxt is None:
+        full = len(cur) >= per_line and not (  # cümlenin son kelimesini tek başına alt satıra bırakma
+            len(cur) == per_line and nxt is not None and nxt["word"].strip()[-1:] in ".!?" and not too_long)
+        if full or sentence_end or pause or too_long or nxt is None:
             out.append((cur[0]["start"], cur[-1]["end"], " ".join(x["word"].strip() for x in cur)))
             cur = []
     return out
@@ -184,7 +186,7 @@ def _ass_esc(t):
     return t.replace("\\", "").replace("{", "(").replace("}", ")").replace("\n", " ")
 
 
-def write_ass_long(words, out, per_line=7, chapters=(), callouts=()):
+def write_ass_long(words, out, per_line=7, chapters=(), callouts=(), highlight=None):
     """Uzun video katmanları (hep aynı görsel kural):
     - Alt yazı: altta, beyaz, ince kontur
     - Bölüm kartı: sol üstte, 'BÖLÜM n' + başlık, kayarak gelir (3.2 sn)
@@ -205,8 +207,26 @@ Style: Callout,Inter Display,50,{THEME['callout_text']},&H00FFFFFF,{THEME['callo
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 """
-    ev = [f"Dialogue: 0,{_ass_time(a)},{_ass_time(b + 0.15)},Cap,,0,0,0,,{_ass_esc(t)}"
-          for a, b, t in srt_blocks(words, per_line)]
+    ev = []
+    blocks = srt_blocks(words, per_line)
+    k = 0  # blokların kelimeleri sırayla words listesinden gelir
+    for n, (a, b, t) in enumerate(blocks):
+        nxt = blocks[n + 1][0] if n + 1 < len(blocks) else None
+        end = b + 0.15 if nxt is None else min(b + 0.15, nxt)  # iki satır asla aynı anda görünmez
+        bw = words[k:k + len(t.split())]
+        k += len(t.split())
+        if not highlight or len(bw) != len(t.split()):
+            ev.append(f"Dialogue: 0,{_ass_time(a)},{_ass_time(end)},Cap,,0,0,0,,{_ass_esc(t)}")
+            continue
+        # kelime kelime: o an söylenen kelime renkli, satır sesle birlikte ilerler
+        for j, w in enumerate(bw):
+            w0 = a if j == 0 else w["start"]
+            w1 = bw[j + 1]["start"] if j + 1 < len(bw) else end
+            if w1 - w0 < 0.02:
+                continue
+            parts = [("{\\c" + highlight + "}" + _ass_esc(x["word"].strip()) + "{\\r}") if i == j
+                     else _ass_esc(x["word"].strip()) for i, x in enumerate(bw)]
+            ev.append(f"Dialogue: 0,{_ass_time(w0)},{_ass_time(w1)},Cap,,0,0,0,,{' '.join(parts)}")
     for t, title, n in chapters:
         a, b = _ass_time(t + 0.2), _ass_time(t + 3.4)
         ev.append(f"Dialogue: 2,{a},{b},ChapNum,,0,0,0,,{{\\fad(250,300)\\move(60,78,90,78)}}{CHAPTER_LABEL} {n}")

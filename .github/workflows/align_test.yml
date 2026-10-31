@@ -1,0 +1,12 @@
+name: Altyazı hizalama testi
+on: workflow_dispatch
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg && pip install -q numpy "edge-tts>=6.1.10,<8" faster-whisper
+      - run: python align_test.py

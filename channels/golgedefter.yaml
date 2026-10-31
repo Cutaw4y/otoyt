@@ -178,6 +178,8 @@ shot_seconds: 5.0              # gizem temposu: biraz daha uzun çekimler
 hook_scenes: 2
 j_cut_seconds: 0.3
 burn_captions: true
+caption_word_highlight: true    # altyazı kelime kelime ilerler: söylenen kelime kehribar renkte
+caption_words_per_line: 5       # kısa satırlar: göz takibi kolay, satırlar birbirine girmez
 music_db: -20
 
 # ======================= KALİTE =======================
@@ -185,6 +187,7 @@ target_words: 1700             # ~15-16 dk: Türkçe gizem kanallarında izleyic
 min_length_ratio: 0.85
 max_expand_rounds: 2
 min_diagram_ratio: 0.5         # sahnelerin en az yarısı atmosferik AI görseli
+max_footage_checks: 160        # cümle başına görüntü kontrolü (ücretli Gemini, ucuz model)
 min_quality_score: 7
 min_quality_floor: 0
 max_topic_attempts: 5
