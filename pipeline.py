@@ -1538,6 +1538,41 @@ def post_reels(script, idea, shorts, history, parent=None):
             log(f"Instagram sırasına eklenemedi: {str(e)[:200]}")
 
 
+def _rescue_ig_assets(tag):
+    """Paket Release'i silinmeden önce, Instagram sırasında o pakete bağlı Short varsa videosunu
+    ig-queue Release'ine kopyalar. Böylece paket silinince sıradaki Reel kaybolmaz.
+    Başarılıysa (ya da kurtarılacak bir şey yoksa) True döner."""
+    q = load_json(IG_QUEUE, [])
+    items = [it for it in q if it.get("release") == tag]
+    if not items:
+        return True
+    ok = True
+    for it in items:
+        try:
+            tmpdir = Path(tempfile.mkdtemp())
+            r = _gh("release", "download", tag, "-p", it["asset"], "-D", str(tmpdir))
+            src = tmpdir / it["asset"]
+            if r.returncode != 0 or not src.exists():
+                raise RuntimeError(r.stderr[:200] or "dosya yok")
+            _gh("release", "view", IG_RELEASE).returncode == 0 or _gh(
+                "release", "create", IG_RELEASE, "--title", "Instagram sırası",
+                "--notes", "Otomatik: sırada bekleyen Reels videoları. Elle silme.")
+            new = f"{datetime.now(timezone.utc):%Y%m%d%H%M}-{slug(it['title'], 40)}-kurtarilan.mp4"
+            dst = tmpdir / new
+            src.rename(dst)
+            r = _gh("release", "upload", IG_RELEASE, str(dst), "--clobber")
+            if r.returncode != 0:
+                raise RuntimeError(r.stderr[:200])
+            it["asset"] = new
+            it.pop("release", None)
+            log(f"Instagram sırasındaki video paketten kurtarıldı: {it['title']}")
+        except Exception as e:
+            ok = False
+            log(f"Instagram sırasındaki video paketten kurtarılamadı ({it['title']}): {str(e)[:200]}")
+    save_json(IG_QUEUE, q)
+    return ok
+
+
 MANUAL_DIR = DATA / "manual"
 MANUAL_PENDING = DATA / "manual_pending.json"
 
@@ -1642,6 +1677,9 @@ def finish_manual_uploads():
     for pk in pend:
         age = (datetime.now() - datetime.fromisoformat(pk["created"])).days
         if all(it.get("done") for it in pk["items"]) or age > 21:
+            if pk.get("release_tag") and not _rescue_ig_assets(pk["release_tag"]):
+                keep.append(pk)  # Instagram sırasındaki video henüz kurtarılamadı: paketi silme, sonra tekrar dene
+                continue
             shutil.rmtree(MANUAL_DIR / pk["key"], ignore_errors=True)
             if pk.get("release_id") and release.enabled():
                 release.remove(pk["release_id"], pk.get("release_tag"))  # geçici paket kopyası silinir
