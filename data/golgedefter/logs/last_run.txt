@@ -1,4 +1,8 @@
-[12:58:27] Başladı (test modu: False, yayın: manual)
-[12:58:28] Ücretli Gemini anahtarı kullanılıyor
-[12:58:28] Kanal doğrulandı: GölgeDefter
-[12:58:29] Elle yüklenen uzun video bulunamadı: 'Alkarısı Nedir? Beşiklerin Başındaki Bin Yıllık Korku'. Kanaldaki son yüklemeler: Doktorların Ellerindeki Görünmez Katil #shorts (private) | Sümer Tabletlerindeki Alkarısı: Lamaştu #shorts (private) | Lohusa Yastığının Altındaki Paslı Makas #shorts (private) | Alkarısı Nedir ? Beşiklerin Başındaki Bin Yıllık Korku  (private)
+[12:59:08] Başladı (test modu: False, yayın: manual)
+[12:59:09] Ücretli Gemini anahtarı kullanılıyor
+[12:59:09] Kanal doğrulandı: GölgeDefter
+[12:59:17] Elle yüklenen video tamamlandı: eJFXozJEZtc Alkarısı Nedir? Beşiklerin Başındaki Bin Yıllık Korku []
+[12:59:18] Elle yüklenen video tamamlandı: vF-mUXAdKy4 Lohusa Yastığının Altındaki Paslı Makas #Shorts []
+[12:59:19] Elle yüklenen video tamamlandı: 5nFNQfWhFhM Sümer Tabletlerindeki Alkarısı: Lamaştu #Shorts []
+[12:59:20] Elle yüklenen video tamamlandı: iYqRZ1Hp-X8 Doktorların Ellerindeki Görünmez Katil #Shorts []
+[12:59:25] Oynatma listesi kapağı kondu: Efsaneler ve Mitolojik Varlıklar
