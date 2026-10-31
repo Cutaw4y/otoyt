@@ -180,7 +180,10 @@ SCRIPT_SCHEMA = (
     'Return JSON: {"core_keyword":"the exact 2-5 word phrase a viewer types into search for this video",'
     '"title":"<=70 chars; core_keyword must appear within the first 40 characters",'
     '"description":"the first 120 characters (before \'show more\') contain core_keyword AND the video\'s '
-    'central question; total 150-300 words, include 3 hashtags",'
+    'central question; total 150-300 words; LAST line = 10-15 hashtags in the video\'s language, most important '
+    'first (YouTube shows the top 3 above the title): core_keyword joined, the specific names/places/events/terms of '
+    'this video, then 3-4 niche tags people follow; every one directly about this video, no generic spam '
+    '(#viral #fyp #trending), no spaces inside a hashtag",'
     '"tags":["8-15 tags: core_keyword, close variants, COMMON MISSPELLINGS and alternate spellings of the '
     'names/terms in the video, and related entities (people, places, organizations, objects). No generic words"],'
     '"pinned_comment":"one pointed A-or-B question about the topic that splits viewers into two camps and makes '
@@ -1140,6 +1143,7 @@ def seo_fix(script):
     desc = script.get("description", "")
     if kw and _norm(kw) not in _norm(desc[:120]):
         script["description"] = f"{kw[:1].upper() + kw[1:]}: {desc}"
+    tidy_hashtags(script)
     script["tags"] = build_tags(script)
     return script
 
@@ -1291,7 +1295,7 @@ def make_manual_package(script, idea, shorts, thumb, main_srt, sub_srt, history,
     desc = (script["description"] + chapters_text(chs, header=CFG.get("chapters_heading", "Chapters"))
             + watch_next_line(idea["pillar"]) + sub_link + "\n\n"
             + CFG.get("desc_footer", "Stock footage: Pixabay / Pexels. Narration: AI voice."))
-    hashtags = " ".join((re.findall(r"#\w+", script.get("description", "")) or [])[:3])
+    hashtags = short_hashtags(script)
     pl = (CFG.get("playlists") or {}).get(idea["pillar"], "")
     main_t, short_ts = plan_times(datetime.now(timezone.utc), len(shorts))
     lines = [
@@ -1463,6 +1467,36 @@ def fix_hashtags(caption, brand=None, limit=5):
     if brand and brand.lower() not in seen:
         tags = tags[:limit - 1] + [brand]
     return (body + "\n\n" + " ".join(tags[:limit])).strip()
+
+
+YT_HASHTAG_MAX = 15   # YouTube 60'tan fazlasında hepsini yok sayar; 15 güvenli ve alakalı kalır
+
+
+def tidy_hashtags(script):
+    """Açıklamadaki hashtag'leri toplar, tekrarı siler, kanal etiketini ekler ve en fazla 15'ini son satıra koyar."""
+    desc = script.get("description", "")
+    pat = r"#[\wçğıöşüÇĞİÖŞÜ]+"
+    tags, seen = [], set()
+    for t in re.findall(pat, desc):
+        if len(t) > 2 and t.lower() not in seen:
+            seen.add(t.lower())
+            tags.append(t)
+    brand = CFG.get("yt_brand_tag") or CFG.get("ig_brand_tag")
+    if brand and brand.lower() not in seen:
+        tags = tags[:YT_HASHTAG_MAX - 1] + [brand]
+    lines = [ln for ln in desc.split("\n") if not re.fullmatch(r"\s*(" + pat + r"\s*)+", ln)]  # salt etiket satırları
+    lines = [re.sub(r"(\s+" + pat + r")+\s*$", "", ln) for ln in lines]  # satır sonundaki etiketler
+    body = re.sub(r"#([\wçğıöşüÇĞİÖŞÜ]+)", r"\1", "\n".join(lines)).rstrip()  # cümle içindekiler düz kelime kalsın
+    body = re.sub(r"\n{3,}", "\n\n", body)
+    script["description"] = (body + "\n\n" + " ".join(tags[:YT_HASHTAG_MAX])).strip() if tags else body
+    return tags[:YT_HASHTAG_MAX]
+
+
+def short_hashtags(script, n=6):
+    tags = re.findall(r"#[\wçğıöşüÇĞİÖŞÜ]+", script.get("description", ""))
+    if not tags:
+        tags = ["#" + re.sub(r"\W", "", script.get("core_keyword", "") or script["tags"][0])]
+    return " ".join(tags[:n])
 
 
 def _reel_caption(script, sh_, first):
@@ -1957,6 +1991,7 @@ def run_once():
     kw = (script.get("core_keyword") or "").strip()  # revizyonlardan sonra da garanti
     if kw and _norm(kw) not in _norm(script.get("description", "")[:120]):
         script["description"] = f"{kw[:1].upper() + kw[1:]}: {script['description']}"
+    tidy_hashtags(script)
     script["tags"] = build_tags(script)
 
     with tempfile.TemporaryDirectory() as tmp:
@@ -2077,9 +2112,7 @@ def run_once():
             try:
                 title = sh_["title"][:90].rstrip() + " #Shorts"
                 sdesc = (f"{sh_['title']}\n\n{CFG.get('full_video_text', 'Watch the full video:')} https://youtu.be/{vid}\n\n"
-                         + " ".join((re.findall(r"#\w+", script.get("description", "")) or
-                                     ["#" + re.sub(r"\W", "", script.get("core_keyword", "") or script["tags"][0])])[:3])
-                         + " #Shorts")
+                         + short_hashtags(script) + " #Shorts")
                 m_short = meta(title, sdesc, script["tags"], iso(short_ts[k]), is_short=True)
                 trt = (tr_meta or {}).get("short_titles") or []
                 if k < len(trt) and trt[k] and CFG.get("localize_metadata", True):

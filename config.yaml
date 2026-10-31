@@ -103,6 +103,7 @@ branding:
 subscribe_text: "🔔 Subscribe for a new cutaway every week:"
 made_for_kids: false
 declare_synthetic: true        # AI içerik beyanı (YouTube politikası)
+yt_brand_tag: "#cutaway"        # her uzun videonun ve Short'un hashtag satırında olur
 
 # ======================= MODELLER =======================
 # Cutaway kendi ücretsiz anahtarını (GEMINI_API_KEY) kullanır. GEMINI_PAID_API_KEY Gölgedefter'e aittir.
