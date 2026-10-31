@@ -1478,7 +1478,7 @@ def tidy_hashtags(script):
     pat = r"#[\wçğıöşüÇĞİÖŞÜ]+"
     tags, seen = [], set()
     for t in re.findall(pat, desc):
-        if len(t) > 2 and t.lower() not in seen:
+        if len(t) > 2 and t.lower() not in seen and t.lower() != "#shorts":
             seen.add(t.lower())
             tags.append(t)
     brand = CFG.get("yt_brand_tag") or CFG.get("ig_brand_tag")
@@ -1496,7 +1496,47 @@ def short_hashtags(script, n=6):
     tags = re.findall(r"#[\wçğıöşüÇĞİÖŞÜ]+", script.get("description", ""))
     if not tags:
         tags = ["#" + re.sub(r"\W", "", script.get("core_keyword", "") or script["tags"][0])]
+    tags = [t for t in dict.fromkeys(tags) if t.lower() != "#shorts"]
+    brand = CFG.get("yt_brand_tag") or CFG.get("ig_brand_tag")
+    if brand and brand.lower() not in {t.lower() for t in tags[:n]}:
+        tags = [t for t in tags if t.lower() != brand.lower()][:n - 1] + [brand]
     return " ".join(tags[:n])
+
+
+def retag_videos(ids):
+    """Yüklenmiş videoların açıklamasındaki hashtag'leri yeni kurala göre yeniler (uzun: 10-15, Short: 6 + #Shorts)."""
+    yt = publish._yt()
+    items = yt.videos().list(part="snippet", id=",".join(ids)).execute().get("items", [])
+    found = {v["id"] for v in items}
+    for vid in ids:
+        if vid not in found:
+            log(f"{vid}: bu kanalda değil ya da okunamadı")
+    for v in items:
+        sn = v["snippet"]
+        is_short = "#shorts" in sn["title"].lower()
+        try:
+            r = llm_json("You write YouTube hashtags.",
+                         f"Video title: {sn['title']}\nDescription:\n{sn.get('description', '')[:3000]}\n\n"
+                         f"Language: {CFG.get('language', 'English')}. Return 12-15 hashtags in that language, most "
+                         "important first (top 3 show above the title): the core search phrase joined, the specific "
+                         "names/places/events/terms of THIS video, then 3-4 niche tags people follow. Every one directly "
+                         "about this video; no generic spam (#viral #fyp #trending #shorts); no spaces inside a hashtag. "
+                         'JSON: {"hashtags":["#..."]}', required=("hashtags",))
+            new = [("#" + re.sub(r"[^\wçğıöşüÇĞİÖŞÜ]", "", h)) for h in r["hashtags"] if isinstance(h, str)]
+            new = [h for h in new if len(h) > 2 and h.lower() != "#shorts"]
+            tmp = {"description": sn.get("description", "") + "\n\n" + " ".join(new)}
+            tags = tidy_hashtags(tmp)
+            body = tmp["description"].rsplit("\n\n", 1)[0] if tags else tmp["description"]
+            line = (short_hashtags({"description": " ".join(tags)}) + " #Shorts") if is_short else " ".join(tags)
+            sn["description"] = (body.rstrip() + "\n\n" + line)[:4900]
+            body_ = {"id": v["id"], "snippet": {k: sn[k] for k in ("title", "description", "tags", "categoryId",
+                                                                 "defaultLanguage", "defaultAudioLanguage") if k in sn}}
+            yt.videos().update(part="snippet", body=body_).execute()
+            log(f"{v['id']}: hashtag'ler yenilendi: {line}")
+            notify(f"🏷 Hashtag'ler eklendi: {sn['title']}\nhttps://youtu.be/{v['id']}\n{line}")
+        except Exception as e:
+            log(f"{v['id']}: hashtag'ler yenilenemedi: {str(e)[:200]}")
+            notify(f"⚠️ Hashtag'ler eklenemedi: https://youtu.be/{v['id']} (ayrıntı kayıtta).")
 
 
 def _reel_caption(script, sh_, first):
@@ -2204,6 +2244,10 @@ if __name__ == "__main__":
             except Exception as e:
                 log(f"{vid}: çeviri altyazısı eklenemedi: {str(e)[:200]}")
                 notify(f"⚠️ Videoya çeviri altyazısı eklenemedi: https://youtu.be/{vid} (ayrıntı kayıtta).")
+        sys.exit(0)
+    if os.getenv("RETAG"):  # yüklenmiş videoların hashtag satırını yenile: video kimlikleri, virgülle
+        check_channel()
+        retag_videos([x.strip() for x in os.getenv("RETAG").split(",") if x.strip()])
         sys.exit(0)
     if os.getenv("FINISH_ONLY"):  # sadece elle yüklenen videoları tamamla + bekleyen yorumlar (hafif, sık çalışır)
         check_channel()
