@@ -1,6 +1,6 @@
 {
   "PLAadc2Jx5MSg": {
-    "fail": 0,
-    "err": "<HttpError 400 when requesting https://youtube.googleapis.com/upload/youtube/v3/playlistImages?part=snippet&alt=json&uploadType=multipart returned \"Th"
+    "v": 1,
+    "title": "How It's Made & What It Costs"
   }
 }
