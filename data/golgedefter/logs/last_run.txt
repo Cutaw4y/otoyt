@@ -1,8 +1,3 @@
-[12:59:08] Başladı (test modu: False, yayın: manual)
-[12:59:09] Ücretli Gemini anahtarı kullanılıyor
-[12:59:09] Kanal doğrulandı: GölgeDefter
-[12:59:17] Elle yüklenen video tamamlandı: eJFXozJEZtc Alkarısı Nedir? Beşiklerin Başındaki Bin Yıllık Korku []
-[12:59:18] Elle yüklenen video tamamlandı: vF-mUXAdKy4 Lohusa Yastığının Altındaki Paslı Makas #Shorts []
-[12:59:19] Elle yüklenen video tamamlandı: 5nFNQfWhFhM Sümer Tabletlerindeki Alkarısı: Lamaştu #Shorts []
-[12:59:20] Elle yüklenen video tamamlandı: iYqRZ1Hp-X8 Doktorların Ellerindeki Görünmez Katil #Shorts []
-[12:59:25] Oynatma listesi kapağı kondu: Efsaneler ve Mitolojik Varlıklar
+[13:59:37] Başladı (test modu: False, yayın: manual)
+[13:59:38] Ücretli Gemini anahtarı kullanılıyor
+[13:59:38] Kanal doğrulandı: GölgeDefter
