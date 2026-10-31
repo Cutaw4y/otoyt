@@ -1512,11 +1512,13 @@ def post_reels(script, idea, shorts, history, parent=None):
                                 "title": title, "pillar": idea["pillar"], "video_id": mid, "parent": parent})
                 save_json(HISTORY, history)
                 notify(f"📸 Instagram Reel yayında: {link or mid}")
+                continue
             except Exception as e:
-                notify("⚠️ Instagram'a Reel yüklenemedi (YouTube tarafı etkilenmedi). Teknik ayrıntı kayıtta; "
-                       "Claude'a 'Instagram hatası' demen yeterli.")
-            continue
-        # sonrakiler: GitHub Release'e yükle, sıraya ekle
+                log(f"Instagram Reel hatası: {str(e)[:500]}")
+                notify("⚠️ Instagram'a Reel yüklenemedi (YouTube tarafı etkilenmedi). Bu Short sıranın başına "
+                       "kondu, akşam otomatik tekrar denenecek. Teknik ayrıntı kayıtta; Claude'a "
+                       "'Instagram hatası' demen yeterli.")
+        # sonrakiler (ve yüklenemeyen ilk Short): GitHub Release'e yükle, sıraya ekle
         try:
             asset = f"{datetime.now(timezone.utc):%Y%m%d%H%M}-{slug(title, 40)}-{k + 1}.mp4"
             tmp = Path(tempfile.gettempdir()) / asset
@@ -1528,7 +1530,8 @@ def post_reels(script, idea, shorts, history, parent=None):
             if r.returncode != 0:
                 raise RuntimeError(r.stderr[:200])
             q = load_json(IG_QUEUE, [])
-            q.append({"asset": asset, "caption": cap, "title": title, "pillar": idea["pillar"], "parent": parent})
+            item = {"asset": asset, "caption": cap, "title": title, "pillar": idea["pillar"], "parent": parent}
+            q.insert(0, item) if k == 0 else q.append(item)  # yüklenemeyen ilk Short sıranın başına
             save_json(IG_QUEUE, q)
             log(f"Instagram sırasına eklendi: {title}")
         except Exception as e:

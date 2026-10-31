@@ -60,7 +60,8 @@ def main():
         return
     item = q[0]
     tmp = Path(tempfile.mkdtemp())
-    r = gh("release", "download", RELEASE, "-p", item["asset"], "-D", str(tmp))
+    rel = item.get("release", RELEASE)  # elle eklenen öğe videoyu başka bir Release'ten (ör. paket) alabilir
+    r = gh("release", "download", rel, "-p", item["asset"], "-D", str(tmp))
     video = tmp / item["asset"]
     if r.returncode != 0 or not video.exists():
         notify(f"⚠️ Instagram sırasındaki video bulunamadı, atlandı: {item['title']}")
@@ -76,7 +77,8 @@ def main():
                  "pillar": item.get("pillar"), "video_id": mid, "parent": item.get("parent")})
     save(HISTORY, hist)
     save(QUEUE, q[1:])
-    gh("release", "delete-asset", RELEASE, item["asset"], "-y")
+    if rel == RELEASE:  # paket Release'indeki dosyaya dokunma
+        gh("release", "delete-asset", RELEASE, item["asset"], "-y")
     notify(f"📸 Instagram Reel yayında: {link or mid}  (sırada {len(q) - 1} kaldı)")
 
 
