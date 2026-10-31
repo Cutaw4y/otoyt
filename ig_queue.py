@@ -74,6 +74,8 @@ def main():
     try:
         mid, link = publish.instagram_reel(str(video), item["caption"], ai_label=CFG.get("instagram_ai_label", True))
     except Exception as e:
+        (DATA / "ig_last_error.txt").write_text(f"{datetime.now().isoformat(timespec='minutes')} "
+                                                f"{item['title']}\n{e}\n", encoding="utf-8")
         notify(f"⚠️ Instagram Reel yüklenemedi (yarın tekrar denenecek): {str(e)[:300]}")
         sys.exit(1)
     hist = load(HISTORY, [])
