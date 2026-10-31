@@ -1,2 +1,3 @@
-[20:00:25] Başladı (test modu: False, yayın: manual)
-[20:00:25] Kanal adı kontrol edilemedi: <HttpError 403 when requesting https://youtube.googleapis.com/youtube/v3/channels?part=snippet&mine=true&alt=json returned "The request cannot be comp
+[05:02:35] Başladı (test modu: False, yayın: manual)
+[05:02:36] Ücretli Gemini anahtarı kullanılıyor
+[05:02:36] Kanal adı kontrol edilemedi: <HttpError 403 when requesting https://youtube.googleapis.com/youtube/v3/channels?part=snippet&mine=true&alt=json returned "The request cannot be comp
