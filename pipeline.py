@@ -495,7 +495,7 @@ def _tts(scenes, workdir):
             extra = {"synth": voice.synth_edge} if fb.get("provider") == "edge" else {}
             return voice.narrate(scenes, workdir, voice=fb["name"], lang=fb.get("lang", "a"), speed=fb.get("speed", 1.0),
                                  sentence_gap=fb.get("sentence_gap", 0.28), scene_gap=fb.get("scene_gap", 0.45),
-                                 **extra)
+                                 align_lang=CFG.get("language_code", "en"), **extra)
     if v.get("provider") == "gemini":
         return voice.narrate_gemini(scenes, workdir, voice=v.get("name", "Charon"), style=v.get("style"),
                                     models=v.get("models"), scene_gap=v.get("scene_gap", 0.45),
@@ -503,7 +503,8 @@ def _tts(scenes, workdir):
                                     scenes_per_request=v.get("scenes_per_request", 6),
                                         max_chars=v.get("max_chars", 1800), lang=CFG.get("language_code", "en"))
     return voice.narrate(scenes, workdir, voice=v["name"], lang=v["lang"], speed=v.get("speed", 1.0),
-                         sentence_gap=v.get("sentence_gap", 0.28), scene_gap=v.get("scene_gap", 0.45))
+                         sentence_gap=v.get("sentence_gap", 0.28), scene_gap=v.get("scene_gap", 0.45),
+                         align_lang=CFG.get("language_code", "en"))
 
 
 def narrate(script, workdir):
@@ -705,7 +706,7 @@ def clip_matches(clip, sc, workdir):
     """Stok videonun ortasından bir kare alıp yapay zekâya sorar: anlatılanla gerçekten ilgili mi?
     İlgisiz görüntü izleyiciyi kaçırır; emin olunamazsa (hata) kabul edilir."""
     global _CLIP_CHECKS
-    if not CFG.get("check_footage", True) or _CLIP_CHECKS >= CFG.get("max_footage_checks", 70):
+    if not CFG.get("check_footage", True) or _CLIP_CHECKS >= CFG.get("max_footage_checks", 160):
         return True  # günlük ücretsiz kota senaryoya kalsın
     _CLIP_CHECKS += 1
     try:
@@ -957,9 +958,9 @@ def assemble(script, workdir, music):
                 and len(s["callout"].split()) <= 6]
     ass = media.write_ass_long(words if CFG.get("burn_captions", True) else [], w / "captions.ass",
                                chapters=chap_ev, callouts=callouts,
-                               per_line=CFG.get("caption_words_per_line", 7),
-                               highlight=(CFG.get("caption_theme") or {}).get("chap_num", "&H0044A8E8")
-                               if CFG.get("caption_word_highlight") else None)
+                               per_line=CFG.get("caption_words_per_line", 5),
+                               highlight=media.THEME.get("chap_num")  # kanalın vurgu rengi
+                               if CFG.get("caption_word_highlight", True) else None)
     whoosh = ASSETS / "whoosh.wav"
     sfx = (whoosh, [ct for ct, _, _ in chap_ev]) if whoosh.exists() and chap_ev else None
     final = media.mux_master(video, nar, w / "final.mp4", ass=ass, music=music, sfx=sfx,

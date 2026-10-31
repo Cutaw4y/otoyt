@@ -107,24 +107,32 @@ def write_wav(a, path):
 
 
 def narrate(scenes, workdir, voice="af_heart", lang="a", speed=1.0,
-            sentence_gap=0.28, scene_gap=0.45, synth=None):
+            sentence_gap=0.28, scene_gap=0.45, synth=None, align_lang=None):
     """Her sahne için wav üretir. Döner: (sahne_dosyaları, sahne_süreleri, kelime_zamanları)."""
     synth = synth or synth_sentence
     workdir = Path(workdir)
     files, durs, words, offset = [], [], [], 0.0
     for i, sc in enumerate(scenes):
-        pieces, t = [], 0.0
+        pieces, t, sw = [], 0.0, []
         sents = split_sentences(sc["narration"])
         for j, s in enumerate(sents):
             a = _trim(synth(s, voice, lang, speed))
             d = a.size / SR
-            words += word_timings(s, offset + t, d)
+            sw.append((s, t, d))
             pieces.append(a)
             t += d
             gap = scene_gap if j == len(sents) - 1 else sentence_gap
             pieces.append(np.zeros(int(gap * SR), dtype=np.float32))
             t += gap
-        f = write_wav(np.concatenate(pieces), workdir / f"vo_{i:02d}.wav")
+        audio = np.concatenate(pieces)
+        al = align_sentences(audio, [x[0] for x in sw], align_lang) if align_lang and sw else None
+        for k, (s, st, d) in enumerate(sw):  # gerçek kelime zamanları; olmazsa cümle içi tahmin
+            if al and len(al[k]) == len(s.split()):
+                words += [{"word": w, "start": round(offset + w0, 3), "end": round(offset + w1, 3)}
+                          for w, (w0, w1) in zip(s.split(), al[k])]
+            else:
+                words += word_timings(s, offset + st, d)
+        f = write_wav(audio, workdir / f"vo_{i:02d}.wav")
         dur = sum(p.size for p in pieces) / SR
         files.append(f)
         durs.append(dur)

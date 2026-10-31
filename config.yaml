@@ -143,6 +143,12 @@ shot_seconds: 4.5              # bir görüntünün ortalama ekranda kalma süre
 hook_scenes: 2                 # ilk 2 sahnede görsel, anlatılanın birebir karşılığı (stok görüntü yok)
 j_cut_seconds: 0.3             # yeni sahnenin sesi görüntüden 0.3 sn önce başlar (kurgucu geçişi)
 burn_captions: true            # uzun videoda ekrana gömülü sade altyazı
+# --- iki kanalda ortak kurallar (Gölgedefter de bunları varsayılan olarak kullanır) ---
+caption_word_highlight: true    # altyazı kelime kelime ilerler: söylenen kelime kanalın vurgu renginde
+caption_words_per_line: 5       # kısa satırlar; iki satır asla aynı anda görünmez
+visual_per_sentence: true       # her cümleye kendi görseli: görüntü, o cümle söylenirken değişir
+max_sentence_images: 60         # video başına cümle görseli (AI) üst sınırı; aşılırsa stok fotoğraf
+max_footage_checks: 160         # stok videonun cümleyle uyumunu kontrol (ucuz Gemini modeli)
 music_db: -21                  # müzik seviyesi (anlatım varken ayrıca otomatik kısılır)
 
 # ======================= KALİTE =======================
