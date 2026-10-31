@@ -21,7 +21,6 @@ intro_chapter: "Giriş"
 chapters_heading: "Bölümler"
 caption_label: "Türkçe"
 full_video_text: "Videonun tamamı:"
-desc_footer: "Stok görüntüler: Pixabay / Pexels. Seslendirme: yapay zekâ sesi. Anlatılan efsaneler ve iddialar kaynaklarıyla birlikte aktarılır; doğaüstü iddialar kanıtlanmış gerçek olarak sunulmaz."
 wiki_langs: ["tr", "en"]
 
 script_rules: >
@@ -114,7 +113,7 @@ caption_theme:            # bölüm kartı ve bilgi etiketleri: kehribar rengi (
   callout_text: "&H000F0B0D"
 
 branding:
-  version: 2
+  version: 3
   banner: "assets/golgedefter/golgedefter_banner.jpg"
   country: "TR"
   keywords: "gizem belgesel kayıp medeniyetler antik gizemler islam tarihi kıyamet alametleri efsaneler açıklanamayan olaylar gölgedefter"
@@ -124,7 +123,6 @@ branding:
     📖 Ayetler, hadis kaynakları, tarihî belgeler ve akademik araştırmalar ışığında: ne anlatılıyor, kayıtlar ne diyor, bilim ne açıklıyor, hâlâ ne bilinmiyor.
     🔎 Amacımız spekülasyon üretmek değil; bilgiye dayalı, düşündüren ve merak uyandıran sayfalar açmak.
     🕯 Yeni sayfalar her Salı, Perşembe ve Cumartesi. Kaçırmamak için abone olmayı unutmayın.
-    Seslendirme yapay zekâ sesidir; her senaryo yayından önce kaynaklarla kontrol edilir.
 
 subscribe_text: "🔔 Yeni sayfaları kaçırmamak için abone ol:"
 made_for_kids: false
@@ -224,7 +222,6 @@ subtitle_translation:
   name: "English"
   label: "English"
   chapters_heading: "Chapters"
-  desc_footer: "Stock footage: Pixabay / Pexels. Narration: AI voice. Legends and claims are presented with their sources; supernatural claims are not presented as proven fact."
   full_video_text: "Watch the full video:"
 
 make_shorts: true

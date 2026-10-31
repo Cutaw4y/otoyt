@@ -88,7 +88,7 @@ thumbnail_style: "bold, high contrast, dramatic lighting, one clear object, cine
 
 # Kanal sayfası (ilk gerçek çalışmada bir kez otomatik ayarlanır)
 branding:
-  version: 3                   # afiş/açıklama değişince artır → bir sonraki çalışmada kanala yeniden uygulanır
+  version: 4                   # afiş/açıklama değişince artır → bir sonraki çalışmada kanala yeniden uygulanır
   banner: "assets/cutaway_banner.jpg"
   country: "TR"
   keywords: "how things work engineering explained science explained infrastructure machines engineering failures how it's made cutaway"
@@ -98,7 +98,6 @@ branding:
     🔬 Clear 3D-style diagrams, real footage and fact-checked scripts. No fluff, no clickbait the video doesn't deliver.
     📅 New videos every Monday, Wednesday and Friday, plus daily Shorts.
     💬 Tell us in the comments what we should cut open next.
-    Narration uses an AI voice; every script is fact-checked before publishing.
 
 subscribe_text: "🔔 Subscribe for a new cutaway every week:"
 made_for_kids: false

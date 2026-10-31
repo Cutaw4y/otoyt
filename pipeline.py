@@ -1419,8 +1419,8 @@ def make_manual_package(script, idea, shorts, thumb, main_srt, sub_srt, history,
     sub_link = (f"\n\n{CFG.get('subscribe_text', '🔔 Subscribe:')} "
                 f"https://www.youtube.com/channel/{CHANNEL_ID}?sub_confirmation=1") if CHANNEL_ID else ""
     desc = (script["description"] + chapters_text(chs, header=CFG.get("chapters_heading", "Chapters"))
-            + watch_next_line(idea["pillar"]) + sub_link + "\n\n"
-            + CFG.get("desc_footer", "Stock footage: Pixabay / Pexels. Narration: AI voice."))
+            + watch_next_line(idea["pillar"]) + sub_link + _footer())
+    desc = tags_last(desc)
     hashtags = short_hashtags(script)
     pl = (CFG.get("playlists") or {}).get(idea["pillar"], "")
     main_t, short_ts = plan_times(datetime.now(timezone.utc), len(shorts))
@@ -1598,6 +1598,24 @@ def fix_hashtags(caption, brand=None, limit=5):
 YT_HASHTAG_MAX = 15   # YouTube 60'tan fazlasında hepsini yok sayar; 15 güvenli ve alakalı kalır
 
 
+def _footer(cfg=None):
+    """Açıklama sonu notu (isteğe bağlı; boşsa hiçbir şey eklenmez)."""
+    t = ((cfg or CFG).get("desc_footer") or "").strip()
+    return "\n\n" + t if t else ""
+
+
+def tags_last(desc):
+    """Hashtag satırlarını açıklamanın en sonuna taşır (bölümler ve abone bağlantısı önce okunur)."""
+    pat = r"\s*(#[\wçğıöşüÇĞİÖŞÜ]+\s*)+"
+    lines = desc.split("\n")
+    tags = [ln.strip() for ln in lines if re.fullmatch(pat, ln)]
+    if not tags:
+        return desc
+    body = re.sub(r"\n{3,}", "\n\n", "\n".join(ln for ln in lines if not re.fullmatch(pat, ln))).strip()
+    uniq = list(dict.fromkeys(t for ln in tags for t in ln.split()))  # tekrar eden etiket olmasın
+    return body + "\n\n" + " ".join(uniq)
+
+
 def tidy_hashtags(script):
     """Açıklamadaki hashtag'leri toplar, tekrarı siler, kanal etiketini ekler ve en fazla 15'ini son satıra koyar."""
     desc = script.get("description", "")
@@ -1627,6 +1645,30 @@ def short_hashtags(script, n=6):
     if brand and brand.lower() not in {t.lower() for t in tags[:n]}:
         tags = [t for t in tags if t.lower() != brand.lower()][:n - 1] + [brand]
     return " ".join(tags[:n])
+
+
+def clean_footers():
+    """Eski açıklama sonu notunu ("Stok görüntüler: ... yapay zekâ sesi ...") kanaldaki videolardan siler."""
+    yt = publish._yt()
+    n = 0
+    for v in publish.recent_uploads(50):
+        sn = v["snippet"]
+        old = sn.get("description", "")
+        lines = [ln for ln in old.split("\n") if not re.match(r"\s*(Stok görüntüler|Stock footage)\s*:", ln)]
+        new = tags_last(re.sub(r"\n{3,}", "\n\n", "\n".join(lines)).strip())
+        if new == old.strip():
+            continue
+        sn["description"] = new
+        body = {"id": v["id"], "snippet": {k: sn[k] for k in ("title", "description", "tags", "categoryId",
+                                                            "defaultLanguage", "defaultAudioLanguage") if k in sn}}
+        try:
+            yt.videos().update(part="snippet", body=body).execute()
+            n += 1
+            print(f"::notice title=açıklama temizlendi::{v['id']} {sn['title'][:60]}")
+        except Exception as e:
+            print(f"::error title=açıklama temizlenemedi::{v['id']} {str(e)[:200]}")
+    log(f"Açıklama notu silinen video: {n}")
+    print(f"::notice title=toplam::{n} video temizlendi")
 
 
 def retag_videos(ids):
@@ -2250,14 +2292,13 @@ def run_once():
         sub_link = (f"\n\n{CFG.get('subscribe_text', '🔔 Subscribe for more:')} "
                     f"https://www.youtube.com/channel/{CHANNEL_ID}?sub_confirmation=1") if CHANNEL_ID else ""
         desc = (script["description"] + chapters_text(chs, header=CFG.get("chapters_heading", "Chapters"))
-                + watch_next_line(idea["pillar"]) + sub_link + "\n\n"
-                + CFG.get("desc_footer", "Stock footage: Pixabay / Pexels. Narration: AI voice."))
+                + watch_next_line(idea["pillar"]) + sub_link + _footer())
+        desc = tags_last(desc)
         m_long = meta(script["title"], desc, script["tags"], iso(main_t))
         if tr_meta and CFG.get("localize_metadata", True):
             tr_desc = (tr_meta["description"]
                        + chapters_text(chs, tr_meta.get("chapters"), sub_lang.get("chapters_heading", "Bölümler"))
-                       + "\n\n" + sub_lang.get("desc_footer",
-                                                 "Stok görüntüler: Pixabay / Pexels. Seslendirme: yapay zekâ sesi."))
+                       + _footer(sub_lang))
             m_long["localizations"] = {sub_lang["code"]: {"title": tr_meta["title"][:100],
                                                           "description": tr_desc[:4900]}}
         named = w / f"{slug(script.get('core_keyword') or script['title'])}.mp4"  # anlamlı dosya adı
@@ -2387,6 +2428,10 @@ if __name__ == "__main__":
             except Exception as e:
                 log(f"{vid}: çeviri altyazısı eklenemedi: {str(e)[:200]}")
                 notify(f"⚠️ Videoya çeviri altyazısı eklenemedi: https://youtu.be/{vid} (ayrıntı kayıtta).")
+        sys.exit(0)
+    if os.getenv("RETAG") == "footer":  # kanaldaki videoların açıklamasından eski kaynak/yapay zekâ notunu sil
+        check_channel()
+        clean_footers()
         sys.exit(0)
     if os.getenv("RETAG"):  # yüklenmiş videoların hashtag satırını yenile: video kimlikleri, virgülle
         check_channel()
