@@ -1515,6 +1515,9 @@ def retag_videos(ids):
             log(f"{vid}: bu kanalda değil ya da okunamadı")
     for v in items:
         sn = v["snippet"]
+        if CHANNEL_ID and sn.get("channelId") != CHANNEL_ID:  # öbür kanalın videosu: dokunma
+            log(f"{v['id']}: bu kanalın videosu değil, atlandı")
+            continue
         is_short = "#shorts" in sn["title"].lower()
         try:
             r = llm_json("You write YouTube hashtags.",
@@ -1533,6 +1536,10 @@ def retag_videos(ids):
             old = re.sub(r"\n{3,}", "\n\n", "\n".join(lines)).rstrip()  # eski etiket satırlarını at
             tmp = {"description": old + "\n\n" + " ".join(new)}
             tags = tidy_hashtags(tmp)
+            mine = (CFG.get("yt_brand_tag") or CFG.get("ig_brand_tag") or "").lower()
+            if any(t.lower() in other and t.lower() != mine for t in tags):  # öbür kanalın etiketi kalmasın
+                tags = [t for t in tags if t.lower() not in other or t.lower() == mine]
+                tmp["description"] = tmp["description"].rsplit("\n\n", 1)[0] + "\n\n" + " ".join(tags)
             body = tmp["description"].rsplit("\n\n", 1)[0] if tags else tmp["description"]
             line = (short_hashtags({"description": " ".join(tags)}) + " #Shorts") if is_short else " ".join(tags)
             sn["description"] = (body.rstrip() + "\n\n" + line)[:4900]
