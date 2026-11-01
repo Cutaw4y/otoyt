@@ -35,5 +35,21 @@
     "pillar": "Anadolu ve dünya efsaneleri, mitolojik varlıklar, halk inançları",
     "video_id": "18114449405597459",
     "parent": null
+  },
+  {
+    "date": "2026-11-01T01:05",
+    "type": "reel",
+    "title": "Dyatlov Geçidi: Çadırı İçeriden Kesen Korku",
+    "pillar": "Açıklanamayan gerçek olaylar ve kayıplar (Dyatlov, Mary Celeste, Roanoke, Tunguska)",
+    "video_id": "17975514972150931",
+    "parent": null
+  },
+  {
+    "date": "2026-11-01T01:05",
+    "type": "long",
+    "title": "Dyatlov Geçidi Olayı: Çadırı İçeriden Kestiren Neydi?",
+    "pillar": "Açıklanamayan gerçek olaylar ve kayıplar (Dyatlov, Mary Celeste, Roanoke, Tunguska)",
+    "video_id": null,
+    "manual": true
   }
 ]
