@@ -415,8 +415,17 @@ def video_privacy(video_id):
 
 def post_comment(video_id, text):
     """Kanal adına üst düzey yorum yazar (YouTube API yorumu sabitlemeye izin vermez; sabitleme Studio'dan)."""
+    yt = _yt()
+    try:  # aynı yorum zaten yazılmışsa (kayıt kaybolduysa) tekrar yazma
+        r = yt.commentThreads().list(part="snippet", videoId=video_id, maxResults=50, order="time",
+                                     textFormat="plainText").execute()
+        for t in r.get("items", []):
+            if t["snippet"]["topLevelComment"]["snippet"].get("textOriginal", "").strip() == text.strip()[:9000]:
+                return t["id"]
+    except Exception:
+        pass
     body = {"snippet": {"videoId": video_id, "topLevelComment": {"snippet": {"textOriginal": text[:9000]}}}}
-    return _yt().commentThreads().insert(part="snippet", body=body).execute()["id"]
+    return yt.commentThreads().insert(part="snippet", body=body).execute()["id"]
 
 
 def viewer_requests(max_items=40):

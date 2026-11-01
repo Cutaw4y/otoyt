@@ -2582,8 +2582,7 @@ if __name__ == "__main__":
                 print(f"::notice title=yayınla {vid}::{now_}", flush=True)
                 notify(f"🚀 Video şimdi yayında: https://youtu.be/{vid}" if now_ == "public" else
                        f"⚠️ Video herkese açılamadı ({now_}). Studio'dan Görünürlük → Herkese açık yapman gerekiyor.")
-            post_due_comments()
-            sys.exit(0)
+            sys.exit(0)  # yorum tamamlayıcıdan yazılır (kayıt orada tutuluyor)
         if "|" in spec:  # "videoId|Yeni başlık": yalnız başlığı değiştir
             vid, new_title = spec.split("|", 1)
             yt = publish._yt()
