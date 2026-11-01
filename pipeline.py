@@ -1161,9 +1161,16 @@ def make_thumbnails(script, workdir, ledger):
     Dönüş: (en iyi, yedek) — yedek, video beklenenden az tıklanırsa sonradan değiştirmek için saklanır."""
     cands = []
     for i, c in enumerate(script["thumbnail_concepts"][:3]):
-        raw = gen_image(f"{c['image_prompt']}. {CFG['thumbnail_style']}. Main subject large on the right half, "
-                        "dark empty space on the left third. No text, no letters, no logos, no watermark.",
-                        workdir / f"thumb_raw_{i}.jpg", script["scenes"][0].get("broll_query"), ledger)
+        prompt = (f"{c['image_prompt']}. {CFG['thumbnail_style']}. Main subject large on the right half, "
+                  "dark empty space on the left third. No text, no letters, no logos, no watermark.")
+        raw = None
+        if CFG.get("paid_tier"):  # ücretli anahtar: en iyi kalite küçük resim (Gemini görsel modeli)
+            try:
+                raw = ai.gemini_image(prompt, workdir / f"thumb_raw_{i}.jpg")
+            except Exception as e:
+                log(f"Küçük resim Gemini ile üretilemedi: {str(e)[:150]}")
+        if raw is None:
+            raw = gen_image(prompt, workdir / f"thumb_raw_{i}.jpg", script["scenes"][0].get("broll_query"), ledger)
         cands.append(media.compose_thumbnail(raw, c["text"], workdir / f"thumb_{i}.jpg",
                                              logo=ASSETS / CFG.get("logo_file", "cutaway_logo.png"),
                                              accent=tuple(CFG.get("thumbnail_accent", (255, 168, 60)))))
@@ -1254,6 +1261,37 @@ def seo_problems(script):
         out.append(f"- Say the core keyword '{kw}' out loud in the narration of scene 0 or 1 "
                    "(within the first 20 seconds), naturally.")
     return out
+
+
+def title_pass(script):
+    """Tıklatan başlık: 10 aday yazdırır, hakem telefonda akış içinde en çok tıklanacak olanı seçer.
+    Anahtar kelime kuralı ve uzunluk kodla kontrol edilir; olmazsa eski başlık kalır."""
+    text = " ".join(s["narration"] for s in script["scenes"][:6])[:2500]
+    try:
+        r = llm_json(
+            f"You are the best YouTube title writer for a {CFG['language']} {CFG.get('channel_name')} channel. "
+            "You write titles that people cannot scroll past, but that the video fully delivers (no lies).",
+            f"Audience: {CFG['audience']}\nCore search phrase: {script.get('core_keyword', '')}\n"
+            f"Current title: {script['title']}\nOpening of the video:\n{text}\n\n"
+            f"Write 10 DIFFERENT titles in {CFG['language']}. Rules: 45-65 characters; the core search phrase (or "
+            "its natural form) in the first 40 characters; ONE strong curiosity gap (an unanswered question, a "
+            "shocking specific detail, a contradiction, a hidden truth); concrete details beat vague words (a number, "
+            "a name, a strange object); emotional power words used naturally (e.g. for Turkish: korkunç, gizli, "
+            "kimsenin bilmediği, hâlâ çözülemedi, o gece; for English: the real reason, nobody noticed, still); "
+            "natural native phrasing, never translated-sounding; no ALL CAPS words, no emoji, no clickbait the "
+            "video can't pay off. Then pick the one with the highest expected click-through rate on a phone feed. "
+            'JSON: {"titles":["..."],"best_index":0,"why":"..."}',
+            required=("titles", "best_index"), judge=False)
+        ts = [t.strip().strip('"') for t in r["titles"] if isinstance(t, str) and 25 <= len(t.strip()) <= 70]
+        best = r["titles"][int(r["best_index"])].strip().strip('"') if 0 <= int(r["best_index"]) < len(r["titles"]) else None
+        ck = _norm(script.get("core_keyword", ""))
+        good = [t for t in ([best] if best else []) + ts if t and (not ck or ck.split()[0] in _norm(t)[:50])]
+        if good:
+            log(f"Başlık seçildi: {good[0]}  (önceki: {script['title']}) — {str(r.get('why', ''))[:150]}")
+            script["title"] = good[0]
+    except Exception as e:
+        log(f"Başlık seçimi yapılamadı: {str(e)[:150]}")
+    return script
 
 
 def seo_fix(script):
@@ -2034,6 +2072,7 @@ def produce_script(history, report):
         if not facts_ok:
             log("Bilgi doğrulamadan geçemedi → yeni konu")
             continue
+        script = title_pass(script)
         script = seo_fix(script)
         for attempt in range(CFG["max_rewrites"] + 1):
             ok, review = quality_gate(script)
@@ -2248,6 +2287,7 @@ def run_once():
         else:
             cap_ = "⚠️ Altyazı zamanları sesten ölçülemedi, tahmini zaman kullanıldı. Claude'a 'altyazı' demen yeterli."
         notify(f"🎙 Seslendirme bitti ({dur_ / 60:.0f} dk {dur_ % 60:.0f} sn).\n{cap_}")
+        thumb, thumb_alt = make_thumbnails(script, w, ledger)  # önce: ücretsiz görsel hakkı sahnelere gitmeden
         build_scene_videos(script, w, ledger)
         vs_ = VIS_STATS
         notify(f"🖼 Görseller hazırlandı: {vs_['scenes']} sahnenin {vs_['planned']} tanesinde görsel cümle cümle "
@@ -2275,7 +2315,6 @@ def run_once():
                 except Exception as e:
                     log(f"Short {k+1} üretilemedi: {e}")
         short = shorts[0]["file"] if shorts else None
-        thumb, thumb_alt = make_thumbnails(script, w, ledger)
 
         # altyazı izleri: İngilizce (doğru metin) + Türkçe (çeviri)
         cap_blocks = media.srt_blocks(words, per_line=8)

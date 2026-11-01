@@ -132,6 +132,34 @@ def gemini_json(system, user, models, required=(), images=None, temperature=0.8)
     raise RuntimeError(f"Gemini geçerli JSON üretemedi: {last}")
 
 
+def gemini_image(prompt, out, models=("gemini-2.5-flash-image", "gemini-3-pro-image-preview"), aspect="16:9"):
+    """Gemini ile görsel üretimi (ücretli anahtar; küçük resim için, ~1-2 TL). Başarısızsa hata fırlatır."""
+    key = os.environ["GEMINI_API_KEY"]
+    last = None
+    for model in models:
+        body = {"contents": [{"parts": [{"text": prompt}]}],
+                "generationConfig": {"responseModalities": ["IMAGE"], "imageConfig": {"aspectRatio": aspect}}}
+        for attempt in range(2):
+            try:
+                r = requests.post(f"{GEMINI}/{model}:generateContent", headers={"x-goog-api-key": key},
+                                  json=body, timeout=180)
+                if r.status_code != 200:
+                    last = f"{model}: {r.status_code} {r.text[:200]}"
+                    if r.status_code in (400, 402, 403, 404):
+                        break
+                    time.sleep(10)
+                    continue
+                parts = r.json()["candidates"][0]["content"]["parts"]
+                b64 = next(p["inlineData"]["data"] for p in parts if "inlineData" in p)
+                from PIL import Image
+                import io
+                Image.open(io.BytesIO(base64.b64decode(b64))).convert("RGB").save(out, quality=95)
+                return out
+            except Exception as e:
+                last = f"{model}: {e}"
+    raise RuntimeError(f"Gemini görsel üretemedi: {last}")
+
+
 def cloudflare_image(prompt, out, model="@cf/black-forest-labs/flux-1-schnell", steps=4):
     acc, tok = os.environ["CLOUDFLARE_ACCOUNT_ID"], os.environ["CLOUDFLARE_API_TOKEN"]
     last = None

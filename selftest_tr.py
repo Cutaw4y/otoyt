@@ -71,7 +71,7 @@ pipeline.run_once()
 outs = sorted(p.name for p in pipeline.OUT.glob("*"))
 print("OUT dosyaları:", outs)
 assert tts_calls and tts_calls[0][1] == "Charon" and "gizemli" in tts_calls[0][2]
-assert any("Gölgedefter'in bir sonraki sayfasında" in c[0] for c in tts_calls), "kapanış cümlesi seslendirilmedi"
+assert any(pipeline.CFG['outro_line'][:25] in c[0] for c in tts_calls), "kapanış cümlesi seslendirilmedi"
 assert "captions_en.srt" in outs and "captions_tr.srt" in outs, outs
 assert "EN: " not in (pipeline.OUT / "captions_tr.srt").read_text(encoding="utf-8")
 en = (pipeline.OUT / "captions_en.srt").read_text(encoding="utf-8"); assert "EN: " in en
