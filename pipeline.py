@@ -168,11 +168,60 @@ def pick_topic(history, report):
         "\n\nPropose 6 specific video ideas with high curiosity and broad appeal, each with a clear angle "
         "a viewer can't get from the first search result. Pick the one most likely to get high click-through "
         "AND high retention.\n" + (f"Idea rules: {CFG['idea_rules']}\n" if CFG.get("idea_rules") else "") +
-        'Return JSON: {"ideas":[{"title":"...","angle":"..."}],"chosen_index":0}',
+        'Return JSON: {"ideas":[{"title":"...","angle":"...","search_query":"what a viewer would type to find '
+        'videos on this topic"}],"chosen_index":0}',
         required=("ideas", "chosen_index"))
     idea = data["ideas"][min(int(data["chosen_index"]), len(data["ideas"]) - 1)]
+    idea = differentiate(data["ideas"], idea)
     idea["pillar"] = pillar
     return idea
+
+
+def differentiate(ideas, chosen):
+    """Rakip analizi: her fikir için YouTube'da ilk 10 videoya bakar. Konu doymuşsa ya daha az işlenmiş fikri seçer
+    ya da rakiplerin anlatmadığı özgün bir açı + 'neden bizden izlemeli' vaadi belirler."""
+    if DRY_RUN or not os.getenv("YT_REFRESH_TOKEN") or not CFG.get("competition_check", True):
+        return chosen
+    region = "TR" if CFG.get("language_code") == "tr" else "US"
+    rows = []
+    for i, it in enumerate(ideas[:6]):
+        try:
+            comp = publish.competition(it.get("search_query") or it["title"], region=region,
+                                       lang=CFG.get("language_code", "en"))
+        except Exception as e:
+            log(f"Rakip analizi yapılamadı: {str(e)[:120]}")
+            return chosen
+        big = [c for c in comp if c["views"] >= CFG.get("saturation_views", 100000)]
+        rows.append((i, it, comp, big))
+    lines = []
+    for i, it, comp, big in rows:
+        lines.append(f"#{i} {it['title']} — top results with {CFG.get('saturation_views', 100000)}+ views: {len(big)}/10\n"
+                     + "\n".join(f"   · {c['title']} ({c['views']:,} views, {c['channel']}, {c['age_days']} days ago)"
+                                  for c in comp[:6]))
+    try:
+        r = llm_json(
+            "You are a YouTube strategist who wins against saturated competition.",
+            "Our candidate ideas and what already ranks on YouTube for each:\n" + "\n".join(lines) +
+            "\n\nChoose the idea where WE can win: prefer topics with few big videos; a saturated topic is allowed "
+            "ONLY if you find an angle none of the top videos cover (a lesser-known document, witness, new research, "
+            "a local/Turkish connection, a myth the popular videos repeat that is actually wrong, an unusual "
+            "point of view). Write that angle concretely, and a one-sentence 'why watch ours' promise that the "
+            "opening must deliver. Also give a fresh title idea that does NOT resemble the top results' titles. "
+            'JSON: {"index":0,"angle":"...","why_ours":"...","title":"...","saturated":false}',
+            required=("index", "angle"), judge=False)
+        k = min(max(int(r["index"]), 0), len(rows) - 1)
+        idea = dict(rows[k][1])
+        idea["angle"] = f"{r['angle']} | WHY VIEWERS SHOULD WATCH OURS: {r.get('why_ours', '')}"
+        if r.get("title"):
+            idea["title"] = r["title"]
+        idea["competitors"] = [c["title"] for c in rows[k][2][:6]]
+        log(f"Rakip analizi: '{idea['title']}' seçildi ({len(rows[k][3])}/10 büyük rakip). Açı: {r['angle'][:160]}")
+        notify(f"🔎 Konu seçildi: {idea['title']}\nYouTube'da bu konuda {len(rows[k][3])} büyük video var. "
+               f"Bizi farklı kılacak açı: {r['angle'][:300]}")
+        return idea
+    except Exception as e:
+        log(f"Rakip analizi değerlendirilemedi: {str(e)[:120]}")
+        return chosen
 
 
 # ---------------------------------------------------------------- 2. senaryo
@@ -244,6 +293,9 @@ def write_script(idea):
         f"{CFG['channel_brief']}\nWrite in {CFG['language']}. Voice: {CFG['tone']}. Rules: {CFG['script_rules']}"
         f"\nSEO and packaging rules: {CFG.get('seo_rules', '')}",
         f"Title idea: {idea['title']}\nAngle: {idea['angle']}\n"
+        + (f"Competing videos already on YouTube (do NOT copy their structure; deliver our unique angle in the first "
+           f"30 seconds and keep paying it off): {'; '.join(idea['competitors'])}\n" if idea.get("competitors") else "")
+        +
         f"This is a LONG-FORM video: write AT LEAST {CFG['target_words']} words of narration in about "
         f"{max(20, CFG['target_words'] // 50)} scenes (2-3 sentences each). Go deep: mechanisms, concrete "
         f"examples, comparisons, history and surprising details. The FIRST 3 scenes must work on their own "

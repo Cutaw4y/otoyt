@@ -578,3 +578,20 @@ def ig_link_cta(caption, tr=True):
     while out and not out[-1].strip():
         out.pop()
     return "\n".join(out + [cta, ""] + tags).strip()
+
+
+def competition(query, region="US", lang="en", n=10):
+    """YouTube'da bu arama için ilk n uzun video: [{title, views, channel, age_days}] (rakip analizi, ~101 birim)."""
+    yt = _yt()
+    r = yt.search().list(part="snippet", q=query, type="video", maxResults=n, regionCode=region,
+                         relevanceLanguage=lang, videoDuration="medium").execute()
+    ids = [i["id"]["videoId"] for i in r.get("items", [])]
+    if not ids:
+        return []
+    st = yt.videos().list(part="statistics,snippet", id=",".join(ids)).execute().get("items", [])
+    out = []
+    for v in st:
+        pub = datetime.fromisoformat(v["snippet"]["publishedAt"].replace("Z", "+00:00")).replace(tzinfo=None)
+        out.append({"title": v["snippet"]["title"], "channel": v["snippet"]["channelTitle"],
+                    "views": int(v["statistics"].get("viewCount", 0)), "age_days": (datetime.utcnow() - pub).days})
+    return out

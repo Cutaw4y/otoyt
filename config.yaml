@@ -42,6 +42,7 @@ title_examples: >   # same pattern in English: concrete people/number + what hap
   "Blast Furnace: Why Shutting It Down for 1 Day Costs $10 Million" ·
   "Jet Engines: How a 2-Pound Bird Can Destroy a $30 Million Engine" ·
   "Hoover Dam: Why Its Concrete Needed 582 Miles of Cooling Pipes"
+saturation_views: 500000   # rakip analizi: bu izlenmenin üstündeki videolar 'büyük rakip' sayılır
 seo_rules: >
   Pick core_keyword as the phrase a US viewer actually types (e.g. "how a jet engine works",
   "why glass is transparent"). Put it at the start of the title, in the first sentence of the

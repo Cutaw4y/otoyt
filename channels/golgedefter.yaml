@@ -58,6 +58,7 @@ title_examples: >   # sahibinin beğendiği başlık tarzı (konu: somut kişi/s
   "Dyatlov Geçidi: 9 Dağcı O Gece Neden Çadırı İçeriden Kesip Kaçtı?" ·
   "Mary Celeste: 10 Kişi Sofrayı Kurup Gemiden Nasıl Kayboldu?" ·
   "Göbeklitepe: 12 Bin Yıl Önce Bu Taşları Kim, Neden Gömdü?"
+saturation_views: 100000   # rakip analizi: bu izlenmenin üstündeki videolar 'büyük rakip' sayılır
 seo_rules: >
   core_keyword: Türkiye'de insanların gerçekten yazdığı doğal arama kalıbı ("dyatlov geçidi
   olayı", "voynich el yazması sırrı", "alkarısı nedir"). Başlık doğal Türkçe merak kalıbıyla
