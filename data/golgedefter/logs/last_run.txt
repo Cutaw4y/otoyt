@@ -1,8 +1,3 @@
-[01:45:19] Başladı (test modu: False, yayın: manual)
-[01:45:19] Ücretli Gemini anahtarı kullanılıyor
-[01:45:20] Kanal doğrulandı: GölgeDefter
-[01:45:29] Elle yüklenen video tamamlandı: zVG9gbRveeA Dyatlov Geçidi Olayı: Çadırı İçeriden Kestiren Neydi? []
-[01:45:32] Elle yüklenen video tamamlandı: P05dGvk0M-A Dyatlov Geçidi: Çadırı İçeriden Kesen Korku #Shorts []
-[01:45:33] Elle yüklenen video tamamlandı: pfT8PnRPgZQ Otopsi Raporundaki Akılalmaz Çelişki #Shorts []
-[01:45:35] Elle yüklenen video tamamlandı: So1kd16bZJg Çığ İddiası ve Ayak İzleri #Shorts []
-[01:45:41] Oynatma listesi kapağı kondu: Açıklanamayan Olaylar
+[05:10:47] Başladı (test modu: False, yayın: manual)
+[05:10:47] Ücretli Gemini anahtarı kullanılıyor
+[05:10:48] Kanal doğrulandı: GölgeDefter
