@@ -1751,6 +1751,7 @@ def refresh_videos(ids):
                 tg_send_file(best, f"Yeni küçük resim: {fake['title']}")
         except Exception as e:
             log(f"{v['id']}: küçük resim yenilenemedi: {str(e)[:200]}")
+            print(f"::error title=refresh {v['id']}::küçük resim: {str(e)[:250]}", flush=True)
         if fake["title"] != old_title:
             body = {"id": v["id"], "snippet": {k: sn[k] for k in ("title", "description", "tags", "categoryId",
                                                                  "defaultLanguage", "defaultAudioLanguage") if k in sn}}
@@ -1761,6 +1762,7 @@ def refresh_videos(ids):
                 log(f"{v['id']}: başlık güncellenemedi: {str(e)[:200]}")
                 fake["title"] = old_title
         done.append(v["id"])
+        print(f"::notice title=refresh {v['id']}::{old_title} → {fake['title']}", flush=True)
         notify(f"🎨 Video yenilendi: https://youtu.be/{v['id']}\nEski başlık: {old_title}\nYeni başlık: {fake['title']}\n"
                "Yeni küçük resim yukarıda.")
     ledger.save()
