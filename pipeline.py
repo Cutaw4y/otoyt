@@ -127,10 +127,12 @@ def save_json(path, data):
 def choose_pillar(report):
     pillars = CFG["content_pillars"]
     sc = report["pillar_scores"]
+    base = CFG.get("pillar_weights") or [1] * len(pillars)
+    base = (list(base) + [1] * len(pillars))[:len(pillars)]
     if not sc or random.random() < CFG.get("explore_rate", 0.25):
-        return random.choice(pillars)
+        return random.choices(pillars, weights=base)[0]
     avg = sum(sc.values()) / len(sc)
-    weights = [max(sc.get(p, avg), 0.1) ** 2 for p in pillars]
+    weights = [max(sc.get(p, avg), 0.1) ** 2 * b for p, b in zip(pillars, base)]
     return random.choices(pillars, weights=weights)[0]
 
 

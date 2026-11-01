@@ -61,6 +61,9 @@ content_pillars:
   - "How it's made and what it really costs (steel, glass, chips, paper, concrete)"
   - "Engineering failures and disasters explained (what broke, why, and what engineers changed after)"
   - "Hidden engineering you see every day but never notice (road details, tower bases, manholes, rail joints)"
+  - "Engineering mysteries and strange structures (sinking buildings, unexplained failures, abandoned megaprojects, structures that shouldn't still stand)"
+# Ağırlık (veri gelene kadar): felaket ve gizem ağırlıklı (31.10 kararı: gizemin merak çekiciliği + mühendislik farkı)
+pillar_weights: [1, 1, 0.7, 0.8, 2.5, 1, 2.5]
 
 idea_rules: >
   Each idea centers on ONE concrete oddity, failure or seemingly impossible conflict,
@@ -69,6 +72,10 @@ idea_rules: >
   [part/story/flaw] of [specific thing]", "What Actually Happens When [X]", "How [X] Survives
   [extreme Y]". Keep the noun specific. Failures: evergreen post-mortems (decades old,
   well documented), respectful to victims, focus on the engineering lesson.
+  Frame EVERY idea like a mystery to be solved (stakes + an open question + the moment it went wrong
+  or the thing nobody can explain), then solve it with engineering: "Why Did This Bridge Collapse in
+  4 Minutes?", "The Dam That Failed Overnight: What Engineers Missed", "Why This Skyscraper Is Still
+  Sinking". The engineering explanation (diagrams, inside views) is our edge over mystery channels.
 
 playlists:   # her konu sütunu bir oynatma listesi (izleyici videodan videoya akar)
   "How a machine or device works, from the inside (engines, fridges, batteries, phones)": "How Machines Work Inside"
@@ -77,6 +84,7 @@ playlists:   # her konu sütunu bir oynatma listesi (izleyici videodan videoya a
   "How it's made and what it really costs (steel, glass, chips, paper, concrete)": "How It's Made & What It Costs"
   "Engineering failures and disasters explained (what broke, why, and what engineers changed after)": "Engineering Failures Explained"
   "Hidden engineering you see every day but never notice (road details, tower bases, manholes, rail joints)": "Hidden Engineering"
+  "Engineering mysteries and strange structures (sinking buildings, unexplained failures, abandoned megaprojects, structures that shouldn't still stand)": "Engineering Mysteries"
 
 # Kanalın görsel kimliği: her diyagram bu stilde üretilir → tutarlı marka görünümü
 visual_style: >
