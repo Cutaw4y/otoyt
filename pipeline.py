@@ -1713,6 +1713,60 @@ def clean_footers():
     print(f"::notice title=toplam::{n} video temizlendi")
 
 
+def refresh_videos(ids):
+    """Yayındaki/yüklenmiş uzun videolara yeni tıklatan başlık + 3 adaylı yeni küçük resim (hakem seçer)."""
+    yt = publish._yt()
+    items = yt.videos().list(part="snippet", id=",".join(ids)).execute().get("items", [])
+    ledger = media.AssetLedger(DATA / "assets_used.json")
+    done = []
+    for v in items:
+        sn = v["snippet"]
+        if CHANNEL_ID and sn.get("channelId") != CHANNEL_ID:
+            log(f"{v['id']}: bu kanalın videosu değil, atlandı")
+            continue
+        if "#shorts" in sn["title"].lower():
+            continue  # Shorts'ta küçük resim akışta görünmez; başlık zaten kısa kanca
+        desc = sn.get("description", "")
+        fake = {"title": sn["title"], "core_keyword": " ".join(sn["title"].split(":")[0].split()[:4]),
+                "scenes": [{"narration": desc[:2500], "broll_query": CFG.get("fallback_broll", "")}]}
+        old_title = sn["title"]
+        title_pass(fake)
+        try:
+            c = llm_json(
+                "You are a top YouTube thumbnail designer.",
+                f"Video title: {fake['title']}\nDescription:\n{desc[:2000]}\n\nChannel look: {CFG.get('thumbnail_rules', '')}\n"
+                "Give 3 clearly DIFFERENT thumbnail concepts. image_prompt IN ENGLISH: ONE striking subject, dramatic "
+                "angle, big on the RIGHT half, dark empty space on the LEFT, strong rim light, high contrast, something "
+                f"surprising visible, NO text. text: 1-3 words in {CFG['language']}, max 18 characters, must NOT repeat the "
+                'title, adds the missing curiosity piece. JSON: {"thumbnail_concepts":[{"image_prompt":"...","text":"..."}]}',
+                required=("thumbnail_concepts",))
+            fake["thumbnail_concepts"] = c["thumbnail_concepts"][:3]
+            with tempfile.TemporaryDirectory() as tmp:
+                best, _alt = make_thumbnails(fake, Path(tmp), ledger)
+                publish.set_thumbnail(v["id"], best)
+                keep = THUMB_ALT / f"{v['id']}.jpg"
+                if _alt:
+                    keep.parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copy(_alt, keep)
+                tg_send_file(best, f"Yeni küçük resim: {fake['title']}")
+        except Exception as e:
+            log(f"{v['id']}: küçük resim yenilenemedi: {str(e)[:200]}")
+        if fake["title"] != old_title:
+            body = {"id": v["id"], "snippet": {k: sn[k] for k in ("title", "description", "tags", "categoryId",
+                                                                 "defaultLanguage", "defaultAudioLanguage") if k in sn}}
+            body["snippet"]["title"] = fake["title"][:100]
+            try:
+                yt.videos().update(part="snippet", body=body).execute()
+            except Exception as e:
+                log(f"{v['id']}: başlık güncellenemedi: {str(e)[:200]}")
+                fake["title"] = old_title
+        done.append(v["id"])
+        notify(f"🎨 Video yenilendi: https://youtu.be/{v['id']}\nEski başlık: {old_title}\nYeni başlık: {fake['title']}\n"
+               "Yeni küçük resim yukarıda.")
+    ledger.save()
+    return done
+
+
 def retag_videos(ids):
     """Yüklenmiş videoların açıklamasındaki hashtag'leri yeni kurala göre yeniler (uzun: 10-15, Short: 6 + #Shorts)."""
     print(f"::notice title=retag::başladı ({len(ids)} video)", flush=True)
@@ -2503,6 +2557,10 @@ if __name__ == "__main__":
     if os.getenv("RETAG") == "footer":  # kanaldaki videoların açıklamasından eski kaynak/yapay zekâ notunu sil
         check_channel()
         clean_footers()
+        sys.exit(0)
+    if os.getenv("REFRESH"):  # başlık + küçük resim yenile: video kimlikleri, virgülle
+        check_channel()
+        refresh_videos([x.strip() for x in os.getenv("REFRESH").split(",") if x.strip()])
         sys.exit(0)
     if os.getenv("RETAG"):  # yüklenmiş videoların hashtag satırını yenile: video kimlikleri, virgülle
         check_channel()
