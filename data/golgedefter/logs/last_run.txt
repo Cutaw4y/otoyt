@@ -1,4 +1,3 @@
-[14:02:25] Başladı (test modu: False, yayın: manual)
-[14:02:26] Ücretli Gemini anahtarı kullanılıyor
-[14:02:27] Kanal doğrulandı: GölgeDefter
-[14:02:28] Yorum yazıldı: zVG9gbRveeA
+[16:56:47] Başladı (test modu: False, yayın: manual)
+[16:56:47] Ücretli Gemini anahtarı kullanılıyor
+[16:56:48] Kanal doğrulandı: GölgeDefter
