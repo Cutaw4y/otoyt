@@ -38,6 +38,10 @@ script_rules: >
   added automatically.
 
 # Arama ve paketleme (2026 araştırması): anahtar kelime üçlemesi, aranabilir bölümler, yazım hatası etiketleri
+title_examples: >   # same pattern in English: concrete people/number + what happened + the open question
+  "Blast Furnace: Why Shutting It Down for 1 Day Costs $10 Million" ·
+  "Jet Engines: How a 2-Pound Bird Can Destroy a $30 Million Engine" ·
+  "Hoover Dam: Why the Concrete Is Still Curing 90 Years Later"
 seo_rules: >
   Pick core_keyword as the phrase a US viewer actually types (e.g. "how a jet engine works",
   "why glass is transparent"). Put it at the start of the title, in the first sentence of the

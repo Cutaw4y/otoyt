@@ -54,6 +54,10 @@ script_rules: >
   santigrat, feet → metre. Para tutarlarını somut bir kıyasla ver (ör. "o günün parasıyla
   bir köyün yıllık geliri kadar"). Sonda tek cümlelik bir kapanış düşüncesi olsun. Abone ol
   çağrısı veya veda cümlesi YAZMA: kanalın sabit kapanış cümlesi otomatik eklenir.
+title_examples: >   # sahibinin beğendiği başlık tarzı (konu: somut kişi/sayı + yaptıkları + cevapsız soru)
+  "Dyatlov Geçidi: 9 Dağcı O Gece Neden Çadırı İçeriden Kesip Kaçtı?" ·
+  "Mary Celeste: 10 Kişi Sofrayı Kurup Gemiden Nasıl Kayboldu?" ·
+  "Göbeklitepe: 12 Bin Yıl Önce Bu Taşları Kim, Neden Gömdü?"
 seo_rules: >
   core_keyword: Türkiye'de insanların gerçekten yazdığı doğal arama kalıbı ("dyatlov geçidi
   olayı", "voynich el yazması sırrı", "alkarısı nedir"). Başlık doğal Türkçe merak kalıbıyla

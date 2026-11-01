@@ -1279,7 +1279,10 @@ def title_pass(script):
             "a name, a strange object); emotional power words used naturally (e.g. for Turkish: korkunç, gizli, "
             "kimsenin bilmediği, hâlâ çözülemedi, o gece; for English: the real reason, nobody noticed, still); "
             "natural native phrasing, never translated-sounding; no ALL CAPS words, no emoji, no clickbait the "
-            "video can't pay off. Then pick the one with the highest expected click-through rate on a phone feed. "
+            "video can't pay off. "
+            + (f"The channel owner LOVES this style, follow its pattern (topic: concrete people/number + what they "
+               f"did + the unanswered question): {CFG['title_examples']} " if CFG.get("title_examples") else "")
+            + "Then pick the one with the highest expected click-through rate on a phone feed. "
             'JSON: {"titles":["..."],"best_index":0,"why":"..."}',
             required=("titles", "best_index"), judge=False)
         ts = [t.strip().strip('"') for t in r["titles"] if isinstance(t, str) and 25 <= len(t.strip()) <= 70]
