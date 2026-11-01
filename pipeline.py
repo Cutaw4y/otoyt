@@ -2566,6 +2566,24 @@ if __name__ == "__main__":
     if os.getenv("REFRESH"):  # başlık + küçük resim yenile: video kimlikleri, virgülle
         check_channel()
         spec = os.getenv("REFRESH")
+        if spec.startswith("yayinla:"):  # planlı videoyu hemen herkese aç
+            yt = publish._yt()
+            for vid in [x.strip() for x in spec[8:].split(",") if x.strip()]:
+                st = yt.videos().list(part="status", id=vid).execute()["items"][0]["status"]
+                body = {"id": vid, "status": {"privacyStatus": "public",
+                                              "selfDeclaredMadeForKids": st.get("selfDeclaredMadeForKids", False),
+                                              "containsSyntheticMedia": st.get("containsSyntheticMedia", True)}}
+                if "license" in st:
+                    body["status"]["license"] = st["license"]
+                if "embeddable" in st:
+                    body["status"]["embeddable"] = st["embeddable"]
+                yt.videos().update(part="status", body=body).execute()
+                now_ = yt.videos().list(part="status", id=vid).execute()["items"][0]["status"]["privacyStatus"]
+                print(f"::notice title=yayınla {vid}::{now_}", flush=True)
+                notify(f"🚀 Video şimdi yayında: https://youtu.be/{vid}" if now_ == "public" else
+                       f"⚠️ Video herkese açılamadı ({now_}). Studio'dan Görünürlük → Herkese açık yapman gerekiyor.")
+            post_due_comments()
+            sys.exit(0)
         if "|" in spec:  # "videoId|Yeni başlık": yalnız başlığı değiştir
             vid, new_title = spec.split("|", 1)
             yt = publish._yt()
