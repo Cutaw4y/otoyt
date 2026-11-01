@@ -2565,7 +2565,20 @@ if __name__ == "__main__":
         sys.exit(0)
     if os.getenv("REFRESH"):  # başlık + küçük resim yenile: video kimlikleri, virgülle
         check_channel()
-        refresh_videos([x.strip() for x in os.getenv("REFRESH").split(",") if x.strip()])
+        spec = os.getenv("REFRESH")
+        if "|" in spec:  # "videoId|Yeni başlık": yalnız başlığı değiştir
+            vid, new_title = spec.split("|", 1)
+            yt = publish._yt()
+            sn = yt.videos().list(part="snippet", id=vid.strip()).execute()["items"][0]["snippet"]
+            old_t = sn["title"]
+            body = {"id": vid.strip(), "snippet": {k: sn[k] for k in ("title", "description", "tags", "categoryId",
+                                                                     "defaultLanguage", "defaultAudioLanguage") if k in sn}}
+            body["snippet"]["title"] = new_title.strip()[:100]
+            yt.videos().update(part="snippet", body=body).execute()
+            print(f"::notice title=başlık {vid}::{old_t} → {new_title}", flush=True)
+            notify(f"✏️ Başlık değişti: https://youtu.be/{vid.strip()}\nEski: {old_t}\nYeni: {new_title.strip()}")
+        else:
+            refresh_videos([x.strip() for x in spec.split(",") if x.strip()])
         sys.exit(0)
     if os.getenv("RETAG"):  # yüklenmiş videoların hashtag satırını yenile: video kimlikleri, virgülle
         check_channel()
