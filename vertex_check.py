@@ -37,3 +37,15 @@ try:
     print(f"::notice title=Gerçek fotoğraf::{'bulundu' if out else 'bulunamadı'} | {pipeline.REAL_CREDITS[:1]}")
 except Exception as e:
     print(f"::error title=Gerçek fotoğraf::{str(e)[:300]}")
+
+
+# Veo (video üretimi) var mı?
+try:
+    import requests as _rq
+    H = ai._vertex_headers(); P = ai._vx["proj"]
+    for m in ("veo-3.1-generate-preview", "veo-3.1-fast-generate-preview", "veo-3.0-generate-001", "veo-3.0-fast-generate-001", "veo-2.0-generate-001"):
+        u = f"https://us-central1-aiplatform.googleapis.com/v1/projects/{P}/locations/us-central1/publishers/google/models/{m}"
+        r = _rq.get(u, headers=H, timeout=30)
+        print(f"::notice title=Veo {m}::{r.status_code} {r.text[:120].replace(chr(10), ' ')}")
+except Exception as e:
+    print(f"::error title=Veo::{str(e)[:200]}")
