@@ -632,3 +632,40 @@ def title_card(text, out, seconds=3.8, accent=(232, 158, 68), logo=None):
     proc.stdin.close()
     proc.wait()
     return out
+
+
+def host_shot(image, frames, out, seed=0):
+    """Anlatıcı (Gölge) çekimi: yavaş yakınlaşma + mum ışığı titremesi + süzülen sis. Gerçekçi görsel canlanır."""
+    import numpy as np
+    from PIL import ImageFilter as _F
+    rng = np.random.default_rng(seed)
+    src = Image.open(image).convert("RGB")
+    src = src.resize((int(W * 1.12), int(H * 1.12)), Image.LANCZOS)
+    base = np.asarray(src, np.float32)
+    # sıcak ışık maskesi (görüntünün parlak-turuncu bölgeleri: mum alevi ve çevresi)
+    r, g, b = base[..., 0], base[..., 1], base[..., 2]
+    warm = np.clip((r - b) / 120.0, 0, 1) * np.clip((r + g) / 400.0, 0, 1)
+    warm = np.asarray(Image.fromarray((warm * 255).astype(np.uint8)).filter(_F.GaussianBlur(25)), np.float32) / 255
+    fog = np.asarray(Image.fromarray((rng.random((90, 160)) * 255).astype(np.uint8))
+                     .resize((int(W * 1.8), int(H * 1.12) + 2), Image.BICUBIC).filter(_F.GaussianBlur(40)), np.float32) / 255
+    n = max(1, int(frames))
+    flick = np.cumsum(rng.normal(0, 0.035, n))
+    flick = 1 + 0.07 * np.tanh(flick - np.convolve(flick, np.ones(9) / 9, mode="same"))
+    proc = subprocess.Popen(["ffmpeg", "-y", "-v", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}",
+                             "-r", str(FPS), "-i", "-", "-c:v", "libx264", "-preset", "veryfast", "-crf", "18",
+                             "-pix_fmt", "yuv420p", "-r", str(FPS), str(out)], stdin=subprocess.PIPE)
+    bh, bw = base.shape[:2]
+    for i in range(n):
+        t = i / max(1, n - 1)
+        z = 1.0 + 0.08 * t                                  # yavaş yakınlaşma (figüre doğru)
+        cw, ch = int(bw / z), int(bh / z)
+        x0 = int((bw - cw) * (0.62 + 0.05 * t))
+        y0 = int((bh - ch) * 0.45)
+        img = base * (1 + (flick[i] - 1) * warm[..., None])
+        fx = int((fog.shape[1] - bw) * t)
+        img = img + fog[:bh, fx:fx + bw, None] * 26 * np.array([0.8, 0.85, 1.0])
+        crop = Image.fromarray(img.clip(0, 255).astype(np.uint8)).crop((x0, y0, x0 + cw, y0 + ch)).resize((W, H))
+        proc.stdin.write(np.asarray(crop).tobytes())
+    proc.stdin.close()
+    proc.wait()
+    return out

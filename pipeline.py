@@ -1090,7 +1090,11 @@ def build_beat_scene(sc, i, bshots, workdir, ledger, style, hook, img_budget):
                 if not clip or clip_matches(clip, {"narration": b["text"], "broll_query": b["query"]}, workdir):
                     break
                 clip = None
-        if clip:
+        host = CFG.get("host_image")
+        if host and k == 0 and (i == 0 or sc.get("chapter")) and (ASSETS / host).exists():
+            # anlatıcı "Gölge": açılışta ve her bölüm başında, anlatım sürerken ekranda
+            media.host_shot(ASSETS / host, fr, out, seed=i)
+        elif clip:
             media.render_footage(clip, fr, out, start=_clip_start(clip, fr))
         else:
             img = beat_image(j)
