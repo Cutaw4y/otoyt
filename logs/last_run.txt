@@ -1,372 +1,245 @@
-[16:09:40] Başladı (test modu: True, yayın: manual)
-[16:09:40] Analitik: 0 video ölçüldü, sütun puanları: {}
-[16:19:57] Gemini gemini-flash-latest 503 → 60 sn bekleniyor (3/6)
-[16:21:12] Gemini gemini-flash-latest 503 → 90 sn bekleniyor (4/6)
-[16:23:11] Gemini gemini-flash-latest 503 → 90 sn bekleniyor (5/6)
-[16:24:45] Gemini gemini-flash-latest 503 → 90 sn bekleniyor (6/6)
-[16:26:20] Konu (1): What Actually Happens Inside Your Refrigerator When You Close the Door  [How a machine or device works, from the inside (engines, fridges, batteries, phones)]
-[16:32:41] Senaryo yazıldı: 33 sahne, 1925 kelime
-[16:33:30] Gemini gemini-flash-latest 503 → 15 sn bekleniyor (1/6)
-[16:56:00] Gemini gemini-flash-latest 503 → 90 sn bekleniyor (6/6)
-[16:58:04] Anlatım sadeleştirildi (1925 → 1977 kelime)
-[16:58:04] Gemini gemini-flash-lite-latest 429 → 15 sn bekleniyor (1/2)
-[16:58:20] Gemini gemini-flash-lite-latest 429 → 30 sn bekleniyor (2/2)
-[16:58:50] Gemini gemini-flash-latest 429 → 15 sn bekleniyor (1/2)
-[16:59:05] Gemini gemini-flash-latest 429 → 30 sn bekleniyor (2/2)
-[16:59:35] Google aramalı doğrulama kullanılamadı (Gemini yanıt vermedi: 429 {
+[05:29:11] Başladı (test modu: False, yayın: manual)
+[05:29:18] Kanal doğrulandı: Cutaway
+[05:29:20] Analitik: 0 video ölçüldü, sütun puanları: {}
+[05:36:09] Rakip analizi: 'The Calculated Failure Engineered Into Every Highway Sign' seçildi (0/10 büyük rakip). Açı: Investigates the violent transition from 1960s rigid steel beams that split cars in two to the Texas Transportation Institute's crash-tested 'slip-base' hinge—a
+[05:36:10] Konu (1): The Calculated Failure Engineered Into Every Highway Sign  [Hidden engineering you see every day but never notice (road details, tower bases, manholes, rail joints)]
+[05:37:14] Senaryo yazıldı: 34 sahne, 1814 kelime
+[05:37:50] Anlatım sadeleştirildi (1814 → 1703 kelime)
+[05:37:51] Gemini gemini-flash-lite-latest 429 → 15 sn bekleniyor (1/2)
+[05:38:06] Gemini gemini-flash-lite-latest 429 → 30 sn bekleniyor (2/2)
+[05:38:36] Gemini gemini-flash-latest 429 → 15 sn bekleniyor (1/2)
+[05:38:51] Gemini gemini-flash-latest 429 → 30 sn bekleniyor (2/2)
+[05:39:21] Google aramalı doğrulama kullanılamadı (Gemini yanıt vermedi: 429 {
   "error": {
     "code": 429,
     "message": "You exceeded your current quota, please check ) → Wikipedia'ya geçiliyor
-[16:59:37] Doğrulama kaynağı: Wikipedia (4 makale)
-[16:59:48] Doğrulama turu 1: 10 iddia, 0 yanlış, 2 belirsiz
-[16:59:50] Gemini gemini-flash-latest 503 → 15 sn bekleniyor (1/6)
-[17:00:05] Gemini gemini-flash-latest günlük kotası doldu → sonraki modele geçiliyor
-[17:00:18] Doğrulama kaynağı: Wikipedia (4 makale)
-[17:00:20] Doğrulama turu 2: 10 iddia, 0 yanlış, 0 belirsiz
-[17:00:27] Editör (min 6, ort 7.6): {'originality': 8, 'hook': 8, 'clarity': 7, 'simplicity': 6, 'flow': 8, 'value_density': 8, 'audience_fit': 8, 'problems': ["Quote: 'This barrier is the evaporator coil, a cold metal pipe that absorbs heat inside your fridge.' - Fix: Explain what an evaporator coil is in simpler terms before naming it.", "Quote: 'The refrigerant is now a vapor holding your pizza heat hostage inside its gaseous cloud.' - Fix: Briefly remind the reader what refrigerant is right here.", "Quote: 'The compressor discharges this scorching gas into the condenser coils, which are the outdoor metal pipes on the back of the fridge that release heat into the room.' - Fix: Simplify 'condenser coils' to 'pipes that get rid of heat'.", "Quote: 'Deprived of thermal energy, the vapor condenses back into a high-pressure liquid that feels warm to the touch.' - Fix: Explain the word 'condenses' simply.", "Quote: 'The mechanism used to perform that miracle is shockingly simple: an opening barely wider than a human hair called the capillary tube.' - Fix: Explain 'capillary tube' as just a tiny pinhole.", "Quote: 'In the nineteen twenties, chemical engineers introduced synthetic chlorofluorocarbons, commonly known as Freon...' - Fix: 'Chlorofluorocarbons' is a huge tongue-twister for a 12-year-old; simplify or break it down phonetically."], 'problems_tr': "Metindeki 'evaporator coil' (buharlaştırıcı bobin), 'condenser coils' (yoğuşturucu bobin) ve 'chlorofluorocarbons' gibi teknik terimler 12 yaşındaki bir dinleyici için yeterince basitleştirilmeden ve açıklanmadan kullanılmış."}
-[17:00:51] Anlatım sadeleştirildi (1316 → 1342 kelime)
-[17:00:51] Senaryo kısa (1342/1650 kelime) → genişletiliyor (1)
-[17:01:01] Senaryo kısa (1342/1650 kelime) → genişletiliyor (2)
-[17:01:12] Senaryo uzunluğu: 1395 kelime
-[17:01:14] Doğrulama kaynağı: Wikipedia (4 makale)
-[17:01:34] Doğrulama turu 1: 7 iddia, 0 yanlış, 0 belirsiz
-[17:01:44] Editör (min 7, ort 7.9): {'originality': 7, 'hook': 8, 'clarity': 8, 'simplicity': 7, 'flow': 9, 'value_density': 8, 'audience_fit': 8, 'problems': ['"thermal energy is real vibration, like millions of tiny billiard balls shaking inside your food" - good, but could be even tighter.', '"evaporator coil, a series of metal tubes designed to absorb heat" - slightly clinical phrase.', '"refrigerant, which is a special fluid that boils at very low temperatures" - clear, but repeats definition later.', '"capillary tube" - a bit technical even with the pinhole analogy.'], 'problems_tr': 'Metin genel olarak oldukça anlaşılır ve akıcı; ancak "evaporator coil" ve "capillary tube" gibi bazı teknik terimler daha basit hale getirilebilirdi.'}
-[17:02:10] Anlatım sadeleştirildi (1386 → 1386 kelime)
-[17:02:10] Senaryo kısa (1386/1650 kelime) → genişletiliyor (1)
-[17:02:20] Senaryo kısa (1386/1650 kelime) → genişletiliyor (2)
-[17:02:29] Senaryo uzunluğu: 1386 kelime
-[17:02:31] Doğrulama kaynağı: Wikipedia (4 makale)
-[17:02:33] Doğrulama turu 1: 10 iddia, 0 yanlış, 0 belirsiz
-[17:02:40] Editör (min 6, ort 7.4): {'originality': 7, 'hook': 8, 'clarity': 7, 'simplicity': 6, 'flow': 8, 'value_density': 8, 'audience_fit': 8, 'problems': ['"Thermal energy is real vibration, like millions of tiny billiard balls shaking inside your food." -> A 12-year-old might not easily visualize thermal energy as billiard balls without a bit more grounding.', '"A tiny fan hidden behind the back plastic panel pulls that lukewarm air across a cold metal pipe, which is the evaporator coil, meaning a series of metal tubes designed to absorb heat." -> A bit wordy; define evaporator coil simply before describing the mechanism.', '"Deprived of thermal energy, the vapor turns back into a high-pressure liquid that feels warm to the touch through the process of condensation, meaning turning from a gas back into a liquid." -> Condensation is a common term, but the sentence is slightly long and can be broken up for better 12-year-old readability.', '"Today, modern units use isobutane, meaning a highly refined hydrocarbon that is completely ozone-safe." -> Hydrocarbon is a slightly advanced chemistry term that should be briefly explained in everyday language.'], 'problems_tr': 'Metinde geçen "evaporator coil" ve "hydrocarbon" gibi terimler 12 yaşındaki bir çocuğun ilk dinlemede tamamen anlayamayacağı kadar teknik kalmış; ayrıca bazı uzun cümlelerin daha kısa parçalara bölünmesi anlatımı kolaylaştıracaktır.'}
-[17:02:40] Konu kalite barajını geçemedi: What Actually Happens Inside Your Refrigerator When You Close the Door
-[17:02:48] Konu (2): Why Airplane Windows Are Round And Have A Tiny Hole  [Everyday science mysteries (why ice floats, why the sky is blue, how soap works)]
-[17:03:09] Senaryo yazıldı: 28 sahne, 1407 kelime
-[17:03:18] Anlatım sadeleştirildi (1407 → 1327 kelime)
-[17:03:21] Doğrulama kaynağı: Wikipedia (4 makale)
-[17:03:22] HATA:
-Traceback (most recent call last):
-  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 2048, in <module>
-    res = run_once()
-          ^^^^^^^^^^
-  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 1815, in run_once
-    idea, script = produce_script(history, report)
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 1656, in produce_script
-    script, facts_ok = verify_loop(script)
-                       ^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 413, in verify_loop
-    claims = fact_check(script)
-             ^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 407, in fact_check
-    return data["claims"]
-           ~~~~^^^^^^^^^^
-TypeError: list indices must be integers or slices, not str
-
-[17:13:23] Başladı (test modu: True, yayın: manual)
-[17:13:23] Analitik: 0 video ölçüldü, sütun puanları: {}
-[17:13:31] Gemini gemini-flash-latest 503 → 15 sn bekleniyor (1/6)
-[17:13:46] Gemini gemini-flash-latest günlük kotası doldu → sonraki modele geçiliyor
-[17:13:49] Konu (1): What Actually Happens When a Lithium-Ion Cell Suffers Thermal Runaway  [How a machine or device works, from the inside (engines, fridges, batteries, phones)]
-[17:14:21] Senaryo kısa (1382/1650 kelime) → genişletiliyor (1)
-[17:14:30] Senaryo yazıldı: 34 sahne, 1442 kelime
-[17:14:39] Anlatım sadeleştirildi (1442 → 1441 kelime)
-[17:14:39] Gemini gemini-flash-lite-latest 429 → 15 sn bekleniyor (1/2)
-[17:14:54] Gemini gemini-flash-lite-latest 429 → 30 sn bekleniyor (2/2)
-[17:15:25] Gemini gemini-flash-latest 429 → 15 sn bekleniyor (1/2)
-[17:15:40] Gemini gemini-flash-latest 429 → 30 sn bekleniyor (2/2)
-[17:16:10] Google aramalı doğrulama kullanılamadı (Gemini yanıt vermedi: 429 {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check ) → Wikipedia'ya geçiliyor
-[17:16:13] Doğrulama kaynağı: Wikipedia (4 makale)
-[17:16:15] Doğrulama turu 1: 10 iddia, 0 yanlış, 3 belirsiz
-[17:16:31] Doğrulama kaynağı: Wikipedia (4 makale)
-[17:16:33] Doğrulama turu 2: 13 iddia, 0 yanlış, 0 belirsiz
-[17:16:40] Editör (min 6, ort 7.9): {'originality': 8, 'hook': 8, 'clarity': 7, 'simplicity': 6, 'flow': 9, 'value_density': 8, 'audience_fit': 9, 'problems': ['"anode, which acts as the negative side of the battery" - anode and cathode are slightly abstract; should explicitly anchor them as \'the negative terminal\' right away.', '"electrochemical cell, a device that turns chemical reactions into electrical current" - a bit textbook; could be simplified to \'a tiny power plant\'.', '"organic solvent" - requires a brief translation like \'a chemical liquid that easily catches fire\'.', '"metal oxides, compounds containing oxygen atoms locked into their chemical structure" - slightly wordy for a 12-year-old; simplify to \'chemicals packed with trapped oxygen\'.', '"solid-state batteries remove the liquid soup that vaporizes and expands under heat" - clear, but \'solid-state\' needs a quick physical definition like \'batteries made entirely of solid materials instead of liquids\'.'], 'problems_tr': 'Pil terminolojisi (anot, katot, organik çözücü) bazı yerlerde 12 yaşındaki bir dinleyici için biraz teknik kalmış; daha basit günlük benzetmelerle açıklanabilir.'}
-[17:17:05] Anlatım sadeleştirildi (1367 → 1357 kelime)
-[17:17:05] Senaryo kısa (1357/1650 kelime) → genişletiliyor (1)
-[17:17:17] Doğrulama kaynağı: Wikipedia (4 makale)
-[17:17:19] Doğrulama turu 1: 7 iddia, 0 yanlış, 0 belirsiz
-[17:17:26] Editör (min 5, ort 7.3): {'originality': 7, 'hook': 8, 'clarity': 7, 'simplicity': 5, 'flow': 8, 'value_density': 8, 'audience_fit': 8, 'problems': ["Quote: 'thermal runaway in lithium-ion batteries can transform it into a self-sustaining blowtorch.' / Fix: Explain 'thermal runaway' simply right away as a chain reaction of heat before using the term.", "Quote: 'On one side you have a thin sheet of copper coated with carbon, called the anode, which acts as the negative terminal of the battery.' / Fix: Simplify technical terms like 'anode' and 'cathode' by calling them just the negative and positive sides without jargon.", "Quote: 'filling all the empty space between the layers is a liquid soup of chemicals called the electrolyte.' / Fix: Make the explanation of 'electrolyte' even easier for a 12-year-old.", "Quote: 'Engineers subject these cells to vibration tests that simulate ten years of driving down a bumpy gravel road...' / Fix: Keep sentences shorter to maintain absolute simplicity for younger listeners.", "Quote: 'A lithium-ion battery cathode is packed with chemicals containing trapped oxygen.' / Fix: Clarify how metal oxides release oxygen in simpler everyday words.", "Quote: 'Scientists are replacing the volatile liquid electrolyte with solid ceramic or glass electrolytes that cannot catch fire...' / Fix: Define 'volatile' simply as quick to catch fire."], 'problems_tr': "Metindeki 'thermal runaway', 'anode', 'cathode' ve 'electrolyte' gibi teknik terimler bazı yerlerde yeterince basitleştirilmemiş; 12 yaşındaki birinin rahatça anlayabilmesi için bu terimlerin daha sade bir dille açıklanması ve cümlelerin biraz daha kısa tutulması gerekirdi."}
-[17:17:52] Anlatım sadeleştirildi (1411 → 1411 kelime)
-[17:17:54] Doğrulama kaynağı: Wikipedia (4 makale)
-[17:17:56] Doğrulama turu 1: 9 iddia, 0 yanlış, 1 belirsiz
-[17:18:13] Doğrulama kaynağı: Wikipedia (4 makale)
-[17:18:15] Doğrulama turu 2: 8 iddia, 0 yanlış, 2 belirsiz
-[17:18:37] Doğrulama kaynağı: Wikipedia (4 makale)
-[17:18:40] Doğrulama turu 3: 14 iddia, 0 yanlış, 1 belirsiz
-[17:18:45] Editör (min 6, ort 7.4): {'originality': 7, 'hook': 8, 'clarity': 7, 'simplicity': 6, 'flow': 8, 'value_density': 8, 'audience_fit': 8, 'problems': ['"thermal runaway in lithium-ion batteries" - Fix: Explain what thermal runaway means simply before naming it.', '"electrolyte" - Fix: Define electrolyte simply as the liquid inside the battery right when it is introduced.', '"lithium ions" - Fix: Briefly explain that lithium ions are tiny charged particles of metal.', '"metal oxide bonds" - Fix: Simplify to chemical bonds that hold oxygen inside the metal.', '"battery management system" - Fix: Simplify to a tiny built-in computer that watches over the battery\'s health.'], 'problems_tr': "Metinde geçen 'electrolyte', 'lithium ions' ve 'metal oxide bonds' gibi teknik terimler önceden yeterince basitleştirilmeden kullanılmış. Bu terimlerin ilk geçtikleri yerlerde daha sade açıklamalar eklenmelidir."}
-[17:18:45] Konu kalite barajını geçemedi: What Actually Happens When a Lithium-Ion Cell Suffers Thermal Runaway
-[17:18:53] Konu (2): What Actually Happens When a Submarine Power Cable Snaps on the Ocean Floor  [Giant infrastructure explained (power grids, dams, ports, bridges, internet cables)]
-[17:19:16] Senaryo yazıldı: 33 sahne, 1593 kelime
-[17:19:28] Anlatım sadeleştirildi (1593 → 1443 kelime)
-[17:19:30] Doğrulama kaynağı: Wikipedia (4 makale)
-[17:19:32] Doğrulama turu 1: 6 iddia, 0 yanlış, 0 belirsiz
-[17:19:39] Editör (min 6, ort 7.4): {'originality': 7, 'hook': 8, 'clarity': 7, 'simplicity': 6, 'flow': 8, 'value_density': 8, 'audience_fit': 8, 'problems': ["Quote: 'Land power lines use alternating current, where electricity flows back and forth sixty times every second.' -> Fix: Explain alternating current slightly more simply or add a brief everyday analogy.", "Quote: 'To push power across hundreds of miles of open ocean, engineers use high voltage direct current.' -> Fix: Define high voltage direct current in simpler terms compared to alternating current.", "Quote: 'They hold their exact position in the water using computer-controlled thrusters, even during heavy ocean storms.' -> Fix: Change 'thrusters' to 'underwater engines' for a 12-year-old.", "Quote: 'Technicians strip back the outer armor step by step.' -> Fix: Clarify that this armor is the tough outer layer previously mentioned.", "Quote: 'Technicians strip back the outer armor step by step. They expose the individual copper strands and prepare them for welding.' -> Fix: Explain welding briefly as melting metal together to join them."], 'problems_tr': "Metinde geçen 'alternating current' (dalgalı akım), 'high voltage direct current' (yüksek voltajlı doğru akım), 'thrusters' (iticiler) ve 'welding' (kaynak) gibi terimler çocuklar veya konuya yabancı yetişkinler için daha basitçe açıklanabilirdi."}
-[17:20:04] Anlatım sadeleştirildi (1473 → 1474 kelime)
-[17:20:06] Doğrulama kaynağı: Wikipedia (4 makale)
-[17:20:09] Doğrulama turu 1: 7 iddia, 0 yanlış, 2 belirsiz
-[17:20:24] Doğrulama kaynağı: Wikipedia (4 makale)
-[17:20:26] Doğrulama turu 2: 6 iddia, 0 yanlış, 1 belirsiz
-[17:20:42] Doğrulama kaynağı: Wikipedia (4 makale)
-[17:20:43] Doğrulama turu 3: 6 iddia, 0 yanlış, 0 belirsiz
-[17:20:50] Editör (min 6, ort 7.4): {'originality': 7, 'hook': 7, 'clarity': 8, 'simplicity': 6, 'flow': 8, 'value_density': 8, 'audience_fit': 8, 'problems': ['"Land power lines use alternating current, where electricity flows back and forth like a tide sixty times every second." -> AC and alternating current need a slightly simpler breakdown for absolute beginners.', '"To push power across hundreds of miles of open ocean, engineers use high voltage direct current..." -> High voltage direct current (HVDC) is introduced without fully explaining why direct current avoids the sponge effect clearly.', '"Converting normal grid power into direct current requires giant converter stations on land." -> A 12-year-old might stumble slightly on how a converter station actually works.', '"Technicians strip back the tough outer armor layer previously mentioned step by step." -> \'Previously mentioned\' sounds a bit like an essay rather than a smooth story flow.'], 'problems_tr': 'Metindeki "alternating current" ve "direct current" gibi terimler daha basitçe açıklanabilirdi. Ayrıca "previously mentioned" gibi ifadeler anlatım akışını biraz makale havasına sokuyor.'}
-[17:21:20] Anlatım sadeleştirildi (1499 → 1498 kelime)
-[17:21:22] Doğrulama kaynağı: Wikipedia (4 makale)
-[17:21:23] Doğrulama turu 1: 4 iddia, 0 yanlış, 0 belirsiz
-[17:21:31] Editör (min 7, ort 7.9): {'originality': 7, 'hook': 8, 'clarity': 8, 'simplicity': 7, 'flow': 8, 'value_density': 9, 'audience_fit': 8, 'problems': ["'alternating current' - mentioned without a simple analogy first. Fix: 'Land power lines use standard electricity that switches back and forth sixty times every second—a type called alternating current.'", "'high voltage direct current' - a bit technical for a 12-year-old. Fix: '...engineers use direct current, a steady stream of electricity flowing in one continuous direction.'", "'five hundred thousand volts, about four thousand times higher than a standard wall outlet' - Good comparison, but 'volts' is a bit abstract. Fix: '...about five hundred thousand volts, which is about four thousand times stronger than a standard wall outlet.'", "'repair bight' - technical jargon used without immediate simple context. Fix: '...a massive spare length of submarine cable, known in the industry as a repair bight.'"], 'problems_tr': "Metin genel olarak çok akıcı ve anlaşılır, ancak 'alternating current', 'high voltage direct current' ve 'repair bight' gibi teknik terimler daha basit benzetmelerle veya kelimelerle açıklanarak basitleştirilebilir."}
-[17:21:31] Konu kalite barajını geçemedi: What Actually Happens When a Submarine Power Cable Snaps on the Ocean Floor
-[17:21:38] Konu (3): Why Airplane Windows Have That Tiny Hole No One Notices  [Everyday science mysteries (why ice floats, why the sky is blue, how soap works)]
-[17:21:57] Senaryo kısa (940/1650 kelime) → genişletiliyor (1)
-[17:22:08] Senaryo kısa (962/1650 kelime) → genişletiliyor (2)
-[17:22:17] Senaryo uzunluğu: 966 kelime
-[17:22:17] Senaryo yazıldı: 32 sahne, 966 kelime
-[17:22:26] Anlatım sadeleştirildi (966 → 924 kelime)
-[17:22:28] Doğrulama kaynağı: Wikipedia (4 makale)
-[17:22:30] Doğrulama turu 1: 10 iddia, 0 yanlış, 0 belirsiz
-[17:22:37] Editör (min 6, ort 7.0): {'originality': 6, 'hook': 7, 'clarity': 7, 'simplicity': 6, 'flow': 8, 'value_density': 7, 'audience_fit': 8, 'problems': ["'bleed hole' - should be explained immediately as a pressure release hole before using the term repeatedly.", "'slipstream' - needs a simple definition like 'the fast-moving air rushing past the outside of the plane'.", "'thermoplastic called acrylic, often known by brand names like Plexiglas' - a bit too jargon-heavy for a 12-year-old; simplify to 'a tough, clear plastic similar to Plexiglas'.", "'polymer chains, which are long molecular strands' - too technical; simplify to 'stretching the plastic molecules so it doesn't snap easily'."], 'problems_tr': "'Bleed hole' terimi ve 'slipstream' kelimesi daha başında basitçe açıklanmalı. Ayrıca 'thermoplastic', 'acrylic' ve 'polymer chains' gibi teknik kelimeler 12 yaşındaki birinin anlayacağı kadar basitleştirilmelidir."}
-[17:22:59] Anlatım sadeleştirildi (0 → 932 kelime)
-[17:22:59] Senaryo kısa (932/1650 kelime) → genişletiliyor (1)
-[17:23:07] Senaryo kısa (932/1650 kelime) → genişletiliyor (2)
-[17:23:15] Senaryo uzunluğu: 936 kelime
-[17:23:17] Doğrulama kaynağı: Wikipedia (4 makale)
-[17:23:18] Doğrulama turu 1: 7 iddia, 0 yanlış, 0 belirsiz
-[17:23:25] Editör (min 6, ort 6.4): {'originality': 6, 'hook': 6, 'clarity': 7, 'simplicity': 6, 'flow': 7, 'value_density': 6, 'audience_fit': 7, 'problems': ["Quote: 'This little opening is a pressure release opening, known as a bleed hole.' -> Fix: 'This little opening is a pressure release valve, known simply as a bleed hole.'", "Quote: 'At thirty-five thousand feet, outside temperatures plummet to minus sixty degrees Fahrenheit...' -> Fix: 'At thirty-five thousand feet, outside temperatures drop to minus sixty degrees Fahrenheit—colder than Antarctica.'"], 'problems_tr': 'Uçak pencerelerindeki basınç tahliye deliğinin işlevi çok iyi anlatılmış, ancak bazı teknik terimler ve sayılar biraz daha basit bir dille ve günlük benzetmelerle açıklanabilirdi.'}
-[17:23:47] Anlatım sadeleştirildi (932 → 932 kelime)
-[17:23:47] Senaryo kısa (932/1650 kelime) → genişletiliyor (1)
-[17:23:57] Senaryo kısa (970/1650 kelime) → genişletiliyor (2)
-[17:24:06] Senaryo uzunluğu: 993 kelime
-[17:24:08] Doğrulama kaynağı: Wikipedia (4 makale)
-[17:24:09] Doğrulama turu 1: 9 iddia, 0 yanlış, 0 belirsiz
-[17:24:17] Editör (min 6, ort 7.0): {'originality': 6, 'hook': 7, 'clarity': 8, 'simplicity': 6, 'flow': 7, 'value_density': 7, 'audience_fit': 8, 'problems': ["Quote: 'This little opening is a pressure release valve, known simply as a bleed hole.' -> Fix: 'This little opening lets air pressure escape, and it is called a bleed hole.'", "Quote: 'Up there, the air is so thin your lungs could not pull in enough oxygen to keep you awake for more than a minute.' -> Fix: 'Up there, the air is so thin you wouldn't be able to breathe properly.'", "Quote: 'The outermost layer sits flush with the exterior skin, facing the fast-moving air rushing past the outside of the plane, known as the slipstream.' -> Fix: 'The outer layer sits right against the outside of the plane, facing the heavy wind rushing past.'", "Quote: 'As the plane climbs and outside pressure drops, the trapped air expands.' -> Fix: 'As the plane climbs and outside air gets thinner, the trapped air inside tries to push outward.'", "Quote: 'That extreme cold chills the outer window pane to the bone. If warm, humid air from the passenger cabin touched that freezing glass directly, water vapor would instantly condense and freeze into thick frost.' -> Fix: 'That extreme cold freezes the outer glass. If the warm, wet air from inside the cabin hit that cold glass, it would instantly turn into thick frost blocking your view.'", "Quote: 'Engineers design these systems using redundancy, having backup systems ready for every failure mode.' -> Fix: 'Engineers use backups for everything, meaning there is always a spare system ready if something breaks.'"], 'problems_tr': "Metinde geçen 'slipstream', 'redundancy', 'pressure release valve' gibi bazı teknik terimler ve karmaşık cümleler 12 yaşındaki bir çocuğun ilk dinlemede tamamen anlayamayacağı kadar soyuttur; bu kısımlar daha günlük bir dille basitleştirilmelidir."}
-[17:24:17] Konu kalite barajını geçemedi: Why Airplane Windows Have That Tiny Hole No One Notices
-[17:24:24] Konu (4): Why a Commercial Jet Engine Cannot Digest a Single Frozen Bird  [How a machine or device works, from the inside (engines, fridges, batteries, phones)]
-[17:24:47] Senaryo yazıldı: 32 sahne, 1633 kelime
-[17:24:58] Anlatım sadeleştirildi (1633 → 1345 kelime)
-[17:25:00] Doğrulama kaynağı: Wikipedia (4 makale)
-[17:25:02] Doğrulama turu 1: 10 iddia, 0 yanlış, 3 belirsiz
-[17:25:17] Doğrulama kaynağı: Wikipedia (4 makale)
-[17:25:19] Doğrulama turu 2: 7 iddia, 0 yanlış, 1 belirsiz
-[17:25:34] Doğrulama kaynağı: Wikipedia (4 makale)
-[17:25:36] Doğrulama turu 3: 10 iddia, 0 yanlış, 3 belirsiz
-[17:25:44] Editör (min 6, ort 7.0): {'originality': 7, 'hook': 8, 'clarity': 7, 'simplicity': 6, 'flow': 6, 'value_density': 7, 'audience_fit': 8, 'problems': ["Quote: 'creating what we call bypass thrust.' -> Fix: 'creating what we call bypass thrust, which is extra pushing power around the engine.'", "Quote: 'This trick, called film cooling, lets the parts live in heat that should melt them.' -> Fix: 'This trick, called film cooling, uses cool air to form a protective blanket so the parts don't melt.'", "Quote: 'To stop total damage, modern engines use moving metal wings called stator vanes.' -> Fix: 'To stop total damage, modern engines use moving metal wings called stator vanes that guide the air.'", "Quote: 'Modern fan blades are made of titanium alloy instead of weak steel or aluminum.' -> Fix: 'Modern fan blades are made of titanium alloy, which is a mix of metals tougher than regular steel or aluminum.'"], 'problems_tr': "Metinde geçen 'bypass thrust', 'film cooling', 'stator vanes' ve 'titanium alloy' gibi bazı teknik terimler, 12 yaşındaki bir çocuğun ilk dinlemede tamamen anlayabilmesi için kısaca açıklanmamıştır."}
-[17:26:05] Anlatım sadeleştirildi (1133 → 1136 kelime)
-[17:26:05] Senaryo kısa (1136/1650 kelime) → genişletiliyor (1)
-[17:26:16] Senaryo kısa (1136/1650 kelime) → genişletiliyor (2)
-[17:26:25] Senaryo uzunluğu: 1150 kelime
-[17:26:27] Doğrulama kaynağı: Wikipedia (4 makale)
-[17:26:29] Doğrulama turu 1: 13 iddia, 0 yanlış, 4 belirsiz
-[17:26:44] Doğrulama kaynağı: Wikipedia (4 makale)
-[17:26:46] Doğrulama turu 2: 11 iddia, 0 yanlış, 1 belirsiz
-[17:27:00] Doğrulama kaynağı: Wikipedia (4 makale)
-[17:27:01] Doğrulama turu 3: 5 iddia, 0 yanlış, 2 belirsiz
-[17:27:08] Editör (min 6, ort 7.1): {'originality': 7, 'hook': 7, 'clarity': 7, 'simplicity': 6, 'flow': 7, 'value_density': 8, 'audience_fit': 8, 'problems': ['"bypass thrust, which is extra pushing power around the engine." - \'Bypass thrust\' is explained, but the transition is slightly technical.', '"stator vanes that guide the air." - \'Stator vanes\' is left a bit jargon-heavy even though explained right after.', '"titanium alloy, which is a mix of metals tougher than regular steel or aluminum." - Good, but could be even simpler for a 12-year-old.', '"resin in a giant mold" - \'Resin\' is used without a brief everyday analogy.'], 'problems_tr': "Metindeki 'stator vanes' (statör kanatları) ve 'resin' (reçine) gibi bazı teknik terimler daha basit bir günlük benzetmeyle açıklanabilirdi."}
-[17:27:28] Anlatım sadeleştirildi (976 → 979 kelime)
-[17:27:28] Senaryo kısa (979/1650 kelime) → genişletiliyor (1)
-[17:27:37] Senaryo kısa (991/1650 kelime) → genişletiliyor (2)
-[17:27:45] Senaryo uzunluğu: 1142 kelime
-[17:27:48] Doğrulama kaynağı: Wikipedia (4 makale)
-[17:27:50] Doğrulama turu 1: 12 iddia, 0 yanlış, 0 belirsiz
-[17:27:57] Editör (min 6, ort 7.1): {'originality': 7, 'hook': 8, 'clarity': 7, 'simplicity': 6, 'flow': 6, 'value_density': 8, 'audience_fit': 8, 'problems': ["Quote: 'bypass air' - Problem: Mentioned without a simple physical description of what it actually does to help the plane.", "Quote: 'titanium alloy, which is a mix of metals tougher than regular steel or aluminum, like a super strong metal skeleton' - Problem: Slightly clunky sentence structure for a 12-year-old.", "Quote: 'carbon fiber cloth instead of solid metal' - Problem: Assumes the listener knows what carbon fiber is.", "Quote: 'stator vanes' - Problem: Technical term introduced without an immediate plain-English analogy.", "Quote: 'An engine stall happens when air flow reverses violently inside the core.' - Problem: 'Engine stall' in a jet is very different from a car stalling; needs a clearer everyday definition."], 'problems_tr': "Metindeki 'bypass air', 'stator vanes' ve 'carbon fiber' gibi teknik terimler 12 yaşındaki bir çocuğun ilk dinlemede tamamen anlayamayacağı kadar hızlı geçilmiş. Jet motorunun durması (engine stall) kavramı da araba stop etmesine benzetilerek daha basitleştirilebilirdi."}
-[17:27:57] Konu kalite barajını geçemedi: Why a Commercial Jet Engine Cannot Digest a Single Frozen Bird
-[17:28:04] Konu (5): What Actually Happens Inside Your Car Engine If You Mistakenly Fill It With Water  [How a machine or device works, from the inside (engines, fridges, batteries, phones)]
-[17:28:24] Senaryo kısa (1108/1650 kelime) → genişletiliyor (1)
-[17:28:34] Senaryo kısa (1123/1650 kelime) → genişletiliyor (2)
-[17:28:45] Senaryo uzunluğu: 1206 kelime
-[17:28:45] Senaryo yazıldı: 34 sahne, 1206 kelime
-[17:28:55] Anlatım sadeleştirildi (1206 → 1223 kelime)
-[17:28:58] Doğrulama kaynağı: Wikipedia (4 makale)
-[17:29:00] Doğrulama turu 1: 5 iddia, 0 yanlış, 0 belirsiz
-[17:29:06] Editör (min 6, ort 7.3): {'originality': 7, 'hook': 8, 'clarity': 7, 'simplicity': 6, 'flow': 8, 'value_density': 7, 'audience_fit': 8, 'problems': ["Quote: 'combustion chamber, a small hollow room where fuel and air mix and explode to push a heavy metal plug called a piston up and down.' -> Fix: Make it even simpler by avoiding the word combustion entirely.", "Quote: 'History shows that early engine builders discovered this limit very quickly when old water pumps leaked into steam cylinders.' -> Fix: This historical tangent breaks the flow and isn't necessary for understanding.", "Quote: 'The weakest link in this chain is the connecting rod, a sturdy steel arm that links the piston to the crankshaft.' -> Fix: Explain what a crankshaft is simply before mentioning it.", "Quote: 'Hydraulic lock, or hydrolock for short.' -> Fix: Just stick to one term and explain it instantly.", "Quote: 'Fixing it requires specialized boring machines that cost hundreds of thousands of dollars to restore the cylinder walls to factory specs.' -> Fix: Simplify this to say fixing it requires expensive industrial tools.", "Quote: 'Another sneaky way water enters is through a blown head gasket, which is the seal between the engine block and the cylinder head.' -> Fix: Explain a head gasket as a rubber seal between two metal engine parts."], 'problems_tr': 'Metinde geçen yanma odası, krank mili ve conta gibi bazı teknik terimler 12 yaşındaki bir çocuk için biraz karmaşık kalmış; ayrıca motorun tarihçesinden bahseden gereksiz detaylar akışı yavaşlatıyor.'}
-[17:29:30] Anlatım sadeleştirildi (1191 → 1184 kelime)
-[17:29:30] Senaryo kısa (1184/1650 kelime) → genişletiliyor (1)
-[17:29:41] Senaryo kısa (1338/1650 kelime) → genişletiliyor (2)
-[17:29:52] Senaryo uzunluğu: 1338 kelime
-[17:29:54] Doğrulama kaynağı: Wikipedia (4 makale)
-[17:29:55] Doğrulama turu 1: 8 iddia, 0 yanlış, 0 belirsiz
-[17:30:02] Editör (min 6, ort 7.4): {'originality': 7, 'hook': 8, 'clarity': 8, 'simplicity': 6, 'flow': 8, 'value_density': 7, 'audience_fit': 8, 'problems': ["Quote: 'cylinders where fuel and air mix to push a heavy metal plug called a piston up and down.' - Fix: Explain what a cylinder is with a simple analogy before mentioning it.", "Quote: 'This is why mechanics tell you to check your oil dipstick regularly.' - Fix: Briefly explain what an oil dipstick is.", "Quote: 'Another sneaky way water enters is through a blown head gasket, which is a rubber seal between two metal engine parts.' - Fix: Make the explanation of a head gasket even simpler for a 12-year-old.", "Quote: 'At three thousand revolutions per minute, about fifteen times faster than a ceiling fan on high speed...' - Fix: Simplify the RPM comparison slightly."], 'problems_tr': "Metindeki 'silindir', 'yağ çubuğu' ve 'silindir conta' gibi bazı terimler 12 yaşındaki bir çocuğun ilk dinlemede tamamen anlayabilmesi için biraz daha basitleştirilebilir."}
-[17:30:28] Anlatım sadeleştirildi (1367 → 1353 kelime)
-[17:30:28] Senaryo kısa (1353/1650 kelime) → genişletiliyor (1)
-[17:30:38] Senaryo kısa (1353/1650 kelime) → genişletiliyor (2)
-[17:30:47] Senaryo uzunluğu: 1353 kelime
-[17:30:50] Doğrulama kaynağı: Wikipedia (4 makale)
-[17:30:51] Doğrulama turu 1: 10 iddia, 0 yanlış, 2 belirsiz
-[17:31:08] Doğrulama kaynağı: Wikipedia (4 makale)
-[17:31:12] Doğrulama turu 2: 10 iddia, 0 yanlış, 1 belirsiz
-[17:31:29] Doğrulama kaynağı: Wikipedia (4 makale)
-[17:31:31] Doğrulama turu 3: 14 iddia, 0 yanlış, 0 belirsiz
-[17:31:37] Editör (min 6, ort 6.6): {'originality': 6, 'hook': 7, 'clarity': 7, 'simplicity': 6, 'flow': 7, 'value_density': 6, 'audience_fit': 7, 'problems': ['"crankshaft, a heavy rotating metal shaft that turns up-and-down motion into spinning power" - A bit clunky for a 12-year-old; should be simplified further.', '"two hundred amperes of current from a twelve volt battery" - Amperes and volts are technical units that slow down a casual listener without a simpler analogy.', '"hydraulic lock, or hydrolock for short" - The term is explained, but could be integrated smoother.', '"connecting rod, a sturdy forged steel arm that links the piston to the crankshaft" - A bit long and definition-heavy for optimal simplicity.'], 'problems_tr': 'Metindeki amper, volt ve krank mili gibi bazı teknik terimler 12 yaşındaki bir çocuğun ilk dinlemede tamamen anlayamayacağı kadar karmaşık bırakılmış; daha basit benzetmelerle açıklanabilir.'}
-[17:31:37] Konu kalite barajını geçemedi: What Actually Happens Inside Your Car Engine If You Mistakenly Fill It With Water
-[17:31:37] Baraj geçilemedi; en iyi senaryo kullanılıyor (min 7, ort 7.9)
-[17:31:38] Seslendirme başlıyor (Gemini Sadaltager)...
-[17:37:16] Seslendirme: 651 sn
-[17:37:16] Sahne 1/33 (diagram, 20.6 sn, 5 çekim)
-[17:37:34] Sahne 2/33 (diagram, 16.7 sn, 4 çekim)
-[17:37:48] Sahne 3/33 (diagram, 20.7 sn, 5 çekim)
-[17:37:58]    ilgisiz görüntü elendi: bronze statue of man on horse
-[17:38:06]    ilgisiz görüntü elendi: many coins falling on table
-[17:38:12]    ilgisiz görüntü elendi: high voltage power line tower
-[17:38:27]    ilgisiz görüntü elendi: fish swimming in an aquarium
-[17:38:32]    ilgisiz görüntü elendi: The Statue of Liberty outdoors
-[17:38:39]    ilgisiz görüntü elendi: man wearing skull face mask
-[17:38:45] Sahne 4/33 (diagram, 20.7 sn, 5 çekim)
-[17:39:03]    ilgisiz görüntü elendi: trees along a river bank
-[17:39:09]    ilgisiz görüntü elendi: barbed wire fence with grass
-[17:39:18]    ilgisiz görüntü elendi: modern city skyscraper exterior view
-[17:39:27]    ilgisiz görüntü elendi: modern glass skyscraper low angle
-[17:39:33]    ilgisiz görüntü elendi: modern skyscraper exterior glass facade
-[17:39:40]    ilgisiz görüntü elendi: two longhorn cattle in field
-[17:39:46] Sahne 5/33 (diagram, 21.9 sn, 5 çekim)
-[17:39:54]    ilgisiz görüntü elendi: large ocean wave breaking down
-[17:40:04]    ilgisiz görüntü elendi: ocean waves hitting beach rocks
-[17:40:16]    ilgisiz görüntü elendi: distant islands and calm ocean
-[17:40:31]    ilgisiz görüntü elendi: small sailboat on blue ocean
-[17:40:35] Gemini gemini-flash-lite-latest 503 → 15 sn bekleniyor (1/6)
-[17:40:58]    ilgisiz görüntü elendi: aerial view of ocean waves
-[17:41:07]    ilgisiz görüntü elendi: ocean waves at sunset
-[17:41:13] Sahne 6/33 (diagram, 28.0 sn, 6 çekim)
-[17:41:21] Gemini gemini-flash-lite-latest 503 → 15 sn bekleniyor (1/6)
-[17:41:48]    ilgisiz görüntü elendi: flowing water over rocks
-[17:41:53]    ilgisiz görüntü elendi: water flowing over mossy rocks
-[17:42:04]    ilgisiz görüntü elendi: historic city square with carriages
-[17:42:16]    ilgisiz görüntü elendi: flowing water over a weir
-[17:42:22]    ilgisiz görüntü elendi: waterfall flowing over green rocks
-[17:42:28]    ilgisiz görüntü elendi: fast flowing rocky river water
-[17:42:38]    ilgisiz görüntü elendi: green trees against sky
-[17:42:45]    ilgisiz görüntü elendi: waterfall in a forest setting
-[17:42:53]    ilgisiz görüntü elendi: river flowing through green forest
-[17:42:56] Sahne 7/33 (footage, 24.3 sn, 5 çekim)
-[17:43:00]    ilgisiz görüntü elendi: vintage audio receiver and amplifier
-[17:43:10]    ilgisiz görüntü elendi: blurred subway train in motion
-[17:43:14]    ilgisiz görüntü elendi: rural landscape with train tracks
-[17:43:23]    ilgisiz görüntü elendi: power lines at sunset silhouette
-[17:43:32]    ilgisiz görüntü elendi: busy train station concourse with people
-[17:43:41]    ilgisiz görüntü elendi: train tracks and highway bridge
-[17:43:51]    ilgisiz görüntü elendi: railroad tracks passing by quickly
-[17:43:59]    ilgisiz görüntü elendi: Close up of music synthesizer
-[17:44:06]    ilgisiz görüntü elendi: busy city street with cars
-[17:44:14] Sahne 8/33 (diagram, 20.5 sn, 5 çekim)
-[17:44:23]    ilgisiz görüntü elendi: clouds moving in the sky
-[17:44:30]    ilgisiz görüntü elendi: soap bubbles floating in street
-[17:44:37]    ilgisiz görüntü elendi: water flowing in a river
-[17:44:46]    ilgisiz görüntü elendi: frozen soap bubble on moss
-[17:45:09] Sahne 9/33 (footage, 21.8 sn, 5 çekim)
-[17:45:18]    ilgisiz görüntü elendi: aerial view of coastal port
-[17:45:21]    ilgisiz görüntü elendi: side view of sailing boat
-[17:45:28]    ilgisiz görüntü elendi: shipwreck stranded near the coast
-[17:45:35]    ilgisiz görüntü elendi: sunset over water and coastline
-[17:45:42]    ilgisiz görüntü elendi: choppy ocean water surface waves
-[17:45:49]    ilgisiz görüntü elendi: passenger ferry on open water
-[17:45:58]    ilgisiz görüntü elendi: ship silhouette at red sunset
-[17:46:04]    ilgisiz görüntü elendi: small boat moving in ocean
-[17:46:12]    ilgisiz görüntü elendi: cruise ship sailing near city
-[17:46:19] Sahne 10/33 (diagram, 21.9 sn, 5 çekim)
-[17:46:28]    ilgisiz görüntü elendi: urban cable car over water
-[17:46:35]    ilgisiz görüntü elendi: person cutting meat with knife
-[17:46:45]    ilgisiz görüntü elendi: Woman sewing on a machine
-[17:46:52]    ilgisiz görüntü elendi: rotating power tool polishing surface
-[17:47:00]    ilgisiz görüntü elendi: Person wakeboarding on a lake
-[17:47:08]    ilgisiz görüntü elendi: ski lift in the mountains
-[17:47:14] Sahne 11/33 (diagram, 19.3 sn, 4 çekim)
-[17:47:24]    ilgisiz görüntü elendi: aerial view of salt flats
-[17:47:30]    ilgisiz görüntü elendi: rocky ocean shore at sunset
-[17:47:38]    ilgisiz görüntü elendi: Mountains reflected in salt flat
-[17:47:49]    ilgisiz görüntü elendi: aerial view of salt flats
-[17:47:55]    ilgisiz görüntü elendi: coastal harbor with boats
-[17:48:21] Sahne 12/33 (diagram, 18.0 sn, 4 çekim)
-[17:48:30]    ilgisiz görüntü elendi: aerial view of road roundabout
-[17:48:37]    ilgisiz görüntü elendi: sunset over the ocean
-[17:48:44]    ilgisiz görüntü elendi: close up of circuit board
-[17:48:52]    ilgisiz görüntü elendi: electronic circuit board with components
-[17:49:04]    ilgisiz görüntü elendi: aerial view of breakwater waves
-[17:49:09]    ilgisiz görüntü elendi: close up of arduino board
-[17:49:12] Sahne 13/33 (footage, 20.1 sn, 4 çekim)
-[17:49:17]    ilgisiz görüntü elendi: city skyline at night
-[17:49:24]    ilgisiz görüntü elendi: car parked near grey building
-[17:50:25] Sahne 14/33 (footage, 20.7 sn, 5 çekim)
-[17:51:37] Sahne 15/33 (diagram, 16.8 sn, 4 çekim)
-[17:52:18] Sahne 16/33 (footage, 16.5 sn, 4 çekim)
-[17:53:10] Sahne 17/33 (footage, 17.2 sn, 4 çekim)
-[17:54:03] Sahne 18/33 (footage, 15.1 sn, 3 çekim)
-[17:54:52] Sahne 19/33 (diagram, 21.1 sn, 5 çekim)
-[17:55:35] Sahne 20/33 (footage, 17.8 sn, 4 çekim)
-[17:56:35] Sahne 21/33 (diagram, 19.9 sn, 4 çekim)
-[17:56:35] Cloudflare günlük ücretsiz kota doldu: {"errors":[{"message":"AiError: AiError: you have used up your daily free allocation of 10,000 neurons, please upgrade to Cloudflare's Workers Paid plan if you would like to continue usage. (9aeae321- → bu video için Pexels fotoğraflarına geçiliyor
-[17:57:10] Sahne 22/33 (footage, 21.3 sn, 5 çekim)
-[17:58:11] Sahne 23/33 (diagram, 17.9 sn, 4 çekim)
-[17:58:46] Sahne 24/33 (footage, 19.8 sn, 4 çekim)
-[17:59:47] Sahne 25/33 (diagram, 19.6 sn, 4 çekim)
-[18:00:27] Sahne 26/33 (diagram, 20.9 sn, 5 çekim)
-[18:01:01] Sahne 27/33 (diagram, 18.5 sn, 4 çekim)
-[18:01:38] Sahne 28/33 (footage, 15.3 sn, 3 çekim)
-[18:02:25] Sahne 29/33 (footage, 19.0 sn, 4 çekim)
-[18:03:24] Sahne 30/33 (footage, 22.1 sn, 5 çekim)
-[18:04:48] Sahne 31/33 (diagram, 19.2 sn, 4 çekim)
-[18:05:24] Sahne 32/33 (footage, 18.5 sn, 4 çekim)
-[18:06:27] Sahne 33/33 (footage, 19.3 sn, 4 çekim)
-[18:22:14] Ana video: 667 sn
-[18:23:36] Short 1: sahne 0-2, 58 sn — When an Ocean Floor Cable Snaps
-[18:23:41] Thumbnail sıralaması: [2, 1, 3] - Thumbnail #2 is the clear winner because it features a dramatic, high-contrast visual (a submarine) combined with punchy, readable text ('OCEAN FLOOR SNAP') that creates an immediate curiosity gap with the title without repeating it. It looks premium and maintains high legibility even at small phone sizes. #1 has strong imagery with the ray, but the text 'THOUSANDS OF VOLTS' is a bit small and harder to read at glance. #3 is too abstract, relying on an indoor lightbulb setup that feels disconnected from the deep-sea premise of a submarine power cable.
-[18:23:41] Altyazı çevirisi: Turkish (255 satır)
-[18:24:50] DRY_RUN anlatım metni:
-  [1] Deep down on the dark ocean floor, a submarine power cable carries enough electricity to power entire cities. But when a heavy ship anchor rips through this line, the power grid on land does not blow up. A silent shield stops the disaster in milliseconds.
-  [2] To see why snapping this wire does not plunge countries into darkness, we look inside the line. A submarine power cable is a heavy armored tube built to survive crushing pressure miles below the surface.
-  [3] At the very center sits a thick bundle of copper strands acting as a highway for electricity. Surrounding this metal core are layers of tough plastic that keep sea water out. Without this tight seal, a single drop of salt water would cause an instant, explosive short circuit.
-  [4] Outside the plastic barrier lies a lead sheath to block all moisture. Then come galvanized steel wires wound tightly in a spiral to give the cable immense strength. This heavy armor lets the cable hang over steep underwater cliffs without snapping under its own massive weight.
-  [5] Land power lines use standard electrical pushes that switch back and forth sixty times every second, known as alternating current. But this switching type fails over long ocean distances. The surrounding salt water acts like a giant sponge, trapping and wasting the electrical energy before it reaches the other shore.
-  [6] To push power across hundreds of miles of open ocean, engineers use high voltage direct current, a steady stream of electricity flowing in one continuous direction without switching back and forth. This steady flow avoids the sponge effect because it does not constantly charge and discharge the surrounding salt water like a battery. That stops energy loss and lets power travel smoothly from one continent to another.
-  [7] Turning normal grid power into this steady direct current requires giant converter stations on land. These stations are massive electrical yards filled with electronic switches and transformers. They transform normal electricity into five hundred thousand volts, about four thousand times higher than a standard wall outlet.
-  [8] Operating at such extreme voltage creates intense electrical forces. The cable relies on flawless insulation to keep the power trapped inside. Even a microscopic air bubble trapped inside the plastic during manufacturing can grow and cause a total blowout.
-  [9] When a giant container ship drops its anchor in shallow coastal waters, the danger spikes. A ship anchor can weigh thirty thousand pounds, about as heavy as six large cars. As the ship drifts, the heavy iron hook drags across the seabed like a giant plough, hunting for buried cables.
-  [10] If that anchor catches a submarine power cable, the steel armor wires groan and stretch before snapping. The copper core inside is torn apart in a split second. The moment the copper separates, a massive electrical fault is created as the live high voltage meets the salty ocean water.
-  [11] Salt water is packed with dissolved salts that conduct electricity easily. When the severed high voltage core touches the sea, a colossal electrical current rushes directly into the ocean. This creates an underwater spark that can boil water and vaporize metal instantly.
-  [12] Despite this massive short circuit, the power station on land does not explode. Special sensors monitor the voltage and current thousands of times every second. The instant they spot a sudden surge, circuit breakers trip open in less than twenty milliseconds.
-  [13] Those twenty milliseconds are faster than a single human eye blink. Circuit breakers pull metal contacts apart inside a chamber filled with special gas that smothers the electrical spark instantly. Power stops flowing through the broken cable before any damage reaches the land grid.
-  [14] With the line safely dead and de-energized, half a country might experience a brief dip in power. But the physical cable sitting on the dark ocean floor is now split in two. Finding that break in thousands of square miles of open ocean is like finding a single needle in a very large haystack.
-  [15] Engineers locate the break using a special electronic pulse technique. They send a high-frequency electrical signal down the healthy end of the cable. The signal travels at nearly the speed of light until it hits the broken end, where it bounces back like an echo.
-  [16] By measuring the exact time it takes for the echo to return, engineers calculate the distance to the break within a few yards. If the cable is buried deep under mud, they send out a survey ship equipped with sonar and magnetic sensors to find its exact coordinates.
-  [17] Once the broken ends are located, a specialized cable repair ship steams to the site. These ships are floating workshops packed with cranes and cleanrooms. They hold their exact position in the water using computer-controlled underwater engines, even during heavy ocean storms.
-  [18] The crew sends down an underwater robotic submarine equipped with cameras and water jets. This robot dives to the seabed, clears away the mud, and cuts the damaged cable clean. Then it attaches heavy lines to pull the broken end up to the surface.
-  [19] Bringing a multi-ton power cable up from thousands of feet deep requires immense lifting power. The ship uses a specialized machine with rubber caterpillar tracks that grip the cable securely. This prevents the heavy line from slipping and crashing back down to the ocean floor.
-  [20] Once the first broken end is secured on the deck, the crew repeats the process for the other side. Now the engineers face a major challenge. The two broken ends are on the deck, but they are too short to simply overlap and splice together.
-  [21] To bridge the gap, the ship carries a massive spare length of submarine power cable known as a repair bight. Splicing this spare piece in requires creating two separate underwater joints. This jointing process is one of the most demanding tasks in all of engineering.
-  [22] The jointing work takes place inside a pressurized cleanroom container on the ship deck to keep out dust and moisture. Technicians carefully remove the protective layers of the cable one by one. They expose the individual copper strands and prepare them for welding, which means melting metal together to join them securely.
-  [23] The copper conductors are welded together using high-precision electrical tools. Every single strand must be aligned perfectly. If a connection has even a tiny flaw, current passing through it will generate intense heat and melt the joint from the inside out.
-  [24] After the copper is joined, technicians rebuild the insulation layer by layer. They wrap thousands of layers of paper tape or polymer film around the metal conductor, heating and curing each layer with extreme precision. This hand-applied insulation must match the factory thickness exactly.
-  [25] Next comes restoring the steel armor. Because the spare cable adds extra length, the joint must be exceptionally strong to handle the hanging weight when lowered back into the water. Steel wires are interwoven by hand and clamped with massive hydraulic presses.
-  [26] The completed joint is a massive, rigid steel cylinder measuring up to thirty feet long. Because it is much stiffer than the flexible cable around it, lowering it back to the ocean floor requires delicate choreography. The ship uses a specialized chute called a deployment stern ramp.
-  [27] As the ship moves slowly forward, the heavy joint and extra cable form a gentle loop known as a slack bight on the seabed. This extra slack ensures the cable does not stay under high tension, protecting it from future shifting currents and underwater landslides.
-  [28] To prevent future anchor strikes, modern installation techniques go a step further. Instead of leaving the cable exposed on the mud, engineers bury it deep beneath the seabed wherever the water is shallow enough for ships to drop anchor.
-  [29] Specialized burial machines use high-pressure water jets to blast a trench into the sand beneath the cable, allowing the line to settle safely out of harm's way. In rocky areas where trenching is impossible, workers cover the cable with heavy articulated concrete mattresses.
-  [30] Despite these heavy protective layers, subsea cables still face unexpected threats from nature. Underwater earthquakes, submarine landslides, and even hungry deep sea sharks nibbling on the plastic insulation can cause failures. Some sharks mistake the magnetic fields around power cables for swimming fish and bite down hard.
-  [31] To protect millions of dollars of infrastructure, modern submarine cables include an extra metallic tape shield just beneath the outer jacket. When a shark bites into this heavy metal layer, it cannot pierce through to the sensitive inner layers, protecting the line.
-  [32] As global demand for clean energy grows, submarine power cables are becoming the invisible highways of the future. Massive offshore wind farms hundreds of miles out at sea rely on these exact lines to bring electricity back to our homes.
-  [33] Without these silent armored lines resting in the pitch-black depths, modern island grids and international power sharing would be impossible. They prove that our civilization relies just as much on what we build down in the dark ocean trenches as we do on the land above.
-[18:24:50] DRY_RUN çeviri altyazı örneği:
-  Karanlık okyanus tabanının derinliklerinde, bir
-  denizaltı güç kablosu bütün şehirleri
-  aydınlatmaya yetecek kadar elektrik taşır.
-  Fakat ağır bir gemi demiri bu hattı
-  kopardığında, karadaki elektrik şebekesi
-  patlamaz.
-  Sessiz bir kalkan, felaketi milisaniyeler
-  içinde durdurur.
-  Bu kablonun kopmasının ülkeleri karanlığa
-  boğmamasını anlamak için kablonun
-  içine bakıyoruz.
-  Denizaltı güç kablosu, suyun altındaki
-  ezici basınca dayanacak şekilde yapılmış
-  ağır zırhlı bir tüptür.
-  En merkezde, elektrik için otoban görevi
-  gören kalın bir bakır tel demeti yer alır.
-  Bu metal çekirdeğin etrafında deniz
-  suyunu dışarıda tutan sağlam plastik
-  katmanlar bulunur. Bu sıkı sızdırmazlık
-  olmasaydı, bir damlacık tuzlu su bile
-  aniden patlayan bir kısa devreye yol açardı.
-  Plastiğin dışında tüm nemi
-  engelleyen kurşun bir kılıf vardır.
-  Ardından, kabloya devasa bir
-  sağlamlık kazandırmak için spiral
-[18:24:50] DRY_RUN: yükleme atlandı, dosyalar out/ klasöründe.
-[18:24:51] Başarıyla bitti.
+[05:39:22] Doğrulama kaynağı: Wikipedia (4 makale)
+[05:39:25] Doğrulama turu 1: 12 iddia, 0 yanlış, 0 belirsiz
+[05:43:44] Başlık seçildi: Highway Breakaway Signs: Why 1,000-Lb Steel Snaps in 50ms  (önceki: Highway Breakaway Signs: Why They Don't Crush Your Car) — It perfectly mimics the channel's high-performing title structure with two concrete, contrasting numbers ('1,000-Lb' vs '50ms'). The paradox of massiv
+[05:43:45] Editör (min 6, ort 8.0): {'originality': 8, 'hook': 9, 'clarity': 7, 'simplicity': 6, 'flow': 8, 'value_density': 9, 'audience_fit': 9, 'problems': ["Quote: 'tension, stretching them like rubber bands. Three steel bolts can resist over thirty thousand pounds of stretch...' -> Fix: 'tension' and 'pounds of stretch' can be simplified for a 12-year-old; explain it simply as 'pulling force'."], 'problems_tr': "12 yaşındaki bir çocuğun zorlanabileceği 'tension' (gerilim) terimi daha basit açıklanabilirdi."}
+[05:48:58] Gemini gemini-flash-latest 503 → 30 sn bekleniyor (2/6)
+[05:49:30] Gemini gemini-flash-latest 503 → 60 sn bekleniyor (3/6)
+[05:53:14] Gemini gemini-flash-latest 503 → 15 sn bekleniyor (1/6)
+[06:00:18] Anlatım sadeleştirildi (1705 → 1705 kelime)
+[06:00:20] Doğrulama kaynağı: Wikipedia (4 makale)
+[06:00:22] Doğrulama turu 1: 12 iddia, 0 yanlış, 7 belirsiz
+[06:02:02] Doğrulama kaynağı: Wikipedia (4 makale)
+[06:02:06] Doğrulama turu 2: 12 iddia, 0 yanlış, 0 belirsiz
+[06:02:11] Editör (min 6, ort 7.7): {'originality': 8, 'hook': 9, 'clarity': 7, 'simplicity': 6, 'flow': 8, 'value_density': 8, 'audience_fit': 8, 'problems': ["Quote: 'torque wrench, a special tool that sets exact squeezing pressure.' -> Fix: 'torque wrench, a special tool that measures how tightly a bolt is squeezed.'", "Quote: 'The slip base cannot slide at all.' -> Fix: 'The sliding metal base gets stuck and cannot slide at all.'"], 'problems_tr': "Metinde geçen 'torque wrench' (tork anahtarı) teriminin açıklaması biraz daha sadeleştirilebilir ve 'slip base' ifadesi ilk kez geçiyormuş gibi daha net bağlanabilirdi."}
+[06:12:45] Gemini gemini-flash-latest 503 → 60 sn bekleniyor (3/6)
+[06:13:47] Gemini gemini-flash-latest 503 → 90 sn bekleniyor (4/6)
+[06:19:51] Gemini gemini-flash-latest 503 → 90 sn bekleniyor (5/6)
+[06:27:33] Gemini gemini-flash-latest günlük kotası doldu → sonraki modele geçiliyor
+[06:27:45] Anlatım sadeleştirildi (1731 → 1731 kelime)
+[06:27:46] Doğrulama kaynağı: Wikipedia (4 makale)
+[06:27:48] Doğrulama turu 1: 7 iddia, 0 yanlış, 0 belirsiz
+[06:27:55] Editör (min 6, ort 7.7): {'originality': 8, 'hook': 9, 'clarity': 7, 'simplicity': 6, 'flow': 8, 'value_density': 8, 'audience_fit': 8, 'problems': ["Quote: 'Road crews tighten these bolts with a torque wrench, a special tool that measures how tightly a bolt is squeezed.' -> Fix: Explain what a torque wrench actually is or remove the name and just say 'special tightening tools'.", "Quote: 'The bolts clamp the two metal plates together with thousands of pounds of clamping force.' -> Fix: Compare this force to something visual, like 'holding the weight of several elephants'.", "Quote: 'That whole disconnection takes only a few dozen milliseconds, roughly three times faster than a single human eye blink.' -> Fix: Clarify milliseconds simply as 'fractions of a second' without needing the exact math.", "Quote: 'That is why highway engineers spend weeks surveying road curves to aim those slots directly at oncoming traffic.' -> Fix: Simplify to 'That is why road workers carefully point the slots toward oncoming traffic.'", "Quote: 'Every roadside object within thirty feet of the white line must either yield or hide behind a barrier.' -> Fix: Change 'yield' to 'break away easily' for a 12-year-old."], 'problems_tr': "Metindeki 'torque wrench' (tork anahtarı) gibi teknik terimler ve milisaniye gibi soyut kavramlar daha basit bir dille açıklanmalı ve 12 yaşındaki bir çocuğun rahatça anlayabileceği şekilde basitleştirilmelidir."}
+[06:27:55] Konu kalite barajını geçemedi: The Calculated Failure Engineered Into Every Highway Sign
+[06:27:55] Baraj geçilemedi; en iyi senaryo kullanılıyor (min 6, ort 8.0)
+[06:27:56] Seslendirme başlıyor (Gemini Sadaltager)...
+[06:37:03] Gemini TTS gemini-3.1-flash-tts-preview (anahtar 1/2): kota yok/doldu → sıradaki
+[06:39:10] Seslendirme: 701 sn
+[06:39:18] Thumbnail sıralaması: [1, 2, 3] - Thumbnail #1 is the strongest because it has a striking, high-contrast visual (the bright red glowing ring and turquoise hardware) that pops immediately at phone size, while the text '50 MILLISECONDS' perfectly complements the title's hook without repeating it. #2 is decent with the spark effect, but the text 'THE PLANNED BREAK' is a bit too generic and less visually arresting. #3 is the weakest because the text 'OVER YOUR ROOF' creates confusion and doesn't clearly relate to highway breakaway signs, lowering the curiosity and clarity needed for a quick scroll.
+[06:40:07] Cümle görselleri planlanamadı (sahne 25-32): Gemini geçerli JSON üretemedi: "eksik alanlar: ['beats']"
+[06:40:12] Cümle cümle görsel planı: 26/34 sahne
+[06:40:12] Sahne 1 (diagram, 21.2 sn, 5 çekim, cümleye bağlı)
+[06:40:34] Sahne 2 (diagram, 19.5 sn, 4 çekim, cümleye bağlı)
+[06:40:51] Sahne 3 (footage, 19.4 sn, 4 çekim, cümleye bağlı)
+[06:40:54]    ilgisiz görüntü elendi: aerial view of green forest
+[06:41:01]    ilgisiz görüntü elendi: person running on park path
+[06:41:07]    ilgisiz görüntü elendi: aerial view of anchored boat
+[06:41:15]    ilgisiz görüntü elendi: modern city street at night
+[06:41:22]    ilgisiz görüntü elendi: red train in mountain forest
+[06:41:30]    ilgisiz görüntü elendi: blurry street scene with bokeh
+[06:41:40]    ilgisiz görüntü elendi: aerial view of forested road
+[06:41:46]    ilgisiz görüntü elendi: busy highway with city skyline
+[06:41:53]    ilgisiz görüntü elendi: aerial view of winding road
+[06:41:59] Sahne 4 (footage, 19.6 sn, 5 çekim, cümleye bağlı)
+[06:42:02]    ilgisiz görüntü elendi: riding a motorcycle on road
+[06:42:09]    ilgisiz görüntü elendi: aerial view of snowy road
+[06:42:16]    ilgisiz görüntü elendi: building construction with a crane
+[06:42:24]    ilgisiz görüntü elendi: aerial view of city night
+[06:42:31]    ilgisiz görüntü elendi: person counting US dollar bills
+[06:42:52]    ilgisiz görüntü elendi: winding road beside rocky cliff
+[06:43:16] Sahne 5 (footage, 21.7 sn, 5 çekim, cümleye bağlı)
+[06:43:19]    ilgisiz görüntü elendi: car driving on highway bridge
+[06:43:26]    ilgisiz görüntü elendi: high angle view of highway
+[06:43:33]    ilgisiz görüntü elendi: car driving on highway road
+[06:43:43]    ilgisiz görüntü elendi: bridge mast and suspension cables
+[06:43:50]    ilgisiz görüntü elendi: aerial view of town roundabout
+[06:43:57]    ilgisiz görüntü elendi: close up of ocean waves
+[06:44:08]    ilgisiz görüntü elendi: aerial view of city street
+[06:44:15]    ilgisiz görüntü elendi: black car driving on road
+[06:44:24]    ilgisiz görüntü elendi: abandoned airplane wreck in landscape
+[06:44:30] Sahne 6 (footage, 22.6 sn, 5 çekim, cümleye bağlı)
+[06:44:32]    ilgisiz görüntü elendi: A vintage vinyl record player
+[06:44:39]    ilgisiz görüntü elendi: doctor in a modern hospital
+[06:44:46]    ilgisiz görüntü elendi: old television showing static noise
+[06:45:05]    ilgisiz görüntü elendi: aerial view of highway traffic
+[06:45:12]    ilgisiz görüntü elendi: cars driving on a highway
+[06:45:18]    ilgisiz görüntü elendi: aerial view of highway bridge
+[06:45:26]    ilgisiz görüntü elendi: person dancing in empty room
+[06:45:32]    ilgisiz görüntü elendi: ocean waves crashing on rocks
+[06:45:39]    ilgisiz görüntü elendi: Woman sitting in a room
+[06:45:48] Sahne 7 (diagram, 21.8 sn, 5 çekim, cümleye bağlı)
+[06:45:55]    ilgisiz görüntü elendi: several boats sailing on ocean
+[06:46:03]    ilgisiz görüntü elendi: low angle view of tree
+[06:46:09]    ilgisiz görüntü elendi: green leaves and sun flare
+[06:46:26]    ilgisiz görüntü elendi: aerial view of green fields
+[06:46:33]    ilgisiz görüntü elendi: aerial view of highway traffic
+[06:46:40]    ilgisiz görüntü elendi: white flowers blooming in rain
+[06:46:43] Sahne 8 (footage, 21.9 sn, 6 çekim, cümleye bağlı)
+[06:46:47]    ilgisiz görüntü elendi: two white flowers in spring
+[06:46:57]    ilgisiz görüntü elendi: time lapse of blooming flowers
+[06:47:01]    ilgisiz görüntü elendi: salt crystals on black background
+[06:47:12]    ilgisiz görüntü elendi: kettle heating on campfire outdoors
+[06:47:18]    ilgisiz görüntü elendi: drummer playing drums on stage
+[06:47:26]    ilgisiz görüntü elendi: iron pot over campfire flames
+[06:47:34]    ilgisiz görüntü elendi: cyclist riding at night outdoors
+[06:47:42]    ilgisiz görüntü elendi: people inside a car driving
+[06:47:49]    ilgisiz görüntü elendi: aerial view of a roundabout
+[06:47:56] Sahne 9 (diagram, 18.9 sn, 4 çekim, cümleye bağlı)
+[06:48:14]    ilgisiz görüntü elendi: many coins on dark surface
+[06:48:21]    ilgisiz görüntü elendi: close up of drill press
+[06:48:29]    ilgisiz görüntü elendi: men in white walking outside
+[06:48:32] Sahne 10 (footage, 19.2 sn, 4 çekim, cümleye bağlı)
+[06:48:35]    ilgisiz görüntü elendi: aerial view of highway sunset
+[06:49:00]    ilgisiz görüntü elendi: pink neon sign spells you
+[06:49:03]    ilgisiz görüntü elendi: aerial view of highway traffic
+[06:49:13]    ilgisiz görüntü elendi: cars driving on dirt road
+[06:49:20]    ilgisiz görüntü elendi: waves washing against rocky shore
+[06:49:26]    ilgisiz görüntü elendi: close up of ocean waves
+[06:49:36]    ilgisiz görüntü elendi: wet road in winter forest
+[06:49:44]    ilgisiz görüntü elendi: autumn leaves floating in water
+[06:49:52]    ilgisiz görüntü elendi: abstract dark particle motion effect
+[06:49:57] Sahne 11 (footage, 20.5 sn, 4 çekim, cümleye bağlı)
+[06:50:02]    ilgisiz görüntü elendi: busy city street at night
+[06:50:08]    ilgisiz görüntü elendi: car driving on winding road
+[06:50:16]    ilgisiz görüntü elendi: traffic on a cable bridge
+[06:50:37]    ilgisiz görüntü elendi: sunlit grass in a forest
+[06:50:40]    ilgisiz görüntü elendi: close up of green grass
+[06:50:47]    ilgisiz görüntü elendi: aerial view of sandy beach
+[06:50:56]    ilgisiz görüntü elendi: abstract floating metallic cubes animation
+[06:51:03]    ilgisiz görüntü elendi: hands shaping clay on wheel
+[06:51:10]    ilgisiz görüntü elendi: sword stuck in the ground
+[06:51:15] Sahne 12 (diagram, 18.6 sn, 5 çekim, cümleye bağlı)
+[06:51:22]    ilgisiz görüntü elendi: lime slices in bubbly water
+[06:51:29]    ilgisiz görüntü elendi: Woman doing yoga indoors
+[06:51:36]    ilgisiz görüntü elendi: glass of soda with lime
+[06:51:54]    ilgisiz görüntü elendi: wooden planks and construction scaffolding
+[06:51:56]    ilgisiz görüntü elendi: person serving food from pot
+[06:52:04]    ilgisiz görüntü elendi: worker tapping stone paver
+[06:52:07] Sahne 13 (diagram, 23.7 sn, 5 çekim, cümleye bağlı)
+[06:52:30]    ilgisiz görüntü elendi: men riding wicker sled downhill
+[06:52:37]    ilgisiz görüntü elendi: old rusty sword in grass
+[06:52:44]    ilgisiz görüntü elendi: field of yellow dandelions
+[06:52:47] Sahne 14 (diagram, 21.3 sn, 5 çekim, cümleye bağlı)
+[06:52:55]    ilgisiz görüntü elendi: man cutting wood with chainsaw
+[06:53:02]    ilgisiz görüntü elendi: person assembling a chainsaw bar
+[06:53:09]    ilgisiz görüntü elendi: man using fabric cutting machine
+[06:53:25]    ilgisiz görüntü elendi: autumn leaves on a branch
+[06:53:32]    ilgisiz görüntü elendi: aerial view of green mountains
+[06:53:39]    ilgisiz görüntü elendi: aerial view of wind turbines
+[06:53:42] Sahne 15 (diagram, 23.0 sn, 6 çekim, cümleye bağlı)
+[06:53:49]    ilgisiz görüntü elendi: yellow flowers in a field
+[06:53:56]    ilgisiz görüntü elendi: snowy mountain peak and blue sky
+[06:54:02]    ilgisiz görüntü elendi: yellow flowers in a field
+[06:54:11]    ilgisiz görüntü elendi: worker welding metal structure with sparks
+[06:54:18]    ilgisiz görüntü elendi: city skyline during a thunderstorm
+[06:54:25]    ilgisiz görüntü elendi: A coin spinning on surface
+[06:54:36]    ilgisiz görüntü elendi: dark stormy clouds in sky
+[06:54:42]    ilgisiz görüntü elendi: cars driving on wet highway
+[06:54:49]    ilgisiz görüntü elendi: green trees in heavy rain
+[06:54:52] Sahne 16 (diagram, 19.4 sn, 4 çekim, cümleye bağlı)
+[06:54:59]    ilgisiz görüntü elendi: green grass field in countryside
+[06:55:06]    ilgisiz görüntü elendi: black car driving on road
+[06:55:14]    ilgisiz görüntü elendi: people riding in bumper cars
+[06:55:28] Sahne 17 (diagram, 18.6 sn, 4 çekim, cümleye bağlı)
+[06:55:34]    ilgisiz görüntü elendi: exterior view of steel factory
+[06:56:02]    ilgisiz görüntü elendi: dining table setting with silverware
+[06:56:04]    ilgisiz görüntü elendi: industrial metal pipe valve wheel
+[06:56:18] Sahne 18 (diagram, 15.2 sn, 4 çekim, cümleye bağlı)
+[06:56:25]    ilgisiz görüntü elendi: motion blur of city traffic
+[06:56:32]    ilgisiz görüntü elendi: rushing river water flowing fast
+[06:56:38]    ilgisiz görüntü elendi: car drifting in circles overhead
+[06:56:50]    ilgisiz görüntü elendi: overhead shot of car in desert
+[06:57:01]    ilgisiz görüntü elendi: ocean waves crashing on rocks
+[06:57:04]    ilgisiz görüntü elendi: water splashing on rocky shore
+[06:57:08] Sahne 19 (footage, 24.0 sn, 5 çekim, cümleye bağlı)
+[06:57:11]    ilgisiz görüntü elendi: Close up of rifle trigger
+[06:57:18]    ilgisiz görüntü elendi: ocean waves crashing in water
+[06:57:25]    ilgisiz görüntü elendi: ocean waves at sunset
+[06:57:34]    ilgisiz görüntü elendi: raindrops splashing on a surface
+[06:57:41]    ilgisiz görüntü elendi: large yellow mining dump truck
+[06:57:54]    ilgisiz görüntü elendi: aerial view of a bridge
+[06:58:02]    ilgisiz görüntü elendi: man cutting wood with chainsaw
+[06:58:09]    ilgisiz görüntü elendi: crowd at a rock concert
+[06:58:16]    ilgisiz görüntü elendi: large monument statue on pillar
+[06:58:28] Sahne 20 (diagram, 22.1 sn, 5 çekim, cümleye bağlı)
+[06:58:42]    ilgisiz görüntü elendi: busy highway with traffic lights
+[06:58:45]    ilgisiz görüntü elendi: coastal road along a cliff
+[06:58:51]    ilgisiz görüntü elendi: aerial view of canal lock
+[06:59:05]    ilgisiz görüntü elendi: person holding small electric chainsaw
+[06:59:13]    ilgisiz görüntü elendi: person cutting wood with chainsaw
+[06:59:20]    ilgisiz görüntü elendi: person holding power cutting tool
+[06:59:23] Sahne 21 (diagram, 20.8 sn, 5 çekim, cümleye bağlı)
+[06:59:34]    ilgisiz görüntü elendi: a turtle in its shell
+[06:59:40]    ilgisiz görüntü elendi: two metal coasters on table
+[06:59:49]    ilgisiz görüntü elendi: nurse using mobile phone indoors
+[06:59:59]    ilgisiz görüntü elendi: black car driving on road
+[07:00:05]    ilgisiz görüntü elendi: driver holding steering wheel inside
+[07:00:12]    ilgisiz görüntü elendi: aerial view of highway traffic
+[07:00:15] Sahne 22 (diagram, 19.9 sn, 4 çekim, cümleye bağlı)
+[07:00:22]    ilgisiz görüntü elendi: side view of tractor machinery
+[07:00:30]    ilgisiz görüntü elendi: stone statue and bronze lion
+[07:00:37]    ilgisiz görüntü elendi: blurry abstract mechanical equipment view
+[07:00:51] Sahne 23 (diagram, 19.3 sn, 4 çekim, cümleye bağlı)
+[07:01:19] Sahne 24 (diagram, 22.6 sn, 4 çekim, cümleye bağlı)
+[07:01:40]    ilgisiz görüntü elendi: hand near electronic wiring setup
+[07:01:42]    ilgisiz görüntü elendi: black gears silhouettes on white
+[07:01:51]    ilgisiz görüntü elendi: close up of watch gears
+[07:02:02] Sahne 25/34 (footage, 20.2 sn, 4 çekim)
+[07:02:05]    ilgisiz görüntü elendi: cars driving on highway aerial
+[07:02:13]    ilgisiz görüntü elendi: mountain peak with dark hills
+[07:02:19]    ilgisiz görüntü elendi: cars driving on a road
+[07:02:27]    ilgisiz görüntü elendi: aerial view of highway traffic
+[07:02:35]    ilgisiz görüntü elendi: aerial view of highway traffic
+[07:02:41]    ilgisiz görüntü elendi: a candle with smoke rising
+[07:02:51]    ilgisiz görüntü elendi: low angle grass and dust
+[07:02:58]    ilgisiz görüntü elendi: aerial view of green bridge
+[07:03:05]    ilgisiz görüntü elendi: aerial view of highway interchange
+[07:03:09] Sahne 26/34 (diagram, 22.3 sn, 5 çekim)
+[07:03:17]    ilgisiz görüntü elendi: nurse making heart with hands
+[07:03:24]    ilgisiz görüntü elendi: wide landscape view of mountains
+[07:03:31]    ilgisiz görüntü elendi: meat skewers grilling on grate
+[07:03:41]    ilgisiz görüntü elendi: nurse wearing blue medical gloves
+[07:03:47]    ilgisiz görüntü elendi: scientist examining pink liquid in flask
+[07:03:56]    ilgisiz görüntü elendi: nurse making finger heart gesture
+[07:04:02] Sahne 27/34 (footage, 21.9 sn, 5 çekim)
+[07:04:07]    ilgisiz görüntü elendi: aerial view of highway traffic
+[07:04:15]    ilgisiz görüntü elendi: aerial view of country road
+[07:04:29]    ilgisiz görüntü elendi: night traffic on highway road
+[07:04:29] Cloudflare günlük ücretsiz kota doldu: {"errors":[{"message":"AiError: AiError: you have used up your daily free allocation of 10,000 neurons, please upgrade to Cloudflare's Workers Paid plan if you would like to continue usage. (280ce6c9- → bu video için Pexels fotoğraflarına geçiliyor
+[07:04:38]    ilgisiz görüntü elendi: aerial view of winding road
+[07:04:44]    ilgisiz görüntü elendi: aerial view of winding road
+[07:04:50]    ilgisiz görüntü elendi: aerial view of green fields
+[07:05:00]    ilgisiz görüntü elendi: high angle highway traffic aerial
+[07:05:06]    ilgisiz görüntü elendi: aerial view of highway traffic
+[07:05:13]    ilgisiz görüntü elendi: aerial view of highway traffic
+[07:05:19] Sahne 28/34 (diagram, 21.3 sn, 5 çekim)
+[07:05:35]    ilgisiz görüntü elendi: car driving on country road
+[07:06:05] Sahne 29/34 (diagram, 19.4 sn, 4 çekim)
+[07:06:47] Sahne 30/34 (footage, 23.8 sn, 5 çekim)
+[07:07:59] Sahne 31/34 (footage, 20.7 sn, 5 çekim)
+[07:09:09] Sahne 32/34 (footage, 23.4 sn, 5 çekim)
+[07:10:19] Sahne 33 (diagram, 21.0 sn, 5 çekim, cümleye bağlı)
+[07:10:57] Sahne 34 (footage, 12.4 sn, 2 çekim, cümleye bağlı)
+[07:26:07] Ana video: 726 sn
+[07:27:00] Short 1: sahne 0-2, 41 sn — Why Highway Signs Fly Over Your Roof
+[07:27:59] Short 2: sahne 12-14, 45 sn — The 50-Millisecond Slip Base Trick
+[07:29:02] Short 3: sahne 25-27, 44 sn — Why Slow Crashes Are More Dangerous
+[07:29:02] Altyazı çevirisi: Turkish (297 satır)
+[07:29:54] Çeviri parçası eksik geldi (180-210), tekrar deneniyor
+[07:30:41] Paket yayında (Releases): https://github.com/Cutaw4y/otoyt/releases/tag/paket-20261102-0730-highway-breakaway-signs
+[07:30:44] Elle yükleme paketi hazır: ['0-YUKLEME-BILGILERI.txt', '1-KUCUK-RESIM.jpg', '1-VIDEO-highway-breakaway-signs.mp4', '1-altyazi-en.srt', '1-altyazi-tr.srt', '2-SHORT-why-highway-signs-fly-over-your-roof.mp4', '3-SHORT-the-50-millisecond-slip-base-trick.mp4', '4-SHORT-why-slow-crashes-are-more-dangerous.mp4']
+[07:30:44] Başarıyla bitti.
