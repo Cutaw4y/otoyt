@@ -1092,8 +1092,13 @@ def build_beat_scene(sc, i, bshots, workdir, ledger, style, hook, img_budget):
                 clip = None
         host = CFG.get("host_image")
         if host and k == 0 and (i == 0 or sc.get("chapter")) and (ASSETS / host).exists():
-            # anlatıcı "Gölge": açılışta ve her bölüm başında, anlatım sürerken ekranda
-            media.host_shot(ASSETS / host, fr, out, seed=i)
+            # anlatıcı "Gölge": açılışta ve her bölüm başında, anlatım sürerken ekranda (gerçek hareketli Veo klipleri)
+            clips = sorted((ASSETS / host).parent.glob("clips/[wlp]*.mp4"))
+            if clips:
+                hc = clips[(i // 2) % len(clips)]
+                media.render_footage(hc, fr, out, start=random.uniform(0.0, max(0.0, media.duration(hc) - fr / media.FPS - 0.2)))
+            else:
+                media.host_shot(ASSETS / host, fr, out, seed=i)
         elif clip:
             media.render_footage(clip, fr, out, start=_clip_start(clip, fr))
         else:
@@ -1103,6 +1108,38 @@ def build_beat_scene(sc, i, bshots, workdir, ledger, style, hook, img_budget):
                                focus=(random.uniform(0.3, 0.7), random.uniform(0.3, 0.7)))
         files.append(out)
     sc["video"] = media.concat(files, workdir / f"scene_{i:02d}.mp4", workdir, f"scene_{i:02d}")
+
+
+def _plain(t):
+    return re.sub(r"[^a-z0-9]", "", (t or "").lower().translate(str.maketrans("çğıöşüâîû", "cgiosuaiu")))
+
+
+def veo_title_card(topic, w):
+    """Gölge'nin eli günün konusunu tüy kalemle deftere yazar (Veo, sesli). Yazı yapay zekâ ile okunup
+    doğrulanır; yanlış yazılmışsa bir kez daha denenir, olmazsa None (çizim açılış kartı kullanılır)."""
+    prompt = ("Extreme close-up, top-down view of an aged blank parchment page of an open old book on a dark wooden "
+              "desk. A hand in a dark leather glove with a black robe sleeve, holding a black feather quill, writes the "
+              f"words \"{topic}\" in large, elegant, clearly legible calligraphy across the middle of the page, letter by "
+              "letter from left to right; the arm and hand move with each stroke and the ink appears exactly under the "
+              "quill tip. Spell it exactly, nothing else is written on the page. Warm candlelight, deep shadows, "
+              "faint fog. Sound: quill scratching on paper, soft candle crackle. Realistic, cinematic. No music.")
+    for attempt in range(2):
+        out = w / f"title_veo_{attempt}.mp4"
+        try:
+            ai.veo_video(prompt, out)
+            fr = w / f"title_veo_{attempt}.jpg"
+            media.sh(["ffmpeg", "-y", "-ss", "7.5", "-i", out, "-frames:v", "1", "-vf", "scale=960:-2", fr])
+            lite = CFG["judge_models"]
+            r = ai.gemini_json("You read handwriting exactly.", "What words are written on the page? "
+                               'JSON: {"text": "..."}', images=[fr], required=("text",), models=lite, temperature=0)
+            if _plain(r.get("text")) == _plain(topic):
+                log(f"Açılış: Gölge'nin eli '{topic}' yazdı (Veo) ✅")
+                return out
+            log(f"Açılış yazısı yanlış okundu ('{r.get('text')}'), tekrar deneniyor")
+        except Exception as e:
+            log(f"Veo açılışı yapılamadı: {str(e)[:150]}")
+            return None
+    return None
 
 
 def assemble(script, workdir, music):
@@ -1116,9 +1153,11 @@ def assemble(script, workdir, music):
         try:
             topic = (script["title"].split(":")[0] if ":" in script["title"] else
                      (script.get("core_keyword") or script["title"])).strip()
-            tc = media.title_card(topic[:40], w / "title_card.mp4",
-                                  accent=tuple(CFG.get("thumbnail_accent", (232, 158, 68))),
-                                  logo=A / CFG.get("logo_file", "cutaway_logo.png"))
+            tc = veo_title_card(topic[:40], w) if CFG.get("title_card") == "veo" else None
+            if tc is None:
+                tc = media.title_card(topic[:40], w / "title_card.mp4",
+                                      accent=tuple(CFG.get("thumbnail_accent", (232, 158, 68))),
+                                      logo=A / CFG.get("logo_file", "cutaway_logo.png"))
             fr = int(round(media.duration(tc) * media.FPS))
             parts.append((tc, media.to_wav(tc, w / "title_card_a.wav", frames=fr), []))
             owners.append(None)

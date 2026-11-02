@@ -404,7 +404,7 @@ def gemini_tts(text, voice="Charon", style=None, models=("gemini-3.1-flash-tts-p
 # Yaklaşık fiyatlar (USD / 1M token; ses: USD / dakika; görsel: USD / adet). Google fiyatları değişebilir:
 # kesin harcama için Google Cloud Billing ve AI Studio Billing sayfaları esastır.
 PRICE = {"flash-lite": (0.10, 0.40), "flash": (0.50, 3.00), "pro": (2.00, 12.00),
-         "tts_min": 0.03, "image": 0.04, "search": 0.035}
+         "tts_min": 0.03, "image": 0.04, "search": 0.035, "veo_sec": 0.15}
 
 
 def cost_usd():
@@ -417,5 +417,41 @@ def cost_usd():
         tot[where] += i / 1e6 * pi + o / 1e6 * po
     for w in ("vertex", "studio"):
         tot[w] += USAGE["tts_seconds"][w] / 60 * PRICE["tts_min"] + USAGE["images"][w] * PRICE["image"]
+    tot["vertex"] += USAGE.get("veo_seconds", 0) * PRICE["veo_sec"]
     tot["vertex"] += USAGE["search_calls"] * PRICE["search"] * 0  # günlük ücretsiz arama hakkı içinde varsayılır
     return tot["vertex"], tot["studio"]
+
+
+def veo_video(prompt, out, image=None, seconds=8, model="veo-3.1-fast-generate-001", audio=True,
+              negative="visible face, eyes, watermark, music, subtitles"):
+    """Vertex Veo ile kısa video (sesli). image: başlangıç karesi (isteğe bağlı). Başarısızsa hata fırlatır."""
+    if not vertex_on():
+        raise RuntimeError("Vertex kapalı")
+    h = _vertex_headers()
+    base = (f"https://us-central1-aiplatform.googleapis.com/v1/projects/{_vx['proj']}/locations/us-central1/"
+            f"publishers/google/models/{model}")
+    inst = {"prompt": prompt}
+    if image:
+        inst["image"] = {"bytesBase64Encoded": base64.b64encode(Path(image).read_bytes()).decode(),
+                         "mimeType": "image/jpeg"}
+    r = requests.post(base + ":predictLongRunning", headers=h, timeout=120, json={
+        "instances": [inst], "parameters": {"aspectRatio": "16:9", "durationSeconds": seconds, "sampleCount": 1,
+                                            "generateAudio": audio, "resolution": "1080p",
+                                            "personGeneration": "allow_adult", "negativePrompt": negative}})
+    if not r.ok:
+        raise RuntimeError(f"Veo {r.status_code}: {r.text[:200]}")
+    op = r.json()["name"]
+    for _ in range(90):
+        time.sleep(10)
+        q = requests.post(base + ":fetchPredictOperation", headers=_vertex_headers(), timeout=120,
+                          json={"operationName": op}).json()
+        if q.get("done"):
+            vids = (q.get("response") or {}).get("videos") or []
+            if not vids:
+                raise RuntimeError(f"Veo boş: {str(q)[:200]}")
+            Path(out).write_bytes(base64.b64decode(vids[0]["bytesBase64Encoded"]))
+            USAGE["images"]["vertex"] += 0
+            USAGE.setdefault("veo_seconds", 0)
+            USAGE["veo_seconds"] += seconds
+            return out
+    raise RuntimeError("Veo zaman aşımı")
