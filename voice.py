@@ -323,8 +323,41 @@ def _groups(scenes, per_request, max_chars):
     return g
 
 
+LOCKED_MODEL = None  # bir videoda kullanılan ses modeli: kapanış cümlesi dahil hep aynı ses
+
+
+def _level(a, target_db=-20.0):
+    """Her ses parçasını aynı ortalama yüksekliğe getirir (istekler arası ses seviyesi farkı duyulmasın)."""
+    rms = float(np.sqrt(np.mean(a.astype(np.float64) ** 2))) if a.size else 0.0
+    if rms < 1e-5:
+        return a
+    g = (10 ** (target_db / 20)) / rms
+    return np.clip(a * g, -0.98, 0.98).astype(np.float32)
+
+
 def narrate_gemini(scenes, workdir, voice="Charon", style=None, models=None, scene_gap=0.45, sentence_gap=0.0,
                    scenes_per_request=6, max_chars=1800, lang="tr"):
+    """Tüm video TEK ses modeliyle okunur: bir model yarıda kalırsa anlatım baştan sıradaki modelle yapılır
+    (aynı videoda iki farklı ses tonu olmasın)."""
+    global LOCKED_MODEL
+    order = list(models or ("gemini-3.1-flash-tts-preview",))
+    if LOCKED_MODEL in order:
+        order = [LOCKED_MODEL] + [m for m in order if m != LOCKED_MODEL]
+    last = None
+    for m in order:
+        try:
+            out = _narrate_gemini_one(scenes, workdir, voice, style, (m,), scene_gap, sentence_gap,
+                                      scenes_per_request, max_chars, lang)
+            LOCKED_MODEL = m
+            return out
+        except Exception as e:
+            last = e
+            print(f"ses modeli {m} tüm anlatımı tamamlayamadı → anlatım baştan sıradaki modelle: {str(e)[:120]}")
+    raise RuntimeError(f"Gemini TTS ses üretemedi: {last}")
+
+
+def _narrate_gemini_one(scenes, workdir, voice="Charon", style=None, models=None, scene_gap=0.45, sentence_gap=0.0,
+                        scenes_per_request=6, max_chars=1800, lang="tr"):
     """Birkaç sahneyi tek istekte seslendirir (ücretsiz katmanın günlük istek sınırına sığmak ve sesin
     sahneler arasında doğal akması için), cümle ve sahne sınırlarını sessizliklerden bulur."""
     import ai
@@ -333,8 +366,8 @@ def narrate_gemini(scenes, workdir, voice="Charon", style=None, models=None, sce
     for grp in _groups(scenes, max(1, scenes_per_request), max_chars):
         sents = [split_sentences(scenes[i]["narration"]) for i in grp]
         flat = [x for ss in sents for x in ss]
-        a = _trim(ai.gemini_tts(" ".join(scenes[i]["narration"] for i in grp), voice=voice, style=style,
-                                models=models or ("gemini-3.1-flash-tts-preview",)))
+        a = _level(_trim(ai.gemini_tts(" ".join(scenes[i]["narration"] for i in grp), voice=voice, style=style,
+                                       models=models or ("gemini-3.1-flash-tts-preview",))))
         al = align_sentences(a, flat, lang) if len(flat) > 0 else None
         ALIGN_STATS["total"] += len(flat)
         ALIGN_STATS["ok"] += len(flat) if al else 0
