@@ -30,8 +30,8 @@ try:
     print("::notice title=Commons ham::" + str(rr.status_code) + " " + " | ".join(
         f"{p['title'][5:40]} {p['imageinfo'][0].get('width')} {p['imageinfo'][0].get('mime')} "
         f"{(p['imageinfo'][0].get('extmetadata') or {}).get('LicenseShortName', {}).get('value', '')}" for p in pg[:6]))
-    out = pipeline.fetch_real_photo("Dyatlov Pass", __import__("pathlib").Path("/tmp/real.jpg"),
-                                    "The hikers' tent was found on the slope of Kholat Syakhl")
+    out = pipeline.fetch_real_photo("Hoover Dam", __import__("pathlib").Path("/tmp/real.jpg"),
+                                    "The giant concrete dam holds back Lake Mead on the Colorado River")
     print(f"::notice title=Gerçek fotoğraf::{'bulundu' if out else 'bulunamadı'} | {pipeline.REAL_CREDITS[:1]}")
 except Exception as e:
     print(f"::error title=Gerçek fotoğraf::{str(e)[:300]}")
