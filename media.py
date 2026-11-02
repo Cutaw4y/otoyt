@@ -669,3 +669,80 @@ def host_shot(image, frames, out, seed=0):
     proc.stdin.close()
     proc.wait()
     return out
+
+
+def page_title(clip, text, out, seconds=4.0, start=1.5, box=(965, 110, 1566, 847), logo=None, left_box=(452, 110, 950, 847)):
+    """Gerçek (Veo) defter sayfası klibinin üstüne günün konusu mürekkeple yazılmış olarak; sol sayfada soluk kanal
+    mührü. Yavaş yakınlaşma eklenir. Ses klipten (mum çıtırtısı)."""
+    import numpy as np
+    n = int(seconds * FPS)
+    font_p = FONTS_DIR / "TeXGyreChorus.otf"
+    x0, y0, x1, y1 = box
+    pw, ph = x1 - x0, y1 - y0
+    words, size = text.split(), 150
+    while size > 50:
+        f = ImageFont.truetype(str(font_p), size)
+        lines, cur = [], ""
+        for w_ in words:
+            t = (cur + " " + w_).strip()
+            if f.getlength(t) <= pw * 0.8 or not cur:
+                cur = t
+            else:
+                lines.append(cur)
+                cur = w_
+        lines.append(cur)
+        if len(lines) <= 3 and max(f.getlength(l) for l in lines) <= pw * 0.84:
+            break
+        size -= 6
+    ink = Image.new("L", (W, H), 0)
+    d = ImageDraw.Draw(ink)
+    lh = int(size * 1.15)
+    ty = (y0 + y1) // 2 - lh * len(lines) // 2 - int(size * 0.1)
+    for k, l in enumerate(lines):
+        d.text(((x0 + x1) / 2 - f.getlength(l) / 2, ty + k * lh), l, font=f, fill=235)
+    # el yazısı hissi: hafif bulanık, kenarı yumuşak mürekkep
+    ink = ink.filter(ImageFilter.GaussianBlur(0.8))
+    stamp = None
+    if logo and Path(logo).exists():  # sol sayfada kanal amblemi: sayfaya basılmış mürekkep baskı gibi
+        lx0, ly0, lx1, ly1 = left_box
+        dd = int(min(lx1 - lx0, ly1 - ly0) * 0.62)
+        lg = np.asarray(Image.open(logo).convert("L").resize((dd, dd)), np.float32) / 255.0
+        mk = Image.new("L", (dd, dd), 0)
+        ImageDraw.Draw(mk).ellipse([3, 3, dd - 3, dd - 3], fill=255)
+        mk = np.asarray(mk.filter(ImageFilter.GaussianBlur(3)), np.float32) / 255.0
+        stamp = np.zeros((H, W, 1), np.float32)
+        px, py = (lx0 + lx1) // 2 - dd // 2, (ly0 + ly1) // 2 - dd // 2
+        # koyu zemin → koyu mürekkep, açık çizgiler → kâğıt görünür (baskı/negatif etkisi)
+        stamp[py:py + dd, px:px + dd, 0] = (1 - lg) * mk * 0.55
+    inkA = np.asarray(ink, np.float32)[..., None] / 255.0
+    stA = stamp
+    ink_col = np.array([38, 24, 14], np.float32)
+    seal_col = np.array([46, 30, 18], np.float32)
+    dec = subprocess.Popen(["ffmpeg", "-v", "error", "-ss", f"{start}", "-i", str(clip), "-t", f"{seconds}",
+                            "-vf", f"scale={W}:{H},fps={FPS}", "-f", "rawvideo", "-pix_fmt", "rgb24", "-"],
+                           stdout=subprocess.PIPE)
+    enc = subprocess.Popen(["ffmpeg", "-y", "-v", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}",
+                            "-r", str(FPS), "-i", "-", "-ss", f"{start}", "-t", f"{seconds}", "-i", str(clip),
+                            "-map", "0:v", "-map", "1:a?", "-c:v", "libx264", "-preset", "veryfast", "-crf", "18",
+                            "-pix_fmt", "yuv420p", "-c:a", "aac", "-shortest", str(out)], stdin=subprocess.PIPE)
+    sz = W * H * 3
+    for i in range(n):
+        buf = dec.stdout.read(sz)
+        if len(buf) < sz:
+            break
+        fr = np.frombuffer(buf, np.uint8).reshape(H, W, 3).astype(np.float32)
+        fr = fr * (1 - inkA * 0.92) + ink_col * inkA * 0.92
+        if stA is not None:
+            fr = fr * (1 - stA) + seal_col * stA
+        z = 1.0 + 0.05 * i / max(1, n - 1)
+        im = Image.fromarray(fr.clip(0, 255).astype(np.uint8))
+        cw, ch = int(W / z), int(H / z)
+        cx0 = int(((x0 + x1) / 2) - cw / 2 * 1.0 - ((x0 + x1) / 2 - W / 2) * (1 - (z - 1) * 4))
+        cx0 = max(0, min(W - cw, int(W / 2 - cw / 2 + (z - 1) * 6 * ((x0 + x1) / 2 - W / 2))))
+        cy0 = (H - ch) // 2
+        enc.stdin.write(np.asarray(im.crop((cx0, cy0, cx0 + cw, cy0 + ch)).resize((W, H))).tobytes())
+    enc.stdin.close()
+    enc.wait()
+    dec.stdout.close()
+    dec.wait()
+    return out
