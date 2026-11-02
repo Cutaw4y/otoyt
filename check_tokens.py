@@ -68,7 +68,9 @@ if os.getenv("YT_REFRESH_TOKEN"):
                            f"{x['snippet'].get('status')}/draft={x['snippet'].get('isDraft')}" for x in caps)
             print(f"::notice title=Video {v['id']}::{v['snippet']['title'][:50]} | "
                   f"{v['status']['privacyStatus']} {v['status'].get('publishAt', '')} | "
-                  f"işleme={v.get('processingDetails', {}).get('processingStatus')} | altyazı: {tr or 'YOK'}")
+                  f"işleme={v.get('processingDetails', {}).get('processingStatus')} | altyazı: {tr or 'YOK'} | "
+                  f"etiket: {len(v['snippet'].get('tags', []))} ({', '.join(v['snippet'].get('tags', [])[:6])}) | "
+                  f"hashtag: {' '.join(__import__('re').findall(r'#[^ #\\n]+', v['snippet'].get('description', ''))[-5:])}")
     except Exception as e:
         print(f"::error title=Video kontrol::{str(e)[:200]}")
 
