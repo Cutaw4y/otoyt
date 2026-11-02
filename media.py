@@ -671,7 +671,27 @@ def host_shot(image, frames, out, seed=0):
     return out
 
 
-def page_title(clip, text, out, seconds=4.0, start=1.5, box=(965, 110, 1566, 847), logo=None, left_box=(452, 110, 950, 847)):
+# Defter çekimini açılıştaki taş oda ışığına (soğuk ay ışığı gölgeler + sıcak mum) uydurur
+PAGE_GRADE = ("colorbalance=rs=-0.06:gs=-0.02:bs=0.12:rm=-0.02:bm=0.03,"
+              "eq=saturation=0.82:contrast=1.08:brightness=-0.04,vignette=angle=PI/3.6")
+
+
+def opening(a, b, out, xf=0.9, tail=0.6):
+    """İki açılış klibini yumuşak geçişle (çözülme + ses çapraz geçişi) tek klip yapar; sonunda karaya iner."""
+    da, db = duration(a), duration(b)
+    tot = da + db - xf
+    fc = (f"[0:v]scale={W}:{H},fps={FPS},format=yuv420p,setpts=PTS-STARTPTS[v0];"
+          f"[1:v]scale={W}:{H},fps={FPS},format=yuv420p,setpts=PTS-STARTPTS[v1];"
+          f"[v0][v1]xfade=transition=fade:duration={xf}:offset={da - xf:.3f},"
+          f"fade=t=out:st={tot - tail:.3f}:d={tail}[v];"
+          f"[0:a]aresample=48000,aformat=channel_layouts=stereo[a0];[1:a]aresample=48000,aformat=channel_layouts=stereo[a1];"
+          f"[a0][a1]acrossfade=d={xf},afade=t=out:st={tot - tail:.3f}:d={tail}[a]")
+    sh(["ffmpeg", "-y", "-v", "error", "-i", a, "-i", b, "-filter_complex", fc, "-map", "[v]", "-map", "[a]",
+        "-c:v", "libx264", "-preset", "veryfast", "-crf", "18", "-pix_fmt", "yuv420p", "-c:a", "aac", out])
+    return out
+
+
+def page_title(clip, text, out, seconds=4.0, start=1.5, box=(965, 110, 1566, 847), logo=None, left_box=(452, 110, 950, 847), reveal=(0.9, 2.3)):
     """Gerçek (Veo) defter sayfası klibinin üstüne günün konusu mürekkeple yazılmış olarak; sol sayfada soluk kanal
     mührü. Yavaş yakınlaşma eklenir. Ses klipten (mum çıtırtısı)."""
     import numpy as np
@@ -723,17 +743,25 @@ def page_title(clip, text, out, seconds=4.0, start=1.5, box=(965, 110, 1566, 847
                            stdout=subprocess.PIPE)
     enc = subprocess.Popen(["ffmpeg", "-y", "-v", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}",
                             "-r", str(FPS), "-i", "-", "-ss", f"{start}", "-t", f"{seconds}", "-i", str(clip),
-                            "-map", "0:v", "-map", "1:a?", "-c:v", "libx264", "-preset", "veryfast", "-crf", "18",
+                            "-map", "0:v", "-map", "1:a?", "-vf", PAGE_GRADE, "-c:v", "libx264", "-preset", "veryfast", "-crf", "18",
                             "-pix_fmt", "yuv420p", "-c:a", "aac", "-shortest", str(out)], stdin=subprocess.PIPE)
     sz = W * H * 3
+    xs = np.arange(W, dtype=np.float32)
     for i in range(n):
         buf = dec.stdout.read(sz)
         if len(buf) < sz:
             break
         fr = np.frombuffer(buf, np.uint8).reshape(H, W, 3).astype(np.float32)
-        fr = fr * (1 - inkA * 0.92) + ink_col * inkA * 0.92
+        # geçiş bitince mürekkep soldan sağa "yazılır", mühür yavaşça belirir
+        t = i / FPS
+        pr = min(1.0, max(0.0, (t - reveal[0]) / (reveal[1] - reveal[0])))
+        edge = x0 + (pw + 120) * pr
+        wipe = np.clip((edge - xs) / 120.0, 0, 1)[None, :, None]
+        a_ = inkA * wipe * 0.92
+        fr = fr * (1 - a_) + ink_col * a_
         if stA is not None:
-            fr = fr * (1 - stA) + seal_col * stA
+            sa = stA * pr
+            fr = fr * (1 - sa) + seal_col * sa
         z = 1.0 + 0.05 * i / max(1, n - 1)
         im = Image.fromarray(fr.clip(0, 255).astype(np.uint8))
         cw, ch = int(W / z), int(H / z)

@@ -1157,15 +1157,20 @@ def assemble(script, workdir, music):
             cdir = A / "host" / "clips"
             if CFG.get("title_card") == "clips" and (cdir / "intro_write.mp4").exists() and (cdir / "page_blank.mp4").exists():
                 # 1) Gölge masada yazıp anlatmaya hazırlanır (tek seferlik Veo klibi, kalem sesiyle)
-                iw = w / "intro_write_v.mp4"
-                media.sh(["ffmpeg", "-y", "-i", cdir / "intro_write.mp4", "-an", "-vf", f"scale={media.W}:{media.H},fps={media.FPS}",
-                          "-c:v", "libx264", "-preset", "veryfast", "-crf", "18", "-pix_fmt", "yuv420p", iw])
-                fr = int(round(media.duration(iw) * media.FPS))
-                parts.append((iw, media.to_wav(cdir / "intro_write.mp4", w / "intro_write_a.wav", frames=fr), []))
-                owners.append(None)
-                # 2) defterin yazılmış hali: günün konusu sayfada
-                tc = media.page_title(cdir / "page_blank.mp4", topic[:40], w / "title_card.mp4",
+                # 2) yumuşak çözülmeyle defterin yazılmış hali (aynı ışık tonunda): günün konusu sayfada
+                pg = media.page_title(cdir / "page_blank.mp4", topic[:40], w / "page_title.mp4",
                                       logo=A / CFG.get("logo_file", "cutaway_logo.png"))
+                try:
+                    tc = media.opening(cdir / "intro_write.mp4", pg, w / "title_card.mp4")
+                except Exception as e:
+                    log(f"Açılış geçişi yapılamadı, düz eklenecek: {str(e)[:120]}")
+                    iw = w / "intro_write_v.mp4"
+                    media.sh(["ffmpeg", "-y", "-i", cdir / "intro_write.mp4", "-an", "-vf", f"scale={media.W}:{media.H},fps={media.FPS}",
+                              "-c:v", "libx264", "-preset", "veryfast", "-crf", "18", "-pix_fmt", "yuv420p", iw])
+                    fr = int(round(media.duration(iw) * media.FPS))
+                    parts.append((iw, media.to_wav(cdir / "intro_write.mp4", w / "intro_write_a.wav", frames=fr), []))
+                    owners.append(None)
+                    tc = pg
             elif CFG.get("title_card") == "veo":
                 tc = veo_title_card(topic[:40], w)
             if tc is None:
