@@ -186,7 +186,7 @@ def differentiate(ideas, chosen):
         return chosen
     region = "TR" if CFG.get("language_code") == "tr" else "US"
     rows = []
-    for i, it in enumerate(ideas[:6]):
+    for i, it in enumerate(ideas[:4]):  # her arama ~101 YouTube kota birimi
         try:
             comp = publish.competition(it.get("search_query") or it["title"], region=region,
                                        lang=CFG.get("language_code", "en"))
@@ -2515,6 +2515,9 @@ def run_once():
                         "title": script["title"], "pillar": idea["pillar"], "video_id": vid})
         save_json(HISTORY, history)
         ledger.save()
+        if vid in publish.UPLOAD_WARNINGS:
+            notify(f"⚠️ Video yüklendi ama YouTube yayın saatini kaydetmedi: https://youtu.be/{vid}\n"
+                   f"Studio'dan Görünürlük → Planla → {fmt_local(main_t)} seç (bir kerelik).")
         notify(f"✅ Video yüklendi: {tr_title(tr_meta, script['title'])}\nhttps://youtu.be/{vid}\n"
                + (f"Yayın: {fmt_local(main_t)} (TR saati). " if sched else "Şimdilik gizli (private). ")
                + "Beğenmezsen Studio'dan sil.")
@@ -2534,7 +2537,7 @@ def run_once():
                 sname = w / f"{slug(sh_['title'])}-shorts.mp4"
                 shutil.copy(sh_["file"], sname)
                 sid = publish.upload(sname, m_short, None, up)
-                if tr_blocks and up == "youtube":
+                if tr_blocks and up == "youtube" and CFG.get("short_captions", False):  # YouTube kotası: Short'ta yazı zaten gömülü
                     off = script["scenes"][sh_["start"]].get("t0", 0.0)
                     sp = media.write_srt_blocks(shift_blocks(tr_blocks, off, sh_["len"]),
                                                 w / f"short{k+1}_{sub_lang['code']}.srt")

@@ -46,6 +46,9 @@ def _yt():
     return build("youtube", "v3", credentials=_creds(), cache_discovery=False)
 
 
+UPLOAD_WARNINGS = []  # planlı yayın saati kaydedilmeyen videolar (API kilidi vb.)
+
+
 def youtube_upload(video, meta, thumb=None):
     from googleapiclient.http import MediaFileUpload
     yt = _yt()
@@ -72,6 +75,12 @@ def youtube_upload(video, meta, thumb=None):
         return resp["id"]
 
     vid = _retry(do, what="YouTube yükleme")
+    try:  # API onayı/kilit kontrolü: planlı yayın gerçekten kaydedildi mi?
+        st = yt.videos().list(part="status", id=vid).execute()["items"][0]["status"]
+        if meta.get("publish_at") and not st.get("publishAt"):
+            UPLOAD_WARNINGS.append(vid)
+    except Exception:
+        pass
     if thumb:
         try:
             _retry(lambda: yt.thumbnails().set(videoId=vid, media_body=MediaFileUpload(str(thumb))).execute(),

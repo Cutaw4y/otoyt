@@ -229,7 +229,7 @@ explore_rate: 0.25
 # ======================= YAYIN =======================
 uploader: "youtube"
 category_id: "27"
-publish_mode: "manual"         # API onayı gelene kadar: sistem üretir, sahibi Studio’dan elle yükler. Onaydan sonra "scheduled"
+publish_mode: "scheduled"     # 2.11.2026: YouTube API denetimi onaylandı → sistem kendisi yükler ve planlar
 publish_delay_hours: 6
 # Türkiye izleyicisi: hafta içi 19:00, hafta sonu 14:00; Shorts her akşam 20:30 (TR saati)
 publish_slots: {tz: "Europe/Istanbul", times: {default: "19:00", sat: "20:00", sun: "20:00"}}   # hafta sonu akşam (TR en yoğun saat; paket ~13:00 hazır)
