@@ -1,0 +1,20 @@
+name: Veo deneme
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  veo:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: pip install -q requests google-auth pillow numpy
+      - env:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+          VEO_SCRIPT: veo_probe.py
+        run: python ${VEO_SCRIPT}
+      - run: |
+          git config user.name "otoyt-bot"; git config user.email "otoyt@users.noreply.github.com"
+          [ -d assets/golgedefter/host/clips ] && git add assets/golgedefter/host/clips && git commit -qm "anlatıcı klipleri" && git pull --rebase -q && git push -q || true
