@@ -24,4 +24,5 @@ for i, s in enumerate(SCENES, 1):
         p = ai.gemini_image(BASE.format(scene=s), OUT / f"host_{i}.jpg")
         print(f"::notice title=Gölge {i}::{p}")
     except Exception as e:
-        print(f"::error title=Gölge {i}::{str(e)[:200]}")
+        print(f"::error title=Gölge {i}::{str(e)[:300]}")
+    import time; time.sleep(15)

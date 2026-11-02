@@ -231,9 +231,13 @@ def gemini_image(prompt, out, models=("gemini-2.5-flash-image", "gemini-3-pro-im
     if vertex_on():
         for vm in ("gemini-3.1-flash-image", "gemini-3-pro-image"):
             try:
-                r = _vertex_generate(vm, {"contents": [{"role": "user", "parts": [{"text": prompt}]}],
-                                          "generationConfig": {"responseModalities": ["IMAGE"],
-                                                               "imageConfig": {"aspectRatio": aspect}}}, timeout=180)
+                for attempt in range(4):  # görsel modeli dakika sınırı: 429'da bekle, tekrar dene
+                    r = _vertex_generate(vm, {"contents": [{"role": "user", "parts": [{"text": prompt}]}],
+                                              "generationConfig": {"responseModalities": ["IMAGE"],
+                                                                   "imageConfig": {"aspectRatio": aspect}}}, timeout=180)
+                    if r.status_code not in (429, 500, 503):
+                        break
+                    time.sleep(20 * (attempt + 1))
                 if r.status_code != 200:
                     last = f"vertex {vm}: {r.status_code} {r.text[:150]}"
                     _vertex_fail(r)
