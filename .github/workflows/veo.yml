@@ -1,5 +1,11 @@
 name: Veo deneme
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      script:
+        default: veo_clips.py
+      clips:
+        default: ""
 permissions:
   contents: write
 jobs:
@@ -13,7 +19,8 @@ jobs:
       - run: pip install -q requests google-auth pillow numpy
       - env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
-          VEO_SCRIPT: veo_probe.py
+          VEO_SCRIPT: ${{ inputs.script }}
+          CLIPS: ${{ inputs.clips }}
         run: python ${VEO_SCRIPT}
       - run: |
           git config user.name "otoyt-bot"; git config user.email "otoyt@users.noreply.github.com"
