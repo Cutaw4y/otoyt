@@ -800,7 +800,10 @@ def fetch_real_photo(subject, out, context=""):
         except Exception:
             continue
         checks += 1
-        if not image_matches(out, f"{subject}. {context}"):
+        ok_ = image_matches(out, f"{subject}. {context}")
+        if os.getenv("DEBUG_REAL"):
+            print(f"::notice title=aday {checks}::{title[:60]} {ii.get('width')} {lic} → {ok_}", flush=True)
+        if not ok_:
             if checks >= 4:
                 return None
             continue

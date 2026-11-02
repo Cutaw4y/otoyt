@@ -20,7 +20,7 @@ except Exception as e:
 
 # Gerçek fotoğraf (Wikimedia Commons) denemesi
 try:
-    os.environ.setdefault("OTOYT_CONFIG", "channels/golgedefter.yaml")
+    os.environ.setdefault("OTOYT_CONFIG", "channels/golgedefter.yaml"); os.environ["DEBUG_REAL"] = "1"
     import pipeline
     import requests as _rq
     rr = _rq.get("https://commons.wikimedia.org/w/api.php", headers=pipeline.WIKI_HEADERS, timeout=30, params={
