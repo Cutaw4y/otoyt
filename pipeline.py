@@ -818,6 +818,46 @@ def fetch_real_photo(subject, out, context=""):
         REAL_CREDITS.append(f"{title.replace('File:', '')[:70]} — {artist}, {md.get('LicenseShortName', {}).get('value', '')} (Wikimedia Commons)")
         VIS_STATS["real"] += 1
         return out
+    return fetch_openverse(subject, out, context) if checks < 4 else None
+
+
+def fetch_openverse(subject, out, context=""):
+    """Commons'ta yoksa: Openverse (Flickr, müzeler, arşivler; 800+ milyon serbest lisanslı görsel).
+    Yalnız ticari kullanıma ve düzenlemeye izin veren lisanslar (para kazanan kanal, yakınlaştırma/kırpma)."""
+    try:
+        r = requests.get("https://api.openverse.org/v1/images/", headers=WIKI_HEADERS, timeout=30, params={
+            "q": subject, "license_type": "commercial,modification", "page_size": 20, "mature": "false"})
+        res = r.json().get("results", []) if r.ok else []
+    except Exception as e:
+        log(f"Openverse aranamadı ({subject}): {str(e)[:100]}")
+        return None
+    checks = 0
+    for it in res:
+        url = it.get("url") or ""
+        if url in _REAL_USED or (it.get("width") or 0) < 1000 or any(
+                s in (it.get("title") or "").lower() for s in ("map", "logo", "diagram", "poster", "model")):
+            continue
+        try:
+            with requests.get(url, headers=WIKI_HEADERS, stream=True, timeout=120) as d:
+                d.raise_for_status()
+                with open(out, "wb") as fh:
+                    for c in d.iter_content(1 << 20):
+                        fh.write(c)
+            from PIL import Image
+            Image.open(out).convert("RGB").save(out, "JPEG", quality=92)
+        except Exception:
+            continue
+        checks += 1
+        if not image_matches(out, f"{subject}. {context}"):
+            if checks >= 3:
+                return None
+            continue
+        _REAL_USED.add(url)
+        lic = f"{(it.get('license') or '').upper()} {it.get('license_version') or ''}".strip()
+        REAL_CREDITS.append(f"{(it.get('title') or 'Photo')[:60]} — {(it.get('creator') or 'unknown')[:40]}, "
+                            f"CC {lic} ({it.get('source') or 'Openverse'})")
+        VIS_STATS["real"] += 1
+        return out
     return None
 
 

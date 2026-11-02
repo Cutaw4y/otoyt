@@ -30,6 +30,8 @@ try:
     print("::notice title=Commons ham::" + str(rr.status_code) + " " + " | ".join(
         f"{p['title'][5:40]} {p['imageinfo'][0].get('width')} {p['imageinfo'][0].get('mime')} "
         f"{(p['imageinfo'][0].get('extmetadata') or {}).get('LicenseShortName', {}).get('value', '')}" for p in pg[:6]))
+    o2 = pipeline.fetch_openverse("Tacoma Narrows Bridge", __import__("pathlib").Path("/tmp/ov.jpg"), "the suspension bridge twisting")
+    print(f"::notice title=Openverse::{'bulundu' if o2 else 'bulunamadı'} | {pipeline.REAL_CREDITS[-1:] }")
     out = pipeline.fetch_real_photo("Hoover Dam", __import__("pathlib").Path("/tmp/real.jpg"),
                                     "The giant concrete dam holds back Lake Mead on the Colorado River")
     print(f"::notice title=Gerçek fotoğraf::{'bulundu' if out else 'bulunamadı'} | {pipeline.REAL_CREDITS[:1]}")
