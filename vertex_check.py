@@ -22,6 +22,14 @@ except Exception as e:
 try:
     os.environ.setdefault("OTOYT_CONFIG", "channels/golgedefter.yaml")
     import pipeline
+    import requests as _rq
+    rr = _rq.get("https://commons.wikimedia.org/w/api.php", headers=pipeline.WIKI_HEADERS, timeout=30, params={
+        "action": "query", "format": "json", "generator": "search", "gsrsearch": "Dyatlov Pass filetype:bitmap",
+        "gsrnamespace": 6, "gsrlimit": 8, "prop": "imageinfo", "iiprop": "url|size|mime|extmetadata", "iiurlwidth": 1920})
+    pg = list((rr.json().get("query") or {}).get("pages", {}).values())
+    print("::notice title=Commons ham::" + str(rr.status_code) + " " + " | ".join(
+        f"{p['title'][5:40]} {p['imageinfo'][0].get('width')} {p['imageinfo'][0].get('mime')} "
+        f"{(p['imageinfo'][0].get('extmetadata') or {}).get('LicenseShortName', {}).get('value', '')}" for p in pg[:6]))
     out = pipeline.fetch_real_photo("Dyatlov Pass", __import__("pathlib").Path("/tmp/real.jpg"),
                                     "The hikers' tent was found on the slope of Kholat Syakhl")
     print(f"::notice title=Gerçek fotoğraf::{'bulundu' if out else 'bulunamadı'} | {pipeline.REAL_CREDITS[:1]}")
