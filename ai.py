@@ -21,6 +21,21 @@ GEMINI = "https://generativelanguage.googleapis.com/v1beta/models"
 VERTEX_MODELS = {"gemini-flash-latest": "gemini-3.8-flash", "gemini-flash-lite-latest": "gemini-3.5-flash-lite",
                  "gemini-pro-latest": "gemini-3.1-pro-preview"}
 _vx = {"cred": None, "proj": None, "off": False}
+# kullanım sayacı (maliyet tahmini için): {"vertex:model"/"studio:model": [girdi_token, çıktı_token, çağrı]}
+USAGE = {"tokens": {}, "tts_seconds": {"vertex": 0.0, "studio": 0.0}, "images": {"vertex": 0, "studio": 0},
+         "search_calls": 0}
+
+
+def _count(where, model, j):
+    try:
+        u = j.get("usageMetadata") or {}
+        k = f"{where}:{VERTEX_MODELS.get(model, model) if where == 'vertex' else model}"
+        t = USAGE["tokens"].setdefault(k, [0, 0, 0])
+        t[0] += int(u.get("promptTokenCount", 0))
+        t[1] += int(u.get("candidatesTokenCount", 0)) + int(u.get("thoughtsTokenCount", 0))
+        t[2] += 1
+    except Exception:
+        pass
 
 
 def vertex_on():
@@ -132,6 +147,9 @@ def gemini(prompt, system=None, models=("gemini-flash-latest",), images=None, js
                     continue
                 if r.status_code == 200:
                     j = r.json()
+                    _count("vertex", model, j)
+                    if search:
+                        USAGE["search_calls"] += 1
                     cands = j.get("candidates") or []
                     text = "".join(p.get("text", "") for p in (cands[0].get("content", {}).get("parts", []) if cands else [])
                                    if not p.get("thought"))
@@ -178,6 +196,9 @@ def gemini(prompt, system=None, models=("gemini-flash-latest",), images=None, js
                 LOG(f"Gemini {model} kullanılamadı: {r.status_code} {r.text[:200]}")
                 break  # bu model olmuyor → sonraki modele geç
             j = r.json()
+            _count("studio", model, j)
+            if search:
+                USAGE["search_calls"] += 1
             cands = j.get("candidates") or []
             text = "".join(p.get("text", "") for p in (cands[0].get("content", {}).get("parts", []) if cands else []))
             if not text:
@@ -222,6 +243,7 @@ def gemini_image(prompt, out, models=("gemini-2.5-flash-image", "gemini-3-pro-im
                 from PIL import Image
                 import io
                 Image.open(io.BytesIO(base64.b64decode(b64))).convert("RGB").save(out, quality=95)
+                USAGE["images"]["vertex"] += 1
                 return out
             except Exception as e:
                 last = f"vertex {vm}: {e}"
@@ -243,6 +265,7 @@ def gemini_image(prompt, out, models=("gemini-2.5-flash-image", "gemini-3-pro-im
                 from PIL import Image
                 import io
                 Image.open(io.BytesIO(base64.b64decode(b64))).convert("RGB").save(out, quality=95)
+                USAGE["images"]["studio"] += 1
                 return out
             except Exception as e:
                 last = f"{model}: {e}"
@@ -316,6 +339,7 @@ def gemini_tts(text, voice="Charon", style=None, models=("gemini-3.1-flash-tts-p
                     raw = raw[i + 8:] if i > 0 else raw[44:]
                 pcm = np.frombuffer(raw[:len(raw) // 2 * 2], dtype="<i2").astype(np.float32) / 32768.0
                 if pcm.size > 2400:
+                    USAGE["tts_seconds"]["vertex"] += pcm.size / 24000
                     return pcm
                 last = "vertex tts boş ses"
                 continue
@@ -363,9 +387,31 @@ def gemini_tts(text, voice="Charon", style=None, models=("gemini-3.1-flash-tts-p
                     b64 = next(p["inlineData"]["data"] for p in parts if "inlineData" in p)
                     pcm = np.frombuffer(base64.b64decode(b64), dtype="<i2").astype(np.float32) / 32768.0
                     if pcm.size > 2400:
+                        USAGE["tts_seconds"]["studio"] += pcm.size / 24000
                         return pcm
                     last = "boş ses"
                 except Exception as e:
                     last = f"yanıt çözülemedi: {e}"
                 time.sleep(5)
     raise RuntimeError(f"Gemini TTS ses üretemedi: {last}")
+
+
+
+# Yaklaşık fiyatlar (USD / 1M token; ses: USD / dakika; görsel: USD / adet). Google fiyatları değişebilir:
+# kesin harcama için Google Cloud Billing ve AI Studio Billing sayfaları esastır.
+PRICE = {"flash-lite": (0.10, 0.40), "flash": (0.50, 3.00), "pro": (2.00, 12.00),
+         "tts_min": 0.03, "image": 0.04, "search": 0.035}
+
+
+def cost_usd():
+    """Bu çalışmadaki Gemini kullanımının tahmini maliyeti: (vertex_usd, studio_usd)."""
+    tot = {"vertex": 0.0, "studio": 0.0}
+    for k, (i, o, _) in USAGE["tokens"].items():
+        where, model = k.split(":", 1)
+        tier = "flash-lite" if "lite" in model else ("pro" if "pro" in model else "flash")
+        pi, po = PRICE[tier]
+        tot[where] += i / 1e6 * pi + o / 1e6 * po
+    for w in ("vertex", "studio"):
+        tot[w] += USAGE["tts_seconds"][w] / 60 * PRICE["tts_min"] + USAGE["images"][w] * PRICE["image"]
+    tot["vertex"] += USAGE["search_calls"] * PRICE["search"] * 0  # günlük ücretsiz arama hakkı içinde varsayılır
+    return tot["vertex"], tot["studio"]

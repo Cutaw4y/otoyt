@@ -2490,6 +2490,38 @@ def _check_gemini_key():
                    "Video bugün ücretsiz anahtarla üretiliyor, senden bir şey gerekmiyor; Claude'a haber ver.")
 
 
+CREDIT_LEDGER = ROOT / "credit_ledger.json"   # iki kanalın ortak (tahmini) kredi defteri
+
+
+def credit_report(stage):
+    """Telegram'a kredi bilgisi: yapım başında kalan kredi, sonunda bu videonun tahmini maliyeti ve yeni bakiye.
+    Google bakiyeyi API ile vermediği için kullanılan token/ses/görselden hesaplanan TAHMİNDİR."""
+    if DRY_RUN:
+        return
+    led = load_json(CREDIT_LEDGER, {}) if CREDIT_LEDGER.exists() else {}
+    led.setdefault("cloud_tl", 14695.0)     # Google Cloud deneme kredisi (Vertex AI), 29 Ocak 2027'ye kadar
+    led.setdefault("studio_tl", 249.89)     # AI Studio ön ödemeli Gemini kredisi
+    rate = float(led.setdefault("usd_tl", 49.0))
+    if stage == "start":
+        notify(f"💳 Yapım başlıyor. Tahmini kalan kredi: Google Cloud {led['cloud_tl']:,.0f} TL · "
+               f"AI Studio {led['studio_tl']:,.2f} TL")
+        return
+    v_usd, s_usd = ai.cost_usd()
+    v_tl, s_tl = v_usd * rate, s_usd * rate
+    led["cloud_tl"] = round(led["cloud_tl"] - v_tl, 2)
+    led["studio_tl"] = round(led["studio_tl"] - s_tl, 2)
+    led.setdefault("runs", []).append({"date": datetime.now().isoformat(timespec="minutes"),
+                                       "channel": CFG["channel_name"], "cloud_tl": round(v_tl, 2),
+                                       "studio_tl": round(s_tl, 2)})
+    led["runs"] = led["runs"][-200:]
+    save_json(CREDIT_LEDGER, led)
+    tok = sum(i + o for i, o, _ in ai.USAGE["tokens"].values())
+    notify(f"💰 Bu videonun tahmini maliyeti: {v_tl + s_tl:,.1f} TL (Cloud {v_tl:,.1f} · AI Studio {s_tl:,.1f}).\n"
+           f"Kalan tahmini kredi: Google Cloud {led['cloud_tl']:,.0f} TL · AI Studio {led['studio_tl']:,.2f} TL\n"
+           f"(Kullanım: {tok:,} token, {sum(ai.USAGE['tts_seconds'].values()) / 60:.0f} dk ses, "
+           f"{sum(ai.USAGE['images'].values())} görsel. Tahmindir; kesin tutar Google Billing sayfasında.)")
+
+
 def check_channel():
     """İzin anahtarı bu config'in kanalına mı bağlı? Değilse hiçbir şey yüklemeden dur."""
     if DRY_RUN or CFG.get("uploader", "youtube") != "youtube" or not os.getenv("YT_REFRESH_TOKEN"):
@@ -2847,8 +2879,10 @@ if __name__ == "__main__":
         log(f"Kurulum eksik, çalışma atlandı: {', '.join(missing)}")
         notify(f"⏸ Kurulum tamamlanmadığı için bugün video üretilmedi (eksik: {', '.join(missing)}).")
         sys.exit(0)
+    credit_report("start")
     try:
         res = run_once()
+        credit_report("end")
         log("Bitti: video üretilmedi." if res is False else "Başarıyla bitti.")
         if res is not False and not DRY_RUN:
             (DATA / "missed.json").unlink(missing_ok=True)
@@ -2870,4 +2904,5 @@ if __name__ == "__main__":
                + ("🔄 10 dakika sonra otomatik olarak yeniden denenecek, senden bir şey gerekmiyor." if retry else
                   "📅 Yarın aynı saatte otomatik telafi üretimi yapılacak, senden bir şey gerekmiyor." if tts_fail else
                   "Claude'a 'üretim hatası' yazman yeterli, kayıttan bakar."))
+        credit_report("end")
         sys.exit(3 if retry else 4)  # 4 = hata Telegram'a Türkçe bildirildi
