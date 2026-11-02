@@ -1,8 +1,3 @@
-[11:16:36] Başladı (test modu: False, yayın: scheduled)
-[11:16:37] Ücretli Gemini anahtarı kullanılıyor
-[11:16:37] Kanal doğrulandı: GölgeDefter
-[11:16:49] Elle yüklenen video tamamlandı: CkDN0qL3gr4 Ahit Sandığı Nerede: Kuruyan Gölün Dibinde Ne Bulundu? []
-[11:16:51] Elle yüklenen video tamamlandı: r2mktE4eshU Ahit Sandığı Nerede Saklanıyor? #Shorts []
-[11:16:53] Elle yüklenen video tamamlandı: 7XWBP5tzkEc Ahit Sandığı Etiyopya Efsanesi #Shorts []
-[11:16:55] Elle yüklenen video tamamlandı: UMal3d2ad40 Taberiye Dibindeki Taş Anıt #Shorts []
-[11:17:00] Oynatma listesi kapağı kondu: Kutsal Kıssalar ve İslam Tarihi
+[14:30:04] Başladı (test modu: False, yayın: scheduled)
+[14:30:04] Ücretli Gemini anahtarı kullanılıyor
+[14:30:05] Kanal doğrulandı: GölgeDefter
