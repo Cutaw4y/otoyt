@@ -1,3 +1,246 @@
-[08:36:13] Başladı (test modu: False, yayın: manual)
-[08:36:13] Ücretli Gemini anahtarı kullanılıyor
-[08:36:14] Kanal doğrulandı: GölgeDefter
+[08:55:18] Başladı (test modu: False, yayın: manual)
+[08:55:19] Ücretli Gemini anahtarı kullanılıyor
+[08:55:19] Kanal doğrulandı: GölgeDefter
+[08:55:20] Analitik: 0 video ölçüldü, sütun puanları: {}
+[08:56:07] Rakip analizi: 'Kayıp Sandığın Gizli Koordinatı: 1200 Yıllık İslam Yazması Nereyi Gösteriyor?' seçildi (0/10 büyük rakip). Açı: Batı odaklı Etiyopya veya Kudüs anlatılarını tamamen çöpe atıp, Nuaym bin Hammad'ın 1200 yıllık 'Kitabü'l-Fiten' eseri başta olmak üzere erken dönem İslam eskat
+[08:56:08] Konu (1): Kayıp Sandığın Gizli Koordinatı: 1200 Yıllık İslam Yazması Nereyi Gösteriyor?  [İslam tarihi ve kutsal kıssalar (Ashab-ı Kehf, Zülkarneyn, İrem ve Ad kavmi, Semud, Nuh tufanı)]
+[08:57:36] Senaryo kısa (1249/1700 kelime) → genişletiliyor (1)
+[08:59:02] Senaryo kısa (1437/1700 kelime) → genişletiliyor (2)
+[09:00:08] Senaryo uzunluğu: 1496 kelime
+[09:00:08] Senaryo yazıldı: 36 sahne, 1496 kelime
+[09:00:59] Sadeleştirme sahne yapısını bozdu → eski metin kalıyor
+[09:16:19] Doğrulama kaynağı: Google araması
+[09:16:19] Doğrulama turu 1: 8 iddia, 0 yanlış, 0 belirsiz
+[09:16:37] Başlık seçildi: Ahit Sandığı Nerede: Kuruyan Gölün Dibinde Ne Bulundu?  (önceki: Ahit Sandığı Nerede? 1200 Yıllık İslam Yazması ve Gizli Göl) — Arama terimini ilk 19 karakterde vererek mobilde tam görünürlük sağlar. 'Kuruyan göl' ve 'dipte bulunan şey' tezatı, efsanevi bir emanet ile güncel/fi
+[09:16:39] Editör (min 6, ort 7.6): {'originality': 8, 'hook': 7, 'clarity': 7, 'simplicity': 6, 'flow': 8, 'value_density': 8, 'audience_fit': 9, 'problems': ['"erken dönem İslam bilginlerinin kayıtları incelendiğinde, bu kutsal emanetin akıbeti doğrudan Taberiye Gölü havzasına bağlanır." -> Erken dönem İslam bilginlerinin kayıtları incelendiğinde, bu kutsal sandığın nerede olduğuna dair izler bizi Taberiye Gölü havzasına götürür.', '"Kitabü\'l-Fiten isimli eserdir. Bu eser, erken İslam döneminde geleceğe, kargaşa dönemlerine ve büyük olaylara dair aktarılan anlatıları bir araya toplayan ilk kapsamlı derlemedir." -> Kitabü\'l-Fiten adlı eserdir. Bu kitap, İslam\'ın ilk dönemlerinde gelecekte yaşanacak büyük olayları anlatan ilk geniş derlemedir.', '"Sahih-i Müslim\'de yer alan eskatolojik kayıtlarda, kıyamet öncesinde ortaya çıkacak Ye\'cüc ve Me\'cüc kavminin Taberiye Gölü\'ne geleceği ve gölün tüm suyunu içerek tüketeceği haber verilir." -> Sahih-i Müslim adlı hadis kitabında, kıyamete yakın dönemde ortaya çıkacak Ye\'cüc ve Me\'cüc adında iki kalabalık grubun Taberiye Gölü\'ne gelip gölün suyunu tamamen içeceği söylenir.'], 'problems_tr_tr': "Metinde geçen bazı dini ve tarihi kavramlar (eskatoloji, Kitabü'l-Fiten, muhaddis gibi) hedef kitle için biraz ağır kalmış; bu terimler daha sade bir dille açıklanarak verilmelidir."}
+[09:18:22] Anlatım sadeleştirildi (1492 → 1465 kelime)
+[09:19:52] Doğrulama kaynağı: Google araması
+[09:19:52] Doğrulama turu 1: 14 iddia, 3 yanlış, 0 belirsiz
+[09:22:14] Doğrulama kaynağı: Google araması
+[09:22:14] Doğrulama turu 2: 15 iddia, 1 yanlış, 0 belirsiz
+[09:24:08] Doğrulama kaynağı: Google araması
+[09:24:08] Doğrulama turu 3: 15 iddia, 0 yanlış, 0 belirsiz
+[09:24:10] Editör (min 6, ort 7.6): {'originality': 8, 'hook': 8, 'clarity': 7, 'simplicity': 6, 'flow': 7, 'value_density': 8, 'audience_fit': 9, 'problems': ["Quote: 'hicri iki yüz yirmi sekiz yılında vefat eden muhaddis, yani Peygamberimizin sözlerini toplayan bilgin Nuaym bin Hammad'ın yazdığı Kitabü'l-Fiten adlı eserdir.' -> Fix: 'hicri 228 yılında vefat eden, Peygamberimizin sözlerini derleyen Nuaym bin Hammad'ın Kitabü'l-Fiten adlı kitabıdır.'", "Quote: 'Zamanla vadideki su seviyesi yükselmiş ve nehirlerin yatak değiştirmesiyle oluşan göl bu yapıyı dev bir su kasası gibi mühürlemiştir.' -> Fix: 'Zamanla nehir yatakları değişti ve göl suyu yükselerek bu yapıyı tamamen su altında bıraktı.'", "Quote: 'Aynı eserde sandığın Taberiye Gölü'nden çıkarılacağını bildiren rivayetle birlikte bu iki kadim merkez, kutsal emanetin kuzeye taşındığı ortak bir kaçış havzasına işaret eder.' -> Fix: 'Aynı kitapta sandığın bu gölden çıkacağı söylenir ve bu da emanetin kuzeye kaçırıldığını gösterir.'", "Quote: 'Etiyopya kiliselerinde saklanan nesneler ise sandığın kendisi değil, Tabot adı verilen ahşap kopyalarıdır.' -> Fix: 'Etiyopya'da saklanan eşya sandığın kendisi değil, Tabot adı verilen ahşap kopyasıdır.'"], 'problems_tr_tr': "Metinde geçen bazı dini ve tarihi terimler (muhaddis, Kitabü'l-Fiten, Tabot gibi) kısaca açıklansa da cümle yapıları yer yer biraz uzun ve karmaşık tutulmuştur. 12 yaşındaki bir çocuğun ilk dinlemede rahatça anlaması için bazı cümlelerin daha kısa ve sade kurulması gerekmektedir."}
+[09:26:09] Anlatım sadeleştirildi (1463 → 1463 kelime)
+[09:27:36] Doğrulama kaynağı: Google araması
+[09:27:36] Doğrulama turu 1: 15 iddia, 1 yanlış, 0 belirsiz
+[09:29:36] Doğrulama kaynağı: Google araması
+[09:29:36] Doğrulama turu 2: 14 iddia, 0 yanlış, 0 belirsiz
+[09:29:38] Editör (min 6, ort 7.6): {'originality': 8, 'hook': 8, 'clarity': 7, 'simplicity': 6, 'flow': 7, 'value_density': 8, 'audience_fit': 9, 'problems': ["Quote: 'Hicri iki yüz yirmi sekiz yılında' -> Fix: 'Yaklaşık bin iki yüz yıl önce'", "Quote: 'Kitabü'l-Fiten adlı kitabıdır' -> Fix: 'Kitabü'l-Fiten adlı dönemin önemli eseridir'", "Quote: 'Tâbût-ı Sekîne' -> Fix: 'Kutsal Ahit Sandığı'", "Quote: 'Tâlût'un krallığını' -> Fix: 'Hz. Davut'tan önceki kral olan Tâlût'un krallığını'", "Quote: 'Milattan önce beş yüz seksen altı yılında' -> Fix: 'Bundan yaklaşık 2600 yıl önce'"], 'problems_tr': 'Metinde geçen bazı özel terimler, hicri tarihler ve eski kitap isimleri hedef kitle için doğrudan açıklanmamış; daha sade ve günlük bir dille basitleştirilmelidir.'}
+[09:29:38] Konu kalite barajını geçemedi: Kayıp Sandığın Gizli Koordinatı: 1200 Yıllık İslam Yazması Nereyi Gösteriyor?
+[09:29:38] Baraj geçilemedi; en iyi senaryo kullanılıyor (min 6, ort 7.6)
+[09:29:39] Seslendirme başlıyor (Gemini Charon)...
+[09:36:39] Seslendirme: 826 sn
+[09:37:17] Thumbnail sıralaması: [1, 2, 3] - Candidate #1 performs best because it directly features the most recognizable and desirable subject from the title (the Ark of the Covenant) with strong golden contrast against a dark, moody background, creating an immediate visual hook. Candidate #2 creates a strong curiosity gap with '1200 Yıllık Sır' but lacks the explicit visual payoff of the artifact. Candidate #3 is a bit too abstract and text-heavy for quick phone scrolling.
+[09:39:03] Cümle cümle görsel planı: 35/36 sahne
+[09:39:03] Sahne 1 (diagram, 21.8 sn, 4 çekim, cümleye bağlı)
+[09:39:03] Cloudflare günlük ücretsiz kota doldu: {"errors":[{"message":"AiError: AiError: you have used up your daily free allocation of 10,000 neurons, please upgrade to Cloudflare's Workers Paid plan if you would like to continue usage. (19b34b84- → bu video için Pexels fotoğraflarına geçiliyor
+[09:39:17] Sahne 2 (diagram, 27.2 sn, 6 çekim, cümleye bağlı)
+[09:39:35] Sahne 3 (footage, 26.3 sn, 6 çekim, cümleye bağlı)
+[09:39:36]    ilgisiz görüntü elendi: sand dunes and small pools
+[09:39:38]    ilgisiz görüntü elendi: Close up of burning campfire
+[09:39:40]    ilgisiz görüntü elendi: Person standing on dry land
+[09:39:49]    ilgisiz görüntü elendi: Torii gate on sea rock
+[09:39:51]    ilgisiz görüntü elendi: person playing electric guitar
+[09:39:53]    ilgisiz görüntü elendi: grey rocks with stream water
+[09:40:01]    ilgisiz görüntü elendi: fish swimming near coral reef
+[09:40:04]    ilgisiz görüntü elendi: sea turtle swimming underwater
+[09:40:07]    ilgisiz görüntü elendi: underwater coral reef on seabed
+[09:40:14] Sahne 4 (diagram, 22.9 sn, 4 çekim, cümleye bağlı)
+[09:40:20]    ilgisiz görüntü elendi: open book and purple flowers
+[09:40:21]    ilgisiz görüntü elendi: man reading book in library
+[09:40:23]    ilgisiz görüntü elendi: exterior view of a mosque
+[09:40:33]    ilgisiz görüntü elendi: St Peter basilica bridge Rome
+[09:40:35]    ilgisiz görüntü elendi: modern city skyline and highway
+[09:40:47] Sahne 5 (diagram, 21.1 sn, 4 çekim, cümleye bağlı)
+[09:40:56]    ilgisiz görüntü elendi: close up of tree roots
+[09:40:58]    ilgisiz görüntü elendi: chain-link fence covering a window
+[09:41:00]    ilgisiz görüntü elendi: close up of buddha statue
+[09:41:10]    ilgisiz görüntü elendi: people walking in European market
+[09:41:12]    ilgisiz görüntü elendi: a frog sitting in water
+[09:41:13]    ilgisiz görüntü elendi: blurry modern people in street
+[09:41:16] Sahne 6 (footage, 25.0 sn, 5 çekim, cümleye bağlı)
+[09:41:19]    ilgisiz görüntü elendi: person turning old book pages
+[09:41:21]    ilgisiz görüntü elendi: nighttime city skyline with bridge
+[09:41:23]    ilgisiz görüntü elendi: orange lava lamp liquid moving
+[09:41:29]    ilgisiz görüntü elendi: water splashing at sunset rocks
+[09:41:31]    ilgisiz görüntü elendi: close up of yellow flowers
+[09:41:33]    ilgisiz görüntü elendi: tall grass at sunset
+[09:41:39]    ilgisiz görüntü elendi: clouds in the sunset sky
+[09:41:40]    ilgisiz görüntü elendi: abstract glowing light bokeh background
+[09:41:43]    ilgisiz görüntü elendi: mountain reflected in calm water
+[09:41:51]    ilgisiz görüntü elendi: aerial view of a waterfall
+[09:41:53]    ilgisiz görüntü elendi: aerial view of city lights
+[09:41:55]    ilgisiz görüntü elendi: sunlight breaking through cloudy sky
+[09:41:58] Sahne 7 (diagram, 23.1 sn, 5 çekim, cümleye bağlı)
+[09:42:04]    ilgisiz görüntü elendi: aerial view of city night
+[09:42:06]    ilgisiz görüntü elendi: a single lit candle burning
+[09:42:09]    ilgisiz görüntü elendi: aerial view of ocean coast
+[09:42:20]    ilgisiz görüntü elendi: a dirt path in forest
+[09:42:22]    ilgisiz görüntü elendi: cherry blossoms blooming on branches
+[09:42:24]    ilgisiz görüntü elendi: dramatic cloudy sky with light
+[09:42:26] Sahne 8 (diagram, 21.0 sn, 4 çekim, cümleye bağlı)
+[09:42:32]    ilgisiz görüntü elendi: rocks by the sea sunset
+[09:42:34]    ilgisiz görüntü elendi: aerial view of rural village
+[09:42:36]    ilgisiz görüntü elendi: river flowing between rocky cliffs
+[09:42:45]    ilgisiz görüntü elendi: sunset over ocean waves breaking
+[09:42:46]    ilgisiz görüntü elendi: close up of a hand
+[09:42:51]    ilgisiz görüntü elendi: aerial view of rocky coast
+[09:42:54] Sahne 9 (diagram, 28.4 sn, 6 çekim, cümleye bağlı)
+[09:43:06]    ilgisiz görüntü elendi: aerial view of a tropical beach
+[09:43:09]    ilgisiz görüntü elendi: empty chair at the beach
+[09:43:11]    ilgisiz görüntü elendi: waves crashing on rocky shore
+[09:43:24]    ilgisiz görüntü elendi: palm fronds over water sunset
+[09:43:26]    ilgisiz görüntü elendi: sunlight shining through tree branches
+[09:43:29]    ilgisiz görüntü elendi: green tree branches against sky
+[09:43:32] Sahne 10/36 (diagram, 26.1 sn, 5 çekim)
+[09:43:37]    ilgisiz görüntü elendi: butterfly flying near yellow flower
+[09:43:39]    ilgisiz görüntü elendi: butterfly on green plants
+[09:43:41]    ilgisiz görüntü elendi: close up of ocean waves
+[09:43:48]    ilgisiz görüntü elendi: man panning for gold water
+[09:43:50]    ilgisiz görüntü elendi: a butterfly on stony ground
+[09:43:52]    ilgisiz görüntü elendi: butterfly on white field daisy
+[09:43:58] Sahne 11 (footage, 26.4 sn, 6 çekim, cümleye bağlı)
+[09:44:01]    ilgisiz görüntü elendi: aerial view of ancient ruins
+[09:44:02]    ilgisiz görüntü elendi: blue fabric texture with waves
+[09:44:05]    ilgisiz görüntü elendi: low angle shot of tree
+[09:44:14]    ilgisiz görüntü elendi: Close up of gothic cathedral
+[09:44:18]    ilgisiz görüntü elendi: aerial view of modern city
+[09:44:19]    ilgisiz görüntü elendi: person reading open books together
+[09:44:28]    ilgisiz görüntü elendi: snowy mountain peak aerial view
+[09:44:30]    ilgisiz görüntü elendi: fluffy clouds in the sky
+[09:44:33]    ilgisiz görüntü elendi: incense sticks burning in grass
+[09:44:38] Sahne 12 (footage, 24.1 sn, 5 çekim, cümleye bağlı)
+[09:44:40]    ilgisiz görüntü elendi: large golden church chandelier interior
+[09:44:42]    ilgisiz görüntü elendi: military vehicle driving through woods
+[09:44:44]    ilgisiz görüntü elendi: modern soldiers preparing machine gun
+[09:44:50]    ilgisiz görüntü elendi: a cat sitting in grass
+[09:44:53]    ilgisiz görüntü elendi: aerial view of green mountains
+[09:44:54]    ilgisiz görüntü elendi: ancient weathered stone carvings
+[09:45:00]    ilgisiz görüntü elendi: abstract dark fire and embers
+[09:45:02]    ilgisiz görüntü elendi: close up of burning wood
+[09:45:04]    ilgisiz görüntü elendi: red autumn leaves and jars
+[09:45:10] Sahne 13 (diagram, 21.0 sn, 5 çekim, cümleye bağlı)
+[09:45:18]    ilgisiz görüntü elendi: blurred crucifix with lit candles
+[09:45:20]    ilgisiz görüntü elendi: aerial view of Mayan ruins
+[09:45:22]    ilgisiz görüntü elendi: large tornado touching the ground
+[09:45:29]    ilgisiz görüntü elendi: modern woman using digital tablet
+[09:45:31]    ilgisiz görüntü elendi: Cat looking at digital tablet
+[09:45:33]    ilgisiz görüntü elendi: colorful pills and medicine capsules
+[09:45:35] Sahne 14 (footage, 20.6 sn, 4 çekim, cümleye bağlı)
+[09:45:37]    ilgisiz görüntü elendi: Person using a smartphone indoors
+[09:45:38]    ilgisiz görüntü elendi: bronze statue of Neptune outdoors
+[09:45:40]    ilgisiz görüntü elendi: Ancient stone carvings on wall
+[09:45:44]    ilgisiz görüntü elendi: fizzy tablet dissolving in water
+[09:45:46]    ilgisiz görüntü elendi: modern tablet device with stylus
+[09:45:48]    ilgisiz görüntü elendi: Person holding tablet showing photos
+[09:45:56]    ilgisiz görüntü elendi: golden grass swaying in wind
+[09:45:59]    ilgisiz görüntü elendi: misty landscape with green field
+[09:46:01]    ilgisiz görüntü elendi: misty landscape with rolling hills
+[09:46:05] Sahne 15 (footage, 18.0 sn, 3 çekim, cümleye bağlı)
+[09:46:07]    ilgisiz görüntü elendi: close up of burning candles
+[09:46:11]    ilgisiz görüntü elendi: green hills and village landscape
+[09:46:13]    ilgisiz görüntü elendi: fountain in front of church
+[09:46:19]    ilgisiz görüntü elendi: Young woman drinking from mug
+[09:46:21]    ilgisiz görüntü elendi: interior of a European church
+[09:46:23]    ilgisiz görüntü elendi: people holding smartphones outdoors
+[09:46:30] Sahne 16 (diagram, 19.9 sn, 4 çekim, cümleye bağlı)
+[09:46:38]    ilgisiz görüntü elendi: aerial view of green mountains
+[09:46:40]    ilgisiz görüntü elendi: aerial view of a waterfall
+[09:46:42]    ilgisiz görüntü elendi: people and dog on beach
+[09:46:50]    ilgisiz görüntü elendi: aerial view of archaeological ruins
+[09:46:52]    ilgisiz görüntü elendi: close up of vintage map
+[09:46:53]    ilgisiz görüntü elendi: ancient obelisk against blue sky
+[09:46:56] Sahne 17 (diagram, 22.6 sn, 5 çekim, cümleye bağlı)
+[09:47:01]    ilgisiz görüntü elendi: stone statues against blue sky
+[09:47:03]    ilgisiz görüntü elendi: aerial view of old church
+[09:47:06]    ilgisiz görüntü elendi: large gothic cathedral in europe
+[09:47:15]    ilgisiz görüntü elendi: aerial view of mountain village
+[09:47:16]    ilgisiz görüntü elendi: gold temple decorations against mountains
+[09:47:19]    ilgisiz görüntü elendi: old stone church in mountains
+[09:47:24] Sahne 18 (diagram, 24.6 sn, 6 çekim, cümleye bağlı)
+[09:47:31]    ilgisiz görüntü elendi: white clouds in blue sky
+[09:47:33]    ilgisiz görüntü elendi: caterpillar crawling on green plant
+[09:47:35]    ilgisiz görüntü elendi: spider on a web
+[09:47:42]    ilgisiz görüntü elendi: burning candles with purple lights
+[09:47:44]    ilgisiz görüntü elendi: large buddha statue in forest
+[09:47:46]    ilgisiz görüntü elendi: person holding white smartphone
+[09:47:54]    ilgisiz görüntü elendi: person typing on laptop keyboard
+[09:47:56]    ilgisiz görüntü elendi: Medical pills on white background
+[09:47:57]    ilgisiz görüntü elendi: Young boy using digital tablet
+[09:48:00] Sahne 19 (footage, 20.0 sn, 5 çekim, cümleye bağlı)
+[09:48:02]    ilgisiz görüntü elendi: Mount Fuji silhouette at sunset
+[09:48:05]    ilgisiz görüntü elendi: snowy mountains with green slopes
+[09:48:07]    ilgisiz görüntü elendi: aerial view of autumn mountains
+[09:48:14]    ilgisiz görüntü elendi: aerial view of barren mountain
+[09:48:19]    ilgisiz görüntü elendi: aerial view of a dam
+[09:48:22]    ilgisiz görüntü elendi: road leading to distant mountains
+[09:48:28]    ilgisiz görüntü elendi: futuristic illuminated tunnel at night
+[09:48:30]    ilgisiz görüntü elendi: aerial view of ancient pyramid
+[09:48:31]    ilgisiz görüntü elendi: modern subway station with train
+[09:48:36] Sahne 20 (footage, 16.6 sn, 4 çekim, cümleye bağlı)
+[09:48:39]    ilgisiz görüntü elendi: aerial view of rocky coast
+[09:48:40]    ilgisiz görüntü elendi: lighthouse by the sea aerial
+[09:48:43]    ilgisiz görüntü elendi: aerial view of canyon river
+[09:48:52]    ilgisiz görüntü elendi: close up of sea anemone
+[09:48:54]    ilgisiz görüntü elendi: three scuba divers underwater swimming
+[09:48:58]    ilgisiz görüntü elendi: clownfish hiding in sea anemone
+[09:49:04] Sahne 21 (diagram, 18.9 sn, 4 çekim, cümleye bağlı)
+[09:49:10]    ilgisiz görüntü elendi: Close up of a pug
+[09:49:13]    ilgisiz görüntü elendi: passenger boat on calm lake
+[09:49:15]    ilgisiz görüntü elendi: aerial view of lakeside town
+[09:49:23]    ilgisiz görüntü elendi: underwater plants and small fish
+[09:49:25]    ilgisiz görüntü elendi: rock by water at sunset
+[09:49:27]    ilgisiz görüntü elendi: many fish swimming underwater aquarium
+[09:49:30] Sahne 22 (diagram, 21.4 sn, 5 çekim, cümleye bağlı)
+[09:49:35]    ilgisiz görüntü elendi: rocks under shallow water
+[09:49:38]    ilgisiz görüntü elendi: close up of yellow flowers
+[09:49:41]    ilgisiz görüntü elendi: stepping stone bridge across river
+[09:49:53]    ilgisiz görüntü elendi: aerial view of mountain village
+[09:49:55]    ilgisiz görüntü elendi: ruined ancient brick stone building
+[09:49:57]    ilgisiz görüntü elendi: stone statue outdoors in park
+[09:49:59] Sahne 23 (footage, 21.4 sn, 5 çekim, cümleye bağlı)
+[09:50:01]    ilgisiz görüntü elendi: Water flowing over river rocks
+[09:50:03]    ilgisiz görüntü elendi: penguins on a sandy beach
+[09:50:07]    ilgisiz görüntü elendi: white clouds in blue sky
+[09:50:13]    ilgisiz görüntü elendi: aerial view of coastal road
+[09:50:16]    ilgisiz görüntü elendi: aerial view of scrap yard
+[09:50:19]    ilgisiz görüntü elendi: aerial view of scrap yard
+[09:50:29]    ilgisiz görüntü elendi: clownfish swimming near coral reef
+[09:50:35]    ilgisiz görüntü elendi: aerial view of clear water
+[09:50:37]    ilgisiz görüntü elendi: aerial view of green islands
+[09:50:41] Sahne 24 (diagram, 21.7 sn, 5 çekim, cümleye bağlı)
+[09:50:47]    ilgisiz görüntü elendi: Warthog walking in open field
+[09:50:48]    ilgisiz görüntü elendi: Person running in snowy park
+[09:50:51]    ilgisiz görüntü elendi: river flowing through pine forest
+[09:51:01]    ilgisiz görüntü elendi: sunset over a calm lake
+[09:51:04]    ilgisiz görüntü elendi: aerial view of dry land
+[09:51:06]    ilgisiz görüntü elendi: aerial view of construction site
+[09:51:08] Sahne 25 (diagram, 21.4 sn, 4 çekim, cümleye bağlı)
+[09:51:14]    ilgisiz görüntü elendi: Ornate historic European stone building
+[09:51:41] Sahne 26 (diagram, 20.7 sn, 5 çekim, cümleye bağlı)
+[09:52:23] Sahne 27 (footage, 22.5 sn, 5 çekim, cümleye bağlı)
+[09:53:00] Sahne 28 (diagram, 25.5 sn, 5 çekim, cümleye bağlı)
+[09:53:34] Sahne 29 (diagram, 22.3 sn, 5 çekim, cümleye bağlı)
+[09:54:02] Sahne 30 (diagram, 25.4 sn, 5 çekim, cümleye bağlı)
+[09:54:35] Sahne 31 (diagram, 20.3 sn, 5 çekim, cümleye bağlı)
+[09:55:07] Sahne 32 (footage, 21.2 sn, 4 çekim, cümleye bağlı)
+[09:55:41] Sahne 33 (footage, 29.2 sn, 5 çekim, cümleye bağlı)
+[09:56:26] Sahne 34 (diagram, 27.4 sn, 5 çekim, cümleye bağlı)
+[09:57:02] Sahne 35 (diagram, 28.0 sn, 5 çekim, cümleye bağlı)
+[09:57:36] Sahne 36 (footage, 22.0 sn, 4 çekim, cümleye bağlı)
+[10:10:11] Ana video: 859 sn
+[10:10:58] Short 1: sahne 0-2, 49 sn — Ahit Sandığı Nerede Saklanıyor?
+[10:11:36] Short 2: sahne 14-17, 38 sn — Ahit Sandığı Etiyopya Efsanesi
+[10:12:16] Short 3: sahne 20-23, 40 sn — Taberiye Dibindeki Taş Anıt
+[10:12:16] Altyazı çevirisi: English (319 satır)
+[10:12:27] Çeviri parçası eksik geldi (180-210), tekrar deneniyor
+[10:12:29] Çeviri parçası eksik geldi (180-210), tekrar deneniyor
+[10:12:34] Çeviri parçası eksik geldi (240-270), tekrar deneniyor
+[10:12:36] Çeviri parçası eksik geldi (240-270), tekrar deneniyor
+[10:12:39] Çeviri parçası eksik geldi (270-300), tekrar deneniyor
+[10:14:26] Instagram sırasına eklendi: Ahit Sandığı Etiyopya Efsanesi
+[10:14:29] Instagram sırasına eklendi: Taberiye Dibindeki Taş Anıt
+[10:14:54] Paket yayında (Releases): https://github.com/Cutaw4y/otoyt/releases/tag/paket-20261102-1014-ahit-sandigi-nerede
+[10:14:56] Elle yükleme paketi hazır: ['0-YUKLEME-BILGILERI.txt', '1-KUCUK-RESIM.jpg', '1-VIDEO-ahit-sandigi-nerede.mp4', '1-altyazi-en.srt', '1-altyazi-tr.srt', '2-SHORT-ahit-sandigi-nerede-saklaniyor.mp4', '3-SHORT-ahit-sandigi-etiyopya-efsanesi.mp4', '4-SHORT-taberiye-dibindeki-tas-anit.mp4']
+[10:14:57] Başarıyla bitti.
