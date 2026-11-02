@@ -757,7 +757,69 @@ def _clip_start(clip, frames):
 
 
 _CLIP_CHECKS = 0
-VIS_STATS = {"rejected": 0, "planned": 0, "scenes": 0}   # bildirim için
+VIS_STATS = {"rejected": 0, "planned": 0, "scenes": 0, "real": 0}   # bildirim için
+REAL_CREDITS = []      # kullanılan gerçek fotoğrafların yazar/lisans satırları (açıklamaya eklenir)
+_REAL_USED = set()
+_OK_LIC = ("public domain", "pd", "cc0", "cc by", "cc-by", "attribution")
+
+
+def fetch_real_photo(subject, out, context=""):
+    """Anlatılan gerçek yerin/nesnenin GERÇEK fotoğrafı: Wikimedia Commons (serbest lisanslı; telifli web
+    görselleri asla). Lisansı kullanıma uygun, yeterince büyük ve yapay zekâ kontrolünde konuyla ilgili olanı seçer."""
+    if not subject or not CFG.get("real_photos", True):
+        return None
+    try:
+        r = requests.get("https://commons.wikimedia.org/w/api.php", headers=WIKI_HEADERS, timeout=30, params={
+            "action": "query", "format": "json", "generator": "search", "gsrsearch": f"{subject} filetype:bitmap",
+            "gsrnamespace": 6, "gsrlimit": 12, "prop": "imageinfo", "iiprop": "url|size|mime|extmetadata",
+            "iiurlwidth": 1920})
+        pages = sorted((r.json().get("query") or {}).get("pages", {}).values(), key=lambda x: x.get("index", 99))
+    except Exception as e:
+        log(f"Gerçek fotoğraf aranamadı ({subject}): {str(e)[:100]}")
+        return None
+    import html as _h
+    for pg in pages:
+        ii = (pg.get("imageinfo") or [{}])[0]
+        title = pg.get("title", "")
+        if title in _REAL_USED or ii.get("mime") not in ("image/jpeg", "image/png") or ii.get("width", 0) < 1000:
+            continue
+        md = ii.get("extmetadata") or {}
+        lic = (md.get("LicenseShortName", {}).get("value") or md.get("License", {}).get("value") or "").lower()
+        if not any(k in lic for k in _OK_LIC) or "nc" in lic.split() or "-nc" in lic or "nd" in lic.split() or "-nd" in lic:
+            continue
+        try:
+            _download(ii.get("thumburl") or ii["url"], out)
+        except Exception:
+            continue
+        if not image_matches(out, f"{subject}. {context}"):
+            continue
+        artist = re.sub(r"<[^>]+>", "", _h.unescape(md.get("Artist", {}).get("value", "") or "")).strip()[:60] or "Wikimedia Commons"
+        _REAL_USED.add(title)
+        REAL_CREDITS.append(f"{title.replace('File:', '')[:70]} — {artist}, {md.get('LicenseShortName', {}).get('value', '')} (Wikimedia Commons)")
+        VIS_STATS["real"] += 1
+        return out
+    return None
+
+
+def image_matches(path, what):
+    """Gerçek fotoğraf anlatılan şeyi gösteriyor mu? (Flash-Lite, hak dolarsa kontrol atlanır.)"""
+    global _CLIP_CHECKS
+    if _CLIP_CHECKS >= CFG.get("max_footage_checks", 70):
+        return True
+    _CLIP_CHECKS += 1
+    try:
+        from PIL import Image
+        sm = Path(path).with_name(Path(path).stem + "_chk.jpg")
+        Image.open(path).convert("RGB").resize((480, 270)).save(sm, quality=80)
+        lite = [m for m in CFG["judge_models"] if "lite" in m] or CFG["judge_models"][:1]
+        r = ai.gemini_json("You check photos for a documentary. Be strict.",
+                           f"Narration: {what}\nDoes this photo clearly show this exact real place/object/event (or a "
+                           "very close real view of it)? Maps, logos, tiny thumbnails, unrelated people = no. "
+                           'JSON: {"match": true or false}', images=[sm], required=("match",), models=lite,
+                           temperature=0.1)
+        return bool(r.get("match"))
+    except Exception:
+        return True
 
 
 def clip_matches(clip, sc, workdir):
@@ -810,8 +872,11 @@ def plan_beats(script):
                 "tablet', 'ancient cuneiform', 'midwife newborn baby'); image = ENGLISH illustration prompt showing "
                 "exactly that thing. If the sentence names nothing concrete, show the most concrete thing it refers "
                 "to from the surrounding sentences, never a generic mood shot. Never show faces of prophets or holy "
-                "figures, no gore. "
-                'JSON: {"beats":[{"id":"3.2","query":"...","image":"..."}]}', required=("beats",))
+                "figures, no gore. real = if the sentence is about a SPECIFIC real, named place, structure, object, "
+                "document, ship, machine or event that real photos of exist, its exact name for a Wikimedia Commons "
+                "search (e.g. 'Dyatlov Pass', 'Göbekli Tepe', 'Hoover Dam spillway', 'Tacoma Narrows Bridge collapse'), "
+                "otherwise empty string. "
+                'JSON: {"beats":[{"id":"3.2","query":"...","image":"...","real":"..."}]}', required=("beats",))
         except Exception as e:
             log(f"Cümle görselleri planlanamadı (sahne {i + 1}-{chunk[-1] + 1}): {str(e)[:150]}")
             continue
@@ -820,7 +885,8 @@ def plan_beats(script):
             sents = voice.split_sentences(scenes[si]["narration"])
             bs = [got.get(f"{si}.{k}") for k in range(len(sents))]
             if all(b and b.get("query") and b.get("image") for b in bs):
-                scenes[si]["beat_plan"] = [{"text": t, "query": b["query"], "image": b["image"]}
+                scenes[si]["beat_plan"] = [{"text": t, "query": b["query"], "image": b["image"],
+                                            "real": str(b.get("real") or "").strip()}
                                            for t, b in zip(sents, bs)]
     n = sum(1 for sc in scenes if sc.get("beat_plan"))
     log(f"Cümle cümle görsel planı: {n}/{len(scenes)} sahne")
@@ -933,6 +999,11 @@ def build_beat_scene(sc, i, bshots, workdir, ledger, style, hook, img_budget):
         if j in imgs:
             return imgs[j]
         b = plan[j]
+        if b.get("real"):  # gerçeklik önce: anlatılan gerçek yerin/nesnenin serbest lisanslı gerçek fotoğrafı
+            got = fetch_real_photo(b["real"], workdir / f"img_{i:02d}_b{j:02d}.jpg", b["text"])
+            if got:
+                imgs[j] = got
+                return got
         if img_budget[0] > 0:
             img_budget[0] -= 1
             imgs[j] = gen_image(f"{b['image']}. Style: {style}", workdir / f"img_{i:02d}_b{j:02d}.jpg",
@@ -950,6 +1021,8 @@ def build_beat_scene(sc, i, bshots, workdir, ledger, style, hook, img_budget):
         out = workdir / f"shot_{i:02d}_{k:02d}.mp4"
         # diyagram sahnesi: önce cümlenin görseli, uzun cümlede ikinci çekim stok; stok sahne: tersi
         want_still = hook or (sc.get("visual") == "diagram") == (part % 2 == 0)
+        if b.get("real") and part == 0:
+            want_still = True  # cümle gerçek bir yerden/nesneden bahsediyorsa önce onun gerçek fotoğrafı
         clip = None
         if not want_still:
             for t in range(3):
@@ -974,7 +1047,20 @@ def assemble(script, workdir, music):
     A = ASSETS
     parts = []  # (video, ses, kelimeler)
     sc = script["scenes"]
-    owners = [sc[0]]  # her parçanın hangi sahneye ait olduğu (intro/outro: None)
+    owners = []  # her parçanın hangi sahneye ait olduğu (intro/outro: None)
+    if CFG.get("title_card"):  # açılış: defter açılır, gölge kalem günün konusunu yazar
+        try:
+            topic = (script["title"].split(":")[0] if ":" in script["title"] else
+                     (script.get("core_keyword") or script["title"])).strip()
+            tc = media.title_card(topic[:40], w / "title_card.mp4",
+                                  accent=tuple(CFG.get("thumbnail_accent", (232, 158, 68))),
+                                  logo=A / CFG.get("logo_file", "cutaway_logo.png"))
+            fr = int(round(media.duration(tc) * media.FPS))
+            parts.append((tc, media.to_wav(tc, w / "title_card_a.wav", frames=fr), []))
+            owners.append(None)
+        except Exception as e:
+            log(f"Açılış kartı yapılamadı: {str(e)[:150]}")
+    owners.append(sc[0])
     parts.append((sc[0]["video"], sc[0]["voice"], sc[0]["words"]))
     intro = A / "intro.mp4"
     if CFG.get("use_intro", True) and intro.exists():
@@ -1701,9 +1787,13 @@ YT_HASHTAG_MAX = 15   # YouTube 60'tan fazlasında hepsini yok sayar; 15 güvenl
 
 
 def _footer(cfg=None):
-    """Açıklama sonu notu (isteğe bağlı; boşsa hiçbir şey eklenmez)."""
+    """Açıklama sonu: görsel kaynakları (lisans gereği) + isteğe bağlı not."""
     t = ((cfg or CFG).get("desc_footer") or "").strip()
-    return "\n\n" + t if t else ""
+    out = "\n\n" + t if t else ""
+    if REAL_CREDITS:
+        head = "Görsel kaynakları:" if (cfg or CFG).get("language_code") == "tr" else "Image credits:"
+        out += "\n\n" + head + "\n" + "\n".join(f"• {c}" for c in REAL_CREDITS[:25])
+    return out
 
 
 def tags_last(desc):
@@ -2409,6 +2499,7 @@ def run_once():
         notify(f"🖼 Görseller hazırlandı: {vs_['scenes']} sahnenin {vs_['planned']} tanesinde görsel cümle cümle "
                f"seçildi (anlatılan neyse ekranda o)."
                + (f" Konuya uymayan {vs_['rejected']} stok video elendi." if vs_["rejected"] else "")
+               + (f" {vs_['real']} yerde anlatılan yerin/nesnenin GERÇEK fotoğrafı kullanıldı (Wikimedia Commons)." if vs_.get("real") else "")
                + (" ⚠️ Bazı sahnelerde eski yöntem kullanıldı." if vs_["planned"] < vs_["scenes"] else " ✅"))
         variants = sorted(ASSETS.glob("music_*.mp3"))
         music = random.choice(variants) if variants else ASSETS / "music.mp3"  # her videoda farklı müzik

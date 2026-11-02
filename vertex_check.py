@@ -16,3 +16,14 @@ try:
     print(f"::notice title=Sistem görsel (Vertex)::{out}")
 except Exception as e:
     print(f"::error title=Sistem Vertex::{str(e)[:300]}")
+
+
+# Gerçek fotoğraf (Wikimedia Commons) denemesi
+try:
+    os.environ.setdefault("OTOYT_CONFIG", "channels/golgedefter.yaml")
+    import pipeline
+    out = pipeline.fetch_real_photo("Dyatlov Pass", __import__("pathlib").Path("/tmp/real.jpg"),
+                                    "The hikers' tent was found on the slope of Kholat Syakhl")
+    print(f"::notice title=Gerçek fotoğraf::{'bulundu' if out else 'bulunamadı'} | {pipeline.REAL_CREDITS[:1]}")
+except Exception as e:
+    print(f"::error title=Gerçek fotoğraf::{str(e)[:300]}")

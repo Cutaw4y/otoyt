@@ -517,3 +517,111 @@ def playlist_cover(title, out, logo=None, accent=(255, 168, 60), size=1280, bg_c
         y += lh
     im.convert("RGB").save(out, quality=92)
     return out
+
+
+def title_card(text, out, seconds=3.8, accent=(232, 158, 68), logo=None):
+    """Gölgedefter açılışı: karanlıkta mum ışığıyla defter açılır, gölge kalem günün konusunu el yazısıyla
+    sağ sayfaya yazar; sol sayfada soluk kanal amblemi."""
+    import numpy as np
+    n = int(seconds * FPS)
+    font_p = FONTS_DIR / "TeXGyreChorus.otf"
+    rng = np.random.default_rng(7)
+    yy, xx = np.mgrid[0:H, 0:W]
+    glow = np.exp(-(((xx - W * 0.5) / (W * 0.42)) ** 2 + ((yy - H * 0.5) / (H * 0.5)) ** 2))
+    bg = np.zeros((H, W, 3), np.float32)
+    for c, (b, a) in enumerate(zip((10, 8, 6), accent)):
+        bg[..., c] = b + glow * a * 0.25
+    bg = Image.fromarray(bg.clip(0, 255).astype(np.uint8))
+    pw, ph = int(W * 0.36), int(H * 0.70)
+    cx, cy = W // 2, int(H * 0.52)
+    # parşömen sayfa dokusu (sırta doğru kararan, kenarları yanık)
+    py_, px_ = np.mgrid[0:ph, 0:pw]
+    base = np.array([222, 204, 166], np.float32)
+    shade = 0.78 + 0.22 * (px_ / pw) ** 0.5                     # sırta yakın koyu
+    edge = np.minimum.reduce([px_, pw - 1 - px_, py_, ph - 1 - py_]).astype(np.float32)
+    burn = np.clip(edge / 40, 0, 1) ** 0.6
+    noise = rng.normal(0, 6, (ph, pw, 1))
+    page = (base * (shade * (0.55 + 0.45 * burn))[..., None] + noise).clip(0, 255).astype(np.uint8)
+    right_page = Image.fromarray(page)
+    left_page = right_page.transpose(Image.FLIP_LEFT_RIGHT)
+    if logo and Path(logo).exists():  # sol sayfada soluk amblem
+        lg = Image.open(logo).convert("L").resize((int(pw * 0.38), int(pw * 0.38)))
+        lp = left_page.copy()
+        tint = Image.new("RGB", lg.size, (120, 90, 55))
+        lp.paste(tint, ((pw - lg.width) // 2, (ph - lg.height) // 2), lg.point(lambda v: int(v * 0.22)))
+        left_page = lp
+    # yazı: sağ sayfaya 1-3 satır
+    words, size = text.split(), 170
+    while size > 54:
+        f = ImageFont.truetype(str(font_p), size)
+        lines, cur = [], ""
+        for w_ in words:
+            t = (cur + " " + w_).strip()
+            if f.getlength(t) <= pw * 0.8 or not cur:
+                cur = t
+            else:
+                lines.append(cur)
+                cur = w_
+        lines.append(cur)
+        if len(lines) <= 3 and max(f.getlength(l) for l in lines) <= pw * 0.84:
+            break
+        size -= 8
+    lh = int(size * 1.12)
+    ink = Image.new("L", (W, H), 0)
+    di = ImageDraw.Draw(ink)
+    rx = cx + pw // 2
+    ty = cy - lh * len(lines) // 2 - int(size * 0.12)
+    spans = []
+    for k, l in enumerate(lines):
+        lw = f.getlength(l)
+        x0 = rx - lw / 2
+        di.text((x0, ty + k * lh), l, font=f, fill=255)
+        spans.append((x0, x0 + lw, ty + k * lh))
+    total = sum(b - a for a, b, _ in spans)
+    pen = Image.new("RGBA", (120, 360), (0, 0, 0, 0))
+    dp = ImageDraw.Draw(pen)
+    dp.polygon([(60, 355), (42, 210), (24, 90), (56, 0), (88, 80), (80, 210)], fill=(8, 6, 5, 240))
+    dp.line([(60, 355), (58, 25)], fill=(*accent, 170), width=3)
+    pen = pen.rotate(-30, expand=True, resample=Image.BICUBIC)
+    pen_sh = Image.new("RGBA", pen.size, (0, 0, 0, 0))
+    pen_sh.putalpha(pen.getchannel("A").point(lambda v: int(v * 0.35)))
+    proc = subprocess.Popen(["ffmpeg", "-y", "-v", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}",
+                             "-r", str(FPS), "-i", "-", "-f", "lavfi", "-i", "anullsrc=r=48000:cl=stereo",
+                             "-t", f"{n / FPS:.3f}", "-c:v", "libx264", "-preset", "veryfast", "-crf", "18",
+                             "-pix_fmt", "yuv420p", "-c:a", "aac", "-shortest", str(out)], stdin=subprocess.PIPE)
+    t_open, t_write = int(n * 0.2), int(n * 0.55)
+    for i in range(n):
+        im = bg.copy()
+        o = min(1.0, i / max(1, t_open))
+        o = 1 - (1 - o) ** 3
+        half = max(8, int(pw * o))
+        sh = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        ImageDraw.Draw(sh).rounded_rectangle([cx - half + 18, cy - ph // 2 + 24, cx + half + 18, cy + ph // 2 + 24],
+                                             16, fill=(0, 0, 0, 150))
+        im.paste(sh, (0, 0), sh)
+        im.paste(left_page.resize((half, ph)), (cx - half, cy - ph // 2))
+        im.paste(right_page.resize((half, ph)), (cx, cy - ph // 2))
+        ImageDraw.Draw(im).rectangle([cx - 2, cy - ph // 2, cx + 2, cy + ph // 2], fill=(90, 70, 46))
+        if i >= t_open:
+            prog = min(1.0, (i - t_open) / max(1, t_write))
+            left = prog * total
+            mask = Image.new("L", (W, H), 0)
+            dm = ImageDraw.Draw(mask)
+            px, py = None, None
+            for a, b, y in spans:
+                seg = min(b - a, max(0.0, left))
+                if seg > 0:
+                    dm.rectangle([a - 25, y - 20, a + seg, y + lh], fill=255)
+                    px, py = a + seg, y + lh * 0.6
+                left -= (b - a)
+            im.paste((40, 25, 14), (0, 0), Image.composite(ink, Image.new("L", (W, H), 0), mask))
+            if px is not None and prog < 1.0:
+                pos = (int(px) - 30, int(py) - pen.height + 30)
+                im.paste(pen_sh, (pos[0] + 14, pos[1] + 18), pen_sh)
+                im.paste(pen, pos, pen)
+        fade = min(1.0, i / 10) * min(1.0, (n - 1 - i) / 8 + 0.2)
+        arr = (np.asarray(im, np.float32) * fade).clip(0, 255).astype(np.uint8)
+        proc.stdin.write(arr.tobytes())
+    proc.stdin.close()
+    proc.wait()
+    return out
