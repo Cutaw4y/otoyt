@@ -24,6 +24,12 @@ CLIPS = {
               "A dark-gloved hand holding a black feather quill enters and writes a line of elegant handwriting from "
               "left to right across the middle of the page, the arm moving with each stroke. Warm candlelight, deep "
               "shadows. Sound: clear quill scratching on paper, soft candle crackle. Realistic, cinematic. No music.", False),
+    "title_test": ("Extreme close-up, top-down view of an aged blank parchment page of an open old book on a wooden desk. "
+                   "A dark-gloved hand holding a black feather quill writes the words \"Dyatlov Geçidi\" in large, "
+                   "elegant, clearly legible calligraphy across the middle of the page, letter by letter from left to "
+                   "right; the arm and hand move with each stroke and the ink appears exactly under the quill tip. "
+                   "Nothing else is written on the page. Warm candlelight, deep shadows. Sound: quill scratching on "
+                   "paper, soft candle crackle. Realistic, cinematic. No music.", False),
 }
 
 
