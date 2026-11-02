@@ -21,7 +21,7 @@ SCENES = [
 ]
 r = ai._vertex_generate("gemini-3.1-flash-image", {"contents": [{"role": "user", "parts": [{"text": "a candle"}]}],
                         "generationConfig": {"responseModalities": ["IMAGE"], "imageConfig": {"aspectRatio": "16:9"}}})
-print(f"::notice title=vertex görsel ham::{r.status_code} {r.text[:250]}")
+print(f"::notice title=vertex görsel ham::{r.status_code} {r.text[:600].replace(chr(10), " ")}")
 for i, s in enumerate(SCENES, 1):
     try:
         p = ai.gemini_image(BASE.format(scene=s), OUT / f"host_{i}.jpg")
