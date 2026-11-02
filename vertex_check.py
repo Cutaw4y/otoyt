@@ -30,9 +30,6 @@ try:
     print("::notice title=Commons ham::" + str(rr.status_code) + " " + " | ".join(
         f"{p['title'][5:40]} {p['imageinfo'][0].get('width')} {p['imageinfo'][0].get('mime')} "
         f"{(p['imageinfo'][0].get('extmetadata') or {}).get('LicenseShortName', {}).get('value', '')}" for p in pg[:6]))
-    _r = __import__("requests").get("https://api.openverse.org/v1/images/", headers=pipeline.WIKI_HEADERS, timeout=30,
-        params={"q": "Tacoma Narrows Bridge", "license_type": "commercial,modification", "page_size": 5})
-    print("::notice title=Openverse ham::" + str(_r.status_code) + " " + _r.text[:300].replace("\n", " "))
     o2 = pipeline.fetch_openverse("Tacoma Narrows Bridge", __import__("pathlib").Path("/tmp/ov.jpg"), "the suspension bridge twisting")
     print(f"::notice title=Openverse::{'bulundu' if o2 else 'bulunamadı'} | {pipeline.REAL_CREDITS[-1:] }")
     out = pipeline.fetch_real_photo("Hoover Dam", __import__("pathlib").Path("/tmp/real.jpg"),

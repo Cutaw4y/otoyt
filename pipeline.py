@@ -825,7 +825,7 @@ def fetch_openverse(subject, out, context=""):
     """Commons'ta yoksa: Openverse (Flickr, müzeler, arşivler; 800+ milyon serbest lisanslı görsel).
     Yalnız ticari kullanıma ve düzenlemeye izin veren lisanslar (para kazanan kanal, yakınlaştırma/kırpma)."""
     try:
-        r = requests.get("https://api.openverse.org/v1/images/", headers=WIKI_HEADERS, timeout=30, params={
+        r = requests.get("https://api.openverse.org/v1/images/", headers=WIKI_HEADERS, timeout=(10, 25), params={
             "q": subject, "license_type": "commercial,modification", "page_size": 20, "mature": "false"})
         res = r.json().get("results", []) if r.ok else []
     except Exception as e:
