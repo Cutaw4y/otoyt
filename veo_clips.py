@@ -5,7 +5,7 @@ import requests
 sys.path.insert(0, ".")
 import ai
 
-MODEL = "veo-3.1-fast-generate-001"
+MODEL = os.getenv("VEO_MODEL", "veo-3.1-generate-001")
 OUT = Path("assets/golgedefter/host/clips"); OUT.mkdir(parents=True, exist_ok=True)
 IMG = base64.b64encode(Path("assets/golgedefter/host/host_1.jpg").read_bytes()).decode()
 KEEP = ("The figure's face stays COMPLETELY hidden in the deep black shadow of the hood at all times. "
@@ -30,6 +30,17 @@ CLIPS = {
                    "right; the arm and hand move with each stroke and the ink appears exactly under the quill tip. "
                    "Nothing else is written on the page. Warm candlelight, deep shadows. Sound: quill scratching on "
                    "paper, soft candle crackle. Realistic, cinematic. No music.", False),
+    "intro_write": ("Side view, slightly low angle. The hooded figure leans over the open book and writes with the black "
+                    "feather quill, his arm moving steadily; the pages are seen at a steep angle so the writing is NOT "
+                    "readable. He pauses, lifts his head toward the camera as if beginning to tell an old story (face "
+                    "remains pure black shadow inside the hood), then continues writing. Candle flame flickers, fog "
+                    "drifts in the moonlight from the window. Slow cinematic dolly-in. Sound: quill scratching on "
+                    "parchment, a low distant wind, soft candle crackle, quiet tense ambience. " + KEEP, True),
+    "page_blank": ("Locked-off static camera, perfectly top-down view directly above an open old book on a dark wooden "
+                   "desk. The right-hand page is aged, clean, completely blank parchment, filling the center of the frame, "
+                   "flat and evenly lit. Warm candlelight flickers gently across the paper, faint fog drifts at the edges. "
+                   "No hands, no quill in frame, no camera movement, no text. Sound: soft candle crackle, quiet room "
+                   "ambience. Realistic, cinematic.", False),
 }
 
 
