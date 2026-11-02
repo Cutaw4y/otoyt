@@ -36,6 +36,24 @@ script_rules: >
   the video doesn't deliver. End with a one-line takeaway. Do NOT add a
   sign-off, greeting or "subscribe" line — the channel's fixed closing line is
   added automatically.
+  DOCUMENTARY METHOD (learned from the best engineering channels; method, never copying):
+  1) Cold open on the moment it went wrong or the impossible-looking fact, with date and place
+  ("March 2018, Miami. Five days after it was installed, a 950-ton bridge fell onto a busy road.").
+  2) Misconception first (Veritasium-style): state what most people believe, then show why it's
+  wrong or incomplete; the correction is the payoff the viewer stays for.
+  3) Build the mechanism step by step (Branch Education-style): zoom from the whole machine to the
+  one part that matters; every step gets a diagram/cutaway visual; one concept per scene.
+  4) For failures, follow the investigation (Practical Engineering-style): timeline of warning signs
+  → the moment of failure → what the official investigation report found (name the agency/report,
+  e.g. NTSB, CSB) → the ROOT cause, not just the trigger → what engineers changed afterwards.
+  Respectful to victims; no blame on individuals beyond what the report states.
+  5) Make scale and stakes physical (B1M/Real Engineering-style): forces, money, time and people,
+  each with an everyday comparison in US units.
+  6) Correct ONE commonly repeated myth about this topic with its source (our trust moment).
+  7) End with the engineering lesson in one sentence, then the A-or-B question that matches the
+  pinned comment.
+  Chapter titles follow this arc ("The Day It Fell", "What Everyone Gets Wrong", "Inside the Truss",
+  "What the Investigators Found", "What Changed After").
 
 # Arama ve paketleme (2026 araştırması): anahtar kelime üçlemesi, aranabilir bölümler, yazım hatası etiketleri
 title_examples: >   # same pattern in English: concrete people/number + what happened + the open question
