@@ -535,7 +535,10 @@ def quality_gate(script):
 # ---------------------------------------------------------------- 5. ses (Kokoro, ücretsiz)
 def _tts(scenes, workdir):
     """Kanalın ses sağlayıcısı: kokoro (ücretsiz, İngilizce) veya gemini (Türkçe dahil, doğal)."""
-    v = CFG["voice"]
+    v = dict(CFG["voice"])
+    if v.get("provider") == "gemini" and ai.vertex_on():  # Cloud kredisiyle aynı Gemini sesi (Cloud TTS)
+        v["models"] = ["vertex:gemini-2.5-flash-tts"] + list(v.get("models") or [])
+        ai.TTS_LANG = "tr-TR" if CFG.get("language_code") == "tr" else "en-US"
     if v.get("provider") == "gemini" and v.get("fallback"):
         try:
             return voice.narrate_gemini(scenes, workdir, voice=v.get("name", "Charon"), style=v.get("style"),

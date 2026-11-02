@@ -14,6 +14,47 @@ from pathlib import Path
 import requests
 
 GEMINI = "https://generativelanguage.googleapis.com/v1beta/models"
+
+# ---------------------------------------------------------------- Vertex AI (Google Cloud kredisi)
+# GCP_SA_KEY (servis hesabı JSON) varsa Gemini çağrıları önce Vertex AI'dan yapılır (ücreti Cloud hesabından,
+# deneme kredisinden düşer); Vertex hata verirse AI Studio anahtarlarına düşülür.
+VERTEX_MODELS = {"gemini-flash-latest": "gemini-3.8-flash", "gemini-flash-lite-latest": "gemini-3.5-flash-lite",
+                 "gemini-pro-latest": "gemini-3.1-pro-preview"}
+_vx = {"cred": None, "proj": None, "off": False}
+
+
+def vertex_on():
+    return bool(os.getenv("GCP_SA_KEY")) and not _vx["off"] and not os.getenv("NO_VERTEX")
+
+
+def _vertex_headers():
+    from google.oauth2 import service_account
+    from google.auth.transport.requests import Request
+    if _vx["cred"] is None:
+        info = json.loads(os.environ["GCP_SA_KEY"])
+        _vx["proj"] = info["project_id"]
+        _vx["cred"] = service_account.Credentials.from_service_account_info(
+            info, scopes=["https://www.googleapis.com/auth/cloud-platform"])
+    if not _vx["cred"].valid:
+        _vx["cred"].refresh(Request())
+    return {"Authorization": f"Bearer {_vx['cred'].token}", "Content-Type": "application/json",
+            "x-goog-user-project": _vx["proj"]}
+
+
+def _vertex_generate(model, body, timeout=300):
+    """Vertex generateContent (global uç). Dönüş: requests.Response."""
+    h = _vertex_headers()
+    m = VERTEX_MODELS.get(model, model)
+    url = (f"https://aiplatform.googleapis.com/v1/projects/{_vx['proj']}/locations/global/publishers/google/"
+           f"models/{m}:generateContent")
+    return requests.post(url, headers=h, json=body, timeout=timeout)
+
+
+def _vertex_fail(r):
+    """Kalıcı Vertex hatası (faturalandırma/izin/kredi) → bu çalışmada Vertex'i kapat, AI Studio'ya dön."""
+    if r.status_code in (402, 403) or "billing" in r.text.lower():
+        _vx["off"] = True
+        LOG(f"Vertex AI kullanılamıyor ({r.status_code}) → AI Studio anahtarlarıyla devam: {r.text[:150]}")
 CF = "https://api.cloudflare.com/client/v4/accounts"
 
 
@@ -77,6 +118,36 @@ def gemini(prompt, system=None, models=("gemini-flash-latest",), images=None, js
         body["tools"] = [{"google_search": {}}]
 
     last = None
+    if vertex_on():
+        vbody = json.loads(json.dumps(body))
+        if search:
+            vbody["tools"] = [{"googleSearch": {}}]
+        for model in models:
+            for attempt in range(3):
+                try:
+                    r = _vertex_generate(model, vbody)
+                except Exception as e:
+                    last = f"vertex: {e}"
+                    time.sleep(5)
+                    continue
+                if r.status_code == 200:
+                    j = r.json()
+                    cands = j.get("candidates") or []
+                    text = "".join(p.get("text", "") for p in (cands[0].get("content", {}).get("parts", []) if cands else [])
+                                   if not p.get("thought"))
+                    if text:
+                        return text
+                    last = f"vertex boş yanıt: {json.dumps(j)[:200]}"
+                    continue
+                if r.status_code in (429, 500, 502, 503, 504):
+                    time.sleep(min(10 * (attempt + 1), 30))
+                    last = f"vertex {r.status_code}"
+                    continue
+                _vertex_fail(r)
+                last = f"vertex {model}: {r.status_code} {r.text[:200]}"
+                break
+            if not vertex_on():
+                break
     for model in models:
         qkey = (model, bool(search))  # aramalı istekler ayrı kota → ayrı takip
         if qkey in _exhausted:
@@ -133,9 +204,27 @@ def gemini_json(system, user, models, required=(), images=None, temperature=0.8)
 
 
 def gemini_image(prompt, out, models=("gemini-2.5-flash-image", "gemini-3-pro-image-preview"), aspect="16:9"):
-    """Gemini ile görsel üretimi (ücretli anahtar; küçük resim için, ~1-2 TL). Başarısızsa hata fırlatır."""
-    key = os.environ["GEMINI_API_KEY"]
+    """Gemini ile görsel üretimi (küçük resim). Önce Vertex (Cloud kredisi), sonra AI Studio anahtarı."""
+    key = os.environ.get("GEMINI_API_KEY", "")
     last = None
+    if vertex_on():
+        for vm in ("gemini-3.1-flash-image", "gemini-3-pro-image"):
+            try:
+                r = _vertex_generate(vm, {"contents": [{"role": "user", "parts": [{"text": prompt}]}],
+                                          "generationConfig": {"responseModalities": ["IMAGE"],
+                                                               "imageConfig": {"aspectRatio": aspect}}}, timeout=180)
+                if r.status_code != 200:
+                    last = f"vertex {vm}: {r.status_code} {r.text[:150]}"
+                    _vertex_fail(r)
+                    continue
+                parts = r.json()["candidates"][0]["content"]["parts"]
+                b64 = next(p["inlineData"]["data"] for p in parts if "inlineData" in p)
+                from PIL import Image
+                import io
+                Image.open(io.BytesIO(base64.b64decode(b64))).convert("RGB").save(out, quality=95)
+                return out
+            except Exception as e:
+                last = f"vertex {vm}: {e}"
     for model in models:
         body = {"contents": [{"parts": [{"text": prompt}]}],
                 "generationConfig": {"responseModalities": ["IMAGE"], "imageConfig": {"aspectRatio": aspect}}}
@@ -186,6 +275,7 @@ def cloudflare_image(prompt, out, model="@cf/black-forest-labs/flux-1-schnell", 
 TTS_GAP = 21.0  # ses istekleri arası en az bekleme (ücretsiz katman: dakikada ~3 istek)
 
 
+TTS_LANG = None  # ör. "tr-TR" (Vertex/Cloud TTS için; pipeline doldurur)
 TTS_KEYS = []  # pipeline doldurur: kanalın anahtarı + öbür kanalın anahtarı (yedek ses hakkı)
 
 
@@ -203,6 +293,40 @@ def gemini_tts(text, voice="Charon", style=None, models=("gemini-3.1-flash-tts-p
             "generationConfig": {"responseModalities": ["AUDIO"],
                                  "speechConfig": {"voiceConfig": {"prebuiltVoiceConfig": {"voiceName": voice}}}}}
     last = None
+    for model in [m for m in models if m.startswith("vertex:")]:
+        if not vertex_on():
+            break
+        lang = TTS_LANG or "en-US"
+        for attempt in range(4):
+            try:
+                r = requests.post("https://texttospeech.googleapis.com/v1/text:synthesize", headers=_vertex_headers(),
+                                  timeout=300, json={"input": {"text": text, **({"prompt": style} if style else {})},
+                                                     "voice": {"languageCode": lang, "name": voice,
+                                                               "modelName": model.split(":", 1)[1]},
+                                                     "audioConfig": {"audioEncoding": "LINEAR16",
+                                                                     "sampleRateHertz": 24000}})
+            except Exception as e:
+                last = f"vertex tts: {e}"
+                time.sleep(5)
+                continue
+            if r.status_code == 200:
+                raw = base64.b64decode(r.json()["audioContent"])
+                if raw[:4] == b"RIFF":
+                    i = raw.find(b"data")
+                    raw = raw[i + 8:] if i > 0 else raw[44:]
+                pcm = np.frombuffer(raw[:len(raw) // 2 * 2], dtype="<i2").astype(np.float32) / 32768.0
+                if pcm.size > 2400:
+                    return pcm
+                last = "vertex tts boş ses"
+                continue
+            if r.status_code in (429, 500, 502, 503, 504):
+                last = f"vertex tts {r.status_code}"
+                time.sleep(min(15 * (attempt + 1), 60))
+                continue
+            _vertex_fail(r)
+            last = f"vertex tts: {r.status_code} {r.text[:200]}"
+            break
+    models = [m for m in models if not m.startswith("vertex:")]
     for ki, key in enumerate(keys):
         for model in models:
             if (model, "tts", ki) in _exhausted:
