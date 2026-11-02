@@ -768,15 +768,23 @@ def fetch_real_photo(subject, out, context=""):
     görselleri asla). Lisansı kullanıma uygun, yeterince büyük ve yapay zekâ kontrolünde konuyla ilgili olanı seçer."""
     if not subject or not CFG.get("real_photos", True):
         return None
-    try:
-        r = requests.get("https://commons.wikimedia.org/w/api.php", headers=WIKI_HEADERS, timeout=30, params={
-            "action": "query", "format": "json", "generator": "search", "gsrsearch": f"{subject} filetype:bitmap",
-            "gsrnamespace": 6, "gsrlimit": 12, "prop": "imageinfo", "iiprop": "url|size|mime|extmetadata",
-            "iiurlwidth": 1920})
-        pages = sorted((r.json().get("query") or {}).get("pages", {}).values(), key=lambda x: x.get("index", 99))
-    except Exception as e:
-        log(f"Gerçek fotoğraf aranamadı ({subject}): {str(e)[:100]}")
-        return None
+    pages, seen = [], set()
+    for q in (f"{subject} filetype:bitmap", f"{subject} photograph filetype:bitmap"):
+        try:
+            r = requests.get("https://commons.wikimedia.org/w/api.php", headers=WIKI_HEADERS, timeout=30, params={
+                "action": "query", "format": "json", "generator": "search", "gsrsearch": q,
+                "gsrnamespace": 6, "gsrlimit": 25, "prop": "imageinfo", "iiprop": "url|size|mime|extmetadata",
+                "iiurlwidth": 1920})
+            for pg in sorted((r.json().get("query") or {}).get("pages", {}).values(), key=lambda x: x.get("index", 99)):
+                if pg.get("title") not in seen:
+                    seen.add(pg.get("title"))
+                    pages.append(pg)
+        except Exception as e:
+            log(f"Gerçek fotoğraf aranamadı ({subject}): {str(e)[:100]}")
+    skip = ("map", "harita", "model", "diagram", "logo", "flag", "coat of arms", "page", "volume", "cover",
+            "chart", "plan", "scheme", "icon", "signature", "draft", "svg")
+    pages = [pg for pg in pages if not any(s in pg.get("title", "").lower() for s in skip)]
+    checks = 0
     import html as _h
     for pg in pages:
         ii = (pg.get("imageinfo") or [{}])[0]
@@ -791,7 +799,10 @@ def fetch_real_photo(subject, out, context=""):
             _download(ii.get("thumburl") or ii["url"], out)
         except Exception:
             continue
+        checks += 1
         if not image_matches(out, f"{subject}. {context}"):
+            if checks >= 4:
+                return None
             continue
         artist = re.sub(r"<[^>]+>", "", _h.unescape(md.get("Artist", {}).get("value", "") or "")).strip()[:60] or "Wikimedia Commons"
         _REAL_USED.add(title)
