@@ -795,9 +795,15 @@ def fetch_real_photo(subject, out, context=""):
         lic = (md.get("LicenseShortName", {}).get("value") or md.get("License", {}).get("value") or "").lower()
         if not any(k in lic for k in _OK_LIC) or "nc" in lic.split() or "-nc" in lic or "nd" in lic.split() or "-nd" in lic:
             continue
-        try:
-            _download(ii.get("thumburl") or ii["url"], out)
-        except Exception:
+        try:  # Wikimedia, kimliksiz (User-Agent'sız) indirmeyi 403 ile reddediyor
+            with requests.get(ii.get("thumburl") or ii["url"], headers=WIKI_HEADERS, stream=True, timeout=120) as d:
+                d.raise_for_status()
+                with open(out, "wb") as fh:
+                    for c in d.iter_content(1 << 20):
+                        fh.write(c)
+        except Exception as e:
+            if os.getenv("DEBUG_REAL"):
+                print(f"::notice title=indirme::{title[:50]} {str(e)[:120]}", flush=True)
             continue
         checks += 1
         ok_ = image_matches(out, f"{subject}. {context}")
