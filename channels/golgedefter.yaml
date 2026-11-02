@@ -54,6 +54,25 @@ script_rules: >
   santigrat, feet → metre. Para tutarlarını somut bir kıyasla ver (ör. "o günün parasıyla
   bir köyün yıllık geliri kadar"). Sonda tek cümlelik bir kapanış düşüncesi olsun. Abone ol
   çağrısı veya veda cümlesi YAZMA: kanalın sabit kapanış cümlesi otomatik eklenir.
+  BELGESEL YAPISI (türün en iyi kanallarının yöntemlerinden; taklit değil, yöntem):
+  1) Soğuk açılış: olayın en tuhaf, en somut ayrıntısıyla başla ve hemen tarih + yer ver ("Şubat
+  1959, Ural Dağları. Kurtarma ekibi çadırı buldu; çadır içeriden kesilmişti.").
+  2) Zaman çizelgesi: olayı saat saat, gün gün kronolojik anlat; her kritik anda tarih/saat/yeri
+  söyle ve o sahnenin callout'una kısa tarih-yer yaz ("2 Şubat 1959 · 21.00"). İzleyici hiç kaybolmasın.
+  3) Önce kanıt, sonra yorum: "Kesin bilinenler" bölümünde yalnızca belgelenmiş gerçekler (resmi
+  rapor, tanık ifadesi, fotoğraf, arkeolojik bulgu); söylentiyi ayrıca ve "iddiaya göre" diye ver.
+  4) Yanlış bilinen bir ayrıntıyı düzelt: popüler anlatımlarda sık tekrarlanan ama kaynaklarda
+  öyle olmayan EN AZ bir bilgiyi kaynağıyla düzelt ("Çoğu anlatımda X denir; oysa rapor Y diyor").
+  Bu, videoyu diğerlerinden ayıran güven anıdır.
+  5) Teoriler bölümü: 3-4 açıklamayı EN ZAYIFTAN EN GÜÇLÜYE sırala; her biri için en güçlü kanıtı
+  ve onu zayıflatan noktayı adil biçimde ver. Doğaüstü/komplo teorilerini de alay etmeden tart.
+  6) Değerlendirme: "Kanıtların en çok desteklediği açıklama…" diye net ama alçakgönüllü bir sonuç
+  söyle; neyin hâlâ bilinmediğini açıkça belirt. Dini anlatılarda hüküm verme: kaynakların ve
+  âlimlerin ne dediğini aktar.
+  7) Kapanış: olayın bıraktığı iz (ne değişti, kurbanlar nasıl anılıyor) ve izleyiciye teoriler
+  arasında seçim yaptıran tek soru (sabit yorumla aynı tartışma).
+  Bölüm başlıkları bu yapıyı izlesin ("Çadırın Bulunduğu Sabah", "Kesin Bilinenler", "Yanlış
+  Bilinen Ayrıntı", "Teoriler", "Kanıtlar Ne Diyor", "Hâlâ Bilinmeyen").
 title_examples: >   # sahibinin beğendiği başlık tarzı (konu: somut kişi/sayı + yaptıkları + cevapsız soru)
   "Dyatlov Geçidi: 9 Dağcı O Gece Neden Çadırı İçeriden Kesip Kaçtı?" ·
   "Mary Celeste: 10 Kişi Sofrayı Kurup Gemiden Nasıl Kayboldu?" ·
