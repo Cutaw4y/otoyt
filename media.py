@@ -544,11 +544,18 @@ def title_card(text, out, seconds=3.8, accent=(232, 158, 68), logo=None):
     page = (base * (shade * (0.55 + 0.45 * burn))[..., None] + noise).clip(0, 255).astype(np.uint8)
     right_page = Image.fromarray(page)
     left_page = right_page.transpose(Image.FLIP_LEFT_RIGHT)
-    if logo and Path(logo).exists():  # sol sayfada soluk amblem
-        lg = Image.open(logo).convert("L").resize((int(pw * 0.38), int(pw * 0.38)))
+    if logo and Path(logo).exists():  # sol sayfada kanal logosu: yuvarlak rozet, ince kehribar halka
+        d_ = int(pw * 0.62)
+        lg = Image.open(logo).convert("RGB").resize((d_, d_))
+        mask = Image.new("L", (d_, d_), 0)
+        ImageDraw.Draw(mask).ellipse([4, 4, d_ - 4, d_ - 4], fill=255)
         lp = left_page.copy()
-        tint = Image.new("RGB", lg.size, (120, 90, 55))
-        lp.paste(tint, ((pw - lg.width) // 2, (ph - lg.height) // 2), lg.point(lambda v: int(v * 0.22)))
+        ox, oy = (pw - d_) // 2, (ph - d_) // 2
+        sh_ = Image.new("L", (d_ + 40, d_ + 40), 0)
+        ImageDraw.Draw(sh_).ellipse([20, 28, d_ + 20, d_ + 28], fill=110)
+        lp.paste((60, 42, 25), (ox - 20, oy - 20), sh_.filter(ImageFilter.GaussianBlur(14)))
+        lp.paste(lg, (ox, oy), mask)
+        ImageDraw.Draw(lp).ellipse([ox + 2, oy + 2, ox + d_ - 2, oy + d_ - 2], outline=tuple(accent), width=5)
         left_page = lp
     # yazı: sağ sayfaya 1-3 satır
     words, size = text.split(), 170
