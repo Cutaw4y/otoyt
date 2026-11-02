@@ -2620,6 +2620,22 @@ if __name__ == "__main__":
     if os.getenv("REFRESH"):  # başlık + küçük resim yenile: video kimlikleri, virgülle
         check_channel()
         spec = os.getenv("REFRESH")
+        if spec.startswith("planla:"):  # "planla:id@2026-11-02T19:00:00Z" → planlı yayın saati koy
+            vid, when = spec[7:].split("@", 1)
+            yt = publish._yt()
+            st = yt.videos().list(part="status", id=vid.strip()).execute()["items"][0]["status"]
+            body = {"id": vid.strip(), "status": {"privacyStatus": "private", "publishAt": when.strip(),
+                                                  "selfDeclaredMadeForKids": st.get("selfDeclaredMadeForKids", False),
+                                                  "containsSyntheticMedia": st.get("containsSyntheticMedia", True)}}
+            try:
+                yt.videos().update(part="status", body=body).execute()
+                st2 = yt.videos().list(part="status", id=vid.strip()).execute()["items"][0]["status"]
+                print(f"::notice title=planla {vid}::{st2.get('privacyStatus')} {st2.get('publishAt')}", flush=True)
+                notify(f"🕒 Yayın saati ayarlandı: https://youtu.be/{vid.strip()} → "
+                       f"{fmt_local(datetime.fromisoformat(when.strip().replace('Z', '+00:00')))}")
+            except Exception as e:
+                print(f"::error title=planla {vid}::{str(e)[:300]}", flush=True)
+            sys.exit(0)
         if spec.startswith("yayinla:"):  # planlı videoyu hemen herkese aç
             yt = publish._yt()
             for vid in [x.strip() for x in spec[8:].split(",") if x.strip()]:

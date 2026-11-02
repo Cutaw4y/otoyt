@@ -34,3 +34,7 @@ jobs:
           GD_IG_ACCESS_TOKEN: ${{ secrets.GD_IG_ACCESS_TOKEN }}
           GD_IG_USER_ID: ${{ secrets.GD_IG_USER_ID }}
         run: python check_tokens.py
+      - name: Vertex denemesi
+        env:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+        run: pip install -q google-auth requests && python vertex_check.py
