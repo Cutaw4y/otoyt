@@ -103,7 +103,7 @@ def _pace(model):
 def gemini(prompt, system=None, models=("gemini-flash-latest",), images=None, json_mode=False,
            search=False, temperature=0.8, tries=6):
     """Gemini çağrısı; 429/5xx'te bekler, model kalıcı hata verirse listedeki sonrakine geçer."""
-    key = os.environ["GEMINI_API_KEY"]
+    key = os.environ.get("GEMINI_API_KEY", "")
     parts = [{"text": prompt}]
     for img in images or []:
         parts.append({"inline_data": {"mime_type": "image/jpeg",
@@ -285,7 +285,7 @@ def gemini_tts(text, voice="Charon", style=None, models=("gemini-3.1-flash-tts-p
     Bir anahtarın günlük ücretsiz ses hakkı biterse sıradaki anahtara (öbür Google projesi) geçer."""
     import numpy as np
     keys = []
-    for k in (TTS_KEYS or [os.environ["GEMINI_API_KEY"]]):
+    for k in (TTS_KEYS or [os.environ.get("GEMINI_API_KEY", "")]):
         if k and k not in keys:
             keys.append(k)
     prompt = f"{style}:\n{text}" if style else text
