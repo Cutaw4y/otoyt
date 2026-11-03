@@ -764,7 +764,14 @@ def gen_image(prompt, out, fallback_query=None, ledger=None):
     global _quota_hit
     out = Path(out).with_suffix(".jpg")
     global _gem_imgs
-    if (CFG.get("scene_images") == "gemini" and ai.vertex_on()
+    if CFG.get("scene_images") == "imagen" and ai.vertex_on() and _gem_imgs < CFG.get("max_gemini_scene_images", 45):
+        try:  # fiyat/performans: Imagen 4 Fast (~0,02 $)
+            got = ai.imagen_image(prompt + ". Cinematic, photographic quality, no text, no letters, no watermark.", out)
+            _gem_imgs += 1
+            return got
+        except Exception as e:
+            log(f"Imagen sahne görseli üretilemedi, Gemini/Cloudflare denenecek: {str(e)[:150]}")
+    if (CFG.get("scene_images") in ("gemini", "imagen") and ai.vertex_on()
             and _gem_imgs < CFG.get("max_gemini_scene_images", 45)):
         # yüksek kaliteli sahne görseli (Google Cloud kredisinden, ~0,04 $/görsel); olmazsa Cloudflare'e düşer
         try:

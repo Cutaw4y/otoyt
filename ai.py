@@ -65,6 +65,32 @@ def _vertex_generate(model, body, timeout=300):
     return requests.post(url, headers=h, json=body, timeout=timeout)
 
 
+def imagen_image(prompt, out, model="imagen-4.0-fast-generate-001", aspect="16:9"):
+    """Vertex Imagen 4 Fast: ~0,02 $/görsel (Gemini görselinin yarısı). Sahne görselleri için fiyat/performans."""
+    h = _vertex_headers()
+    url = (f"https://us-central1-aiplatform.googleapis.com/v1/projects/{_vx['proj']}/locations/us-central1/"
+           f"publishers/google/models/{model}:predict")
+    body = {"instances": [{"prompt": prompt[:1900]}],
+            "parameters": {"sampleCount": 1, "aspectRatio": aspect, "personGeneration": "allow_adult",
+                           "safetySetting": "block_only_high", "addWatermark": False}}
+    for attempt in range(4):
+        r = requests.post(url, headers=h, json=body, timeout=120)
+        if r.status_code not in (429, 500, 503):
+            break
+        time.sleep(15 * (attempt + 1))
+    if r.status_code != 200:
+        raise RuntimeError(f"imagen {r.status_code}: {r.text[:200]}")
+    preds = r.json().get("predictions") or []
+    b64 = next((p.get("bytesBase64Encoded") for p in preds if p.get("bytesBase64Encoded")), None)
+    if not b64:
+        raise RuntimeError(f"imagen boş döndü (güvenlik filtresi?): {str(r.json())[:200]}")
+    from PIL import Image
+    import io
+    Image.open(io.BytesIO(base64.b64decode(b64))).convert("RGB").save(out, quality=93)
+    USAGE["images"]["vertex_imagen"] = USAGE["images"].get("vertex_imagen", 0) + 1
+    return out
+
+
 def _vertex_fail(r):
     """Kalıcı Vertex hatası (faturalandırma/izin/kredi) → bu çalışmada Vertex'i kapat, AI Studio'ya dön."""
     if r.status_code in (402, 403) or "billing" in r.text.lower():
@@ -417,6 +443,7 @@ def cost_usd():
         tot[where] += i / 1e6 * pi + o / 1e6 * po
     for w in ("vertex", "studio"):
         tot[w] += USAGE["tts_seconds"][w] / 60 * PRICE["tts_min"] + USAGE["images"][w] * PRICE["image"]
+    tot["vertex"] += USAGE["images"].get("vertex_imagen", 0) * 0.02
     tot["vertex"] += USAGE.get("veo_seconds", 0) * PRICE["veo_sec"]
     tot["vertex"] += USAGE["search_calls"] * PRICE["search"] * 0  # günlük ücretsiz arama hakkı içinde varsayılır
     return tot["vertex"], tot["studio"]
