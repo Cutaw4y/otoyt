@@ -14,7 +14,7 @@ on:
 permissions:
   contents: write               # history.json / assets_used.json kaydı için
 
-concurrency: otoyt
+concurrency: otoyt-tr   # kanal başına ayrı sıra
 
 env:
   OTOYT_CONFIG: channels/golgedefter.yaml
