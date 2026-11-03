@@ -2739,7 +2739,12 @@ def check_channel():
         log(f"Kanal adı kontrol edilemedi: {str(e)[:150]}")
         return
     norm = lambda x: (x or "").replace("İ", "i").replace("I", "ı").lower().replace(" ", "")
-    if title and norm(title) != norm(CFG["channel_name"]):
+    ok_names = {norm(n) for n in [CFG["channel_name"]] + list(CFG.get("channel_aliases") or [])}
+    if CFG.get("channel_id"):  # kimlik biliniyorsa ad değişse de doğru kanal tanınır
+        if CHANNEL_ID != CFG["channel_id"]:
+            raise RuntimeError(f"YANLIŞ KANAL: izin anahtarı '{title}' ({CHANNEL_ID}) kanalına bağlı, beklenen "
+                               f"'{CFG['channel_name']}'. Hiçbir şey yüklenmedi; get_token.bat ile doğru kanalı seç.")
+    elif title and norm(title) not in ok_names:
         raise RuntimeError(f"YANLIŞ KANAL: izin anahtarı '{title}' kanalına bağlı, beklenen "
                            f"'{CFG['channel_name']}'. Hiçbir şey yüklenmedi; get_token.bat ile doğru kanalı seç.")
     log(f"Kanal doğrulandı: {title}")

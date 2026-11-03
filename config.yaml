@@ -1,7 +1,9 @@
 # ======================= KANAL KİMLİĞİ =======================
 # Niş (03.11.2026, Furkan): cinler ve görünmeyen âlem; İngilizce, ABD/İngiltere/Kanada izleyicisi
 channel_name: "Smokeless Archive"   # 03.11.2026: eski adı Cutaway (YouTube Studio'dan ad değişikliği elle)
-notify_prefix: "🕯️ Smokeless Archive |"   # Telegram mesajlarında hangi kanal olduğu
+notify_prefix: "🕯️ Smokeless Archive |"
+channel_id: "UCH4bEob06jM9poDzHWAlWqQ"   # kanal adı değişse de doğrulama bu kimlikle
+channel_aliases: ["Cutaway"]   # Telegram mesajlarında hangi kanal olduğu
 channel_brief: >
   Smokeless Archive: records of the unseen. The world of the jinn and the unseen in Islamic and
   Middle Eastern tradition, told in English for people who have never heard it properly. What the
