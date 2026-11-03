@@ -3,16 +3,16 @@
 channel_name: "Cutaway"        # kanal adını değiştirirsen burayı da değiştir
 notify_prefix: "🔧 Cutaway |"   # Telegram mesajlarında hangi kanal olduğu
 channel_brief: >
-  Engineering disasters and mysteries, cut open (niche since 3 Nov 2026).
-  Each video takes ONE real, well documented case: a structure that collapsed, a machine that
-  exploded, a building that is still sinking, a disaster that almost happened, a megaproject
-  that failed. Our signature: we cut the failure open and show the exact part that broke. It opens like a mystery (stakes + the moment
-  it went wrong + the open question), then solves it with engineering: diagrams and inside views
-  show exactly what broke and why, and what engineers changed after. Respectful to victims,
-  evergreen cases (decades old, well documented), no current news, no politics, no real people as
-  the main subject, no investment/medical/legal advice.
+  Strange true events, investigated (niche since 3 Nov 2026). Unexplained phenomena and
+  "supernatural" cases, vanishings, places and objects that shouldn't exist, and disasters
+  nobody saw coming. Each video takes ONE real, well documented case, opens it like a mystery,
+  lays out the evidence first, then weighs every explanation fairly (including the paranormal
+  ones, without mocking) and shows what science and engineering can and can't explain. Our
+  signature: we "cut the mystery open" with clear diagrams and cutaway views of the evidence.
+  Respectful to victims and believers, evergreen cases, no current news, no politics, no
+  living private people as the subject, no investment/medical/legal advice.
 audience: "curious adults 18-55 in the US, UK, Canada, Australia"
-tone: "a friendly, calm storyteller explaining to a smart friend who knows nothing about the topic; simple everyday words, clear, curious, occasional dry humor"
+tone: "a calm, slightly dark documentary storyteller talking to a smart friend at night; simple everyday words, gripping, fair-minded, never sensational, rare dry humor"
 language: "English"
 language_code: "en"
 
@@ -21,10 +21,10 @@ script_rules: >
   question right away so the viewer knows they clicked the right video; no
   greetings, no "in today's video", no clichés ("did you know", "imagine",
   "from sand to smartphone"), no fake suspense that withholds basic info.
-  Preview the payoff early, then deliver it. Proven arc: open on the strange observation or
-  failure → rule out the obvious explanation → show the physics step by step → reveal the
-  engineering trade-off (why it is built this way and what it costs). Make invisible forces
-  tangible with scale comparisons. Structure the video in clear
+  Preview the payoff early, then deliver it. Proven arc: open on the strange fact → what we know
+  for sure → rule out the obvious explanation → test each theory against the evidence → the
+  most likely answer and what is still unknown. Make distances, forces, cold and time tangible
+  with scale comparisons. Structure the video in clear
   chapters; each chapter answers one question. Explain like a great teacher:
   one idea per scene, define a term right before using it, everyday analogies,
   concrete examples, scale comparisons; every claim gets a visual proof (a
@@ -37,98 +37,91 @@ script_rules: >
   the video doesn't deliver. End with a one-line takeaway. Do NOT add a
   sign-off, greeting or "subscribe" line — the channel's fixed closing line is
   added automatically.
-  DOCUMENTARY METHOD (learned from the best engineering channels; method, never copying):
-  1) Cold open on the moment it went wrong or the impossible-looking fact, with date and place
-  ("March 2018, Miami. Five days after it was installed, a 950-ton bridge fell onto a busy road.").
-  2) Misconception first (Veritasium-style): state what most people believe, then show why it's
-  wrong or incomplete; the correction is the payoff the viewer stays for.
-  3) Build the mechanism step by step (Branch Education-style): zoom from the whole machine to the
-  one part that matters; every step gets a diagram/cutaway visual; one concept per scene.
-  4) For failures, follow the investigation (Practical Engineering-style): timeline of warning signs
-  → the moment of failure → what the official investigation report found (name the agency/report,
-  e.g. NTSB, CSB) → the ROOT cause, not just the trigger → what engineers changed afterwards.
-  Respectful to victims; no blame on individuals beyond what the report states.
-  5) Make scale and stakes physical (B1M/Real Engineering-style): forces, money, time and people,
-  each with an everyday comparison in US units.
-  6) Correct ONE commonly repeated myth about this topic with its source (our trust moment).
-  7) End with the engineering lesson in one sentence, then the A-or-B question that matches the
-  pinned comment.
-  Chapter titles follow this arc ("The Day It Fell", "What Everyone Gets Wrong", "Inside the Truss",
-  "What the Investigators Found", "What Changed After").
+  DOCUMENTARY METHOD (learned from the best mystery and investigation channels; method, never copying):
+  1) Cold open on the strangest concrete detail with date and place ("February 1959, Ural Mountains.
+  The rescuers found the tent cut open from the inside.").
+  2) Timeline: tell it in order, hour by hour or day by day; say the date/time/place at each key
+  moment and put it in that scene's callout ("Feb 2, 1959 · 9 PM").
+  3) Evidence first, interpretation later: a "What we know for sure" chapter with only documented
+  facts (official reports, witness statements, photos, measurements); rumors are labeled "reportedly".
+  4) Correct ONE commonly repeated myth with its source ("Most retellings say X; the report says Y").
+  This is our trust moment.
+  5) Theories chapter: 3-4 explanations from WEAKEST to STRONGEST; for each, its best evidence and what
+  weakens it. Paranormal theories are presented fairly, without mocking. Use a cutaway/diagram to
+  test each explanation physically (forces, distances, temperatures, timings) in US units with
+  everyday comparisons. For disasters, follow the investigation: warning signs → moment of failure →
+  what the official report found (name the agency) → the root cause → what changed after.
+  6) Verdict: "The evidence best supports…", clear but humble; say plainly what is still unknown.
+  7) Close on what the case left behind, then the A-or-B question that matches the pinned comment.
+  Chapter titles follow this arc ("The Night It Happened", "What We Know for Sure", "What Everyone
+  Gets Wrong", "The Theories", "What the Evidence Says").
 
 # Arama ve paketleme (2026 araştırması): anahtar kelime üçlemesi, aranabilir bölümler, yazım hatası etiketleri
-title_examples: >   # mystery-shaped, concrete number/place + what went wrong + the open question
+title_examples: >   # concrete place/number + the strange fact + the open question
+  "Dyatlov Pass: Why 9 Hikers Cut Their Tent Open and Ran Into the Snow" ·
+  "The Mary Celeste: A Ship Found Sailing With No One Aboard" ·
   "Hyatt Regency: How One Changed Bolt Killed 114 People" ·
-  "Kola Superdeep Borehole: Why They Stopped Drilling at 7.6 Miles" ·
-  "Millennium Tower: Why This $350 Million Skyscraper Is Still Sinking" ·
-  "Teton Dam: The Leak Engineers Saw 2 Hours Before It Failed"
+  "The Wow! Signal: 72 Seconds From Space Nobody Can Explain"
 saturation_views: 500000   # rakip analizi: bu izlenmenin üstündeki videolar 'büyük rakip' sayılır
 seo_rules: >
-  Pick core_keyword as the phrase a US viewer actually types (e.g. "how a jet engine works",
-  "why glass is transparent"). Put it at the start of the title, in the first sentence of the
+  Pick core_keyword as the phrase a US viewer actually types (e.g. "dyatlov pass incident",
+  "mary celeste mystery"). Put it at the start of the title, in the first sentence of the
   description, and say it naturally in the first 20 seconds of narration. Chapter titles are
-  Google-style queries ("How the Compressor Works", "Why Turbines Don't Melt"). Tags: core
-  keyword, variants, common misspellings of the technical terms and names, related entities.
-  pinned_comment: a sharp but friendly A-or-B engineering debate tied to the video (e.g.
-  "Nuclear or solar for a city of 1 million — which would you build?").
+  Google-style queries ("What Happened at Dyatlov Pass", "Dyatlov Pass Theories"). Tags: core
+  keyword, variants, common misspellings of the names and places, related entities.
+  pinned_comment: a sharp but friendly A-or-B vote on the case (e.g. "What really happened that
+  night? 1) avalanche 2) something we still can't explain").
 
-# Rakip analizi (Practical Engineering, Real Engineering, Branch Education, Jared Owen, The B1M):
-# en çok izlenenler tek bir somut tuhaflık, felaket/arıza analizi ve görünmez altyapıyı somutlaştıran videolar.
+# Rakip analizi (LEMMiNO, Fascinating Horror, Plainly Difficult, Wendigoon tarzı vaka anlatıcıları):
+# en çok izlenenler tek bir somut, belgeli ve hâlâ tartışılan vaka; fark: kanıtı kesitle göstermek.
 content_pillars:
-  - "Engineering disasters: what really broke inside (collapses, explosions, dam and bridge failures)"
-  - "Engineering mysteries: structures that shouldn't still stand, sinking buildings, failures nobody predicted"
-  - "Near-disasters: the day it almost went wrong and the one detail that saved everyone"
-  - "Failed and abandoned megaprojects: what engineers got wrong"
-# 03.11 araştırması: geniş konulu yüzsüz kanallar 2026'da geriliyor, dar niş + tanınır imza öne çıkıyor.
-# Kimlik: 'Cutaway' = felaketin İÇİNİ açıp tam olarak hangi parçanın neden koptuğunu gösteren tek kanal.
-pillar_weights: [3, 2, 1.5, 1]
+  - "Unexplained events and 'supernatural' cases investigated (strange deaths, sightings, sounds, lights)"
+  - "Vanishings: ships, planes, expeditions and people that disappeared without a trace"
+  - "Disasters nobody saw coming: what really broke inside (collapses, explosions, dam and bridge failures)"
+  - "Places and objects that shouldn't exist (impossible structures, strange signals, out-of-place finds)"
+# 03.11 kararı (Furkan): yalnız mühendislik değil, sıra dışı/doğaüstü olaylar da; kimlik = "gerçek tuhaf olaylar, kanıtla incelenir"
+pillar_weights: [3, 2.5, 2, 1.5]
 
 idea_rules: >
-  Each idea centers on ONE concrete oddity, failure or seemingly impossible conflict,
-  never a broad subject ("Why Roads Get Washboards", not "How Roads Work"). Proven title
-  shapes: "Why [familiar thing] [does counterintuitive thing]", "The [Hidden/Bizarre/Wild]
-  [part/story/flaw] of [specific thing]", "What Actually Happens When [X]", "How [X] Survives
-  [extreme Y]". Keep the noun specific. Failures: evergreen post-mortems (decades old,
-  well documented), respectful to victims, focus on the engineering lesson.
-  Frame EVERY idea like a mystery to be solved (stakes + an open question + the moment it went wrong
-  or the thing nobody can explain), then solve it with engineering: "Why Did This Bridge Collapse in
-  4 Minutes?", "The Dam That Failed Overnight: What Engineers Missed", "Why This Skyscraper Is Still
-  Sinking". The engineering explanation (diagrams, inside views) is our edge over mystery channels.
+  Each idea centers on ONE real, well documented case with a concrete strange fact, never a broad
+  subject ("Why 9 Hikers Cut Their Tent Open", not "Mysteries of Russia"). Frame every idea as a
+  question the viewer can't stop thinking about (stakes + the moment + the thing nobody can explain).
+  Prefer cases with documents, photos, official reports or measurements we can show; skip cases that
+  are pure internet rumor. Evergreen (at least ~10 years old), respectful to victims.
 
 playlists:   # her konu sütunu bir oynatma listesi (izleyici videodan videoya akar)
-  "Engineering disasters: what really broke inside (collapses, explosions, dam and bridge failures)": "Engineering Disasters: What Really Broke"
-  "Engineering mysteries: structures that shouldn't still stand, sinking buildings, failures nobody predicted": "Engineering Mysteries"
-  "Near-disasters: the day it almost went wrong and the one detail that saved everyone": "Near-Disasters"
-  "Failed and abandoned megaprojects: what engineers got wrong": "Failed Megaprojects"
+  "Unexplained events and 'supernatural' cases investigated (strange deaths, sightings, sounds, lights)": "Unexplained Cases, Investigated"
+  "Vanishings: ships, planes, expeditions and people that disappeared without a trace": "Vanished Without a Trace"
+  "Disasters nobody saw coming: what really broke inside (collapses, explosions, dam and bridge failures)": "Disasters: What Really Broke"
+  "Places and objects that shouldn't exist (impossible structures, strange signals, out-of-place finds)": "Things That Shouldn't Exist"
 
 # Kanalın görsel kimliği: her diyagram bu stilde üretilir → tutarlı marka görünümü
 visual_style: >
-  clean modern educational illustration, 3D cutaway / exploded view / cross-section where useful,
-  flat vector look with soft gradients, dark navy background, glowing cyan and
+  clean modern documentary illustration, 3D cutaway / cross-section / evidence map where useful,
+  moody night palette, dark navy background, glowing cyan and
   warm orange accents, clear arrows showing flow, no text or labels, 16:9
 watch_next_text: "▶ Watch next:"
 thumbnail_rules: >
-  Cutaway signature (same on every video so viewers recognize us): the real structure or machine
-  at the moment of failure, with ONE part cut open as a photoreal cutaway that glows hot orange
-  where it broke (the cracked bolt, the failed weld, the leaking seam). Dark, cold teal
-  surroundings, the failure point is the brightest thing in the frame. Optionally a tiny invented
-  human for scale. Never gore, never real victims, never a real person.
+  Cutaway signature (same on every video so viewers recognize us): ONE eerie, real-looking scene of
+  the case at night or in cold light (the cut tent in the snow, the empty ship, the cracked dam),
+  with ONE key piece of evidence highlighted as a glowing orange cutaway or outline, the brightest
+  thing in the frame. Dark cold-teal surroundings, lots of empty dark space. Optionally a tiny
+  invented human silhouette for scale. Never gore, never real victims' faces, never a real person.
 thumbnail_style: "bold, high contrast, dramatic lighting, one clear object, cinematic, vivid colors"
 
 # Kanal sayfası (ilk gerçek çalışmada bir kez otomatik ayarlanır)
 branding:
-  version: 4                   # afiş/açıklama değişince artır → bir sonraki çalışmada kanala yeniden uygulanır
+  version: 5                   # afiş/açıklama değişince artır → bir sonraki çalışmada kanala yeniden uygulanır
   banner: "assets/cutaway_banner.jpg"
   country: "TR"
-  keywords: "how things work engineering explained science explained infrastructure machines engineering failures how it's made cutaway"
+  keywords: "unexplained mysteries unsolved mysteries strange true stories disappearances disasters explained paranormal investigated documentary cutaway"
   description: |
-    ⚙️ How things actually work. Cutaway takes ONE thing — a jet engine, a dam, a microchip, a fridge — and opens it up, step by step.
-    🏗️ Giant infrastructure, hidden everyday engineering, famous engineering failures and how things are made (and what they really cost).
-    🔬 Clear 3D-style diagrams, real footage and fact-checked scripts. No fluff, no clickbait the video doesn't deliver.
-    📅 New videos every Monday, Wednesday and Friday, plus daily Shorts.
-    💬 Tell us in the comments what we should cut open next.
+    🕯️ Strange true events, investigated. Cutaway takes ONE real case — a vanishing, an unexplained death, a disaster nobody saw coming — and cuts it open.
+    🔎 Evidence first, then every theory weighed fairly (yes, the paranormal ones too), and what science can and can't explain.
+    🧩 Clear cutaway diagrams, real photos and fact-checked scripts. No fluff, no clickbait the video doesn't deliver.
+    💬 Vote on every case in the comments and tell us which mystery we should open next.
 
-subscribe_text: "🔔 Subscribe for a new cutaway every week:"
+subscribe_text: "🔔 Subscribe for a new case every week:"
 made_for_kids: false
 declare_synthetic: true        # AI içerik beyanı (YouTube politikası)
 yt_brand_tag: "#cutaway"        # her uzun videonun ve Short'un hashtag satırında olur
@@ -200,7 +193,7 @@ plain_rules: >
   "refractory" (or explain it), "mix" over "mixture" when the meaning is the same.
 max_factcheck_rounds: 2
 require_web_factcheck: true    # doğrulama çalışmazsa video ÜRETİLMEZ
-fallback_broll: "industrial machinery close up"
+fallback_broll: "dark foggy forest at night"
 explore_rate: 0.25             # %25 ihtimalle yeni konu türü dener (öğrenme için)
 
 # ======================= YAYIN =======================
