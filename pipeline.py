@@ -905,6 +905,20 @@ def fetch_openverse(subject, out, context=""):
     return None
 
 
+_VIS_T0 = None
+
+
+def vis_hurry():
+    """Görsel aşaması zaman bütçesini aştı mı? (Katı kontroller üretimi saatlerce uzatmasın; yayın kaçmasın.)"""
+    if _VIS_T0 is None:
+        return False
+    late = (time.time() - _VIS_T0) / 60 > CFG.get("visual_time_budget_min", 45)
+    if late and not getattr(vis_hurry, "said", False):
+        vis_hurry.said = True
+        log("Görsel aşaması zaman bütçesini aştı: kalan sahnelerde yalnız cümleye göre çizilen görseller (hızlı mod)")
+    return late
+
+
 def visual_ok(path, sentence):
     """Üretilen görsel bu cümleyi gerçekten gösteriyor mu? Kontrol yapılamazsa kabul (görsel zaten cümleye göre çizildi)."""
     try:
@@ -1069,6 +1083,8 @@ def build_scene_videos(script, workdir, ledger):
     for s in scenes[:hook_n]:
         s["visual"] = "diagram"  # ilk saniyeler: söylenenin birebir görseli
     shot_sec = CFG.get("shot_seconds", 4.5)
+    global _VIS_T0
+    _VIS_T0 = time.time()
     if CFG.get("visual_per_sentence", True):
         plan_beats(script)
     img_budget = [CFG.get("max_sentence_images", 60)]
@@ -1133,7 +1149,7 @@ def build_beat_scene(sc, i, bshots, workdir, ledger, style, hook, img_budget):
                 imgs[j] = got
                 return got
         strict = CFG.get("strict_visuals")
-        if strict:  # gerçek stok fotoğraf, ancak cümleyi gerçekten gösteriyorsa
+        if strict and not vis_hurry():  # gerçek stok fotoğraf, ancak cümleyi gerçekten gösteriyorsa
             p = workdir / f"img_{i:02d}_b{j:02d}_s.jpg"
             if fetch_stock_photo(b["query"], p, ledger) and image_matches(p, b["text"]):
                 imgs[j] = p
@@ -1149,7 +1165,7 @@ def build_beat_scene(sc, i, bshots, workdir, ledger, style, hook, img_budget):
                     raise
                 imgs[j] = prev[-1]
                 return imgs[j]
-            if strict and not visual_ok(imgs[j], b["text"]):  # alakasız çıktıysa cümleyi birebir çizdirerek bir kez daha
+            if strict and not vis_hurry() and not visual_ok(imgs[j], b["text"]):  # alakasız çıktıysa cümleyi birebir çizdirerek bir kez daha
                 try:
                     imgs[j] = gen_image(f"Show literally and only what this sentence describes: \"{b['text']}\". "
                                         f"{b['image']}. Style: {style}", p, None, ledger)
@@ -1177,10 +1193,10 @@ def build_beat_scene(sc, i, bshots, workdir, ledger, style, hook, img_budget):
         if CFG.get("strict_visuals"):
             # katı mod (Furkan: gerçek video/fotoğraf önce): cümle gerçek bir yerden bahsediyorsa önce onun gerçek
             # fotoğrafı; değilse önce konuyla birebir ilgili gerçek video (yapay zekâ kontrolünden geçerse)
-            want_still = bool(b.get("real") and part == 0)
+            want_still = bool(b.get("real") and part == 0) or vis_hurry()
         clip = None
         if not want_still:
-            for t in range(3):
+            for t in range(2 if CFG.get("strict_visuals") else 3):
                 clip = fetch_stock(b["query"], workdir / f"raw_{i:02d}_{k:02d}_{t}.mp4", ledger)
                 if not clip or clip_matches(clip, {"narration": b["text"], "broll_query": b["query"]}, workdir):
                     break
