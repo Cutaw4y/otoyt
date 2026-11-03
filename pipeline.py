@@ -1538,7 +1538,7 @@ def make_thumbnails(script, workdir, ledger):
         prompt = (f"{c['image_prompt']}. {CFG['thumbnail_style']}. Main subject large on the right half, "
                   "dark empty space on the left third. No text, no letters, no logos, no watermark.")
         raw = None
-        if CFG.get("paid_tier"):  # ücretli anahtar: en iyi kalite küçük resim (Gemini görsel modeli)
+        if CFG.get("paid_tier") or ai.vertex_on():  # ücretli anahtar / Cloud kredisi: en iyi kalite küçük resim (Gemini)
             try:
                 raw = ai.gemini_image(prompt, workdir / f"thumb_raw_{i}.jpg")
             except Exception as e:
@@ -3058,7 +3058,7 @@ if __name__ == "__main__":
     ai.LOG = log
     log(f"Başladı (test modu: {DRY_RUN}, yayın: {CFG['publish_mode']})")
     _check_gemini_key()
-    if not CFG.get("paid_tier"):
+    if not CFG.get("paid_tier") and not ai.vertex_on():  # Cloud kredisi varsa ses Vertex'ten: bekleme gerekmez
         ai.TTS_GAP = 21.0
     else:
         ai.TTS_GAP = 1.0
