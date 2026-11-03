@@ -164,7 +164,7 @@ def next_series(history):
         if it["id"] in done or it["title"] in tried:
             continue
         log(f"Seri bölümü seçildi: {it['title']}")
-        notify(f"📚 Seri bölümü: {it['title']}")
+        notify(f"📚 Seri bölümü: {it['title']}{tr_note(it['title'])}")
         return {"title": it["title"], "angle": it["angle"], "pillar": it.get("pillar") or CFG["content_pillars"][0],
                 "search_query": it.get("search_query", it["title"]), "series_id": it["id"]}
     return None
@@ -244,7 +244,7 @@ def differentiate(ideas, chosen):
             idea["title"] = r["title"]
         idea["competitors"] = [c["title"] for c in rows[k][2][:6]]
         log(f"Rakip analizi: '{idea['title']}' seçildi ({len(rows[k][3])}/10 büyük rakip). Açı: {r['angle'][:160]}")
-        notify(f"🔎 Konu seçildi: {idea['title']}\nYouTube'da bu konuda {len(rows[k][3])} büyük video var. "
+        notify(f"🔎 Konu seçildi: {idea['title']}{tr_note(idea['title'])}\nYouTube'da bu konuda {len(rows[k][3])} büyük video var. "
                f"Bizi farklı kılacak açı: {r['angle'][:300]}")
         return idea
     except Exception as e:
@@ -1429,6 +1429,20 @@ def explain_error(text):
         if key.lower() in text.lower():
             return msg
     return None
+
+
+def tr_note(*texts):
+    """İngilizce kanalda bildirime Türkçe karşılık (Furkan her konuyu Türkçe de görsün). Hata olursa boş."""
+    if CFG.get("language_code") == "tr" or not texts:
+        return ""
+    try:
+        d = llm_json("You translate short YouTube titles/labels into natural Turkish. Use established Turkish "
+                     "Islamic terms (cin, Kaf Dağı, karîn, Hz. Süleyman).",
+                     json.dumps({"items": list(texts)}, ensure_ascii=False) + '\nReturn JSON: {"items":["..."]} same order',
+                     required=("items",), judge=False)
+        return "\n🇹🇷 " + " · ".join(str(x) for x in d["items"][:len(texts)])
+    except Exception:
+        return ""
 
 
 def tr_title(tr_meta, en_title):
@@ -2797,7 +2811,7 @@ def run_once():
     script["tags"] = build_tags(script)
     sc_ = script.get("_score") or (0, 0)
     est = word_count(script) / CFG.get("words_per_minute", 130)
-    notify(f"📌 Konu seçildi: {script['title']}\nBölüm: {idea['pillar']}\n"
+    notify(f"📌 Konu seçildi: {script['title']}{tr_note(script['title'], idea['pillar'])}\nBölüm: {idea['pillar']}\n"
            f"Senaryo puanı (10 üzerinden): en düşük {sc_[0]:.0f}, ortalama {sc_[1]:.1f} · "
            f"{len(script['scenes'])} sahne, yaklaşık {est:.0f} dakika.\nBilgiler kaynaklarla kontrol edildi. "
            "Şimdi seslendirme ve görsellere geçiliyor.")
