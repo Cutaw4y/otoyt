@@ -232,7 +232,8 @@ caption_words_per_line: 5       # kısa satırlar; iki satır asla aynı anda g�
 visual_per_sentence: true       # her cümleye kendi görseli: görüntü, o cümle söylenirken değişir
 scene_images: "gemini"          # sahne görselleri Gemini (Vertex kredisi) ile: bu kanalda görsel kalitesi çok önemli
 max_gemini_scene_images: 45     # video başına üst sınır (~1,8 $); fazlası Cloudflare'den
-max_sentence_images: 60         # video başına cümle görseli (AI) üst sınırı; aşılırsa stok fotoğraf
+strict_visuals: true            # alakasız görüntü yok: stok video kullanılmaz; her görsel cümleye göre çizilir ve kontrol edilir
+max_sentence_images: 140        # video başına cümle görseli üst sınırı (aşılırsa sahnenin önceki görseli farklı açıyla)
 max_footage_checks: 160         # stok videonun cümleyle uyumunu kontrol (ucuz Gemini modeli)
 music_db: -21                  # müzik seviyesi (anlatım varken ayrıca otomatik kısılır)
 

@@ -194,6 +194,10 @@ voice:
 
 # ======================= KURGU =======================
 use_intro: true
+strict_visuals: true             # alakasız görüntü yok: stok video kullanılmaz; her görsel cümleye göre çizilir ve kontrol edilir
+max_sentence_images: 140
+scene_images: "gemini"           # sahne görselleri Gemini (Vertex kredisi) ile, kalan Cloudflare
+max_gemini_scene_images: 45
 host_image: "host/host_1.jpg"     # anlatıcı 'Gölge': açılışta ve bölüm başlarında (yüzü görünmez)
 title_card: "clips"              # en başta: defter açılır, gölge kalem günün konusunu yazar (~3,8 sn)
 outro_line: "Bu sayfa şimdilik kapanıyor. Henüz abone olmadıysanız, Gölgedefter'e destek olmak için abone olmayı unutmayın. Videoyu buraya kadar izlediyseniz, bir beğeni bırakmanız bizim için çok değerli. Bir sonraki sayfada görüşmek üzere."

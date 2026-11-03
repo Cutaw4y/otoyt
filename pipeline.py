@@ -903,11 +903,32 @@ def fetch_openverse(subject, out, context=""):
     return None
 
 
+def visual_ok(path, sentence):
+    """Üretilen görsel bu cümleyi gerçekten gösteriyor mu? Kontrol yapılamazsa kabul (görsel zaten cümleye göre çizildi)."""
+    try:
+        from PIL import Image
+        sm = Path(path).with_name(Path(path).stem + "_vchk.jpg")
+        Image.open(path).convert("RGB").resize((480, 270)).save(sm, quality=80)
+        lite = [m for m in CFG["judge_models"] if "lite" in m] or CFG["judge_models"][:1]
+        r = ai.gemini_json("You check images for a documentary. A viewer must instantly connect the image to the "
+                           "sentence being spoken. Be strict.",
+                           f"Spoken sentence: {sentence}\nDoes this image clearly show what the sentence talks about "
+                           "(its subject, place, object or scene)? Unrelated, random, generic or confusing = no. Text or "
+                           'letters in the image = no. JSON: {"match": true or false, "seen": "5 words"}',
+                           images=[sm], required=("match",), models=lite, temperature=0.1)
+        if not r.get("match"):
+            VIS_STATS["rejected"] += 1
+            log(f"   alakasız görsel yeniden çizilecek: {r.get('seen', '')}")
+        return bool(r.get("match"))
+    except Exception:
+        return True
+
+
 def image_matches(path, what):
     """Gerçek fotoğraf anlatılan şeyi gösteriyor mu? (Flash-Lite, hak dolarsa kontrol atlanır.)"""
     global _CLIP_CHECKS
     if _CLIP_CHECKS >= CFG.get("max_footage_checks", 70):
-        return True
+        return not CFG.get("strict_visuals")  # katı modda kontrol edilemeyen gerçek fotoğraf kullanılmaz
     _CLIP_CHECKS += 1
     try:
         from PIL import Image
@@ -921,7 +942,7 @@ def image_matches(path, what):
                            temperature=0.1)
         return bool(r.get("match"))
     except Exception:
-        return True
+        return not CFG.get("strict_visuals")
 
 
 def clip_matches(clip, sc, workdir):
@@ -1058,14 +1079,17 @@ def build_scene_videos(script, workdir, ledger):
         log(f"Sahne {i+1}/{len(scenes)} ({sc.get('visual')}, {sc['duration']:.1f} sn, {len(shots)} çekim)")
         q = sc.get("broll_query") or CFG["fallback_broll"]
         img = None
-        if sc.get("visual") == "diagram":
+        if sc.get("visual") == "diagram" or CFG.get("strict_visuals"):  # katı mod: stok video yok
             img = gen_image(f"{sc.get('image_prompt') or sc['narration']}. Style: {style}",
                             workdir / f"img_{i:02d}.jpg", q, ledger)
+            if CFG.get("strict_visuals") and not visual_ok(img, sc["narration"][:400]):
+                img = gen_image(f"Show literally what this narration describes: \"{sc['narration'][:300]}\". "
+                                f"Style: {style}", workdir / f"img_{i:02d}.jpg", q, ledger)
         files = []
         for k, fr in enumerate(shots):
             out = workdir / f"shot_{i:02d}_{k:02d}.mp4"
             # diyagram sahnesi: diyagram (geniş) → stok → diyagram (detay) → stok ...
-            use_still = img is not None and (k % 2 == 0 or i < hook_n)
+            use_still = img is not None and (k % 2 == 0 or i < hook_n or CFG.get("strict_visuals"))
             clip = None
             if not use_still:
                 # konuyla ilgili stok video: 3 aday dene; genel "yedek" görüntü kullanma, yoksa AI görsel
@@ -1106,10 +1130,28 @@ def build_beat_scene(sc, i, bshots, workdir, ledger, style, hook, img_budget):
             if got:
                 imgs[j] = got
                 return got
+        strict = CFG.get("strict_visuals")
         if img_budget[0] > 0:
             img_budget[0] -= 1
-            imgs[j] = gen_image(f"{b['image']}. Style: {style}", workdir / f"img_{i:02d}_b{j:02d}.jpg",
-                                b["query"], ledger)
+            p = workdir / f"img_{i:02d}_b{j:02d}.jpg"
+            try:
+                imgs[j] = gen_image(f"{b['image']}. Style: {style}", p, None if strict else b["query"], ledger)
+            except Exception:
+                prev = [v for v in imgs.values() if v]
+                if not prev:
+                    raise
+                imgs[j] = prev[-1]
+                return imgs[j]
+            if strict and not visual_ok(imgs[j], b["text"]):  # alakasız çıktıysa cümleyi birebir çizdirerek bir kez daha
+                try:
+                    imgs[j] = gen_image(f"Show literally and only what this sentence describes: \"{b['text']}\". "
+                                        f"{b['image']}. Style: {style}", p, None, ledger)
+                except Exception:
+                    pass
+        elif strict:  # bütçe bitti: alakasız stok yerine bu sahnenin önceki (doğrulanmış) görseli farklı açıyla
+            prev = [v for v in imgs.values() if v]
+            imgs[j] = prev[-1] if prev else gen_image(f"{b['image']}. Style: {style}",
+                                                     workdir / f"img_{i:02d}_b{j:02d}.jpg", None, ledger)
         else:  # AI görsel bütçesi bitti: aynı konunun stok fotoğrafı
             p = workdir / f"img_{i:02d}_b{j:02d}.jpg"
             imgs[j] = fetch_stock_photo(b["query"], p, ledger) or gen_image(
@@ -1125,6 +1167,8 @@ def build_beat_scene(sc, i, bshots, workdir, ledger, style, hook, img_budget):
         want_still = hook or (sc.get("visual") == "diagram") == (part % 2 == 0)
         if b.get("real") and part == 0:
             want_still = True  # cümle gerçek bir yerden/nesneden bahsediyorsa önce onun gerçek fotoğrafı
+        if CFG.get("strict_visuals"):
+            want_still = True  # katı mod: stok video yok; yalnız cümle için üretilmiş/doğrulanmış görsel ve gerçek fotoğraf
         clip = None
         if not want_still:
             for t in range(3):
