@@ -79,14 +79,19 @@ content_pillars:
   - "Vanishings: ships, planes, expeditions and people that disappeared without a trace"
   - "Disasters nobody saw coming: what really broke inside (collapses, explosions, dam and bridge failures)"
   - "Places and objects that shouldn't exist (impossible structures, strange signals, out-of-place finds)"
+  - "The world's strangest beliefs, investigated: jinn and other entities from cultures Americans rarely hear about, through documented cases"
 # 03.11 kararı (Furkan): yalnız mühendislik değil, sıra dışı/doğaüstü olaylar da; kimlik = "gerçek tuhaf olaylar, kanıtla incelenir"
-pillar_weights: [3, 2.5, 2, 1.5]
+pillar_weights: [3, 2.5, 2, 1.5, 1.5]   # cin vb. sütunu deneme: izlenirse ağırlığı artar
 
 idea_rules: >
   Each idea centers on ONE real, well documented case with a concrete strange fact, never a broad
   subject ("Why 9 Hikers Cut Their Tent Open", not "Mysteries of Russia"). Frame every idea as a
   question the viewer can't stop thinking about (stakes + the moment + the thing nobody can explain).
-  Prefer cases with documents, photos, official reports or measurements we can show; skip cases that
+  Religious beliefs (e.g. jinn in Islam, also known from the Quran and hadith): explain the belief
+  accurately from its own sources with sura/verse or hadith reference, tell the documented cases and
+  what witnesses reported, give what researchers say about such experiences, and NEVER mock or rule
+  on the faith itself; Muslim viewers must feel respected and Americans must feel they learned
+  something new. Prefer cases with documents, photos, official reports or measurements we can show; skip cases that
   are pure internet rumor. Evergreen (at least ~10 years old), respectful to victims.
 
 playlists:   # her konu sütunu bir oynatma listesi (izleyici videodan videoya akar)
@@ -94,6 +99,7 @@ playlists:   # her konu sütunu bir oynatma listesi (izleyici videodan videoya a
   "Vanishings: ships, planes, expeditions and people that disappeared without a trace": "Vanished Without a Trace"
   "Disasters nobody saw coming: what really broke inside (collapses, explosions, dam and bridge failures)": "Disasters: What Really Broke"
   "Places and objects that shouldn't exist (impossible structures, strange signals, out-of-place finds)": "Things That Shouldn't Exist"
+  "The world's strangest beliefs, investigated: jinn and other entities from cultures Americans rarely hear about, through documented cases": "Strange Beliefs, Investigated"
 
 # Kanalın görsel kimliği: her diyagram bu stilde üretilir → tutarlı marka görünümü
 visual_style: >
