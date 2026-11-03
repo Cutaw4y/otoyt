@@ -13,7 +13,7 @@ Servisler (hepsi ücretsiz): Gemini, Cloudflare Workers AI, Kokoro, Pexels, YouT
   DRY_RUN=1 python pipeline.py    # üret, yükleme yapma (out/ klasörüne kaydeder)
   python selftest.py              # API'siz render testi
 """
-import json, math, os, random, re, shutil, sys, tempfile, time, traceback
+import json, math, os, random, re, shutil, subprocess, sys, tempfile, time, traceback
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -3224,6 +3224,19 @@ if __name__ == "__main__":
     if os.getenv("REFRESH"):  # başlık + küçük resim yenile: video kimlikleri, virgülle
         check_channel()
         spec = os.getenv("REFRESH")
+        if "SON" in spec:  # "SON" = kanalın en son yüklenen (planlı) uzun videosu (kimliği bilmeden işlem)
+            ups = [v for v in publish.recent_uploads(15) if "#shorts" not in v["title"].lower()]
+            if ups:
+                spec = spec.replace("SON", ups[0]["id"])
+                print(f"::notice title=SON::{ups[0]['id']} {ups[0]['title']}", flush=True)
+        if spec.startswith("cok:"):  # birden çok işlem sırayla: "cok:yayinla:ID;;ID|Başlık"
+            parts = spec[4:].split(";;")
+        else:
+            parts = [spec]
+        for spec in parts[:-1]:
+            os.environ["REFRESH"] = spec
+            subprocess.run([sys.executable, __file__], env=os.environ.copy())
+        spec = parts[-1]
         if spec.startswith("planla:"):  # "planla:id@2026-11-02T19:00:00Z" → planlı yayın saati koy
             vid, when = spec[7:].split("@", 1)
             yt = publish._yt()
