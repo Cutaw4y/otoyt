@@ -776,7 +776,7 @@ def gen_image(prompt, out, fallback_query=None, ledger=None):
         # yüksek kaliteli sahne görseli (Google Cloud kredisinden, ~0,04 $/görsel); olmazsa Cloudflare'e düşer
         try:
             got = ai.gemini_image(prompt + ". Cinematic, photographic quality, wide 16:9 composition, no text, "
-                                  "no letters, no watermark.", out, models=())
+                                  "no letters, no watermark.", out, models=(), quick=True)
             _gem_imgs += 1
             return got
         except Exception as e:

@@ -13,7 +13,7 @@ ROOT = Path(__file__).parent
 REPO = os.environ.get("GITHUB_REPOSITORY", "Cutaw4y/otoyt")
 API = f"https://api.github.com/repos/{REPO}"
 H = {"Authorization": f"Bearer {os.environ['GITHUB_TOKEN']}", "Accept": "application/vnd.github+json"}
-MAX_TRIES = 3
+MAX_TRIES = 2   # bekçinin günlük otomatik yeniden deneme sayısı
 TR = timezone(timedelta(hours=3))
 
 # kanal → (iş akışı, geçmiş dosyası, video günleri (TR, 0=Pzt), en erken müdahale saati (TR), ad)
@@ -54,16 +54,17 @@ def main():
         rs = runs(wf, today_utc)
         if any(r["status"] in ("queued", "in_progress", "waiting", "pending", "requested") for r in rs):
             continue  # şu an üretiliyor
-        tries = sum(1 for r in rs if r["event"] in ("schedule", "workflow_dispatch"))
         key = f"{wf}:{today_utc}"
+        tries = int(state.get(key + ":tries", 0))  # yalnız bekçinin kendi denemeleri sayılır
         if tries >= MAX_TRIES:
-            if not state.get(key):
-                state[key] = "gave_up"
-                tg(f"🆘 CLAUDE'A YAZ — {name}: bugün {tries} deneme yapıldı, video hâlâ çıkmadı. Bekçi durdu. "
+            if not state.get(key + ":gave_up"):
+                state[key + ":gave_up"] = True
+                tg(f"🆘 CLAUDE'A YAZ — {name}: bekçi bugün {tries} kez yeniden denedi, video hâlâ çıkmadı. Bekçi durdu. "
                    "Claude'a 'kontrol et' yazman yeterli; yarınki video normal saatinde denenecek.")
             continue
         r = requests.post(f"{API}/actions/workflows/{wf}/dispatches", headers=H,
                           json={"ref": "main", "inputs": {"dry_run": "false"}}, timeout=30)
+        state[key + ":tries"] = tries + 1
         print(f"{name}: üretim başlatıldı ({r.status_code}), bugünkü deneme {tries + 1}")
         tg(f"🔁 {name}: bugünün videosu henüz çıkmamıştı (gecikme veya hata). Bekçi üretimi otomatik başlattı "
            f"(bugünkü {tries + 1}. deneme). Yarıda kalan konu varsa aynısıyla devam edilir. Senden bir şey gerekmiyor.")

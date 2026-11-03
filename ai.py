@@ -250,14 +250,16 @@ def gemini_json(system, user, models, required=(), images=None, temperature=0.8)
     raise RuntimeError(f"Gemini geçerli JSON üretemedi: {last}")
 
 
-def gemini_image(prompt, out, models=("gemini-2.5-flash-image", "gemini-3-pro-image-preview"), aspect="16:9"):
+def gemini_image(prompt, out, models=("gemini-2.5-flash-image", "gemini-3-pro-image-preview"), aspect="16:9",
+                 quick=False):
     """Gemini ile görsel üretimi (küçük resim). Önce Vertex (Cloud kredisi), sonra AI Studio anahtarı."""
     key = os.environ.get("GEMINI_API_KEY", "")
     last = None
     if vertex_on():
-        for vm in ("gemini-3.1-flash-image", "gemini-3-pro-image"):
+        for vm in (("gemini-3.1-flash-image",) if quick else ("gemini-3.1-flash-image", "gemini-3-pro-image")):
             try:
-                for attempt in range(4):  # görsel modeli dakika sınırı: 429'da bekle, tekrar dene
+                for attempt in range(1 if quick else 4):  # görsel modeli dakika sınırı: 429'da bekle, tekrar dene
+                    # quick (sahne görselleri): beklemeden ücretsiz modele düş; saatlerce 429 beklemesi olmasın
                     r = _vertex_generate(vm, {"contents": [{"role": "user", "parts": [{"text": prompt}]}],
                                               "generationConfig": {"responseModalities": ["IMAGE"],
                                                                    "imageConfig": {"aspectRatio": aspect}}}, timeout=180)
