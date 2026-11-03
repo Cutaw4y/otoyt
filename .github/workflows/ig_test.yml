@@ -5,6 +5,9 @@ on:
       durations:
         description: "Test videosu süreleri (sn, virgülle)"
         default: "5"
+      hesap:
+        description: "Hangi hesap (golgedefter / beyondqaf)"
+        default: "golgedefter"
 jobs:
   test:
     runs-on: ubuntu-24.04
@@ -15,7 +18,7 @@ jobs:
         with: {python-version: "3.12"}
       - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg && pip install -q requests
       - env:
-          IG_ACCESS_TOKEN: ${{ secrets.GD_IG_ACCESS_TOKEN }}
-          IG_USER_ID: ${{ secrets.GD_IG_USER_ID }}
+          IG_ACCESS_TOKEN: ${{ inputs.hesap == 'beyondqaf' && secrets.IG_ACCESS_TOKEN || secrets.GD_IG_ACCESS_TOKEN }}
+          IG_USER_ID: ${{ inputs.hesap == 'beyondqaf' && '17841436533748607' || secrets.GD_IG_USER_ID }}
           IG_TEST_DURATIONS: ${{ inputs.durations || '5' }}
         run: python ig_test.py
