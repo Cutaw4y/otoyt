@@ -52,8 +52,9 @@ def main():
         if any(h.get("type", "long") == "long" and str(h.get("date", "")).startswith(today_utc) for h in hist):
             continue  # bugünün videosu çıktı
         rs = runs(wf, today_utc)
-        if any(r["status"] in ("queued", "in_progress", "waiting", "pending", "requested") for r in rs):
-            continue  # şu an üretiliyor
+        busy = ("queued", "in_progress", "waiting", "pending", "requested")
+        if any(r["status"] in busy for w in ("otoyt.yml", "otoyt_tr.yml") for r in runs(w, today_utc)):
+            continue  # bir kanal şu an üretiyor (iki kanal aynı anda üretmez; sıradaki işi bozmayalım)
         key = f"{wf}:{today_utc}"
         tries = int(state.get(key + ":tries", 0))  # yalnız bekçinin kendi denemeleri sayılır
         if tries >= MAX_TRIES:
