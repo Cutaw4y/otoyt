@@ -56,5 +56,37 @@
     "title": "Why Slow Crashes Are More Dangerous #Shorts",
     "video_id": "1KMdBwB9BxQ",
     "manual": true
+  },
+  {
+    "date": "2026-11-03T15:28",
+    "type": "long",
+    "title": "What Are Jinn in Islam? The Quran's Unseen Civilization",
+    "pillar": "Jinn: what the Quran, authentic hadith and classical scholars actually say",
+    "video_id": "jj2Ey8frTjE",
+    "series_id": "jinn-1"
+  },
+  {
+    "date": "2026-11-03T15:28",
+    "type": "short",
+    "title": "What Are Jinn Actually Made Of?",
+    "pillar": "Jinn: what the Quran, authentic hadith and classical scholars actually say",
+    "video_id": "odjfUwjw1II",
+    "parent": "jj2Ey8frTjE"
+  },
+  {
+    "date": "2026-11-03T15:28",
+    "type": "short",
+    "title": "The Real Origin of the Word Genie",
+    "pillar": "Jinn: what the Quran, authentic hadith and classical scholars actually say",
+    "video_id": "BEOlG8TrnE0",
+    "parent": "jj2Ey8frTjE"
+  },
+  {
+    "date": "2026-11-03T15:28",
+    "type": "short",
+    "title": "Why Jinn Cannot Predict the Future",
+    "pillar": "Jinn: what the Quran, authentic hadith and classical scholars actually say",
+    "video_id": "5O7z1Fx2mow",
+    "parent": "jj2Ey8frTjE"
   }
 ]
