@@ -127,11 +127,35 @@
     "parent": null
   },
   {
-    "date": "2026-11-03T16:02",
-    "type": "reel",
-    "title": "Otopsi Raporundaki Akılalmaz Çelişki",
-    "pillar": "Açıklanamayan gerçek olaylar ve kayıplar (Dyatlov, Mary Celeste, Roanoke, Tunguska)",
-    "video_id": "18046654652834145",
-    "parent": null
+    "date": "2026-11-03T16:18",
+    "type": "long",
+    "title": "Cessase Hadisi: 30 Denizcinin Bulduğu Zincirli Adam Kimdi?",
+    "pillar": "Kıyamet alametleri ve ahir zaman anlatıları (ayet ve hadis kaynaklarıyla, tarih tahmini yok)",
+    "video_id": "ayKbYxbFMK8",
+    "series_id": "temim-1"
+  },
+  {
+    "date": "2026-11-03T16:18",
+    "type": "short",
+    "title": "Islak Adada Zincirli Dev",
+    "pillar": "Kıyamet alametleri ve ahir zaman anlatıları (ayet ve hadis kaynaklarıyla, tarih tahmini yok)",
+    "video_id": "sS6jraFHFwM",
+    "parent": "ayKbYxbFMK8"
+  },
+  {
+    "date": "2026-11-03T16:18",
+    "type": "short",
+    "title": "Zincirli Adamın Üç Sorusu",
+    "pillar": "Kıyamet alametleri ve ahir zaman anlatıları (ayet ve hadis kaynaklarıyla, tarih tahmini yok)",
+    "video_id": "JZ1L4gROckw",
+    "parent": "ayKbYxbFMK8"
+  },
+  {
+    "date": "2026-11-03T16:18",
+    "type": "short",
+    "title": "Minberden Duyurulan Tanık",
+    "pillar": "Kıyamet alametleri ve ahir zaman anlatıları (ayet ve hadis kaynaklarıyla, tarih tahmini yok)",
+    "video_id": "WueuKjiulFw",
+    "parent": "ayKbYxbFMK8"
   }
 ]

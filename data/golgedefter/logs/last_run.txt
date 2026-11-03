@@ -1,3 +1,135 @@
-[14:28:22] Başladı (test modu: False, yayın: scheduled)
-[14:28:23] Ücretli Gemini anahtarı kullanılıyor
-[14:28:24] Kanal doğrulandı: GölgeDefter
+[13:25:15] Başladı (test modu: False, yayın: scheduled)
+[13:25:15] Ücretli Gemini anahtarı kullanılıyor
+[13:25:16] Kanal doğrulandı: GölgeDefter
+[13:25:17] Analitik: 0 video ölçüldü, sütun puanları: {}
+[13:25:17] Seri bölümü seçildi: Temim ed-Dari Hadisi: 30 Denizci O Adada Kimi Zincirli Buldu?
+[13:25:17] Konu (1): Temim ed-Dari Hadisi: 30 Denizci O Adada Kimi Zincirli Buldu?  [Kıyamet alametleri ve ahir zaman anlatıları (ayet ve hadis kaynaklarıyla, tarih tahmini yok)]
+[13:26:43] Senaryo kısa (1376/1700 kelime) → genişletiliyor (1)
+[13:27:59] Senaryo kısa (1418/1700 kelime) → genişletiliyor (2)
+[13:29:03] Senaryo uzunluğu: 1528 kelime
+[13:29:03] Senaryo yazıldı: 35 sahne, 1528 kelime
+[13:30:23] Sadeleştirme sahne yapısını bozdu → eski metin kalıyor
+[13:31:31] Doğrulama kaynağı: Google araması
+[13:31:31] Doğrulama turu 1: 15 iddia, 1 yanlış, 0 belirsiz
+[13:33:40] Doğrulama kaynağı: Google araması
+[13:33:40] Doğrulama turu 2: 15 iddia, 0 yanlış, 0 belirsiz
+[13:34:18] Başlık seçildi: Cessase Hadisi: 30 Denizcinin Bulduğu Zincirli Adam Kimdi?  (önceki: Cessase Hadisi: O Adada Zincirli Duran Kimdi?) — Kanalın sevdiği formülü ('30 Denizci' somut sayısı + 'bulduğu zincirli adam' detayı + 'kimdi?' merak boşluğu) kusursuz uygular; mobil ekranda ilk bakı
+[13:34:20] Editör (min 6, ort 7.4): {'originality': 7, 'hook': 7, 'clarity': 8, 'simplicity': 6, 'flow': 7, 'value_density': 8, 'audience_fit': 9, 'problems': ["İslam kayıtlarında cessase hadisi diye bilinen bu olay, karanlık bir manastırda demir halkalarla kilitlenmiş bir tutsağın anlatısıdır. -> 'Hadis' ve 'Cessase' kelimeleri önceden açıklanmadan kullanılmış.", "Hadis, Sahih-i Müslim içinde Kitabü'l-Fiten bölümünde iki bin dokuz yüz kırk iki numaralı kayıtta yer alır. -> 'Sahih-i Müslim' ve 'Kitabü'l-Fiten' terimleri yabancı gelebilir.", "Rivayeti aktaran kadın sahabi Fâtıma bint Kays, Peygamberimizin öğle namazından sonra cemaati mescitte topladığını bildirir. -> 'Sahabi' kelimesi hedef kitle için bilinse de tanımı verilebilir.", "İmam Kurtubî gibi klasik muhakkikler ise olayın fiziksel bir hakikat olduğunu savundu. -> 'Muhakkik' terimi açıklanmamış."], 'problems_tr': "Metinde 'Sahih-i Müslim', 'Kitabü'l-Fiten', 'Sahabi' ve 'Muhakkik' gibi dini/teknik terimler doğrudan açıklamadan kullanılmıştır. 12 yaşındaki bir dinleyicinin bu kavramları ilk dinleyişte anlaması zor olabilir."}
+[13:36:08] Anlatım sadeleştirildi (945 → 958 kelime)
+[13:36:08] Senaryo kısa (958/1700 kelime) → genişletiliyor (1)
+[13:37:14] Senaryo kısa (1243/1700 kelime) → genişletiliyor (2)
+[13:38:00] Senaryo uzunluğu: 1243 kelime
+[13:39:33] Doğrulama kaynağı: Google araması
+[13:39:33] Doğrulama turu 1: 15 iddia, 0 yanlış, 0 belirsiz
+[13:39:34] Editör (min 6, ort 7.6): {'originality': 7, 'hook': 6, 'clarity': 8, 'simplicity': 7, 'flow': 8, 'value_density': 8, 'audience_fit': 9, 'problems': ["Quote: 'Sahih-i Müslim'in iki bin dokuz yüz kırk iki numaralı hadisinde yer alır.' -> Fix: 'Müslim'in güvenilir hadis kitaplarında yer alır.'", "Quote: 'Fâtıma bint Kays, bir sahabidir; yani Peygamberimizi bizzat görüp dinleyen kişilerden biridir.' -> Fix: 'Olayı aktaran kişi, Peygamberimizi bizzat görmüş olan Fâtıma isimli bir kadındır.'", "Quote: 'İmam Kurtubî gibi klasik muhakkikler...' -> Fix: 'Eski dönemdeki bazı İslam bilginleri...'"], 'problems_tr': 'Metinde geçen Sahih-i Müslim, sahabî ve muhakkik gibi bazı dini terimler hedef kitle için doğrudan açıklanmış olsa da daha sadeleştirilebilirdi.'}
+[13:41:45] Anlatım sadeleştirildi (1035 → 1033 kelime)
+[13:41:45] Senaryo kısa (1033/1700 kelime) → genişletiliyor (1)
+[13:42:43] Senaryo kısa (1227/1700 kelime) → genişletiliyor (2)
+[13:43:56] Senaryo uzunluğu: 1322 kelime
+[13:46:31] Doğrulama kaynağı: Google araması
+[13:46:31] Doğrulama turu 1: 15 iddia, 0 yanlış, 0 belirsiz
+[13:46:34] Editör (min 6, ort 7.4): {'originality': 7, 'hook': 7, 'clarity': 8, 'simplicity': 6, 'flow': 7, 'value_density': 8, 'audience_fit': 9, 'problems': ['"İslam tarihinde cessase hadisi olarak kayıtlara geçen bu anlatım, yüzyıllardır din bilginlerinin ve tarihçilerin üzerine düşündüğü en esrarengiz deniz yolculuklarından biridir." -> Should briefly explain what \'hadis\' means for a complete non-expert (e.g., Hz. Muhammed\'in sözü veya yaşadığı bir olay).', '"Temîm ed-Dârî ve beraberindeki tüccarlar, Şam ile Arabistan kıyıları arasında yük taşıyordu." -> Add context that he wasn\'t Muslim yet at that exact moment.', '"İmam Müslim\'in Fiten ve Kıyamet Alametleri kitabında tam metin olarak korunmuştur." -> Clarify who İmam Müslim is briefly (ünlü bir İslam alimi/hadis derleyicisi).', '"hidroloji uzmanları, bu tablonun Şeria Vadisi\'ndeki doğal kuraklık döngülerinden kaynaklandığını belirtir." -> Simplify \'hidroloji\' (su bilimiyle uğraşan uzmanlar).'], 'problems_tr': "Metinde geçen 'hadis', 'İmam Müslim' ve 'hidroloji' gibi bazı dini ve teknik terimler hedef kitledeki tamamen konuya yabancı olabilecek 12 yaşındaki bir dinleyici için kısaca açıklanarak basitleştirilmelidir."}
+[13:46:34] Konu kalite barajını geçemedi: Temim ed-Dari Hadisi: 30 Denizci O Adada Kimi Zincirli Buldu?
+[13:46:34] Baraj geçilemedi; en iyi senaryo kullanılıyor (min 6, ort 7.6)
+[13:46:37] Seslendirme başlıyor (Gemini Charon)...
+[13:52:33] Seslendirme: 725 sn
+[13:58:03] Thumbnail sıralaması: [1, 2, 3] - Thumbnail #1 is the strongest because it features a very high-contrast, dramatic focal point (the heavy rusty chains and shackle) combined with the curiosity-inducing text 'KİMİ GÖRDÜLER?', perfectly complementing the title without repeating it. It scales down exceptionally well on mobile. #2 is decent with a clear human silhouette in a doorway and bold text, but feels slightly more generic. #3 is cluttered and relies on a small map graphic that is hard to decipher at a glance on a phone screen.
+[14:01:48] Cümle cümle görsel planı: 34/34 sahne
+[14:01:48] Sahne 1 (diagram, 32.2 sn, 7 çekim, cümleye bağlı)
+[14:01:50]    ilgisiz görüntü elendi: modern boats in water body
+[14:01:52]    ilgisiz görüntü elendi: modern sailboat deck at sea
+[14:02:01]    ilgisiz görüntü elendi: modern motorboats moored near cliffs
+[14:02:03]    ilgisiz görüntü elendi: modern ship on calm sea
+[14:02:24]    ilgisiz görüntü elendi: aerial view of arid mountains
+[14:02:38]    ilgisiz görüntü elendi: arid desert landscape with sparse vegetation
+[14:02:50]    ilgisiz görüntü elendi: Close up of old map
+[14:02:52]    ilgisiz görüntü elendi: illuminated minaret under starry night
+[14:06:33]    alakasız görsel yeniden çizilecek: old book with Arabic text
+[14:10:18]    ilgisiz görüntü elendi: close up of a lion
+[14:10:20]    ilgisiz görüntü elendi: aerial view of deep canyon
+[14:14:10]    ilgisiz görüntü elendi: Alcatraz island with a lighthouse
+[14:14:14]    ilgisiz görüntü elendi: aerial view of rock formations
+[14:14:16] Sahne 2 (diagram, 25.3 sn, 5 çekim, cümleye bağlı)
+[14:14:19]    ilgisiz görüntü elendi: scuba divers underwater near coral
+[14:14:21]    ilgisiz görüntü elendi: modern cruise ship at sea
+[14:18:27]    ilgisiz görüntü elendi: close up of full moon
+[14:18:31]    ilgisiz görüntü elendi: red moon over tree line
+[14:22:35]    ilgisiz görüntü elendi: rain drops on a window
+[14:22:39]    ilgisiz görüntü elendi: green trees under cloudy sky
+[14:23:16]    ilgisiz görüntü elendi: close up of old map
+[14:23:18]    ilgisiz görüntü elendi: modern cruise ship on water
+[14:23:19] Sahne 3 (footage, 22.3 sn, 5 çekim, cümleye bağlı)
+[14:23:21]    ilgisiz görüntü elendi: cruise ship near coastline
+[14:23:23]    ilgisiz görüntü elendi: sunset over coast with ships
+[14:24:39]    ilgisiz görüntü elendi: wake behind a moving ship
+[14:24:44]    ilgisiz görüntü elendi: aerial view of calm coastline
+[14:25:32]    ilgisiz görüntü elendi: small calm waves on beach
+[14:25:34]    ilgisiz görüntü elendi: aerial view of small waves
+[14:25:41]    ilgisiz görüntü elendi: yellow leaves over flowing water
+[14:25:44]    ilgisiz görüntü elendi: sliced strawberries with sugar crystals
+[14:26:23]    ilgisiz görüntü elendi: abandoned brick building with pillars
+[14:26:26]    ilgisiz görüntü elendi: empty indoor corridor at night
+[14:26:29] Sahne 4 (diagram, 21.7 sn, 5 çekim, cümleye bağlı)
+[14:26:47]    ilgisiz görüntü elendi: driftwood on a sandy beach
+[14:26:49]    ilgisiz görüntü elendi: sunlight reflecting on rocky water
+[14:27:27]    ilgisiz görüntü elendi: jagged coastal cliffs with ocean
+[14:27:30]    ilgisiz görüntü elendi: ocean waves crashing at sunset
+[14:31:15]    ilgisiz görüntü elendi: calm ocean during golden sunset
+[14:31:18]    ilgisiz görüntü elendi: aerial view of coastal cliffs
+[14:31:21]    ilgisiz görüntü elendi: a butterfly on yellow flowers
+[14:31:23]    ilgisiz görüntü elendi: many sailboats anchored in bay
+[14:33:14] Sahne 5 (footage, 18.6 sn, 4 çekim, cümleye bağlı)
+[14:33:19]    ilgisiz görüntü elendi: blue ocean and sky view
+[14:33:21]    ilgisiz görüntü elendi: small boat sailing on water
+[14:33:38]    ilgisiz görüntü elendi: rough sea waves crashing rocks
+[14:33:42]    ilgisiz görüntü elendi: kayaks paddling on green water
+[14:34:22]    ilgisiz görüntü elendi: aerial view of sandy beach
+[14:34:27]    ilgisiz görüntü elendi: aerial view of pebble beach
+[14:38:13]    ilgisiz görüntü elendi: stepping stones across small river
+[14:38:15]    ilgisiz görüntü elendi: sunset over rocky beach water
+[14:38:17] Sahne 6 (footage, 21.9 sn, 5 çekim, cümleye bağlı)
+[14:38:19]    ilgisiz görüntü elendi: sunny aerial view of beach
+[14:38:21]    ilgisiz görüntü elendi: close up of rocky shore
+[14:42:07]    ilgisiz görüntü elendi: aerial view of coastal city
+[14:42:24]    ilgisiz görüntü elendi: full moon in night sky
+[14:42:28]    ilgisiz görüntü elendi: sunny beach with people relaxing
+[14:42:32]    ilgisiz görüntü elendi: aerial view of rocky coast
+[14:46:13] Görsel aşaması zaman bütçesini aştı: kalan sahnelerde yalnız cümleye göre çizilen görseller (hızlı mod)
+[14:46:28] Sahne 7 (diagram, 21.1 sn, 4 çekim, cümleye bağlı)
+[14:54:05] Sahne 8 (footage, 16.2 sn, 5 çekim, cümleye bağlı)
+[15:01:11] Sahne 9 (diagram, 23.9 sn, 5 çekim, cümleye bağlı)
+[15:06:12] Sahne 10 (footage, 21.7 sn, 5 çekim, cümleye bağlı)
+[15:11:51] Sahne 11 (diagram, 22.2 sn, 6 çekim, cümleye bağlı)
+[15:14:16] Sahne 12 (footage, 20.4 sn, 5 çekim, cümleye bağlı)
+[15:17:13] Sahne 13 (diagram, 18.1 sn, 4 çekim, cümleye bağlı)
+[15:20:50] Sahne 14 (diagram, 19.6 sn, 5 çekim, cümleye bağlı)
+[15:23:49] Sahne 15 (footage, 21.7 sn, 5 çekim, cümleye bağlı)
+[15:26:47] Sahne 16 (footage, 22.3 sn, 5 çekim, cümleye bağlı)
+[15:26:47] Cloudflare günlük ücretsiz kota doldu: {"errors":[{"message":"AiError: AiError: you have used up your daily free allocation of 10,000 neurons, please upgrade to Cloudflare's Workers Paid plan if you would like to continue usage. (dcd5af64- → bu video için Pexels fotoğraflarına geçiliyor
+[15:29:50] Sahne 17 (diagram, 18.7 sn, 4 çekim, cümleye bağlı)
+[15:30:41] Sahne 18 (footage, 19.8 sn, 4 çekim, cümleye bağlı)
+[15:31:27] Sahne 19 (diagram, 18.6 sn, 4 çekim, cümleye bağlı)
+[15:34:24] Sahne 20 (footage, 19.2 sn, 5 çekim, cümleye bağlı)
+[15:34:40] Sahne 21 (diagram, 20.8 sn, 5 çekim, cümleye bağlı)
+[15:36:32] Sahne 22 (footage, 19.3 sn, 4 çekim, cümleye bağlı)
+[15:39:36] Sahne 23 (diagram, 16.0 sn, 4 çekim, cümleye bağlı)
+[15:41:39] Sahne 24 (footage, 17.5 sn, 4 çekim, cümleye bağlı)
+[15:42:24] Sahne 25 (diagram, 20.2 sn, 4 çekim, cümleye bağlı)
+[15:44:50] Sahne 26 (footage, 19.1 sn, 5 çekim, cümleye bağlı)
+[15:47:46] Sahne 27 (diagram, 17.6 sn, 4 çekim, cümleye bağlı)
+[15:50:42] Sahne 28 (footage, 23.4 sn, 6 çekim, cümleye bağlı)
+[15:52:41] Sahne 29 (diagram, 22.9 sn, 5 çekim, cümleye bağlı)
+[15:55:42] Sahne 30 (footage, 22.5 sn, 5 çekim, cümleye bağlı)
+[15:57:33] Sahne 31 (diagram, 22.1 sn, 6 çekim, cümleye bağlı)
+[15:59:22] Sahne 32 (footage, 19.7 sn, 5 çekim, cümleye bağlı)
+[15:59:50] Sahne 33 (diagram, 25.0 sn, 6 çekim, cümleye bağlı)
+[16:00:15] Sahne 34 (footage, 33.7 sn, 7 çekim, cümleye bağlı)
+[16:14:53] Ana video: 770 sn
+[16:15:47] Short 1: sahne 0-4, 58 sn — Islak Adada Zincirli Dev
+[16:16:42] Short 2: sahne 17-21, 58 sn — Zincirli Adamın Üç Sorusu
+[16:17:33] Short 3: sahne 23-27, 57 sn — Minberden Duyurulan Tanık
+[16:17:33] Altyazı çevirisi: English (267 satır)
+[16:17:44] Çeviri parçası eksik geldi (150-180), tekrar deneniyor
+[16:18:13] Altyazı eklendi: Türkçe
+[16:18:15] Altyazı eklendi: English
+[16:18:17] Oynatma listesine eklendi: Kıyamet ve Ahir Zaman
