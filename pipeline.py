@@ -1717,6 +1717,10 @@ def title_pass(script):
                "in plain words a 12-year-old instantly understands (no rare or academic words), and make it feel "
                "eerie and mysterious, like something unexplained or supernatural happened (only as far as the video "
                "really supports). " if demand else "")
+            + "NEVER build the title around a name or term the average viewer doesn't know (an obscure narrator, "
+              "scholar, place or Arabic term); lead with the famous, instantly understood thing (e.g. Deccal, cinler, "
+              "kıyamet, a famous place) and the eerie event itself. Bad: 'Temim ed-Dari Hadisi: ...'. Good: 'Deccal "
+              "Bir Adada Zincirli mi? 30 Denizcinin Gördüğü Şey'. "
             + (f"The channel owner LOVES this style, follow its pattern (topic: concrete people/number + what they "
                f"did + the unanswered question): {CFG['title_examples']} " if CFG.get("title_examples") else "")
             + "Then pick the one with the highest expected click-through rate on a phone feed. "
