@@ -69,6 +69,24 @@ def main():
         print(f"{name}: üretim başlatıldı ({r.status_code}), bugünkü deneme {tries + 1}")
         tg(f"🔁 {name}: bugünün videosu henüz çıkmamıştı (gecikme veya hata). Bekçi üretimi otomatik başlattı "
            f"(bugünkü {tries + 1}. deneme). Yarıda kalan konu varsa aynısıyla devam edilir. Senden bir şey gerekmiyor.")
+    # Instagram bekçisi: bugün video çıktıysa ama Reels paylaşılmadıysa günlük Instagram işini hemen çalıştır
+    for wf_ig, hist_f, qfile, name in (("ig_en.yml", ROOT / "history.json", ROOT / "ig_queue.json", "Beyond Qaf"),
+                                       ("ig_tr.yml", ROOT / "data/golgedefter/history.json",
+                                        ROOT / "data/golgedefter/ig_queue.json", "Gölgedefter")):
+        hist = json.loads(hist_f.read_text(encoding="utf-8")) if hist_f.exists() else []
+        if not any(h.get("type", "long") == "long" and str(h.get("date", "")).startswith(today_utc) for h in hist):
+            continue
+        if any(h.get("type") == "reel" and str(h.get("date", "")).startswith(today_utc) for h in hist):
+            continue  # bugün Reel paylaşıldı
+        q = json.loads(qfile.read_text(encoding="utf-8")) if qfile.exists() else []
+        key = f"{wf_ig}:{today_utc}:ig"
+        if not q or state.get(key, 0) >= 2:
+            continue
+        if any(r["status"] in ("queued", "in_progress") for r in runs(wf_ig, today_utc)):
+            continue
+        state[key] = state.get(key, 0) + 1
+        requests.post(f"{API}/actions/workflows/{wf_ig}/dispatches", headers=H, json={"ref": "main"}, timeout=30)
+        print(f"{name}: bugün Reel paylaşılmamıştı, Instagram işi başlatıldı")
     state_f.write_text(json.dumps(state, ensure_ascii=False, indent=1))
 
 
