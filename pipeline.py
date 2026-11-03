@@ -2405,7 +2405,7 @@ def _reel_caption(script, sh_, first):
 
 
 IG_QUEUE = DATA / "ig_queue.json"
-IG_RELEASE = "ig-queue"   # sıradaki Reels videoları bu GitHub Release'te bekler (repoyu şişirmez)
+IG_RELEASE = CFG.get("ig_release", "ig-queue")   # kanal başına ayrı; sıradaki Reels videoları bu GitHub Release'te bekler (repoyu şişirmez)
 
 
 def _gh(*args):

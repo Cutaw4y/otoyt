@@ -21,7 +21,7 @@ if CFG.get("ig_user_id"):
 DATA = ROOT / CFG.get("data_dir", ".")
 QUEUE = DATA / "ig_queue.json"
 HISTORY = DATA / "history.json"
-RELEASE = "ig-queue"
+RELEASE = CFG.get("ig_release", "ig-queue")
 
 
 def notify(text):
