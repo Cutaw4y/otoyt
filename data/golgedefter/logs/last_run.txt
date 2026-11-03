@@ -1,5 +1,3 @@
-[17:19:23] Başladı (test modu: False, yayın: scheduled)
-[17:19:24] Ücretli Gemini anahtarı kullanılıyor
-[17:19:25] Kanal doğrulandı: GölgeDefter
-[17:19:26] Yorum yazıldı: ayKbYxbFMK8
-[17:19:29] Oynatma listesi kapağı kondu: Kıyamet ve Ahir Zaman
+[20:11:45] Başladı (test modu: False, yayın: scheduled)
+[20:11:46] Ücretli Gemini anahtarı kullanılıyor
+[20:11:46] Kanal doğrulandı: GölgeDefter
