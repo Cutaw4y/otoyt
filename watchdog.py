@@ -59,7 +59,7 @@ def main():
         if tries >= MAX_TRIES:
             if not state.get(key):
                 state[key] = "gave_up"
-                tg(f"⚠️ {name}: bugün {tries} deneme yapıldı, video hâlâ çıkmadı. Bekçi durdu. "
+                tg(f"🆘 CLAUDE'A YAZ — {name}: bugün {tries} deneme yapıldı, video hâlâ çıkmadı. Bekçi durdu. "
                    "Claude'a 'kontrol et' yazman yeterli; yarınki video normal saatinde denenecek.")
             continue
         r = requests.post(f"{API}/actions/workflows/{wf}/dispatches", headers=H,

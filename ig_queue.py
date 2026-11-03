@@ -70,7 +70,7 @@ def main():
         r = gh("release", "download", rel, "-p", item["asset"], "-D", str(tmp))
         video = tmp / item["asset"]
     if (r is not None and r.returncode != 0) or not video.exists():
-        notify(f"⚠️ Instagram sırasındaki video bulunamadı, atlandı: {item['title']}")
+        notify(f"ℹ️ Instagram sırasındaki video bulunamadı, atlandı: {item['title']}")
         save(QUEUE, q[1:])
         return
     try:
@@ -79,7 +79,7 @@ def main():
     except Exception as e:
         (DATA / "ig_last_error.txt").write_text(f"{datetime.now().isoformat(timespec='minutes')} "
                                                 f"{item['title']}\n{e}\n", encoding="utf-8")
-        notify(f"⚠️ Instagram Reel yüklenemedi (yarın tekrar denenecek): {str(e)[:300]}")
+        notify(f"ℹ️ Instagram Reel yüklenemedi (yarın tekrar denenecek): {str(e)[:300]}")
         sys.exit(1)
     hist = load(HISTORY, [])
     hist.append({"date": datetime.now().isoformat(timespec="minutes"), "type": "reel", "title": item["title"],

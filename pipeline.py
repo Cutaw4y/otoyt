@@ -2387,7 +2387,7 @@ def retag_videos(ids):
         except Exception as e:
             log(f"{v['id']}: hashtag'ler yenilenemedi: {str(e)[:200]}")
             print(f"::error title=retag {v['id']}::{str(e)[:300]}")
-            notify(f"⚠️ Hashtag'ler eklenemedi: https://youtu.be/{v['id']} (ayrıntı kayıtta).")
+            notify(f"ℹ️ Hashtag'ler eklenemedi: https://youtu.be/{v['id']} (ayrıntı kayıtta).")
 
 
 def _reel_caption(script, sh_, first):
@@ -2424,7 +2424,7 @@ def post_reels(script, idea, shorts, history, parent=None):
     try:
         days = publish.instagram_refresh()
         if days is not None and days < 10:
-            notify(f"⚠️ Instagram anahtarının süresi {days} gün sonra doluyor, yenilenmesi gerekiyor.")
+            notify(f"🆘 CLAUDE'A YAZ — Instagram anahtarının süresi {days} gün sonra doluyor, yenilenmesi gerekiyor.")
     except Exception as e:
         log(f"Instagram token yenilenemedi: {str(e)[:200]}")
     n = int(CFG.get("instagram_reels_per_video", 1))
@@ -2441,7 +2441,7 @@ def post_reels(script, idea, shorts, history, parent=None):
                 continue
             except Exception as e:
                 log(f"Instagram Reel hatası: {str(e)[:500]}")
-                notify("⚠️ Instagram'a Reel yüklenemedi (YouTube tarafı etkilenmedi). Bu Short sıranın başına "
+                notify("ℹ️ Instagram'a Reel yüklenemedi (YouTube tarafı etkilenmedi). Bu Short sıranın başına "
                        "kondu, akşam otomatik tekrar denenecek. Teknik ayrıntı kayıtta; Claude'a "
                        "'Instagram hatası' demen yeterli.")
         # sonrakiler (ve yüklenemeyen ilk Short): GitHub Release'e yükle, sıraya ekle
@@ -2587,7 +2587,7 @@ def finish_manual_uploads():
             notify(f"✅ Yüklediğin video tamamlandı: {it['title']}\nhttps://youtu.be/{v['id']}\n"
                    "Açıklama, etiketler, küçük resim, altyazılar, oynatma listesi ve yayın saati eklendi. "
                    "Senden bir şey gerekmiyor." + when
-                   + (f"\n⚠️ {'; '.join(notes)}" if notes else ""))
+                   + (f"\nℹ️ {'; '.join(notes)}" if notes else ""))
             hist = load_json(HISTORY, [])
             for h in reversed(hist):
                 if h.get("manual") and not h.get("video_id") and it["kind"] == "long" and \
@@ -2807,7 +2807,7 @@ def ensure_branding():
         notify("🎨 Kanal afişi ve açıklaması ayarlandı.")
     except Exception as e:  # marka ayarı başarısız olsa da video üretimi devam etsin
         log(f"Kanal markası ayarlanamadı: {e}")
-        notify("⚠️ Kanal afişi/açıklaması güncellenemedi. Video üretimi etkilenmedi, devam ediyor.")
+        notify("ℹ️ Kanal afişi/açıklaması güncellenemedi. Video üretimi etkilenmedi, devam ediyor.")
 
 
 def clear_old_localizations():
@@ -2845,7 +2845,7 @@ def _check_gemini_key():
             ai.TTS_KEYS = [alt] + [k for k in ai.TTS_KEYS if k not in (alt, key)]
             CFG["paid_tier"] = False
             log(f"Gemini anahtarı çalışmıyor ({r.status_code}) → öbür kanalın anahtarına geçildi")
-            notify("⚠️ Ücretli Gemini hesabında bakiye görünmüyor (ödeme henüz yansımamış olabilir). "
+            notify("ℹ️ Ücretli Gemini hesabında bakiye görünmüyor (ödeme henüz yansımamış olabilir). "
                    "Video bugün ücretsiz anahtarla üretiliyor, senden bir şey gerekmiyor; Claude'a haber ver.")
 
 
@@ -2984,9 +2984,9 @@ def run_once():
             cap_ = "Altyazılar kontrol edildi: her kelimenin zamanı sesten ölçüldü, altyazı sesle birebir uyumlu ✅"
         elif st_["ok"]:
             cap_ = (f"Altyazılar kontrol edildi: {st_['total']} cümlenin {st_['ok']} tanesinde kelime zamanı sesten "
-                    "ölçüldü, kalanında tahmini zaman kullanıldı (küçük kayma olabilir) ⚠️")
+                    "ölçüldü, kalanında tahmini zaman kullanıldı (küçük kayma olabilir) ℹ️")
         else:
-            cap_ = "⚠️ Altyazı zamanları sesten ölçülemedi, tahmini zaman kullanıldı. Claude'a 'altyazı' demen yeterli."
+            cap_ = "ℹ️ Altyazı zamanları sesten ölçülemedi, tahmini zaman kullanıldı. Claude'a 'altyazı' demen yeterli."
         notify(f"🎙 Seslendirme bitti ({dur_ / 60:.0f} dk {dur_ % 60:.0f} sn).\n{cap_}")
         thumb, thumb_alt = make_thumbnails(script, w, ledger)  # önce: ücretsiz görsel hakkı sahnelere gitmeden
         build_scene_videos(script, w, ledger)
@@ -2995,7 +2995,7 @@ def run_once():
                f"seçildi (anlatılan neyse ekranda o)."
                + (f" Konuya uymayan {vs_['rejected']} stok video elendi." if vs_["rejected"] else "")
                + (f" {vs_['real']} yerde anlatılan yerin/nesnenin GERÇEK fotoğrafı kullanıldı (Wikimedia Commons)." if vs_.get("real") else "")
-               + (" ⚠️ Bazı sahnelerde eski yöntem kullanıldı." if vs_["planned"] < vs_["scenes"] else " ✅"))
+               + (" ℹ️ Bazı sahnelerde eski yöntem kullanıldı." if vs_["planned"] < vs_["scenes"] else " ✅"))
         variants = sorted(ASSETS.glob("music_*.mp3"))
         music = random.choice(variants) if variants else ASSETS / "music.mp3"  # her videoda farklı müzik
         final, words = assemble(script, w, music)
@@ -3096,7 +3096,7 @@ def run_once():
                 log(f"Altyazı eklenemedi ({name}): {str(e)[:200]}")
                 save_pending_caption(vid, srt_path, code, name)
                 if not cap_warned and ("insufficient" in str(e).lower() or "403" in str(e)):
-                    notify("⚠️ Altyazılar şimdilik yüklenemedi: YouTube izninin yenilenmesi gerekiyor "
+                    notify("🆘 CLAUDE'A YAZ — Altyazılar şimdilik yüklenemedi: YouTube izninin yenilenmesi gerekiyor "
                            "(get_token.bat bir kez). Altyazılar saklandı, izin yenilenince otomatik yüklenecek.")
                     cap_warned = True
         add_to_pillar_playlist(vid, idea["pillar"])
@@ -3106,7 +3106,7 @@ def run_once():
         save_json(HISTORY, history)
         ledger.save()
         if vid in publish.UPLOAD_WARNINGS:
-            notify(f"⚠️ Video yüklendi ama YouTube yayın saatini kaydetmedi: https://youtu.be/{vid}\n"
+            notify(f"🆘 CLAUDE'A YAZ — Video yüklendi ama YouTube yayın saatini kaydetmedi: https://youtu.be/{vid}\n"
                    f"Studio'dan Görünürlük → Planla → {fmt_local(main_t)} seç (bir kerelik).")
         notify(f"✅ Video yüklendi: {tr_title(tr_meta, script['title'])}\nhttps://youtu.be/{vid}\n"
                + (f"Yayın: {fmt_local(main_t)} (TR saati). " if sched else "Şimdilik gizli (private). ")
@@ -3148,7 +3148,7 @@ def run_once():
                        + (f"(yayın: {fmt_local(short_ts[k])} TR saati) " if sched else "(şimdilik gizli) ")
                        + f"https://youtu.be/{sid}")
             except Exception as e:
-                notify(f"⚠️ {k+1}. Short YouTube'a yüklenemedi. Uzun video etkilenmedi; ayrıntı kayıtta.")
+                notify(f"ℹ️ {k+1}. Short YouTube'a yüklenemedi. Uzun video etkilenmedi; ayrıntı kayıtta.")
                 if "quota" in str(e).lower() or "uploadLimit" in str(e):
                     break  # günlük yükleme hakkı doldu; kalanları zorlamayalım
 
@@ -3207,7 +3207,7 @@ if __name__ == "__main__":
                 notify(f"✅ {sub.get('label', sub['name'])} altyazı eklendi: https://youtu.be/{vid}")
             except Exception as e:
                 log(f"{vid}: çeviri altyazısı eklenemedi: {str(e)[:200]}")
-                notify(f"⚠️ Videoya çeviri altyazısı eklenemedi: https://youtu.be/{vid} (ayrıntı kayıtta).")
+                notify(f"ℹ️ Videoya çeviri altyazısı eklenemedi: https://youtu.be/{vid} (ayrıntı kayıtta).")
         sys.exit(0)
     if os.getenv("RETAG") == "footer":  # kanaldaki videoların açıklamasından eski kaynak/yapay zekâ notunu sil
         check_channel()
@@ -3266,7 +3266,7 @@ if __name__ == "__main__":
                 now_ = yt.videos().list(part="status", id=vid).execute()["items"][0]["status"]["privacyStatus"]
                 print(f"::notice title=yayınla {vid}::{now_}", flush=True)
                 notify(f"🚀 Video şimdi yayında: https://youtu.be/{vid}" if now_ == "public" else
-                       f"⚠️ Video herkese açılamadı ({now_}). Studio'dan Görünürlük → Herkese açık yapman gerekiyor.")
+                       f"🆘 CLAUDE'A YAZ — Video herkese açılamadı ({now_}). Studio'dan Görünürlük → Herkese açık yapman gerekiyor.")
             sys.exit(0)  # yorum tamamlayıcıdan yazılır (kayıt orada tutuluyor)
         if "|" in spec:  # "videoId|Yeni başlık": yalnız başlığı değiştir
             vid, new_title = spec.split("|", 1)
@@ -3325,10 +3325,12 @@ if __name__ == "__main__":
         if tts_fail:
             retry = False  # günlük ses hakkı 10 dk'da yenilenmez → ertesi gün telafi çalışması
             save_json(DATA / "missed.json", {"date": datetime.now().isoformat(timespec="minutes")})
-        notify("❌ Video üretimi sırasında bir hata oluştu. Teknik ayrıntı Claude için kayda yazıldı.\n"
-               + (f"💡 {guide}\n" if guide else "")
-               + ("🔄 10 dakika sonra otomatik olarak yeniden denenecek, senden bir şey gerekmiyor." if retry else
-                  "📅 Yarın aynı saatte otomatik telafi üretimi yapılacak, senden bir şey gerekmiyor." if tts_fail else
-                  "Claude'a 'üretim hatası' yazman yeterli, kayıttan bakar."))
+        if retry or tts_fail:  # sistem kendisi toparlıyor: sadece bilgi
+            notify("ℹ️ Video üretiminde bir aksaklık oldu, sistem kendisi tekrar deneyecek. Senden bir şey gerekmiyor.\n"
+                   + ("🔄 10 dakika sonra otomatik yeniden denenecek." if retry else
+                      "📅 Yarın aynı saatte otomatik telafi üretimi yapılacak."))
+        else:  # izin/anahtar gibi kendi kendine çözülemeyen durum
+            notify("🆘 CLAUDE'A YAZ — Video üretimi durdu ve kendi kendine çözülemiyor."
+                   + (f"\n💡 {guide}" if guide else "") + "\nClaude'a 'üretim hatası' yazman yeterli, kayıttan bakar.")
         credit_report("end")
         sys.exit(3 if retry else 4)  # 4 = hata Telegram'a Türkçe bildirildi
