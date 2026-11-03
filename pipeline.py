@@ -788,6 +788,11 @@ def gen_image(prompt, out, fallback_query=None, ledger=None):
         for q in (fallback_query, CFG["fallback_broll"]):
             if fetch_stock_photo(q, out, ledger):
                 return out
+    if ai.vertex_on():  # son çare: sınırı aşsa da Gemini (video yarıda kalmasın)
+        try:
+            return ai.gemini_image(prompt + ". Cinematic, wide 16:9, no text.", out, models=())
+        except Exception as e:
+            log(f"Son çare Gemini görseli de olmadı: {str(e)[:120]}")
     raise RuntimeError("Ne AI görsel ne yedek fotoğraf bulunabildi")
 
 
@@ -906,6 +911,7 @@ def fetch_openverse(subject, out, context=""):
 
 
 _VIS_T0 = None
+_LAST_IMG = None
 
 
 def vis_hurry():
@@ -1161,9 +1167,12 @@ def build_beat_scene(sc, i, bshots, workdir, ledger, style, hook, img_budget):
                 imgs[j] = gen_image(f"{b['image']}. Style: {style}", p, None if strict else b["query"], ledger)
             except Exception:
                 prev = [v for v in imgs.values() if v]
-                if not prev:
+                if prev:
+                    imgs[j] = prev[-1]
+                elif _LAST_IMG and Path(_LAST_IMG).exists():
+                    imgs[j] = _LAST_IMG
+                else:
                     raise
-                imgs[j] = prev[-1]
                 return imgs[j]
             if strict and not vis_hurry() and not visual_ok(imgs[j], b["text"]):  # alakasız çıktıysa cümleyi birebir çizdirerek bir kez daha
                 try:
@@ -1200,6 +1209,7 @@ def build_beat_scene(sc, i, bshots, workdir, ledger, style, hook, img_budget):
                 clip = fetch_stock(b["query"], workdir / f"raw_{i:02d}_{k:02d}_{t}.mp4", ledger)
                 if not clip or clip_matches(clip, {"narration": b["text"], "broll_query": b["query"]}, workdir):
                     break
+                Path(clip).unlink(missing_ok=True)  # elenen video diski doldurmasın
                 clip = None
         host = CFG.get("host_image")
         if host and k == 0 and (i == 0 or sc.get("chapter")) and (ASSETS / host).exists():
@@ -1219,6 +1229,13 @@ def build_beat_scene(sc, i, bshots, workdir, ledger, style, hook, img_budget):
                                focus=(random.uniform(0.3, 0.7), random.uniform(0.3, 0.7)))
         files.append(out)
     sc["video"] = media.concat(files, workdir / f"scene_{i:02d}.mp4", workdir, f"scene_{i:02d}")
+    for f in list(files) + list(Path(workdir).glob(f"raw_{i:02d}_*.mp4")):  # disk: ara dosyaları sil
+        if Path(f) != Path(sc["video"]):
+            Path(f).unlink(missing_ok=True)
+    global _LAST_IMG
+    good = [v for v in imgs.values() if v and Path(v).exists()]
+    if good:
+        _LAST_IMG = good[-1]
 
 
 def _plain(t):

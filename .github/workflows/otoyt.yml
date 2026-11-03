@@ -20,6 +20,8 @@ jobs:
     runs-on: ubuntu-24.04   # sabit sürüm: Ubuntu 26 geçişinde paketler bozulmasın
     timeout-minutes: 210
     steps:
+      - name: Disk alanı aç (kullanılmayan araçlar silinir, ~30 GB)
+        run: sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL /usr/local/share/boost; df -h / | tail -1
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
