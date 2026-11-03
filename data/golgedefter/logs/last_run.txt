@@ -1,3 +1,4 @@
-[05:17:35] Başladı (test modu: False, yayın: scheduled)
-[05:17:35] Ücretli Gemini anahtarı kullanılıyor
-[05:17:36] Kanal doğrulandı: GölgeDefter
+[08:27:11] Başladı (test modu: False, yayın: scheduled)
+[08:27:11] Ücretli Gemini anahtarı kullanılıyor
+[08:27:12] Kanal doğrulandı: GölgeDefter
+[08:27:12] Kanal ayarları tamam.
