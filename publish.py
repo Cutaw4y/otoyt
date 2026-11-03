@@ -136,7 +136,7 @@ def ayrshare_upload(video, meta, thumb=None):
     return _retry(do, tries=2, what="Ayrshare paylaşım")
 
 
-def srt_to_ytt(srt_path, out_path, top=True):
+def srt_to_ytt(srt_path, out_path, top=True, size=None):
     """SRT → YouTube zamanlı metin (srv3). Seçilen altyazı gömülü yazının hemen üstünde görünür, çakışmaz."""
     import re
     from xml.sax.saxutils import escape
@@ -146,6 +146,8 @@ def srt_to_ytt(srt_path, out_path, top=True):
         se, mi = rest.split(",")
         return ((int(h) * 60 + int(m)) * 60 + int(se)) * 1000 + int(mi)
     ps = []
+    size = size or int(os.getenv("CAPTION_SIZE", "75"))  # yazı boyutu (%): küçük, videonun gömülü yazısını ezmesin
+    pen = ' p="1"' if size != 100 else ""
     for blk in re.split(r"\n\s*\n", txt.strip()):
         ls = [l for l in blk.split("\n") if l.strip()]
         i = next((k for k, l in enumerate(ls) if "-->" in l), None)
@@ -155,12 +157,12 @@ def srt_to_ytt(srt_path, out_path, top=True):
         t0, t1 = ms(a), ms(b.split()[0])
         body = escape(" ".join(ls[i + 1:]).strip())
         if body:
-            ps.append(f'<p t="{t0}" d="{max(1, t1 - t0)}" wp="1" ws="1">{body}</p>')
+            ps.append(f'<p t="{t0}" d="{max(1, t1 - t0)}" wp="1" ws="1"{pen}>{body}</p>')
     # üstte bölüm kartı (sol) ve bilgi kutusu (sağ) var; gömülü yazı en altta (~%82'den aşağı).
     # Seçilen iz, gömülü yazının hemen ÜSTÜNE oturur: iki dilli altyazı gibi alt alta, hiçbir şeyle çakışmaz.
     pos = 'ap="7" ah="50" av="78"' if top else 'ap="7" ah="50" av="94"'
     xml = ('<?xml version="1.0" encoding="utf-8"?>\n<timedtext format="3">\n<head>\n'
-           f'<wp id="1" {pos}/>\n<ws id="1" ju="2"/>\n</head>\n<body>\n' + "\n".join(ps) + "\n</body>\n</timedtext>\n")
+           f'<pen id="1" sz="{size}"/>\n<wp id="1" {pos}/>\n<ws id="1" ju="2"/>\n</head>\n<body>\n' + "\n".join(ps) + "\n</body>\n</timedtext>\n")
     open(out_path, "w", encoding="utf-8").write(xml)
     return out_path
 

@@ -215,6 +215,8 @@ burn_captions: true            # uzun videoda ekrana gömülü sade altyazı
 caption_word_highlight: true    # altyazı kelime kelime ilerler: söylenen kelime kanalın vurgu renginde
 caption_words_per_line: 5       # kısa satırlar; iki satır asla aynı anda görünmez
 visual_per_sentence: true       # her cümleye kendi görseli: görüntü, o cümle söylenirken değişir
+scene_images: "gemini"          # sahne görselleri Gemini (Vertex kredisi) ile: bu kanalda görsel kalitesi çok önemli
+max_gemini_scene_images: 45     # video başına üst sınır (~1,8 $); fazlası Cloudflare'den
 max_sentence_images: 60         # video başına cümle görseli (AI) üst sınırı; aşılırsa stok fotoğraf
 max_footage_checks: 160         # stok videonun cümleyle uyumunu kontrol (ucuz Gemini modeli)
 music_db: -21                  # müzik seviyesi (anlatım varken ayrıca otomatik kısılır)
@@ -260,6 +262,12 @@ subtitle_translation:
   code: "tr"
   name: "Turkish"
   label: "Türkçe"
+  notes: >
+    Turkish viewers are mostly Muslims who know these terms: use the established Turkish Islamic
+    terms (cin, şeytan, İblis, karîn, nazar, sihir/büyü, rukye, gayb, melek, Kur'an-ı Kerim, sure,
+    ayet, hadis, Hz. Süleyman, Hz. Muhammed (s.a.v.)), and write sura names the Turkish way
+    (Rahman Suresi 15. ayet, Cin Suresi, Hicr Suresi). Never translate "jinn" as "peri" or "ruh",
+    never "genie" as anything but "lamba cini" when it means the Western genie. Respectful tone.
 
 make_shorts: true
 shorts_per_video: 3            # her uzun videodan kaç farklı Short (YouTube günlük yükleme kotası: en fazla 4)

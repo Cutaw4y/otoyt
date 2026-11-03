@@ -754,12 +754,24 @@ def fetch_pexels_photo(query, out, ledger):
 
 
 _quota_hit = False
+_gem_imgs = 0
 
 
 def gen_image(prompt, out, fallback_query=None, ledger=None):
     """AI diyagram (Cloudflare). Günlük ücretsiz kota biterse Pexels fotoğrafına düşer."""
     global _quota_hit
     out = Path(out).with_suffix(".jpg")
+    global _gem_imgs
+    if (CFG.get("scene_images") == "gemini" and ai.vertex_on()
+            and _gem_imgs < CFG.get("max_gemini_scene_images", 45)):
+        # yüksek kaliteli sahne görseli (Google Cloud kredisinden, ~0,04 $/görsel); olmazsa Cloudflare'e düşer
+        try:
+            got = ai.gemini_image(prompt + ". Cinematic, photographic quality, wide 16:9 composition, no text, "
+                                  "no letters, no watermark.", out, models=())
+            _gem_imgs += 1
+            return got
+        except Exception as e:
+            log(f"Gemini sahne görseli üretilemedi, Cloudflare denenecek: {str(e)[:150]}")
     if not os.getenv("CLOUDFLARE_API_TOKEN") or not os.getenv("CLOUDFLARE_ACCOUNT_ID"):
         _quota_hit = True  # Cloudflare kurulmamış → doğrudan Pexels fotoğrafı
     if not _quota_hit:
@@ -1281,7 +1293,9 @@ def translate_lines(lines, lang_name, chunk=30):
                     f"You translate video subtitles into natural, fluent, SIMPLE {lang_name} that anyone understands "
                     "on first read (everyday words, no jargon, no academic or archaic words; if the original "
                     "explains a term, keep the explanation). Keep each line short and readable; keep facts "
-                    "accurate; convert nothing that changes meaning. Every numbered line gets its own translation.",
+                    "accurate; convert nothing that changes meaning. Every numbered line gets its own translation."
+                    + (f" {(CFG.get('subtitle_translation') or {}).get('notes', '')}"
+                       if lang_name == (CFG.get("subtitle_translation") or {}).get("name") else ""),
                     f"Translate every value into {lang_name}. Keep exactly the same keys 1..{len(part)}.\n"
                     + json.dumps({"lines": src}, ensure_ascii=False) + '\nReturn JSON: {"lines":{"1":"...",...}}',
                     required=("lines",), judge=True)
