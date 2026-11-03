@@ -101,6 +101,42 @@ playlists:   # her konu sütunu bir oynatma listesi (izleyici videodan videoya a
   "Places and objects that shouldn't exist (impossible structures, strange signals, out-of-place finds)": "Things That Shouldn't Exist"
   "The world's strangest beliefs, investigated: jinn and other entities from cultures Americans rarely hear about, through documented cases": "Strange Beliefs, Investigated"
 
+# Planlı seri (Furkan, 03.11): sırayla, her 2 videodan biri. id değişmesin (yayınlananlar id ile izlenir).
+series_every: 2
+series:
+  - id: jinn-1
+    pillar: "The world's strangest beliefs, investigated: jinn and other entities from cultures Americans rarely hear about, through documented cases"
+    title: "Jinn: What the Quran Actually Says About the Hidden Beings"
+    search_query: "what are jinn in islam"
+    angle: >
+      Part 1 of our Jinn series. Explain what jinn are ONLY from the primary sources, each with its
+      reference shown on screen: created from smokeless fire (Ar-Rahman 55:15, Al-Hijr 15:27), created
+      to worship like humans (Adh-Dhariyat 51:56), have free will and believers among them (Surah Al-Jinn
+      72:1-15; Al-Ahqaf 46:29-32), Iblis was one of them (Al-Kahf 18:50), they worked for Prophet
+      Sulayman (Saba 34:12-14), and what authentic hadith (Bukhari/Muslim, cite the book) add. Correct the
+      big Western myth: jinn are not wish-granting genies; the "genie" comes from European translations
+      of One Thousand and One Nights. End by promising part 2 (real reported cases from Turkey).
+  - id: jinn-2
+    pillar: "The world's strangest beliefs, investigated: jinn and other entities from cultures Americans rarely hear about, through documented cases"
+    title: "Karabasan: The Jinn Encounters Millions of Turks Report"
+    search_query: "jinn encounters turkey karabasan"
+    angle: >
+      Part 2 of our Jinn series (remind viewers of part 1 in one sentence). The most commonly reported
+      jinn experiences in Turkey, centered on "karabasan" (the night-time pressing presence) and other
+      widely reported patterns; use only documented, publicly reported accounts (news reports, published
+      research, folklore archives), never invent names or cases. What witnesses describe, what the
+      tradition says, and what sleep researchers say about sleep paralysis, without ruling on the faith.
+      End by promising part 3 (similar encounters around the world).
+  - id: jinn-3
+    pillar: "The world's strangest beliefs, investigated: jinn and other entities from cultures Americans rarely hear about, through documented cases"
+    title: "The Same Night Visitor, Seen in Every Culture"
+    search_query: "jinn encounters around the world sleep paralysis demon"
+    angle: >
+      Part 3 of our Jinn series (one sentence recap). Documented reports from around the world that
+      match the jinn experience: the Old Hag of Newfoundland, kanashibari in Japan, pisadeira in Brazil,
+      the djinn reports of the Middle East and South Asia. Why so many cultures describe the same visitor,
+      what science explains and what it still can't. Respectful to every belief. Close the series.
+
 # Kanalın görsel kimliği: her diyagram bu stilde üretilir → tutarlı marka görünümü
 visual_style: >
   clean modern documentary illustration, 3D cutaway / cross-section / evidence map where useful,

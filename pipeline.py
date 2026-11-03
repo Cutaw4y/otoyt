@@ -147,7 +147,33 @@ def fetch_viewer_requests():
         return []
 
 
+def next_series(history):
+    """config 'series': sırayla yayınlanacak planlı bölümler (ör. Cin serisi). Varsayılan: her 2 videodan biri.
+    Senaryosu kaliteyi geçemeyen bölüm o çalışmada atlanır (history'ye 'tried' olarak düşer), sonra tekrar denenir."""
+    items = CFG.get("series") or []
+    if not items:
+        return None
+    longs = [h for h in history if h.get("type", "long") == "long"]
+    done = {h.get("series_id") for h in longs if h.get("series_id")}
+    tried = {h.get("title") for h in longs if not h.get("date")}  # bu çalışmada denenip reddedilenler
+    every = int(CFG.get("series_every", 2))
+    recent = [h for h in longs if h.get("date")][-(every - 1):] if every > 1 else []
+    if any(h.get("series_id") for h in recent):
+        return None  # araya normal video girsin
+    for it in items:
+        if it["id"] in done or it["title"] in tried:
+            continue
+        log(f"Seri bölümü seçildi: {it['title']}")
+        notify(f"📚 Seri bölümü: {it['title']}")
+        return {"title": it["title"], "angle": it["angle"], "pillar": it.get("pillar") or CFG["content_pillars"][0],
+                "search_query": it.get("search_query", it["title"]), "series_id": it["id"]}
+    return None
+
+
 def pick_topic(history, report):
+    s_ = next_series(history)
+    if s_:
+        return s_
     past = [h["title"] for h in history if h.get("type", "long") == "long"][-300:]
     pillar = choose_pillar(report)
     perf = ""
@@ -1935,7 +1961,8 @@ def make_manual_package(script, idea, shorts, thumb, main_srt, sub_srt, history,
     pend.append(entry)
     save_json(MANUAL_PENDING, pend)
     history.append({"date": datetime.now().isoformat(timespec="minutes"), "type": "long",
-                    "title": script["title"], "pillar": idea["pillar"], "video_id": None, "manual": True})
+                    "title": script["title"], "pillar": idea["pillar"], "video_id": None, "manual": True,
+                    "series_id": idea.get("series_id")})
     save_json(HISTORY, history)
     ledger.save()
     run = os.getenv("GITHUB_RUN_ID")
@@ -2877,7 +2904,8 @@ def run_once():
                     cap_warned = True
         add_to_pillar_playlist(vid, idea["pillar"])
         history.append({"date": datetime.now().isoformat(timespec="minutes"), "type": "long",
-                        "title": script["title"], "pillar": idea["pillar"], "video_id": vid})
+                        "title": script["title"], "pillar": idea["pillar"], "video_id": vid,
+                        "series_id": idea.get("series_id")})
         save_json(HISTORY, history)
         ledger.save()
         if vid in publish.UPLOAD_WARNINGS:
