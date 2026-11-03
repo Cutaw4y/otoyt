@@ -3035,6 +3035,25 @@ if __name__ == "__main__":
             except Exception as e:
                 print(f"::error title=planla {vid}::{str(e)[:300]}", flush=True)
             sys.exit(0)
+        if spec.startswith("gizle:"):  # videoları gizliye al (silmek yerine; geri açılabilir)
+            check_channel()
+            yt = publish._yt()
+            hidden = []
+            for vid in [x.strip() for x in spec[6:].split(",") if x.strip()]:
+                it = yt.videos().list(part="status,snippet", id=vid).execute().get("items", [])
+                if not it or (CHANNEL_ID and it[0]["snippet"].get("channelId") != CHANNEL_ID):
+                    print(f"::warning title=gizle {vid}::bu kanalın videosu değil / bulunamadı", flush=True)
+                    continue
+                st = it[0]["status"]
+                body = {"id": vid, "status": {"privacyStatus": "private",
+                                              "selfDeclaredMadeForKids": st.get("selfDeclaredMadeForKids", False),
+                                              "containsSyntheticMedia": st.get("containsSyntheticMedia", True)}}
+                yt.videos().update(part="status", body=body).execute()
+                hidden.append(it[0]["snippet"]["title"])
+                print(f"::notice title=gizle {vid}::private", flush=True)
+            notify(f"🙈 {len(hidden)} eski video gizliye alındı (silinmedi, istenirse geri açılabilir):\n- "
+                   + "\n- ".join(hidden))
+            sys.exit(0)
         if spec.startswith("yayinla:"):  # planlı videoyu hemen herkese aç
             yt = publish._yt()
             for vid in [x.strip() for x in spec[8:].split(",") if x.strip()]:
