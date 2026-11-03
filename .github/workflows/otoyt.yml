@@ -99,7 +99,7 @@ jobs:
           git config user.name "otoyt-bot"
           git config user.email "otoyt@users.noreply.github.com"
           for f in credit_ledger.json playlist_covers.json history.json assets_used.json assets/branding_done.json logs/last_run.txt \
-                   pending_comments.json votes.json playlists.json localizations_cleared.json manual_pending.json; do [ -f "$f" ] && git add "$f"; done
+                   pending_comments.json pending_script.json votes.json playlists.json localizations_cleared.json manual_pending.json; do [ -f "$f" ] && git add "$f"; done
           for d in pending_captions thumb_alt manual; do [ -d "$d" ] && git add -A "$d"; done
           git diff --cached --quiet && exit 0
           git commit -m "otoyt: $(date -u +%F)"

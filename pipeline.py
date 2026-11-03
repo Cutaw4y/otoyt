@@ -2864,6 +2864,26 @@ def check_channel():
     log(f"Kanal doğrulandı: {title}")
 
 
+def push_now(path, msg):
+    """Önemli kaydı hemen depoya yazar (iş zaman aşımına uğrarsa da kaybolmasın). Yalnız GitHub'da, hata olursa sessiz."""
+    if DRY_RUN or not os.getenv("GITHUB_ACTIONS"):
+        return
+    try:
+        import subprocess
+        run = lambda *a: subprocess.run(["git", *a], cwd=ROOT, capture_output=True, text=True, timeout=60)
+        run("config", "user.name", "otoyt-bot")
+        run("config", "user.email", "otoyt@users.noreply.github.com")
+        run("add", str(path))
+        if run("commit", "-m", f"otoyt: {msg}").returncode != 0:
+            return
+        for _ in range(3):
+            run("pull", "--rebase", "-X", "theirs", "-q")
+            if run("push", "-q").returncode == 0:
+                return
+    except Exception as e:
+        log(f"Kayıt hemen yazılamadı: {str(e)[:100]}")
+
+
 def run_once():
     if os.getenv("GITHUB_EVENT_NAME") == "schedule" and not os.getenv("CATCHUP"):
         today = datetime.now().date().isoformat()
@@ -2887,7 +2907,19 @@ def run_once():
     tally_votes()
     ensure_playlist_covers()
     maybe_swap_thumbnails(history)
-    idea, script = produce_script(history, report)
+    PENDING_SCRIPT = DATA / "pending_script.json"
+    pend = load_json(PENDING_SCRIPT, None) if PENDING_SCRIPT.exists() else None
+    if pend and pend.get("script") and (datetime.now() - datetime.fromisoformat(pend["date"])).days <= 7:
+        # önceki çalışma hata/zaman aşımıyla yarıda kaldı: hazır (kalite ve bilgi kontrolünden geçmiş) senaryo çöpe gitmesin
+        idea, script = pend["idea"], pend["script"]
+        log(f"Yarıda kalan videonun senaryosu kullanılıyor: {script['title']}")
+        notify(f"♻️ Önceki denemede yarıda kalan konu yeniden yapılıyor: {script['title']}{tr_note(script['title'])}")
+    else:
+        idea, script = produce_script(history, report)
+        if script is not None:
+            save_json(PENDING_SCRIPT, {"date": datetime.now().isoformat(timespec="minutes"), "idea": idea,
+                                       "script": script})
+            push_now(PENDING_SCRIPT, "yarım kalırsa diye senaryo kaydı")
     if script is None:
         return False
     kw = (script.get("core_keyword") or "").strip()  # revizyonlardan sonra da garanti
@@ -3008,6 +3040,7 @@ def run_once():
         vid = publish.upload(named, m_long, thumb, up)
         queue_comment(vid, script.get("pinned_comment"))
         record_vote(vid, script)
+        (DATA / "pending_script.json").unlink(missing_ok=True)  # yüklendi: yarım kalan senaryo kaydı silinir
         mark_poll_used()
         if thumb_alt:
             THUMB_ALT.mkdir(parents=True, exist_ok=True)
