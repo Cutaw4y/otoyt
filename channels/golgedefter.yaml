@@ -198,7 +198,7 @@ strict_visuals: true             # alakasız görüntü yok: önce gerçek foto�
 max_footage_checks: 320
 max_sentence_images: 140
 scene_images: "gemini"           # sahne görselleri Gemini (Vertex kredisi) ile, kalan Cloudflare
-max_gemini_scene_images: 45
+max_gemini_scene_images: 25     # fiyat/performans: ilk ~5 dakika (en çok izlenen kısım) Gemini kalitesinde, gerisi ücretsiz model
 host_image: "host/host_1.jpg"     # anlatıcı 'Gölge': açılışta ve bölüm başlarında (yüzü görünmez)
 title_card: "clips"              # en başta: defter açılır, gölge kalem günün konusunu yazar (~3,8 sn)
 outro_line: "Bu sayfa şimdilik kapanıyor. Henüz abone olmadıysanız, Gölgedefter'e destek olmak için abone olmayı unutmayın. Videoyu buraya kadar izlediyseniz, bir beğeni bırakmanız bizim için çok değerli. Bir sonraki sayfada görüşmek üzere."
@@ -217,7 +217,7 @@ max_expand_rounds: 2
 min_diagram_ratio: 0.5         # sahnelerin en az yarısı atmosferik AI görseli
 min_quality_score: 7
 min_quality_floor: 0
-max_topic_attempts: 5
+max_topic_attempts: 2          # fiyat/performans: en fazla 2 konu denenir, en iyi senaryo yayınlanır
 max_rewrites: 2
 units_rule: >
   Metrik birimler kullan (metre, kilometre, kilogram, derece). Her sayıyı göz önünde canlanan bir

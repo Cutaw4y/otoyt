@@ -1212,7 +1212,7 @@ def build_beat_scene(sc, i, bshots, workdir, ledger, style, hook, img_budget):
             want_still = bool(b.get("real") and part == 0) or vis_hurry()
         clip = None
         if not want_still:
-            for t in range(2 if CFG.get("strict_visuals") else 3):
+            for t in range(1 if CFG.get("strict_visuals") else 3):
                 clip = fetch_stock(b["query"], workdir / f"raw_{i:02d}_{k:02d}_{t}.mp4", ledger)
                 if not clip or clip_matches(clip, {"narration": b["text"], "broll_query": b["query"]}, workdir):
                     break
