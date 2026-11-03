@@ -3,10 +3,10 @@
 channel_name: "Cutaway"        # kanal adını değiştirirsen burayı da değiştir
 notify_prefix: "🔧 Cutaway |"   # Telegram mesajlarında hangi kanal olduğu
 channel_brief: >
-  Engineering disasters, mysteries and things that shouldn't exist (niche since 3 Nov 2026).
+  Engineering disasters and mysteries, cut open (niche since 3 Nov 2026).
   Each video takes ONE real, well documented case: a structure that collapsed, a machine that
-  exploded, a megaproject that was abandoned, a building that is still sinking, a secret or
-  extreme facility, a disaster that almost happened. It opens like a mystery (stakes + the moment
+  exploded, a building that is still sinking, a disaster that almost happened, a megaproject
+  that failed. Our signature: we cut the failure open and show the exact part that broke. It opens like a mystery (stakes + the moment
   it went wrong + the open question), then solves it with engineering: diagrams and inside views
   show exactly what broke and why, and what engineers changed after. Respectful to victims,
   evergreen cases (decades old, well documented), no current news, no politics, no real people as
@@ -75,14 +75,13 @@ seo_rules: >
 # Rakip analizi (Practical Engineering, Real Engineering, Branch Education, Jared Owen, The B1M):
 # en çok izlenenler tek bir somut tuhaflık, felaket/arıza analizi ve görünmez altyapıyı somutlaştıran videolar.
 content_pillars:
-  - "Engineering disasters: what really broke (collapses, explosions, dam and bridge failures)"
-  - "Engineering mysteries: structures that shouldn't still stand, sinking buildings, unexplained failures"
-  - "Abandoned and failed megaprojects (ghost cities, cancelled giants, machines that never worked)"
-  - "Secret and declassified engineering (Cold War bunkers, hidden facilities, strange military machines)"
+  - "Engineering disasters: what really broke inside (collapses, explosions, dam and bridge failures)"
+  - "Engineering mysteries: structures that shouldn't still stand, sinking buildings, failures nobody predicted"
   - "Near-disasters: the day it almost went wrong and the one detail that saved everyone"
-  - "Engineering at the deadly extremes (deepest holes, hottest mines, places that destroy machines)"
-# 03.11 kararı: kanal tamamen 'mühendislik felaketleri, gizemleri ve sıra dışı yapılar' nişine geçti
-pillar_weights: [2.5, 2.5, 1.5, 1.2, 1.2, 1]
+  - "Failed and abandoned megaprojects: what engineers got wrong"
+# 03.11 araştırması: geniş konulu yüzsüz kanallar 2026'da geriliyor, dar niş + tanınır imza öne çıkıyor.
+# Kimlik: 'Cutaway' = felaketin İÇİNİ açıp tam olarak hangi parçanın neden koptuğunu gösteren tek kanal.
+pillar_weights: [3, 2, 1.5, 1]
 
 idea_rules: >
   Each idea centers on ONE concrete oddity, failure or seemingly impossible conflict,
@@ -97,12 +96,10 @@ idea_rules: >
   Sinking". The engineering explanation (diagrams, inside views) is our edge over mystery channels.
 
 playlists:   # her konu sütunu bir oynatma listesi (izleyici videodan videoya akar)
-  "Engineering disasters: what really broke (collapses, explosions, dam and bridge failures)": "Engineering Disasters Explained"
-  "Engineering mysteries: structures that shouldn't still stand, sinking buildings, unexplained failures": "Engineering Mysteries"
-  "Abandoned and failed megaprojects (ghost cities, cancelled giants, machines that never worked)": "Abandoned Megaprojects"
-  "Secret and declassified engineering (Cold War bunkers, hidden facilities, strange military machines)": "Secret Engineering"
+  "Engineering disasters: what really broke inside (collapses, explosions, dam and bridge failures)": "Engineering Disasters: What Really Broke"
+  "Engineering mysteries: structures that shouldn't still stand, sinking buildings, failures nobody predicted": "Engineering Mysteries"
   "Near-disasters: the day it almost went wrong and the one detail that saved everyone": "Near-Disasters"
-  "Engineering at the deadly extremes (deepest holes, hottest mines, places that destroy machines)": "Deadly Extremes"
+  "Failed and abandoned megaprojects: what engineers got wrong": "Failed Megaprojects"
 
 # Kanalın görsel kimliği: her diyagram bu stilde üretilir → tutarlı marka görünümü
 visual_style: >
@@ -111,10 +108,11 @@ visual_style: >
   warm orange accents, clear arrows showing flow, no text or labels, 16:9
 watch_next_text: "▶ Watch next:"
 thumbnail_rules: >
-  Cutaway look: the real object shown as a photoreal 3D cutaway or exploded view with glowing
-  internals, or the object at an extreme moment (red-hot, cracked, giant next to a tiny human
-  for scale). Orange-and-teal contrast, dark background. When it fits, add one small human figure
-  with a clear reaction or for scale (an invented person, never a real one): emotion lifts clicks.
+  Cutaway signature (same on every video so viewers recognize us): the real structure or machine
+  at the moment of failure, with ONE part cut open as a photoreal cutaway that glows hot orange
+  where it broke (the cracked bolt, the failed weld, the leaking seam). Dark, cold teal
+  surroundings, the failure point is the brightest thing in the frame. Optionally a tiny invented
+  human for scale. Never gore, never real victims, never a real person.
 thumbnail_style: "bold, high contrast, dramatic lighting, one clear object, cinematic, vivid colors"
 
 # Kanal sayfası (ilk gerçek çalışmada bir kez otomatik ayarlanır)
