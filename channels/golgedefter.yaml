@@ -194,7 +194,8 @@ voice:
 
 # ======================= KURGU =======================
 use_intro: true
-strict_visuals: true             # alakasız görüntü yok: stok video kullanılmaz; her görsel cümleye göre çizilir ve kontrol edilir
+strict_visuals: true             # alakasız görüntü yok: önce gerçek fotoğraf/video (yapay zekâ ile kontrol), olmazsa cümleye göre çizilip kontrol edilen görsel
+max_footage_checks: 320
 max_sentence_images: 140
 scene_images: "gemini"           # sahne görselleri Gemini (Vertex kredisi) ile, kalan Cloudflare
 max_gemini_scene_images: 45

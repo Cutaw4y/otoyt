@@ -950,7 +950,7 @@ def clip_matches(clip, sc, workdir):
     İlgisiz görüntü izleyiciyi kaçırır; emin olunamazsa (hata) kabul edilir."""
     global _CLIP_CHECKS
     if not CFG.get("check_footage", True) or _CLIP_CHECKS >= CFG.get("max_footage_checks", 160):
-        return True  # günlük ücretsiz kota senaryoya kalsın
+        return not CFG.get("strict_visuals")  # katı modda kontrol edilemeyen video kullanılmaz
     _CLIP_CHECKS += 1
     try:
         fr = Path(workdir) / (Path(clip).stem + "_chk.jpg")
@@ -972,7 +972,7 @@ def clip_matches(clip, sc, workdir):
         if "kota" in str(e) or "429" in str(e):  # ücretsiz hak bitti: kalan sahnelerde kontrolü bırak,
             _CLIP_CHECKS = 10 ** 6                 # çeviri ve küçük resim hakemine hak kalsın
             log("Görüntü kontrolü durduruldu (Gemini hakkı dolu)")
-        return True
+        return not CFG.get("strict_visuals")
 
 
 def plan_beats(script):
@@ -1079,7 +1079,7 @@ def build_scene_videos(script, workdir, ledger):
         log(f"Sahne {i+1}/{len(scenes)} ({sc.get('visual')}, {sc['duration']:.1f} sn, {len(shots)} çekim)")
         q = sc.get("broll_query") or CFG["fallback_broll"]
         img = None
-        if sc.get("visual") == "diagram" or CFG.get("strict_visuals"):  # katı mod: stok video yok
+        if sc.get("visual") == "diagram" or CFG.get("strict_visuals"):  # katı mod: yedek görsel hazır olsun
             img = gen_image(f"{sc.get('image_prompt') or sc['narration']}. Style: {style}",
                             workdir / f"img_{i:02d}.jpg", q, ledger)
             if CFG.get("strict_visuals") and not visual_ok(img, sc["narration"][:400]):
@@ -1089,7 +1089,7 @@ def build_scene_videos(script, workdir, ledger):
         for k, fr in enumerate(shots):
             out = workdir / f"shot_{i:02d}_{k:02d}.mp4"
             # diyagram sahnesi: diyagram (geniş) → stok → diyagram (detay) → stok ...
-            use_still = img is not None and (k % 2 == 0 or i < hook_n or CFG.get("strict_visuals"))
+            use_still = img is not None and (k % 2 == 0 or i < hook_n)
             clip = None
             if not use_still:
                 # konuyla ilgili stok video: 3 aday dene; genel "yedek" görüntü kullanma, yoksa AI görsel
@@ -1131,6 +1131,11 @@ def build_beat_scene(sc, i, bshots, workdir, ledger, style, hook, img_budget):
                 imgs[j] = got
                 return got
         strict = CFG.get("strict_visuals")
+        if strict:  # gerçek stok fotoğraf, ancak cümleyi gerçekten gösteriyorsa
+            p = workdir / f"img_{i:02d}_b{j:02d}_s.jpg"
+            if fetch_stock_photo(b["query"], p, ledger) and image_matches(p, b["text"]):
+                imgs[j] = p
+                return p
         if img_budget[0] > 0:
             img_budget[0] -= 1
             p = workdir / f"img_{i:02d}_b{j:02d}.jpg"
@@ -1168,7 +1173,9 @@ def build_beat_scene(sc, i, bshots, workdir, ledger, style, hook, img_budget):
         if b.get("real") and part == 0:
             want_still = True  # cümle gerçek bir yerden/nesneden bahsediyorsa önce onun gerçek fotoğrafı
         if CFG.get("strict_visuals"):
-            want_still = True  # katı mod: stok video yok; yalnız cümle için üretilmiş/doğrulanmış görsel ve gerçek fotoğraf
+            # katı mod (Furkan: gerçek video/fotoğraf önce): cümle gerçek bir yerden bahsediyorsa önce onun gerçek
+            # fotoğrafı; değilse önce konuyla birebir ilgili gerçek video (yapay zekâ kontrolünden geçerse)
+            want_still = bool(b.get("real") and part == 0)
         clip = None
         if not want_still:
             for t in range(3):
