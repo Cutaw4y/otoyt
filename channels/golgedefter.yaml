@@ -263,3 +263,19 @@ ig_brand_tag: "#gölgedefter"    # her Reel'de olur; Instagram en fazla 5 etiket
 yt_brand_tag: "#gölgedefter"    # YouTube hashtag satırında her zaman olur
 instagram_reels_per_video: 3     # 1.si hemen, kalanlar günde bir (ig_tr.yml)
 instagram_ai_label: true
+
+# Planlı konular (Furkan seçti). Sırayla yapılır; id değişmesin (yapılanlar id ile izlenir).
+series_every: 1
+series:
+  - id: temim-1
+    pillar: "Kıyamet alametleri ve ahir zaman anlatıları (ayet ve hadis kaynaklarıyla, tarih tahmini yok)"
+    title: "Temim ed-Dari Hadisi: 30 Denizci O Adada Kimi Zincirli Buldu?"
+    search_query: "temim ed dari hadisi cessase deccal ada"
+    angle: >
+      Sahih-i Müslim'deki (Kitabü'l-Fiten, "Cessâse hadisi") rivayet: Fâtıma bint Kays'ın aktardığı, Peygamber
+      Efendimiz'in (s.a.v.) minberden anlattığı Temîm ed-Dârî'nin deniz yolculuğu. Lahm ve Cüzâm kabilesinden 30
+      kişi, bir ay dalgalarla savrulan gemi, ada, tüylü varlık Cessâse, manastırda zincirlenmiş adam ve onun
+      sorduğu sorular (Beysan hurmaları, Taberiye gölü, Zuğar pınarı). Önce hadisin metnini ve kaynağını sadık
+      biçimde anlat (kitap ve bab adıyla), sonra âlimlerin bu hadis hakkında söylediklerini (sened değerlendirmesi,
+      farklı yorumlar) aktar. Adanın yeri hakkındaki popüler tahminleri "iddia" olarak ver, kesin konum ve tarih
+      tahmini yapma, kimseyi Deccal ilan etme. Saygılı, sakin, belgesel anlatım.
