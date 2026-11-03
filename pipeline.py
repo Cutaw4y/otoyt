@@ -282,9 +282,11 @@ SCRIPT_SCHEMA = (
     '"ig_hashtags_note":"IG rules: first line = hook that contains the exact words people would search on '
     'Instagram for this topic (Instagram search reads captions); then 1-2 short lines that add a surprising fact '
     'NOT in the clip; then a question that invites comments; then a CTA: the full video is on YouTube, link in bio; '
-    'last line EXACTLY 5 hashtags (Instagram allows max 5): 1 broad niche tag, 2 specific to this clip\'s subject '
-    '(names, places, events), 1 mid-size community tag, 1 brand tag given in the brief. No spaces inside a tag, '
-    'no punctuation, written in the video language",'
+    'last line EXACTLY 5 hashtags (Instagram allows max 5): 2 BIG, popular discovery tags that people browse on '
+    'Instagram for this kind of content and that fit THIS clip (choose from the channel\'s discovery list), 2 popular '
+    'tags specific to this clip\'s subject (the famous name/concept people search, e.g. #deccal, #jinn), 1 brand tag '
+    'given in the brief. Every tag must be relevant to the clip. No spaces inside a tag, no punctuation, written in '
+    'the video language",'
     '"scenes":[{"narration":"2-3 sentences","visual":"footage or diagram",'
     '"broll_query":"2-4 word English stock footage query",'
     '"image_prompt":"IN ENGLISH: illustration of exactly what this scene explains",'
@@ -2197,15 +2199,24 @@ def tg_send_file(path, caption=""):
         log(f"Telegram dosya gönderilemedi: {str(e)[:150]}")
 
 
-def fix_hashtags(caption, brand=None, limit=5):
-    """Instagram en fazla 5 etiket kabul ediyor: fazlasını siler, marka etiketini garanti eder, sona toplar."""
+def fix_hashtags(caption, brand=None, limit=5, discovery=None):
+    """Instagram en fazla 5 etiket kabul ediyor. Düzen: keşfet etiketi + 1 büyük konu etiketi (kanal listesinden)
+    + 2 konuya özel etiket + marka etiketi. Fazlası silinir, eksikse kanal listesinden tamamlanır."""
     tags, seen = [], set()
     for t in re.findall(r"#[\wçğıöşüÇĞİÖŞÜ]+", caption):
         if t.lower() not in seen:
             seen.add(t.lower())
             tags.append(t)
     body = re.sub(r"\s*#[\wçğıöşüÇĞİÖŞÜ]+", "", caption).rstrip()
-    if brand and brand.lower() not in seen:
+    if discovery:
+        pool = [d.lower() for d in discovery]
+        broad = [t for t in tags if t.lower() in pool and t.lower() != discovery[0].lower()]
+        specific = [t for t in tags if t.lower() not in pool and (not brand or t.lower() != brand.lower())]
+        broad = (broad + [d for d in discovery[1:] if d.lower() not in seen])[:1]
+        tags = [discovery[0]] + broad + specific[:limit - 2 - (1 if brand else 0)]
+        if len(tags) < limit - (1 if brand else 0):  # konuya özel etiket azsa listeden tamamla
+            tags += [d for d in discovery[2:] if d.lower() not in {t.lower() for t in tags}][:limit - 1 - len(tags)]
+    if brand and brand.lower() not in {t.lower() for t in tags}:
         tags = tags[:limit - 1] + [brand]
     return (body + "\n\n" + " ".join(tags[:limit])).strip()
 
@@ -2409,7 +2420,7 @@ def _reel_caption(script, sh_, first):
                + ("Videonun tamamı YouTube'da, link profilde 👆" if tr
                   else "Full video on YouTube, link in bio 👆") + "\n\n"
                + " ".join("#" + t for t in tags))
-    return publish.ig_link_cta(fix_hashtags(cap, CFG.get("ig_brand_tag")), tr)
+    return publish.ig_link_cta(fix_hashtags(cap, CFG.get("ig_brand_tag"), discovery=CFG.get("ig_discovery_tags")), tr)
 
 
 IG_QUEUE = DATA / "ig_queue.json"
@@ -2941,6 +2952,20 @@ def push_now(path, msg):
         log(f"Kayıt hemen yazılamadı: {str(e)[:100]}")
 
 
+def preflight():
+    """Üretimden ÖNCE dış hesapları kontrol et: sorun varsa saatler sonra değil hemen haber ver."""
+    if DRY_RUN:
+        return
+    if CFG.get("instagram_enabled") and os.getenv("IG_ACCESS_TOKEN") and os.getenv("IG_USER_ID"):
+        try:
+            user = publish.instagram_check()
+            log(f"Instagram anahtarı geçerli: @{user}")
+        except Exception as e:
+            notify("🆘 CLAUDE'A YAZ — Instagram anahtarı çalışmıyor (süresi dolmuş olabilir). Video yine YouTube'a "
+                   "yüklenecek, Reels sırada bekleyecek. Anahtar yenilenince otomatik paylaşılır.\n"
+                   f"Ayrıntı: {str(e)[:150]}")
+
+
 def run_once():
     if os.getenv("GITHUB_EVENT_NAME") == "schedule" and not os.getenv("CATCHUP"):
         today = datetime.now().date().isoformat()
@@ -2949,6 +2974,7 @@ def run_once():
             log("Bugünün videosu zaten (elle başlatılan çalışmayla) üretildi; zamanlanmış çalışma atlandı.")
             return True
     check_channel()
+    preflight()
     if not DRY_RUN:
         notify("🎬 Yeni video yapımı başladı: önce konu seçilecek ve senaryo yazılacak.")
     ensure_branding()

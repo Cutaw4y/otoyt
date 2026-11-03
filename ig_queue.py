@@ -79,7 +79,11 @@ def main():
     except Exception as e:
         (DATA / "ig_last_error.txt").write_text(f"{datetime.now().isoformat(timespec='minutes')} "
                                                 f"{item['title']}\n{e}\n", encoding="utf-8")
-        notify(f"ℹ️ Instagram Reel yüklenemedi (yarın tekrar denenecek): {str(e)[:300]}")
+        if "190" in str(e) or "access token" in str(e).lower():
+            notify("🆘 CLAUDE'A YAZ — Instagram anahtarı geçersiz (süresi dolmuş). Reels sırada bekliyor; "
+                   "anahtar yenilenince otomatik paylaşılır.")
+        else:
+            notify(f"ℹ️ Instagram Reel yüklenemedi (yarın tekrar denenecek): {str(e)[:300]}")
         sys.exit(1)
     hist = load(HISTORY, [])
     hist.append({"date": datetime.now().isoformat(timespec="minutes"), "type": "reel", "title": item["title"],

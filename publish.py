@@ -248,6 +248,15 @@ def _ig_base(token):
     return "https://graph.instagram.com" if token.startswith("IG") else "https://graph.facebook.com"
 
 
+def instagram_check():
+    """Instagram anahtarı geçerli mi ve doğru hesaba mı ait? (hesap_adı) döner; geçersizse hata fırlatır."""
+    token, ig_id = os.environ.get("IG_ACCESS_TOKEN", ""), os.environ.get("IG_USER_ID", "")
+    r = requests.get(f"{_ig_base(token)}/{ig_id}", params={"fields": "username", "access_token": token}, timeout=30)
+    if not r.ok:
+        raise RuntimeError(_ig_err(r))
+    return r.json().get("username", "")
+
+
 def instagram_refresh():
     """Instagram girişi token'ının süresini 60 güne uzatır. Kalan gün sayısını döner (Page token'da None)."""
     token = os.environ.get("IG_ACCESS_TOKEN", "")

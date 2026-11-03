@@ -296,6 +296,7 @@ ig_brand_tag: "#beyondqaf"
 ig_release: "ig-queue-beyondqaf"      # sıradaki Reels bu kanala özel Release'te bekler
 instagram_reels_per_video: 3     # 1.si hemen, kalanlar günde bir (ig_en.yml)
 ig_user_id: "17841436533748607"   # @beyondqaf Instagram hesap kimliği (gizli değil; anahtar IG_ACCESS_TOKEN secret'ta)
-instagram_ai_label: true       # Reel'e "AI ile üretildi" etiketi
+instagram_ai_label: true
+ig_discovery_tags: ["#explore", "#paranormal", "#jinn", "#islam", "#mystery", "#unexplained", "#folklore", "#scarystories"]   # 1.si her Reel'de (keşfet), biri konuya göre seçilir       # Reel'e "AI ile üretildi" etiketi
 # Not: Instagram'da zamanlama yok; Reel üretim anında yayınlanır.
 # publish_mode "private" iken Instagram'a HİÇ gönderilmez (test güvenliği).

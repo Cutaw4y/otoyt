@@ -263,6 +263,7 @@ ig_brand_tag: "#gölgedefter"    # her Reel'de olur; Instagram en fazla 5 etiket
 yt_brand_tag: "#gölgedefter"    # YouTube hashtag satırında her zaman olur
 instagram_reels_per_video: 3     # 1.si hemen, kalanlar günde bir (ig_tr.yml)
 instagram_ai_label: true
+ig_discovery_tags: ["#keşfet", "#gizem", "#paranormal", "#islam", "#tarih", "#korku", "#efsane", "#bilinmeyenler"]   # 1.si her Reel'de (keşfet), biri konuya göre seçilir
 
 # Planlı konular (Furkan seçti). Sırayla yapılır; id değişmesin (yapılanlar id ile izlenir).
 series_every: 1
