@@ -1,10 +1,3 @@
-[13:15:29] Başladı (test modu: False, yayın: scheduled)
-[13:15:30] Ücretli Gemini anahtarı kullanılıyor
-[13:15:31] Kanal doğrulandı: GölgeDefter
-[13:15:31] Analitik: 0 video ölçüldü, sütun puanları: {}
-[13:16:24] Rakip analizi: 'Kayaları Delenler Neden Kurtulamadı? Semud'u Yok Eden 'Sayha'nın Akustik Sırrı' seçildi (1/10 büyük rakip). Açı: Rakipler sadece klasik 'Salih Peygamber ve mucize deve' kıssasını vaaz tonunda anlatırken; biz Kur'an'da helak sebebi olarak geçen 'es-Sayha' (şiddetli çığlık/s
-[13:16:24] Konu (1): Kayaları Delenler Neden Kurtulamadı? Semud'u Yok Eden 'Sayha'nın Akustik Sırrı  [İslam tarihi ve kutsal kıssalar (Ashab-ı Kehf, Zülkarneyn, İrem ve Ad kavmi, Semud, Nuh tufanı)]
-[13:18:04] Senaryo yazıldı: 34 sahne, 1771 kelime
-[13:19:20] Anlatım sadeleştirildi (1771 → 1383 kelime)
-[13:21:02] Doğrulama kaynağı: Google araması
-[13:21:02] Doğrulama turu 1: 14 iddia, 2 yanlış, 0 belirsiz
+[14:28:22] Başladı (test modu: False, yayın: scheduled)
+[14:28:23] Ücretli Gemini anahtarı kullanılıyor
+[14:28:24] Kanal doğrulandı: GölgeDefter
