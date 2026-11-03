@@ -237,8 +237,10 @@ SCRIPT_SCHEMA = (
     '(#viral #fyp #trending), no spaces inside a hashtag",'
     '"tags":["8-15 tags: core_keyword, close variants, COMMON MISSPELLINGS and alternate spellings of the '
     'names/terms in the video, and related entities (people, places, organizations, objects). No generic words"],'
-    '"pinned_comment":"one pointed A-or-B question about the topic that splits viewers into two camps and makes '
-    'them answer in the comments; specific, respectful, no insults, no politics",'
+    '"pinned_comment":"a VOTE in the video\'s language: line 1 = one pointed A-or-B question about the topic that '
+    'splits viewers into two camps (specific, respectful, no insults, no politics); line 2 = \'1) \' + option A; '
+    'line 3 = \'2) \' + option B; line 4 = a short ask to reply with just 1 or 2 and one word why",'
+    '"vote_options":["option A in 1-3 words","option B in 1-3 words"],'
     '"thumbnail_concepts":[{"image_prompt":"IN ENGLISH: ONE striking subject, extreme close-up or dramatic '
     'angle, big and on the RIGHT half, dark uncluttered space on the LEFT, cinematic rim light, high contrast, '
     'something surprising/wrong/extreme visible (cutaway, cracked, glowing, giant scale). NO text in image",'
@@ -304,7 +306,9 @@ def write_script(idea):
         f"as a ~50 second Short (strong hook + payoff). Also plan {CFG.get('shorts_per_video', 3)} Shorts in "
         f"'shorts': each a range of consecutive scenes (0-based, inclusive) that is fully understandable WITHOUT "
         f"the rest of the video, 30-55 seconds of narration (about 75-135 words), starting with a surprising line, "
-        f"ranges must not overlap, the first one is scenes 0-2.\n{_schema()}",
+        f"ranges must not overlap, the first one is scenes 0-2. The LAST scene ends by asking the pinned_comment "
+        f"question aloud and telling viewers to vote in the comments by writing just 1 or 2.\n"
+        + poll_context() + f"{_schema()}",
         required=("title", "description", "tags", "thumbnail_concepts", "scenes"))
 
 
@@ -1668,6 +1672,119 @@ def queue_comment(video_id, text):
 
 
 PLAYLISTS = DATA / "playlists.json"
+VOTES = DATA / "votes.json"
+
+
+def record_vote(video_id, script):
+    """Videonun sonundaki 1/2 oylamasını kaydeder; birkaç gün sonra yorumlardan sayılır."""
+    opts = [str(o).strip() for o in (script.get("vote_options") or [])][:2]
+    if len(opts) < 2:  # revizyonda alan düştüyse sabit yorumdaki "1) … / 2) …" satırlarından al
+        ls = [l.strip() for l in (script.get("pinned_comment") or "").splitlines()]
+        opts = [l[2:].strip() for p_ in ("1)", "2)") for l in ls if l.startswith(p_)][:2]
+    if not video_id or len(opts) < 2:
+        return
+    v = load_json(VOTES, []) if VOTES.exists() else []
+    v.append({"video_id": video_id, "title": script.get("title", ""), "question": (script.get("pinned_comment") or "").split("\n")[0],
+              "options": opts, "added": datetime.now().isoformat(timespec="minutes")})
+    save_json(VOTES, v[-60:])
+
+
+def _vote_of(text, opts):
+    t = (text or "").strip().lower()
+    if not t:
+        return None
+    first = t.lstrip("*#(").replace("️⃣", "")[:2]
+    if first[:1] in "12" and (len(first) == 1 or not first[1].isdigit()):
+        return int(first[0]) - 1
+    hits = [i for i, o in enumerate(opts) if o and o.lower() in t]
+    return hits[0] if len(hits) == 1 else None
+
+
+def tally_votes(min_days=3):
+    """3 gün dolan oylamaları sayar: sonucu Telegram'a bildirir, sabit yorumun altına sonucu yazar,
+    bir sonraki videonun senaryosunda gerçek sayılarla tek cümleyle anılması için saklar."""
+    if DRY_RUN or not VOTES.exists() or CFG.get("uploader", "youtube") != "youtube":
+        return
+    votes = load_json(VOTES, [])
+    now = datetime.now()
+    changed = False
+    for v in votes:
+        if v.get("counted") or (now - datetime.fromisoformat(v["added"])).days < min_days:
+            continue
+        try:
+            yt = publish._yt()
+            counts, own_thread, page, seen = [0, 0], None, None, 0
+            for _ in range(5):  # en fazla 500 yorum (5 birim kota)
+                r = yt.commentThreads().list(part="snippet", videoId=v["video_id"], maxResults=100,
+                                             textFormat="plainText", pageToken=page).execute()
+                for it in r.get("items", []):
+                    c = it["snippet"]["topLevelComment"]["snippet"]
+                    if CHANNEL_ID and c.get("authorChannelId", {}).get("value") == CHANNEL_ID:
+                        if v["question"][:40] and c.get("textOriginal", "").startswith(v["question"][:40]):
+                            own_thread = it["id"]
+                        continue
+                    seen += 1
+                    k = _vote_of(c.get("textOriginal"), v["options"])
+                    if k is not None:
+                        counts[k] += 1
+                page = r.get("nextPageToken")
+                if not page:
+                    break
+        except Exception as e:
+            log(f"Oylama sayılamadı ({v['video_id']}): {str(e)[:120]}")
+            continue
+        n = sum(counts)
+        v.update(counted=now.isoformat(timespec="minutes"), counts=counts, comments=seen)
+        changed = True
+        if n == 0:
+            notify(f"🗳️ Oylama sonucu: \"{v['title']}\" videosuna 3 günde {seen} yorum geldi ama oy veren olmadı.")
+            continue
+        pa = round(100 * counts[0] / n)
+        tr = CFG.get("language_code", "en").startswith("tr")
+        res = (f"{v['options'][0]} %{pa} · {v['options'][1]} %{100 - pa} ({n} oy)" if tr else
+               f"{v['options'][0]} {pa}% · {v['options'][1]} {100 - pa}% ({n} votes)")
+        notify(f"🗳️ Oylama sonucu: \"{v['title']}\"\n{v['question']}\n{res}\n"
+               + ("Sonucu sabit yorumun altına yazdım; bir sonraki videoda da kısaca anılacak." if n >= 5 else
+                  "Oy az olduğu için videoda anılmayacak."))
+        if n >= 5:
+            v["use_next"] = True
+            if own_thread:
+                try:
+                    txt = (f"🗳️ Sonuç: {res}. Oy veren herkese teşekkürler!" if tr else
+                           f"🗳️ Results: {res}. Thanks to everyone who voted!")
+                    yt.comments().insert(part="snippet", body={"snippet": {"parentId": own_thread,
+                                                                            "textOriginal": txt}}).execute()
+                except Exception as e:
+                    log(f"Sonuç yanıtı yazılamadı: {str(e)[:120]}")
+    if changed:
+        save_json(VOTES, votes)
+
+
+def poll_context():
+    """Önceki videonun oylama sonucu (yeterli oy varsa) → yeni senaryoda tek cümleyle, gerçek sayılarla anılır."""
+    if not VOTES.exists():
+        return ""
+    for v in reversed(load_json(VOTES, [])):
+        if v.get("use_next") and not v.get("used"):
+            n = sum(v["counts"])
+            pa = round(100 * v["counts"][0] / n)
+            poll_context.pending = v["video_id"]
+            return (f"Viewer poll result from our previous video \"{v['title']}\" — question: {v['question']} — "
+                    f"{v['options'][0]}: {pa}%, {v['options'][1]}: {100 - pa}% ({n} votes). In the outro (before the new "
+                    "vote question) mention this result in ONE short, warm sentence with these exact numbers and "
+                    "thank the voters. Do not invent or round differently.\n")
+    return ""
+
+
+def mark_poll_used():
+    vid = getattr(poll_context, "pending", None)
+    if not vid or not VOTES.exists():
+        return
+    votes = load_json(VOTES, [])
+    for v in votes:
+        if v["video_id"] == vid:
+            v["used"] = True
+    save_json(VOTES, votes)
 
 
 def add_to_pillar_playlist(video_id, pillar):
@@ -2615,6 +2732,7 @@ def run_once():
     log(f"Analitik: {report['n']} video ölçüldü, sütun puanları: {report['pillar_scores']}")
     finish_manual_uploads()
     post_due_comments()
+    tally_votes()
     ensure_playlist_covers()
     maybe_swap_thumbnails(history)
     idea, script = produce_script(history, report)
@@ -2737,6 +2855,8 @@ def run_once():
         shutil.copy(final, named)
         vid = publish.upload(named, m_long, thumb, up)
         queue_comment(vid, script.get("pinned_comment"))
+        record_vote(vid, script)
+        mark_poll_used()
         if thumb_alt:
             THUMB_ALT.mkdir(parents=True, exist_ok=True)
             shutil.copy(thumb_alt, THUMB_ALT / f"{vid}.jpg")
