@@ -1,18 +1,18 @@
 # ======================= KANAL KİMLİĞİ =======================
-# Niş: Education & Science (2026 verisinde en yüksek medyan RPM'li kategori)
-channel_name: "Cutaway"        # kanal adını değiştirirsen burayı da değiştir
-notify_prefix: "🔧 Cutaway |"   # Telegram mesajlarında hangi kanal olduğu
+# Niş (03.11.2026, Furkan): cinler ve görünmeyen âlem; İngilizce, ABD/İngiltere/Kanada izleyicisi
+channel_name: "Smokeless Archive"   # 03.11.2026: eski adı Cutaway (YouTube Studio'dan ad değişikliği elle)
+notify_prefix: "🕯️ Smokeless Archive |"   # Telegram mesajlarında hangi kanal olduğu
 channel_brief: >
-  Strange true events, investigated (niche since 3 Nov 2026). Unexplained phenomena and
-  "supernatural" cases, vanishings, places and objects that shouldn't exist, and disasters
-  nobody saw coming. Each video takes ONE real, well documented case, opens it like a mystery,
-  lays out the evidence first, then weighs every explanation fairly (including the paranormal
-  ones, without mocking) and shows what science and engineering can and can't explain. Our
-  signature: we "cut the mystery open" with clear diagrams and cutaway views of the evidence.
-  Respectful to victims and believers, evergreen cases, no current news, no politics, no
-  living private people as the subject, no investment/medical/legal advice.
-audience: "curious adults 18-55 in the US, UK, Canada, Australia"
-tone: "a calm, slightly dark documentary storyteller talking to a smart friend at night; simple everyday words, gripping, fair-minded, never sensational, rare dry humor"
+  Smokeless Archive: records of the unseen. The world of the jinn and the unseen in Islamic and
+  Middle Eastern tradition, told in English for people who have never heard it properly. What the
+  Quran and authentic hadith actually say (always with the exact reference), what classical
+  scholars wrote, documented encounters and places people report, the ancient legends of the
+  region, and how the same beings appear in other cultures. A hooded archivist keeps the records.
+  Respectful to Islam and to every faith: we never mock and never rule on the faith itself; we
+  report what the sources say, what witnesses report and what researchers say. Never depict any
+  prophet. No instructions for magic or rituals of any kind. No current news, no politics.
+audience: "curious adults 18-55 in the US, UK, Canada, Australia: paranormal and folklore fans who have never heard the jinn tradition properly, plus English-speaking Muslims who want it told accurately and respectfully"
+tone: "a calm, low, slightly dark storyteller, an archivist reading old records at night to a curious friend; simple everyday words, gripping, fair-minded and reverent, never sensational, never mocking"
 language: "English"
 language_code: "en"
 
@@ -37,75 +37,70 @@ script_rules: >
   the video doesn't deliver. End with a one-line takeaway. Do NOT add a
   sign-off, greeting or "subscribe" line — the channel's fixed closing line is
   added automatically.
-  DOCUMENTARY METHOD (learned from the best mystery and investigation channels; method, never copying):
-  1) Cold open on the strangest concrete detail with date and place ("February 1959, Ural Mountains.
-  The rescuers found the tent cut open from the inside.").
-  2) Timeline: tell it in order, hour by hour or day by day; say the date/time/place at each key
-  moment and put it in that scene's callout ("Feb 2, 1959 · 9 PM").
-  3) Evidence first, interpretation later: a "What we know for sure" chapter with only documented
-  facts (official reports, witness statements, photos, measurements); rumors are labeled "reportedly".
-  4) Correct ONE commonly repeated myth with its source ("Most retellings say X; the report says Y").
-  This is our trust moment.
-  5) Theories chapter: 3-4 explanations from WEAKEST to STRONGEST; for each, its best evidence and what
-  weakens it. Paranormal theories are presented fairly, without mocking. Use a cutaway/diagram to
-  test each explanation physically (forces, distances, temperatures, timings) in US units with
-  everyday comparisons. For disasters, follow the investigation: warning signs → moment of failure →
-  what the official report found (name the agency) → the root cause → what changed after.
-  6) Verdict: "The evidence best supports…", clear but humble; say plainly what is still unknown.
-  7) Close on what the case left behind, then the A-or-B question that matches the pinned comment.
-  Chapter titles follow this arc ("The Night It Happened", "What We Know for Sure", "What Everyone
-  Gets Wrong", "The Theories", "What the Evidence Says").
+  ARCHIVE METHOD (learned from the best folklore and mystery documentaries; method, never copying):
+  1) Cold open on the strangest concrete detail of THIS record (a verse, a reported night, a place),
+  with time and place when known.
+  2) Sources first: what the Quran says (sura name + number:verse), what authentic hadith say (name
+  the collection, e.g. Sahih al-Bukhari), what classical scholars wrote (name and century). Quote
+  meaning carefully; never invent a verse, hadith, scholar, witness or case. Say "according to
+  tradition" or "reportedly" for anything not in the primary sources.
+  3) Explain every Arabic term the first time in plain English (jinn, ghayb, qareen, sihr, ruqyah).
+  4) Correct ONE common Western myth with its source (e.g. genies granting wishes come from European
+  translations of One Thousand and One Nights). This is our trust moment.
+  5) Reported cases: only publicly documented accounts (books, news reports, published research,
+  folklore archives); what witnesses described, in order.
+  6) What researchers say (e.g. sleep paralysis, cultural psychology) presented fairly next to the
+  believers' view; NEVER declare the faith true or false.
+  7) Close on what the record leaves us with, then the A-or-B question that matches the pinned comment.
+  Chapter titles follow this arc ("The Record", "What the Quran Says", "What People Get Wrong",
+  "The Reported Nights", "What Researchers Say").
 
 # Arama ve paketleme (2026 araştırması): anahtar kelime üçlemesi, aranabilir bölümler, yazım hatası etiketleri
-title_examples: >   # concrete place/number + the strange fact + the open question
-  "Dyatlov Pass: Why 9 Hikers Cut Their Tent Open and Ran Into the Snow" ·
-  "The Mary Celeste: A Ship Found Sailing With No One Aboard" ·
-  "Hyatt Regency: How One Changed Bolt Killed 114 People" ·
-  "The Wow! Signal: 72 Seconds From Space Nobody Can Explain"
+title_examples: >   # concrete source/place/number + the strange fact + the open question
+  "Jinn: What the Quran Actually Says About the Hidden Beings" ·
+  "Iram of the Pillars: The City God Erased From the Map" ·
+  "The Qareen: The Companion Islam Says Every Human Has" ·
+  "Solomon's Jinn: Why They Kept Working After He Died"
 saturation_views: 500000   # rakip analizi: bu izlenmenin üstündeki videolar 'büyük rakip' sayılır
 seo_rules: >
-  Pick core_keyword as the phrase a US viewer actually types (e.g. "dyatlov pass incident",
-  "mary celeste mystery"). Put it at the start of the title, in the first sentence of the
+  Pick core_keyword as the phrase a US viewer actually types (e.g. "what are jinn",
+  "jinn in islam", "qareen meaning"). Put it at the start of the title, in the first sentence of the
   description, and say it naturally in the first 20 seconds of narration. Chapter titles are
-  Google-style queries ("What Happened at Dyatlov Pass", "Dyatlov Pass Theories"). Tags: core
+  Google-style queries ("What Are Jinn Made Of", "Jinn in the Quran"). Tags: core
   keyword, variants, common misspellings of the names and places, related entities.
-  pinned_comment: a sharp but friendly A-or-B vote on the case (e.g. "What really happened that
-  night? 1) avalanche 2) something we still can't explain").
+  pinned_comment: a respectful A-or-B vote on the record (e.g. "Had you heard of jinn before this
+  video? 1) yes, I grew up with these stories 2) no, this is new to me"), never a vote on the faith.
 
-# Rakip analizi (LEMMiNO, Fascinating Horror, Plainly Difficult, Wendigoon tarzı vaka anlatıcıları):
-# en çok izlenenler tek bir somut, belgeli ve hâlâ tartışılan vaka; fark: kanıtı kesitle göstermek.
+# Fark: İngilizcede cin konusu ya vaaz ya ucuz korku olarak anlatılıyor; biz kaynaklı, saygılı ve sinematik anlatıyoruz.
 content_pillars:
-  - "Unexplained events and 'supernatural' cases investigated (strange deaths, sightings, sounds, lights)"
-  - "Vanishings: ships, planes, expeditions and people that disappeared without a trace"
-  - "Disasters nobody saw coming: what really broke inside (collapses, explosions, dam and bridge failures)"
-  - "Places and objects that shouldn't exist (impossible structures, strange signals, out-of-place finds)"
-  - "The world's strangest beliefs, investigated: jinn and other entities from cultures Americans rarely hear about, through documented cases"
-# 03.11 kararı (Furkan): yalnız mühendislik değil, sıra dışı/doğaüstü olaylar da; kimlik = "gerçek tuhaf olaylar, kanıtla incelenir"
-pillar_weights: [3, 2.5, 2, 1.5, 1.5]   # cin vb. sütunu deneme: izlenirse ağırlığı artar
+  - "Jinn: what the Quran, authentic hadith and classical scholars actually say"
+  - "Reported jinn encounters and places people avoid, from documented accounts"
+  - "The unseen in Islamic tradition explained from sources (the qareen, the evil eye, Iblis, Harut and Marut, the ghayb)"
+  - "Lost cities and legends of the ancient Middle East (Iram of the Pillars, Solomon's jinn, Dhul-Qarnayn's wall, the People of the Cave)"
+  - "The same beings across cultures: jinn compared with demons, fairies, shadow people and sleep paralysis visitors"
+# 03.11 kararı (Furkan): kanal tamamen cinler ve görünmeyen âleme odaklandı.
+pillar_weights: [3, 2.5, 2, 2, 1.5]
 
 idea_rules: >
-  Each idea centers on ONE real, well documented case with a concrete strange fact, never a broad
-  subject ("Why 9 Hikers Cut Their Tent Open", not "Mysteries of Russia"). Frame every idea as a
-  question the viewer can't stop thinking about (stakes + the moment + the thing nobody can explain).
-  Religious beliefs (e.g. jinn in Islam, also known from the Quran and hadith): explain the belief
-  accurately from its own sources with sura/verse or hadith reference, tell the documented cases and
-  what witnesses reported, give what researchers say about such experiences, and NEVER mock or rule
-  on the faith itself; Muslim viewers must feel respected and Americans must feel they learned
-  something new. Prefer cases with documents, photos, official reports or measurements we can show; skip cases that
-  are pure internet rumor. Evergreen (at least ~10 years old), respectful to victims.
+  Each idea centers on ONE specific record: one verse/story, one named being, one documented
+  account, one place or one legend, never a broad subject ("Why Jinn Fear Iron in Folklore", not
+  "All About Jinn"). Frame it as a question the viewer can't stop thinking about. Prefer topics with
+  clear primary sources we can cite. Never depict prophets; never give or describe how to perform
+  magic, summoning or exorcism rituals (we may say such practices exist and what scholars say about
+  them). Respect Islam and every faith; no mocking, no fear-mongering, no rulings on belief.
 
 playlists:   # her konu sütunu bir oynatma listesi (izleyici videodan videoya akar)
-  "Unexplained events and 'supernatural' cases investigated (strange deaths, sightings, sounds, lights)": "Unexplained Cases, Investigated"
-  "Vanishings: ships, planes, expeditions and people that disappeared without a trace": "Vanished Without a Trace"
-  "Disasters nobody saw coming: what really broke inside (collapses, explosions, dam and bridge failures)": "Disasters: What Really Broke"
-  "Places and objects that shouldn't exist (impossible structures, strange signals, out-of-place finds)": "Things That Shouldn't Exist"
-  "The world's strangest beliefs, investigated: jinn and other entities from cultures Americans rarely hear about, through documented cases": "Strange Beliefs, Investigated"
+  "Jinn: what the Quran, authentic hadith and classical scholars actually say": "Jinn: What the Sources Say"
+  "Reported jinn encounters and places people avoid, from documented accounts": "Reported Encounters"
+  "The unseen in Islamic tradition explained from sources (the qareen, the evil eye, Iblis, Harut and Marut, the ghayb)": "The Unseen, Explained"
+  "Lost cities and legends of the ancient Middle East (Iram of the Pillars, Solomon's jinn, Dhul-Qarnayn's wall, the People of the Cave)": "Legends of the Ancient East"
+  "The same beings across cultures: jinn compared with demons, fairies, shadow people and sleep paralysis visitors": "Across Cultures"
 
 # Planlı seri (Furkan, 03.11): sırayla, her 2 videodan biri. id değişmesin (yayınlananlar id ile izlenir).
-series_every: 2
+series_every: 1   # kanal artık tamamen bu konuda: seri bölümleri art arda
 series:
   - id: jinn-1
-    pillar: "The world's strangest beliefs, investigated: jinn and other entities from cultures Americans rarely hear about, through documented cases"
+    pillar: "Jinn: what the Quran, authentic hadith and classical scholars actually say"
     title: "Jinn: What the Quran Actually Says About the Hidden Beings"
     search_query: "what are jinn in islam"
     angle: >
@@ -117,7 +112,7 @@ series:
       big Western myth: jinn are not wish-granting genies; the "genie" comes from European translations
       of One Thousand and One Nights. End by promising part 2 (real reported cases from Turkey).
   - id: jinn-2
-    pillar: "The world's strangest beliefs, investigated: jinn and other entities from cultures Americans rarely hear about, through documented cases"
+    pillar: "Reported jinn encounters and places people avoid, from documented accounts"
     title: "Karabasan: The Jinn Encounters Millions of Turks Report"
     search_query: "jinn encounters turkey karabasan"
     angle: >
@@ -128,7 +123,7 @@ series:
       tradition says, and what sleep researchers say about sleep paralysis, without ruling on the faith.
       End by promising part 3 (similar encounters around the world).
   - id: jinn-3
-    pillar: "The world's strangest beliefs, investigated: jinn and other entities from cultures Americans rarely hear about, through documented cases"
+    pillar: "The same beings across cultures: jinn compared with demons, fairies, shadow people and sleep paralysis visitors"
     title: "The Same Night Visitor, Seen in Every Culture"
     search_query: "jinn encounters around the world sleep paralysis demon"
     angle: >
@@ -139,34 +134,37 @@ series:
 
 # Kanalın görsel kimliği: her diyagram bu stilde üretilir → tutarlı marka görünümü
 visual_style: >
-  clean modern documentary illustration, 3D cutaway / cross-section / evidence map where useful,
-  moody night palette, dark navy background, glowing cyan and
+  cinematic dark illustration of ancient Middle Eastern and archival scenes (desert ruins, old
+  manuscripts, candlelit rooms, starry deserts), maps and timelines where useful, moody night
+  palette, dark navy background, glowing cold blue-white and
   warm orange accents, clear arrows showing flow, no text or labels, 16:9
 watch_next_text: "▶ Watch next:"
 thumbnail_rules: >
-  Cutaway signature (same on every video so viewers recognize us): ONE eerie, real-looking scene of
-  the case at night or in cold light (the cut tent in the snow, the empty ship, the cracked dam),
-  with ONE key piece of evidence highlighted as a glowing orange cutaway or outline, the brightest
-  thing in the frame. Dark cold-teal surroundings, lots of empty dark space. Optionally a tiny
-  invented human silhouette for scale. Never gore, never real victims' faces, never a real person.
+  Smokeless Archive signature (same on every video): a dark, cinematic night scene from the record
+  (a desert ruin under stars, an old house doorway, an ancient manuscript by candlelight), with ONE
+  element glowing in cold blue-white smokeless fire (a silhouette made of flame, eyes in the dark,
+  a burning glyph), the brightest thing in the frame. Deep navy and black, lots of empty dark space
+  on the LEFT for text. Never gore, never a real person, NEVER depict any prophet or holy figure,
+  no Quran pages with legible verses, no mosque interiors used for horror.
 thumbnail_style: "bold, high contrast, dramatic lighting, one clear object, cinematic, vivid colors"
 
 # Kanal sayfası (ilk gerçek çalışmada bir kez otomatik ayarlanır)
 branding:
-  version: 5                   # afiş/açıklama değişince artır → bir sonraki çalışmada kanala yeniden uygulanır
-  banner: "assets/cutaway_banner.jpg"
+  version: 6                   # afiş/açıklama değişince artır → bir sonraki çalışmada kanala yeniden uygulanır
+  banner: "assets/smokeless/smokeless_banner.jpg"
   country: "TR"
-  keywords: "unexplained mysteries unsolved mysteries strange true stories disappearances disasters explained paranormal investigated documentary cutaway"
+  keywords: "jinn djinn jinn in islam what are jinn qareen the unseen islamic folklore middle eastern legends paranormal documentary smokeless archive"
   description: |
-    🕯️ Strange true events, investigated. Cutaway takes ONE real case — a vanishing, an unexplained death, a disaster nobody saw coming — and cuts it open.
-    🔎 Evidence first, then every theory weighed fairly (yes, the paranormal ones too), and what science can and can't explain.
-    🧩 Clear cutaway diagrams, real photos and fact-checked scripts. No fluff, no clickbait the video doesn't deliver.
-    💬 Vote on every case in the comments and tell us which mystery we should open next.
+    🕯️ Smokeless Archive: records of the unseen.
+    The Quran says the jinn were created from smokeless fire, long before humans. Here we open the records: what the Quran and authentic hadith actually say, what classical scholars wrote, the encounters people report, and the legends of the ancient East.
+    📜 Every verse and source cited. Respectful to every faith. No fear-mongering, no fake stories.
+    📅 New records every Monday, Wednesday and Friday.
+    💬 Vote on every record in the comments and tell us what we should open next.
 
-subscribe_text: "🔔 Subscribe for a new case every week:"
+subscribe_text: "🔔 Subscribe for a new record every week:"
 made_for_kids: false
 declare_synthetic: true        # AI içerik beyanı (YouTube politikası)
-yt_brand_tag: "#cutaway"        # her uzun videonun ve Short'un hashtag satırında olur
+yt_brand_tag: "#smokelessarchive"        # her uzun videonun ve Short'un hashtag satırında olur
 
 # ======================= MODELLER =======================
 # Cutaway kendi ücretsiz anahtarını (GEMINI_API_KEY) kullanır. GEMINI_PAID_API_KEY Gölgedefter'e aittir.
@@ -186,8 +184,8 @@ factcheck_models: ["gemini-flash-lite-latest", "gemini-flash-latest"]  # Google 
 # kendi Google projesinin kotası. Alınamazsa video yine çıksın diye yedek: Kokoro (ücretsiz, yerel).
 voice:
   provider: "gemini"
-  name: "Sadaltager"           # "bilgili" tonlu erkek ses. Alternatif: "Charon" (bilgilendirici), "Iapetus" (net)
-  style: "Read in clear American English like a calm, curious science documentary narrator, with natural emphasis on key numbers and short pauses between sentences"
+  name: "Charon"               # derin erkek ses (Gölge ile aynı karakter, İngilizce)
+  style: "Read in clear American English, low and calm, like an old archivist reading forbidden records by candlelight at night: unhurried, slightly hushed, with short pauses between sentences"
   models: ["gemini-3.1-flash-tts-preview", "gemini-2.5-flash-preview-tts"]
   sentence_gap: 0.3
   scene_gap: 0.6
@@ -200,8 +198,12 @@ voice:
     scene_gap: 0.6
 
 # ======================= KURGU / MARKA =======================
+assets_dir: "assets/smokeless"   # intro / outro / müzik / logo (brand_smokeless.py üretir); anlatıcı klipleri Gölgedefter'den (host -> ../golgedefter/host)
+logo_file: "smokeless_logo.png"
+host_image: "host/host_1.jpg"    # anlatıcı 'The Archivist' (Gölge ile aynı kukuletalı figür): açılışta ve bölüm başlarında
+title_card: "clips"              # en başta: arşivci yazar, sonra defterde günün konusu
 use_intro: true                # 1. sahneden (merak uyandıran açılış) sonra 2.6 sn logo animasyonu
-outro_line: "And that's how it actually works. If you're not subscribed yet, subscribing really helps the channel grow. And if you made it this far, a like goes a long way. See you in the next Cutaway."
+outro_line: "And so this record closes, for now. If you're not subscribed yet, subscribing really helps the archive grow. And if you stayed until the end, a like goes a long way. Until the next record."
 outro_hold_seconds: 8          # kapanış cümlesinden sonra kapanış kartı ekranda kalma süresi
 shot_seconds: 4.5              # bir görüntünün ortalama ekranda kalma süresi (profesyonel tempo 3-6 sn)
 hook_scenes: 2                 # ilk 2 sahnede görsel, anlatılanın birebir karşılığı (stok görüntü yok)
@@ -235,7 +237,7 @@ plain_rules: >
   "refractory" (or explain it), "mix" over "mixture" when the meaning is the same.
 max_factcheck_rounds: 2
 require_web_factcheck: true    # doğrulama çalışmazsa video ÜRETİLMEZ
-fallback_broll: "dark foggy forest at night"
+fallback_broll: "desert night stars ancient ruins"
 explore_rate: 0.25             # %25 ihtimalle yeni konu türü dener (öğrenme için)
 
 # ======================= YAYIN =======================
