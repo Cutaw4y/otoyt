@@ -1,15 +1,16 @@
 # ======================= KANAL KİMLİĞİ =======================
 # Niş (03.11.2026, Furkan): cinler ve görünmeyen âlem; İngilizce, ABD/İngiltere/Kanada izleyicisi
-channel_name: "Smokeless Archive"   # 03.11.2026: eski adı Cutaway (YouTube Studio'dan ad değişikliği elle)
-notify_prefix: "🕯️ Smokeless Archive |"
+channel_name: "Beyond Qaf"   # 03.11.2026: eski adı Cutaway (YouTube Studio'dan ad değişikliği elle)
+notify_prefix: "🕯️ Beyond Qaf |"
 channel_id: "UCH4bEob06jM9poDzHWAlWqQ"   # kanal adı değişse de doğrulama bu kimlikle
-channel_aliases: ["Cutaway"]   # Telegram mesajlarında hangi kanal olduğu
+channel_aliases: ["Cutaway", "Smokeless Archive"]   # Telegram mesajlarında hangi kanal olduğu
 channel_brief: >
-  Smokeless Archive: records of the unseen. The world of the jinn and the unseen in Islamic and
+  Beyond Qaf: where the unseen lives (Mount Qaf: the legendary mountain at the edge of the world where
+  the jinn live in Islamic and Eastern folklore). The world of the jinn and the unseen in Islamic and
   Middle Eastern tradition, told in English for people who have never heard it properly. What the
   Quran and authentic hadith actually say (always with the exact reference), what classical
   scholars wrote, documented encounters and places people report, the ancient legends of the
-  region, and how the same beings appear in other cultures. A hooded archivist keeps the records.
+  region, and how the same beings appear in other cultures. A hooded narrator keeps the records.
   Respectful to Islam and to every faith: we never mock and never rule on the faith itself; we
   report what the sources say, what witnesses report and what researchers say. Never depict any
   prophet. No instructions for magic or rituals of any kind. No current news, no politics.
@@ -59,6 +60,7 @@ script_rules: >
 
 # Arama ve paketleme (2026 araştırması): anahtar kelime üçlemesi, aranabilir bölümler, yazım hatası etiketleri
 title_examples: >   # concrete source/place/number + the strange fact + the open question
+  "Mount Qaf: The Mountain at the Edge of the World Where the Jinn Live" ·
   "Jinn: What the Quran Actually Says About the Hidden Beings" ·
   "Iram of the Pillars: The City God Erased From the Map" ·
   "The Qareen: The Companion Islam Says Every Human Has" ·
@@ -113,6 +115,18 @@ series:
       Sulayman (Saba 34:12-14), and what authentic hadith (Bukhari/Muslim, cite the book) add. Correct the
       big Western myth: jinn are not wish-granting genies; the "genie" comes from European translations
       of One Thousand and One Nights. End by promising part 2 (real reported cases from Turkey).
+  - id: qaf-1
+    pillar: "Lost cities and legends of the ancient Middle East (Iram of the Pillars, Solomon's jinn, Dhul-Qarnayn's wall, the People of the Cave)"
+    title: "Mount Qaf: The Mountain at the Edge of the World Where the Jinn Live"
+    search_query: "mount qaf jinn legend"
+    angle: >
+      The legend our channel is named after. What classical Islamic and Persian sources say about Mount
+      Qaf (the mountain of emerald encircling the world, home of jinn and the Simurgh), naming the
+      authors and works (e.g. tafsir traditions on Surah Qaf, al-Qazwini's Aja'ib al-Makhluqat, Attar's
+      Conference of the Birds), clearly separating folklore and later tradition from what the Quran
+      itself says (Surah Qaf begins with the letter Qaf; the mountain is NOT stated in the Quran).
+      Why "beyond Mount Qaf" became a saying for "impossibly far away" in Turkish and Persian. Respectful;
+      say plainly which parts are legend.
   - id: jinn-2
     pillar: "Reported jinn encounters and places people avoid, from documented accounts"
     title: "Karabasan: The Jinn Encounters Millions of Turks Report"
@@ -142,7 +156,7 @@ visual_style: >
   warm orange accents, clear arrows showing flow, no text or labels, 16:9
 watch_next_text: "▶ Watch next:"
 thumbnail_rules: >
-  Smokeless Archive signature (same on every video): a dark, cinematic night scene from the record
+  Beyond Qaf signature (same on every video): a dark, cinematic night scene from the record
   (a desert ruin under stars, an old house doorway, an ancient manuscript by candlelight), with ONE
   element glowing in cold blue-white smokeless fire (a silhouette made of flame, eyes in the dark,
   a burning glyph), the brightest thing in the frame. Deep navy and black, lots of empty dark space
@@ -152,21 +166,22 @@ thumbnail_style: "bold, high contrast, dramatic lighting, one clear object, cine
 
 # Kanal sayfası (ilk gerçek çalışmada bir kez otomatik ayarlanır)
 branding:
-  version: 6                   # afiş/açıklama değişince artır → bir sonraki çalışmada kanala yeniden uygulanır
-  banner: "assets/smokeless/smokeless_banner.jpg"
+  version: 7                   # afiş/açıklama değişince artır → bir sonraki çalışmada kanala yeniden uygulanır
+  banner: "assets/beyondqaf/beyondqaf_banner.jpg"
   country: "TR"
-  keywords: "jinn djinn jinn in islam what are jinn qareen the unseen islamic folklore middle eastern legends paranormal documentary smokeless archive"
+  keywords: "jinn djinn jinn in islam what are jinn qareen the unseen islamic folklore middle eastern legends paranormal documentary beyond qaf mount qaf"
   description: |
-    🕯️ Smokeless Archive: records of the unseen.
-    The Quran says the jinn were created from smokeless fire, long before humans. Here we open the records: what the Quran and authentic hadith actually say, what classical scholars wrote, the encounters people report, and the legends of the ancient East.
+    🕯️ Beyond Qaf: where the unseen lives.
+    In the old stories, the jinn live beyond Mount Qaf, the mountain at the edge of the world.
+    The Quran says the jinn were created from smokeless fire, long before humans. Here we cross over: what the Quran and authentic hadith actually say, what classical scholars wrote, the encounters people report, and the legends of the ancient East.
     📜 Every verse and source cited. Respectful to every faith. No fear-mongering, no fake stories.
-    📅 New records every Monday, Wednesday and Friday.
-    💬 Vote on every record in the comments and tell us what we should open next.
+    📅 New stories every Monday, Wednesday and Friday.
+    💬 Vote on every record in the comments and tell us what we should explore next.
 
-subscribe_text: "🔔 Subscribe for a new record every week:"
+subscribe_text: "🔔 Subscribe for new stories every week:"
 made_for_kids: false
 declare_synthetic: true        # AI içerik beyanı (YouTube politikası)
-yt_brand_tag: "#smokelessarchive"        # her uzun videonun ve Short'un hashtag satırında olur
+yt_brand_tag: "#beyondqaf"        # her uzun videonun ve Short'un hashtag satırında olur
 
 # ======================= MODELLER =======================
 # Cutaway kendi ücretsiz anahtarını (GEMINI_API_KEY) kullanır. GEMINI_PAID_API_KEY Gölgedefter'e aittir.
@@ -200,12 +215,12 @@ voice:
     scene_gap: 0.6
 
 # ======================= KURGU / MARKA =======================
-assets_dir: "assets/smokeless"   # intro / outro / müzik / logo (brand_smokeless.py üretir); anlatıcı klipleri Gölgedefter'den (host -> ../golgedefter/host)
-logo_file: "smokeless_logo.png"
-host_image: "host/host_1.jpg"    # anlatıcı 'The Archivist' (Gölge ile aynı kukuletalı figür): açılışta ve bölüm başlarında
+assets_dir: "assets/beyondqaf"   # intro / outro / müzik / logo (brand_beyondqaf.py üretir); anlatıcı klipleri Gölgedefter'den (host -> ../golgedefter/host)
+logo_file: "beyondqaf_logo.png"
+host_image: "host/host_1.jpg"    # anlatıcı (Gölge ile aynı kukuletalı figür): açılışta ve bölüm başlarında
 title_card: "clips"              # en başta: arşivci yazar, sonra defterde günün konusu
 use_intro: true                # 1. sahneden (merak uyandıran açılış) sonra 2.6 sn logo animasyonu
-outro_line: "And so this record closes, for now. If you're not subscribed yet, subscribing really helps the archive grow. And if you stayed until the end, a like goes a long way. Until the next record."
+outro_line: "And so this story closes, for now. If you're not subscribed yet, subscribing really helps the channel grow. And if you stayed until the end, a like goes a long way. Until we meet again, beyond Qaf."
 outro_hold_seconds: 8          # kapanış cümlesinden sonra kapanış kartı ekranda kalma süresi
 shot_seconds: 4.5              # bir görüntünün ortalama ekranda kalma süresi (profesyonel tempo 3-6 sn)
 hook_scenes: 2                 # ilk 2 sahnede görsel, anlatılanın birebir karşılığı (stok görüntü yok)
@@ -276,7 +291,7 @@ shorts_gap_hours: 20           # sonraki Shortlar birer gün arayla
 
 # ======================= INSTAGRAM =======================
 instagram_enabled: true        # anahtar (IG_ACCESS_TOKEN, IG_USER_ID) yoksa sessizce atlanır
-ig_brand_tag: "#smokelessarchive"
+ig_brand_tag: "#beyondqaf"
 instagram_ai_label: true       # Reel'e "AI ile üretildi" etiketi
 # Not: Instagram'da zamanlama yok; Reel üretim anında yayınlanır.
 # publish_mode "private" iken Instagram'a HİÇ gönderilmez (test güvenliği).

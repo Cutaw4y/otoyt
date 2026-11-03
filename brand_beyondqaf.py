@@ -1,8 +1,9 @@
 """
-Smokeless Archive marka öğeleri (eski Cutaway kanalı; 03.11.2026'dan itibaren cinler ve görünmeyen âlem).
+Beyond Qaf marka öğeleri (eski Cutaway kanalı; 03.11.2026'dan itibaren cinler ve görünmeyen âlem).
+Ad: Kaf Dağı, İslami ve Doğu efsanelerinde cinlerin yaşadığı, dünyayı çevreleyen dağ ("Kaf Dağı'nın ardında").
 Gölgedefter'in kardeş kanalı: aynı defter işareti, ama alev "dumansız ateş" gibi soğuk mavi-beyaz parlar.
-Üretir (assets/smokeless/): intro.mp4, outro.png, smokeless_logo.png, smokeless_banner.jpg, music.mp3, whoosh.wav
-Çalıştır:  python brand_smokeless.py [--force]
+Üretir (assets/beyondqaf/): intro.mp4, outro.png, beyondqaf_logo.png, beyondqaf_banner.jpg, music.mp3, whoosh.wav
+Çalıştır:  python brand_beyondqaf.py [--force]
 """
 import subprocess
 from pathlib import Path
@@ -13,8 +14,8 @@ import brand_golgedefter as g
 from brand import W, write_wav, whoosh
 
 ROOT = Path(__file__).parent
-g.A = A = ROOT / "assets" / "smokeless"
-g.NAME, g.TAG = "SMOKELESS ARCHIVE", "Records of the unseen."
+g.A = A = ROOT / "assets" / "beyondqaf"
+g.NAME, g.TAG = "BEYOND QAF", "Where the unseen lives."
 g.AMBER, g.AMBER_L = (96, 156, 255), (214, 232, 255)   # dumansız ateş: mavi-beyaz kenar
 g.PARCH, g.PARCH_D = (226, 222, 210), (150, 146, 136)
 g.SMOKE = (150, 160, 178)
@@ -35,7 +36,7 @@ _font = g.font
 
 
 def _intro_font(path, size):  # uzun ad: girişteki 150 pt başlık ekrana sığsın
-    return _font(path, 100 if size == 150 else size)
+    return _font(path, 140 if size == 150 else size)
 
 
 def make_outro_card(out):
@@ -54,7 +55,7 @@ def make_outro_card(out):
     bw = d.textlength("SUBSCRIBE", font=bf) + 110
     d.rounded_rectangle([(W - bw) / 2, 710, (W + bw) / 2, 795], 42, fill=(196, 30, 30))
     center("SUBSCRIBE", bf, 726, (250, 244, 236))
-    center("A new record every Monday, Wednesday and Friday", g.font(g.INTER + "InterDisplay-Medium.otf", 34),
+    center("New stories every Monday, Wednesday and Friday", g.font(g.INTER + "InterDisplay-Medium.otf", 34),
            845, g.SMOKE)
     im.save(out, quality=95)
     return out
@@ -72,10 +73,10 @@ def make_banner(out):
     e = g.emblem(420)
     im.paste(e, (510, 505), e)
     d = ImageDraw.Draw(im)
-    g.spaced(d, (960, 585), "SMOKELESS", g.font(g.SERIF, 118), g.PARCH, track=0.08)
-    g.spaced(d, (962, 715), "ARCHIVE", g.font(g.SERIF, 64), g.AMBER, track=0.32)
+    g.spaced(d, (962, 560), "BEYOND", g.font(g.SERIF, 64), g.AMBER, track=0.32)
+    g.spaced(d, (958, 625), "QAF", g.font(g.SERIF, 170), g.PARCH, track=0.10)
     d.text((966, 815), g.TAG, font=g.font(g.INTER + "InterDisplay-Medium.otf", 50), fill=g.PARCH_D)
-    d.text((966, 892), "NEW RECORDS  ·  MON  ·  WED  ·  FRI",
+    d.text((966, 892), "NEW STORIES  ·  MON  ·  WED  ·  FRI",
            font=g.font(g.INTER + "InterDisplay-Bold.otf", 34), fill=g.SMOKE)
     im.save(out, quality=92)
     return out
@@ -90,7 +91,7 @@ def build_all(force=False):
         finally:
             g.font = _font
     jobs = [("intro.mp4", intro), ("outro.png", make_outro_card),
-            ("smokeless_logo.png", g.make_avatar), ("smokeless_banner.jpg", make_banner)]
+            ("beyondqaf_logo.png", g.make_avatar), ("beyondqaf_banner.jpg", make_banner)]
     for name, fn in jobs:
         if force or not (A / name).exists():
             fn(A / name)
