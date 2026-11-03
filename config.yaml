@@ -267,7 +267,8 @@ shorts_delay_hours: 20         # ilk Short ana videodan sonraki günün Shorts s
 shorts_gap_hours: 20           # sonraki Shortlar birer gün arayla
 
 # ======================= INSTAGRAM =======================
-instagram_enabled: false       # IG anahtarları eklenince true yap
+instagram_enabled: true        # anahtar (IG_ACCESS_TOKEN, IG_USER_ID) yoksa sessizce atlanır
+ig_brand_tag: "#smokelessarchive"
 instagram_ai_label: true       # Reel'e "AI ile üretildi" etiketi
 # Not: Instagram'da zamanlama yok; Reel üretim anında yayınlanır.
 # publish_mode "private" iken Instagram'a HİÇ gönderilmez (test güvenliği).
