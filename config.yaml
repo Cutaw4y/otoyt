@@ -162,6 +162,9 @@ thumbnail_rules: >
   a burning glyph), the brightest thing in the frame. Deep navy and black, lots of empty dark space
   on the LEFT for text. Never gore, never a real person, NEVER depict any prophet or holy figure,
   no Quran pages with legible verses, no mosque interiors used for horror.
+caption_theme:            # bölüm kartı ve bilgi etiketlerinin ince çizgi/etiket rengi: dumansız ateş mavisi (ASS &HAABBGGRR)
+  chap_num: "&H00FF9C60"
+
 thumbnail_style: "bold, high contrast, dramatic lighting, one clear object, cinematic, vivid colors"
 
 # Kanal sayfası (ilk gerçek çalışmada bir kez otomatik ayarlanır)

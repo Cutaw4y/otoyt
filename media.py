@@ -200,9 +200,10 @@ WrapStyle: 0
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
 Style: Cap,Inter Display,58,&H00FFFFFF,&H00FFFFFF,&H00101010,&HA0000000,-1,0,0,0,100,100,0,0,1,3.5,2,2,160,160,56,1
-Style: ChapNum,Inter Display,30,{THEME['chap_num']},&H00FFFFFF,{THEME['chap_box']},&H00000000,-1,0,0,0,100,100,3,0,3,14,0,7,90,90,78,1
-Style: ChapTitle,Inter Display,58,&H00FAF4EE,&H00FFFFFF,{THEME['chap_box']},&H00000000,-1,0,0,0,100,100,0,0,3,18,0,7,90,90,128,1
-Style: Callout,Inter Display,50,{THEME['callout_text']},&H00FFFFFF,{THEME['callout_box']},&H00000000,-1,0,0,0,100,100,1,0,3,12,0,9,90,90,84,1
+Style: ChapNum,Inter Display,26,{THEME['chap_num']},&H00FFFFFF,&H80000000,&H00000000,-1,0,0,0,100,100,7,0,1,3,0,7,96,90,84,1
+Style: ChapTitle,Caladea,66,&H00E8F0F4,&H00FFFFFF,&H70000000,&H00000000,-1,0,0,0,100,100,0.5,0,1,5,0,7,96,90,122,1
+Style: Callout,Caladea,46,&H00E8F0F4,&H00FFFFFF,&H70000000,&H00000000,-1,0,0,0,100,100,0.5,0,1,5,0,9,90,100,86,1
+Style: Accent,Inter Display,10,{THEME['chap_num']},&H00FFFFFF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,0,0,7,0,0,0,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
@@ -227,14 +228,18 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
             parts = [("{\\c" + highlight + "}" + _ass_esc(x["word"].strip()) + "{\\r}") if i == j
                      else _ass_esc(x["word"].strip()) for i, x in enumerate(bw)]
             ev.append(f"Dialogue: 0,{_ass_time(w0)},{_ass_time(w1)},Cap,,0,0,0,,{' '.join(parts)}")
+    # belgesel künyesi görünümü: kutu yok; zarif serif yazı, yumuşak gölge, ince renkli çizgi, yavaş beliriş
     for t, title, n in chapters:
-        a, b = _ass_time(t + 0.2), _ass_time(t + 3.4)
-        ev.append(f"Dialogue: 2,{a},{b},ChapNum,,0,0,0,,{{\\fad(250,300)\\move(60,78,90,78)}}{CHAPTER_LABEL} {n}")
-        ev.append(f"Dialogue: 2,{a},{b},ChapTitle,,0,0,0,,{{\\fad(300,300)\\move(60,128,90,128)}}"
-                  f"{_ass_esc(up(title))}")
+        a, b = _ass_time(t + 0.2), _ass_time(t + 3.6)
+        ev.append(f"Dialogue: 2,{a},{b},ChapNum,,0,0,0,,{{\\fad(400,400)\\blur6\\move(80,84,96,84)}}{CHAPTER_LABEL} {n}")
+        ev.append(f"Dialogue: 2,{a},{b},Accent,,0,0,0,,{{\\fad(400,400)\\pos(96,118)\\p1}}m 0 0 l 70 0 70 3 0 3{{\\p0}}")
+        ev.append(f"Dialogue: 2,{a},{b},ChapTitle,,0,0,0,,{{\\fad(450,400)\\blur8\\move(80,128,96,128)}}"
+                  f"{_ass_esc(title)}")
     for t, text in callouts:
-        ev.append(f"Dialogue: 1,{_ass_time(t)},{_ass_time(t + 3.0)},Callout,,0,0,0,,"
-                  f"{{\\fad(200,250)}}{_ass_esc(up(text))}")
+        a, b = _ass_time(t), _ass_time(t + 3.2)
+        ev.append(f"Dialogue: 1,{a},{b},Callout,,0,0,0,,{{\\fad(350,350)\\blur8\\move({W - 84},86,{W - 100},86)}}"
+                  f"{_ass_esc(text)}")
+        ev.append(f"Dialogue: 1,{a},{b},Accent,,0,0,0,,{{\\fad(350,350)\\pos({W - 160},150)\\p1}}m 0 0 l 60 0 60 3 0 3{{\\p0}}")
     Path(out).write_text(head + "\n".join(ev) + "\n", encoding="utf-8")
     return out
 
