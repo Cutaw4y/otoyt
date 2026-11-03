@@ -16,6 +16,8 @@ import publish
 
 ROOT = Path(__file__).parent
 CFG = yaml.safe_load((ROOT / os.getenv("OTOYT_CONFIG", "config.yaml")).read_text(encoding="utf-8"))
+if CFG.get("ig_user_id") and not os.getenv("IG_USER_ID"):
+    os.environ["IG_USER_ID"] = str(CFG["ig_user_id"])
 DATA = ROOT / CFG.get("data_dir", ".")
 QUEUE = DATA / "ig_queue.json"
 HISTORY = DATA / "history.json"
