@@ -2916,7 +2916,7 @@ def push_now(path, msg):
         if run("commit", "-m", f"otoyt: {msg}").returncode != 0:
             return
         for _ in range(3):
-            run("pull", "--rebase", "-X", "theirs", "-q")
+            run("pull", "--rebase", "--autostash", "-X", "theirs", "-q")  # çalışma klasörü kirli olsa da
             if run("push", "-q").returncode == 0:
                 return
     except Exception as e:
