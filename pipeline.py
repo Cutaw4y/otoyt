@@ -2765,6 +2765,12 @@ def check_channel():
 
 
 def run_once():
+    if os.getenv("GITHUB_EVENT_NAME") == "schedule" and not os.getenv("CATCHUP"):
+        today = datetime.now().date().isoformat()
+        if any(h.get("type", "long") == "long" and str(h.get("date", "")).startswith(today)
+               for h in (load_json(HISTORY, []) if HISTORY.exists() else [])):
+            log("Bugünün videosu zaten (elle başlatılan çalışmayla) üretildi; zamanlanmış çalışma atlandı.")
+            return True
     check_channel()
     if not DRY_RUN:
         notify("🎬 Yeni video yapımı başladı: önce konu seçilecek ve senaryo yazılacak.")
