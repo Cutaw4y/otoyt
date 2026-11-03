@@ -2436,40 +2436,50 @@ def post_reels(script, idea, shorts, history, parent=None):
     except Exception as e:
         log(f"Instagram token yenilenemedi: {str(e)[:200]}")
     n = int(CFG.get("instagram_reels_per_video", 1))
+    # 1) ÖNCE hepsini kalıcı sıraya koy (iş zaman aşımına uğrasa da Reels kaybolmasın)
+    queued = []
     for k, sh_ in enumerate(shorts[:n]):
         title = sh_.get("title") or script.get("short_title", script["title"])
         cap = _reel_caption(script, sh_, k == 0)
-        if k == 0:
-            try:
-                mid, link = publish.instagram_reel(sh_["file"], cap, ai_label=CFG.get("instagram_ai_label", True))
-                history.append({"date": datetime.now().isoformat(timespec="minutes"), "type": "reel",
-                                "title": title, "pillar": idea["pillar"], "video_id": mid, "parent": parent})
-                save_json(HISTORY, history)
-                notify(f"📸 Instagram Reel yayında: {link or mid}")
-                continue
-            except Exception as e:
-                log(f"Instagram Reel hatası: {str(e)[:500]}")
-                notify("ℹ️ Instagram'a Reel yüklenemedi (YouTube tarafı etkilenmedi). Bu Short sıranın başına "
-                       "kondu, akşam otomatik tekrar denenecek. Teknik ayrıntı kayıtta; Claude'a "
-                       "'Instagram hatası' demen yeterli.")
-        # sonrakiler (ve yüklenemeyen ilk Short): GitHub Release'e yükle, sıraya ekle
         try:
             asset = f"{datetime.now(timezone.utc):%Y%m%d%H%M}-{slug(title, 40)}-{k + 1}.mp4"
             tmp = Path(tempfile.gettempdir()) / asset
             shutil.copy(sh_["file"], tmp)
-            _gh("release", "view", IG_RELEASE) .returncode == 0 or _gh(
+            _gh("release", "view", IG_RELEASE).returncode == 0 or _gh(
                 "release", "create", IG_RELEASE, "--title", "Instagram sırası",
                 "--notes", "Otomatik: sırada bekleyen Reels videoları. Elle silme.")
             r = _gh("release", "upload", IG_RELEASE, str(tmp), "--clobber")
             if r.returncode != 0:
                 raise RuntimeError(r.stderr[:200])
-            q = load_json(IG_QUEUE, [])
             item = {"asset": asset, "caption": cap, "title": title, "pillar": idea["pillar"], "parent": parent}
-            q.insert(0, item) if k == 0 else q.append(item)  # yüklenemeyen ilk Short sıranın başına
+            q = load_json(IG_QUEUE, []) if IG_QUEUE.exists() else []
+            q.insert(len(queued), item) if k == 0 or queued else q.append(item)  # bu videonunkiler sıranın başına
             save_json(IG_QUEUE, q)
+            queued.append((item, sh_))
             log(f"Instagram sırasına eklendi: {title}")
         except Exception as e:
             log(f"Instagram sırasına eklenemedi: {str(e)[:200]}")
+            if k == 0:
+                queued.append(({"asset": None, "caption": cap, "title": title}, sh_))
+    push_now(IG_QUEUE, "Instagram sırası")
+    # 2) ilkini hemen paylaşmayı dene; olursa sıradan çıkar
+    if not queued:
+        return
+    item, sh_ = queued[0]
+    try:
+        mid, link = publish.instagram_reel(sh_["file"], item["caption"], ai_label=CFG.get("instagram_ai_label", True))
+        history.append({"date": datetime.now().isoformat(timespec="minutes"), "type": "reel",
+                        "title": item["title"], "pillar": idea["pillar"], "video_id": mid, "parent": parent})
+        save_json(HISTORY, history)
+        if item.get("asset"):
+            q = [x for x in load_json(IG_QUEUE, []) if x.get("asset") != item["asset"]]
+            save_json(IG_QUEUE, q)
+            push_now(IG_QUEUE, "Instagram sırası")
+        notify(f"📸 Instagram Reel yayında: {link or mid}")
+    except Exception as e:
+        log(f"Instagram Reel hatası: {str(e)[:500]}")
+        notify("ℹ️ Instagram'a Reel şimdi yüklenemedi (YouTube tarafı etkilenmedi). Sırada bekliyor, günlük "
+               "Instagram paylaşımında otomatik tekrar denenecek.")
 
 
 def _rescue_ig_assets(tag):
