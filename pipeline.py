@@ -1819,7 +1819,15 @@ def next_slot(after, slots):
 def plan_times(now, n_shorts):
     """Ana video + Shorts yayın anları (UTC). Config'te yayın saatleri yoksa eski gecikme kuralı."""
     if CFG.get("publish_slots"):
-        main = next_slot(now + timedelta(hours=CFG.get("min_lead_hours", 1.5)), CFG["publish_slots"])
+        early = now + timedelta(hours=CFG.get("min_lead_hours", 1.5))
+        main = next_slot(early, CFG["publish_slots"])
+        # bugünün yayın saati kaçtıysa yarına atma: aynı gece, mümkün olan ilk anda yayınla (gece yarısından önce)
+        from zoneinfo import ZoneInfo
+        tz = ZoneInfo(CFG["publish_slots"].get("tz", "UTC"))
+        e_loc, m_loc = early.astimezone(tz), main.astimezone(tz)
+        if m_loc.date() > e_loc.date() and e_loc.hour < CFG.get("late_publish_until", 23):
+            main = early.replace(second=0, microsecond=0)
+            log(f"Bugünün yayın saati kaçtı; video aynı gün {e_loc:%H:%M} (yerel) yayınlanacak")
     else:
         main = now + timedelta(hours=CFG["publish_delay_hours"])
     shorts, prev = [], main + timedelta(hours=CFG.get("shorts_delay_hours", 20))
