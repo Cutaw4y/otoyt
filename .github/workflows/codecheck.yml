@@ -1,0 +1,25 @@
+name: Kod kontrolü (her değişiklikte)
+on:
+  push:
+    paths: ["*.py", "config.yaml", "channels/*.yaml"]
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12", cache: pip}
+      - run: pip install -q -r requirements.txt 2>/dev/null || pip install -q requests pyyaml pillow numpy google-api-python-client google-auth
+      - name: Derleme, ayar ve içe aktarma testi (iki kanal)
+        run: |
+          python -m py_compile *.py
+          for c in config.yaml channels/golgedefter.yaml; do
+            OTOYT_CONFIG=$c DRY_RUN=1 python -c "import pipeline, media, ai, voice, publish; p=pipeline; assert p.CFG['content_pillars']; print('OK', p.CFG['channel_name'])"
+          done
+      - name: Hata varsa Telegram'a haber ver
+        if: failure()
+        env:
+          T: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          C: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: curl -s "https://api.telegram.org/bot$T/sendMessage" -d chat_id="$C" -d text="⚠️ Son kod değişikliği testten geçmedi. Bir sonraki video etkilenebilir; Claude'a 'kontrol et' yaz." >/dev/null
