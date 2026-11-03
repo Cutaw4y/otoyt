@@ -51,7 +51,7 @@ UPLOAD_STARTED = False   # True olduktan sonra hata olursa otomatik tekrar denem
 
 # ---------------------------------------------------------------- yardımcılar
 RUNLOG = DATA / "logs" / "last_run.txt"
-if CFG.get("ig_user_id") and not os.getenv("IG_USER_ID"):  # hesap kimliği gizli değil: config'den
+if CFG.get("ig_user_id"):  # kanalın kendi Instagram hesabı config'de sabit: başka hesaba paylaşım asla olmaz
     os.environ["IG_USER_ID"] = str(CFG["ig_user_id"])
 media.LANG = CFG.get("language_code", "en")
 media.CHAPTER_LABEL = CFG.get("chapter_label", "CHAPTER")
