@@ -1,26 +1,3 @@
-[09:18:45] Başladı (test modu: False, yayın: scheduled)
-[09:18:45] Ücretli Gemini anahtarı kullanılıyor
-[09:18:46] Kanal doğrulandı: GölgeDefter
-[09:18:46] Analitik: 0 video ölçüldü, sütun puanları: {}
-[09:19:32] Rakip analizi: 'Sümerlerin 241 Bin Yıllık Yalanı: Tabletteki Matematik Hilesi Çözüldü' seçildi (0/10 büyük rakip). Açı: YouTube'daki videoların neredeyse tamamı bu listeyi uzaylılar/Anunnakiler veya biyolojik ölümsüzlük safsatasıyla açıklıyor. Oysa Oxford'daki Weld-Blundell Prizm
-[09:19:32] Konu (1): Sümerlerin 241 Bin Yıllık Yalanı: Tabletteki Matematik Hilesi Çözüldü  [Kayıp medeniyetler ve antik gizemler (Göbeklitepe, Sümerler, Nazca, Atlantis efsanesi, Mohenjo-daro)]
-[09:23:38] Senaryo kısa (1263/1700 kelime) → genişletiliyor (1)
-[09:24:56] Senaryo kısa (1415/1700 kelime) → genişletiliyor (2)
-[09:25:58] Senaryo uzunluğu: 1506 kelime
-[09:25:58] Senaryo yazıldı: 38 sahne, 1506 kelime
-[09:27:05] Anlatım sadeleştirildi (1506 → 1560 kelime)
-[09:27:36] Doğrulama kaynağı: Google araması
-[09:27:36] Doğrulama turu 1: 15 iddia, 1 yanlış, 0 belirsiz
-[09:30:08] Doğrulama kaynağı: Google araması
-[09:30:08] Doğrulama turu 2: 15 iddia, 0 yanlış, 0 belirsiz
-[09:30:26] Başlık seçildi: Sümer Kral Listesi: 8 Kral 241 Bin Yıl Boyunca Nasıl Yaşadı?  (önceki: Sümer Kral Listesi Sırrı: 241 Bin Yıllık Şifre Çözüldü) — Kanalın en sevdiği şablonu (konu + somut sayılar + çarpıcı soru) kusursuz uygular. '8 Kral' ve '241 Bin Yıl' zıtlığı doğrudan mantık sınırlarını zorla
-[09:30:28] Editör (min 6, ort 7.6): {'originality': 7, 'hook': 8, 'clarity': 7, 'simplicity': 6, 'flow': 8, 'value_density': 8, 'audience_fit': 9, 'problems': ["Quote: 'Altmış sayısı öyle özel bir matematiksel yapıya sahipti ki, ikiye, üçe, dörde, beşe ve altıya kalansız bölünebiliyordu.' -> Fix: Altmış sayısı matematikte çok özeldir çünkü 2, 3, 4, 5 ve 6'ya tam bölünür, bu da bölüştürmeyi kolaylaştırır.", "Quote: 'En temel birim altmış idi ve buna soss deniyordu. Altmışın on katı olan altı yüz sayısına ner adı verilirdi. Altmış çarpı altmış, yani üç bin altı yüz sayısı ise en kutsal büyük birimdi ve buna sar deniyordu.' -> Fix: Sümerler altmışlık birimlere özel isimler veriyordu; örneğin üç bin altı yüz sayısına sar diyorlardı."], 'problems_tr': 'Metindeki bazı matematiksel terimler ve yabancı birim adları (soss, ner, sar) yeterince basitleştirilmeden verilmiş, 12 yaşındaki bir çocuğun ilk dinlemede anlaması için bu kısımların daha sade anlatılması gerekirdi.'}
-[09:32:19] Anlatım sadeleştirildi (1555 → 1555 kelime)
-[09:33:10] Doğrulama kaynağı: Google araması
-[09:33:10] Doğrulama turu 1: 15 iddia, 0 yanlış, 0 belirsiz
-[09:33:12] Editör (min 6, ort 7.7): {'originality': 8, 'hook': 8, 'clarity': 7, 'simplicity': 6, 'flow': 8, 'value_density': 8, 'audience_fit': 9, 'problems': ['"altmışlık sayı düzeni" (This concept is explained later, but introducing the heavy math term upfront slightly hurts immediate simplicity.) Fix: "altmış sayısını temel alan bir hesaplama yöntemi"', '"sar birimlerinin" (Mentioned without prior explanation before the math section details it.) Fix: "altmışlık sisteme göre hesaplanan büyük zaman birimlerinin"', '"ner birimlerinin" (Unexplained technical sub-unit term.) Fix: "altı yüzlük daha küçük birimlerin"', '"Enmebaragesi\'nin" (A bit of a tongue-twister for a 12-year-old on first listen without pronunciation break.) Fix: "Enmebaragesi adlı kralın"'], 'problems_tr': "Metinde geçen 'altmışlık sayı düzeni', 'sar' ve 'ner' gibi bazı özel terimler ve bazı isimler ilk başta yeterince basitleştirilmeden kullanılmıştır. Bu terimler daha sade bir günlük dille açıklanabilirdi."}
-[09:35:06] Anlatım sadeleştirildi (1564 → 1564 kelime)
-[09:35:52] Doğrulama kaynağı: Google araması
-[09:35:52] Doğrulama turu 1: 15 iddia, 0 yanlış, 0 belirsiz
-[09:35:54] Editör (min 7, ort 7.9): {'originality': 7, 'hook': 8, 'clarity': 8, 'simplicity': 7, 'flow': 8, 'value_density': 8, 'audience_fit': 9, 'problems': ["'Ashmolean Müzesi' (Kısaca müze denmeliydi, çocuklar nerede olduğunu bilemeyebilir) -> İngiltere'deki bir müzede duran...", "'Anunnaki adı verilen göksel varlıklar' -> Gökyüzünden geldiğine inanılan tanrılar", "'Enmebaragesi adlı kralın saltanatı' -> Hükümdarlık süresi"], 'problems_tr': 'Metinde geçen bazı özel isimler ve terimler (Ashmolean Müzesi, Anunnaki, saltanat) yeterince basitleştirilmeden kullanılmış; 12 yaşındaki bir çocuğun rahatça anlayabilmesi için bu kavramların ilk geçtiği yerde kısa açıklamalar eklenmelidir.'}
-[09:35:54] Seslendirme başlıyor (Gemini Charon)...
+[11:15:47] Başladı (test modu: False, yayın: scheduled)
+[11:15:48] Ücretli Gemini anahtarı kullanılıyor
+[11:15:48] Kanal doğrulandı: GölgeDefter
