@@ -1672,10 +1672,33 @@ def seo_problems(script):
     return out
 
 
+def search_demand(phrase, n=12):
+    """YouTube arama önerileri: insanların bu konuda en çok ne aradığı (ücretsiz, kota harcamaz)."""
+    import requests
+    hl = CFG.get("language_code", "en")
+    gl = "TR" if hl == "tr" else "US"
+    out = []
+    for q in dict.fromkeys([phrase, " ".join(phrase.split()[:2]), phrase.split()[0] if phrase else ""]):
+        if not q:
+            continue
+        try:
+            r = requests.get("https://suggestqueries.google.com/complete/search",
+                             params={"client": "firefox", "ds": "yt", "q": q, "hl": hl, "gl": gl}, timeout=15)
+            for x in r.json()[1]:
+                if x not in out:
+                    out.append(x)
+        except Exception:
+            continue
+    return out[:n]
+
+
 def title_pass(script):
     """Tıklatan başlık: 10 aday yazdırır, hakem telefonda akış içinde en çok tıklanacak olanı seçer.
     Anahtar kelime kuralı ve uzunluk kodla kontrol edilir; olmazsa eski başlık kalır."""
     text = " ".join(s["narration"] for s in script["scenes"][:6])[:2500]
+    demand = search_demand((script.get("core_keyword") or script["title"].split(":")[0]).strip())
+    if demand:
+        log("En çok arananlar: " + " | ".join(demand[:8]))
     try:
         r = llm_json(
             f"You are the best YouTube title writer for a {CFG['language']} {CFG.get('channel_name')} channel. "
@@ -1689,6 +1712,11 @@ def title_pass(script):
             "kimsenin bilmediği, hâlâ çözülemedi, o gece; for English: the real reason, nobody noticed, still); "
             "natural native phrasing, never translated-sounding; no ALL CAPS words, no emoji, no clickbait the "
             "video can't pay off. "
+            + (f"WHAT PEOPLE ACTUALLY SEARCH on YouTube about this topic (autocomplete, most searched first): "
+               f"{' | '.join(demand)}. Build the title around the most searched phrase that the video truly answers, "
+               "in plain words a 12-year-old instantly understands (no rare or academic words), and make it feel "
+               "eerie and mysterious, like something unexplained or supernatural happened (only as far as the video "
+               "really supports). " if demand else "")
             + (f"The channel owner LOVES this style, follow its pattern (topic: concrete people/number + what they "
                f"did + the unanswered question): {CFG['title_examples']} " if CFG.get("title_examples") else "")
             + "Then pick the one with the highest expected click-through rate on a phone feed. "
