@@ -1,253 +1,458 @@
-[13:16:15] Başladı (test modu: False, yayın: scheduled)
-[13:16:16] Kanal doğrulandı: Beyond Qaf
-[13:16:17] Analitik: 1 video ölçüldü, sütun puanları: {"How it's made and what it really costs (steel, glass, chips, paper, concrete)": 1.518587076263208}
-[13:16:17] Seri bölümü seçildi: Jinn: What the Quran Actually Says About the Hidden Beings
-[13:16:23] Konu (1): Jinn: What the Quran Actually Says About the Hidden Beings  [Jinn: what the Quran, authentic hadith and classical scholars actually say]
-[13:17:36] Senaryo kısa (1207/1650 kelime) → genişletiliyor (1)
-[13:18:38] Senaryo kısa (1337/1650 kelime) → genişletiliyor (2)
-[13:19:19] Senaryo uzunluğu: 1481 kelime
-[13:19:19] Senaryo yazıldı: 35 sahne, 1481 kelime
-[13:20:06] Anlatım sadeleştirildi (1481 → 1303 kelime)
-[13:20:20] Doğrulama kaynağı: Google araması
-[13:20:20] Doğrulama turu 1: 10 iddia, 0 yanlış, 3 belirsiz
-[13:21:03] Doğrulama kaynağı: Google araması
-[13:21:03] Doğrulama turu 2: 15 iddia, 0 yanlış, 0 belirsiz
-[13:21:19] Başlık seçildi: What Are Jinn in Islam? The Quran's One-Way Mirror  (önceki: What Are Jinn in Islam? What the Quran Actually Says) — "What Are Jinn in Islam? The Quran's One-Way Mirror" features the core search query upfront, perfectly fits mobile display limits at 51 characters, an
-[13:21:21] Editör (min 5, ort 7.1): {'originality': 8, 'hook': 7, 'clarity': 6, 'simplicity': 5, 'flow': 8, 'value_density': 8, 'audience_fit': 8, 'problems': ["Quote: 'Surah Ar-Rahman' -> Fix: 'Chapter 55 of the Quran, called Surah Ar-Rahman'", "Quote: 'marij, an Arabic word meaning the scorching tip of a smokeless fire.' -> Fix: 'marij, an Arabic word for the purest, hottest tip of a flame with no smoke.'", "Quote: 'Antoine Galland' -> Fix: 'a French scholar named Antoine Galland'", "Quote: 'called sihr, meaning dark sorcery' -> Fix: 'called sihr, which means dark magic'", "Quote: 'Surah Al-Jinn' -> Fix: 'Chapter 72, titled Surah Al-Jinn'", "Quote: 'Ibn Kathir' -> Fix: 'an ancient Islamic scholar named Ibn Kathir'", "Quote: 'Prophet Sulayman' -> Fix: 'Prophet Sulayman, who is also known as King Solomon'", "Quote: 'al-ghayb in Arabic' -> Fix: 'al-ghayb, which means the hidden future'", "Quote: 'al-Bukhari and Muslim' -> Fix: 'trusted early Islamic record keepers named al-Bukhari and Muslim'", "Quote: 'qareen' -> Fix: 'qareen, meaning a personal unseen companion'"], 'problems_tr': "Metin genel olarak akıcı ve ilgi çekici; ancak 'Surah', 'sihr', 'Ibn Kathir', 'al-ghayb' ve 'qareen' gibi terimler ilk kez duyanlar için daha sade şekilde açıklanmalı ve telaffuz ediliş/anlam bütünlüğü netleştirilmeli."}
-[13:22:41] Anlatım sadeleştirildi (1289 → 1289 kelime)
-[13:22:41] Senaryo kısa (1289/1650 kelime) → genişletiliyor (1)
-[13:24:15] Doğrulama kaynağı: Google araması
-[13:24:15] Doğrulama turu 1: 12 iddia, 0 yanlış, 1 belirsiz
-[13:24:59] Doğrulama kaynağı: Google araması
-[13:24:59] Doğrulama turu 2: 15 iddia, 0 yanlış, 0 belirsiz
-[13:25:05] Editör (min 5, ort 7.0): {'originality': 8, 'hook': 7, 'clarity': 6, 'simplicity': 5, 'flow': 7, 'value_density': 8, 'audience_fit': 8, 'problems': ["Quote: 'The primary record begins in Chapter fifty-five of the Quran, called Surah Ar-Rahman, verse fifteen.' Fix: Break it down so non-Muslims understand what a Surah is immediately: 'The primary record begins in the Quran—the central religious text of Islam—specifically in Chapter 55...'", "Quote: 'marijin min nar, which translates to a pure, piercing flame completely stripped of smoke.' Fix: Simplify the Arabic phrase pronunciation and translation flow for a 12-year-old.", "Quote: 'Islamic jurisprudence, claiming that any human can summon or command a jinn to grant wishes is strictly forbidden.' Fix: Explain 'jurisprudence' simply as 'Islamic law'.", "Quote: 'categorized as sihr, the Arabic term for dark sorcery' Fix: Spell out 'sihr' clearly and define it immediately as black magic.", "Quote: 'Every human has a qareen, meaning an assigned unseen companion that whispers doubts, known as waswas, into the human conscience.' Fix: Keep terms simple, define 'waswas' right away as whispers of doubt."], 'problems_tr': "Metin genel olarak akıcı ve ilgi çekici, ancak 'jurisprudence' (fıkıh/hukuk) ve 'sihr' (büyü) gibi bazı Arapça ve teknik terimler 12 yaşındaki bir dinleyici için daha basitçe açıklanmalıdır."}
-[13:26:25] Anlatım sadeleştirildi (1507 → 1564 kelime)
-[13:26:34] Doğrulama kaynağı: Google araması
-[13:26:34] Doğrulama turu 1: 15 iddia, 1 yanlış, 0 belirsiz
-[13:27:26] Doğrulama kaynağı: Google araması
-[13:27:26] Doğrulama turu 2: 13 iddia, 0 yanlış, 0 belirsiz
-[13:27:29] Editör (min 6, ort 7.4): {'originality': 8, 'hook': 8, 'clarity': 7, 'simplicity': 6, 'flow': 7, 'value_density': 8, 'audience_fit': 8, 'problems': ["Quote: 'Classical commentators like Ibn Kathir and Al-Tabari explained that marij refers to the pure, darting tip of a flame...' -> Fix: Mentioning historical figures without context slightly bogs down the 12-year-old simplicity; introduce them briefly as 'early Islamic scholars'.", "Quote: 'Because jinn bodies vibrate outside this narrow channel, our retinas simply cannot capture them...' -> Fix: 'Vibrate outside this narrow channel' is slightly abstract for a 12-year-old; simplify to 'Because their bodies exist in light waves our eyes cannot see...'", "Quote: 'Authentic traditions in Sahih Muslim note that they consume bones and leftovers from human meals...' -> Fix: 'Sahih Muslim' is an unexplained source name for beginners; add 'a major book of verified sayings of the Prophet Muhammad'.", "Quote: 'Trying to bind or control these unseen beings is categorized as sihr, pronounced SEER, the Arabic word for black magic...' -> Fix: Good explanation, but the transition into how sorcery works is slightly rushed.", "Quote: 'Early collections like Sahih al-Bukhari record that every human has a qareen, an unseen companion...' -> Fix: 'Sahih al-Bukhari' is a source name that needs a tiny helper word like 'in a primary book of Islamic records'."], 'problems_tr': 'Metin genel olarak çok akıcı ve ilgi çekici, ancak 12 yaşındaki bir çocuğun ilk dinlemede tamamen anlayabilmesi için bazı İslami terim kaynaklarının (Ibn Kathir, Sahih Muslim vb.) kimler veya ne oldukları çok kısa birer ek açıklama ile basitleştirilebilir. Ayrıca elektromanyetik dalga/titreşim gibi soyut kavramlar biraz daha sadeleştirilebilir.'}
-[13:27:29] Konu kalite barajını geçemedi: Jinn: What the Quran Actually Says About the Hidden Beings
-[13:27:29] Baraj geçilemedi; en iyi senaryo kullanılıyor (min 6, ort 7.4)
-[13:27:36] Seslendirme başlıyor (Gemini Charon)...
-[13:35:50] Seslendirme: 1018 sn
-[13:37:18] Thumbnail sıralaması: [1, 3, 2] - Thumbnail #1 is the strongest because 'NOT A GENIE' directly debunks a common misconception, creating an immediate curiosity gap with the title while featuring a striking, high-contrast blue fire figure that pops clearly at phone size. #3 creates great mystery with glowing eyes lurking in the dark ruins and 'THE UNSEEN TRIBE' text, though slightly less punchy than #1. #2 suffers from being too dark and abstract with 'SMOKELESS FIRE' text, making it harder to decipher quickly on a small screen.
-[13:39:33] Cümle cümle görsel planı: 35/35 sahne
-[13:39:33] Sahne 1 (diagram, 29.3 sn, 6 çekim, cümleye bağlı)
-[13:39:39]    ilgisiz görüntü elendi: aerial view of tropical beach
-[13:39:40]    ilgisiz görüntü elendi: snow falling under street lights
-[13:39:53]    ilgisiz görüntü elendi: blue water in a river
-[13:39:57]    ilgisiz görüntü elendi: tropical beach with palm tree
-[13:40:12]    ilgisiz görüntü elendi: Tall grass at sunset background
-[13:40:14]    ilgisiz görüntü elendi: sunset behind clouds in sky
-[13:40:19]    ilgisiz görüntü elendi: aerial view of old town
-[13:40:22]    ilgisiz görüntü elendi: daisy flowers near ancient structure
-[13:40:34]    alakasız görsel yeniden çizilecek: old arabic scripture with text
-[13:41:48]    ilgisiz görüntü elendi: aerial view of river bridge
-[13:41:51]    ilgisiz görüntü elendi: seagulls sitting on wooden posts
-[13:42:07]    ilgisiz görüntü elendi: modern city with a lake
-[13:42:10]    ilgisiz görüntü elendi: aerial view of old town
-[13:42:13] Sahne 2 (diagram, 31.5 sn, 5 çekim, cümleye bağlı)
-[13:42:24]    ilgisiz görüntü elendi: pier with flags over water
-[13:42:26]    ilgisiz görüntü elendi: Woman yawning in a dark room
-[13:42:49]    ilgisiz görüntü elendi: burning snowflake shaped candles
-[13:42:51]    ilgisiz görüntü elendi: close up of candle flame
-[13:43:02]    alakasız görsel yeniden çizilecek: blue flame on ancient script
-[13:43:15]    ilgisiz görüntü elendi: scientist heating glass with burner
-[13:43:17]    ilgisiz görüntü elendi: volcano erupting with lava
-[13:43:21] Sahne 3 (diagram, 27.3 sn, 5 çekim, cümleye bağlı)
-[13:43:35]    ilgisiz görüntü elendi: sparkler burning in the dark
-[13:43:36]    ilgisiz görüntü elendi: forest trees in daylight
-[13:43:42]    ilgisiz görüntü elendi: a wasp on a plant
-[13:43:56]    ilgisiz görüntü elendi: ocean waves crashing against cliffs
-[13:44:18] Sahne 4 (diagram, 27.5 sn, 5 çekim, cümleye bağlı)
-[13:44:21]    ilgisiz görüntü elendi: pink and blue ink swirling
-[13:44:24]    ilgisiz görüntü elendi: yellow ink swirling in water
-[13:44:36]    alakasız görsel yeniden çizilecek: hand writing on Arabic text
-[13:45:51]    ilgisiz görüntü elendi: white smoke swirling in darkness
-[13:45:53]    ilgisiz görüntü elendi: yellow ink swirling in water
-[13:45:59]    ilgisiz görüntü elendi: aerial view of barren hills
-[13:46:00]    ilgisiz görüntü elendi: bright sun shining through clouds
-[13:46:11]    alakasız görsel yeniden çizilecek: ruined village with map interface
-[13:47:25]    ilgisiz görüntü elendi: campfire burning in the dark
-[13:47:27]    ilgisiz görüntü elendi: icicles hanging from wooden structure
-[13:48:09]    ilgisiz görüntü elendi: aerial view of white buildings
-[13:48:11]    ilgisiz görüntü elendi: close up of bright fire
-[13:48:14] Sahne 5 (diagram, 29.6 sn, 6 çekim, cümleye bağlı)
-[13:48:25]    ilgisiz görüntü elendi: rainbow in the sky
-[13:48:26]    ilgisiz görüntü elendi: man writing on white board
-[13:48:31]    ilgisiz görüntü elendi: Glass radiometer with spinning vanes
-[13:48:33]    ilgisiz görüntü elendi: blurry light leak abstract background
-[13:48:40]    ilgisiz görüntü elendi: close up of praying mantis
-[13:48:42]    ilgisiz görüntü elendi: blond woman looking at camera
-[13:48:55]    alakasız görsel yeniden çizilecek: close up of human eye
-[13:49:28]    ilgisiz görüntü elendi: pink cherry blossom tree branches
-[13:49:31]    ilgisiz görüntü elendi: close up of man face
-[13:49:35]    ilgisiz görüntü elendi: close up of pelican head
-[13:49:38]    ilgisiz görüntü elendi: close up of a ram
-[13:49:41] Sahne 6 (diagram, 39.6 sn, 7 çekim, cümleye bağlı)
-[13:49:44]    ilgisiz görüntü elendi: aerial view of winding mountain road
-[13:49:46]    ilgisiz görüntü elendi: night sky with stars over water
-[13:50:22]    ilgisiz görüntü elendi: cars driving on a highway
-[13:50:24]    ilgisiz görüntü elendi: busy city street traffic aerial
-[13:50:29]    ilgisiz görüntü elendi: Woman touching camel in desert
-[13:50:46]    ilgisiz görüntü elendi: aerial view of arid town
-[13:50:47]    ilgisiz görüntü elendi: sand dunes and blue water
-[13:51:25]    ilgisiz görüntü elendi: sand dust blowing in desert
-[13:51:29]    ilgisiz görüntü elendi: aerial view of arid hills
-[13:51:34]    ilgisiz görüntü elendi: sand falling from a hand
-[13:51:36]    ilgisiz görüntü elendi: wide desert landscape with bushes
-[13:51:43]    ilgisiz görüntü elendi: aerial view of rocky desert
-[13:51:44]    ilgisiz görüntü elendi: dead tree in desert landscape
-[13:51:48] Sahne 7 (footage, 40.1 sn, 8 çekim, cümleye bağlı)
-[13:53:11]    alakasız görsel yeniden çizilecek: open book and burning candle
-[13:54:26]    ilgisiz görüntü elendi: hand resting on open book
-[13:54:27]    ilgisiz görüntü elendi: Person turning pages of Quran
-[13:54:33]    ilgisiz görüntü elendi: aerial view of rural mosque
-[13:54:34]    ilgisiz görüntü elendi: person reading an open book
-[13:54:41]    ilgisiz görüntü elendi: stepping stones across small river
-[13:54:44]    ilgisiz görüntü elendi: stone stepping stones across river
-[13:55:15]    alakasız görsel yeniden çizilecek: stone tablet with arabic writing
-[13:56:31]    ilgisiz görüntü elendi: stone thrown in lake water
-[13:56:33]    ilgisiz görüntü elendi: close up of pink flowers
-[13:56:41]    ilgisiz görüntü elendi: stepping stones across a river
-[13:56:45]    ilgisiz görüntü elendi: river flowing through green valley
-[13:56:51]    ilgisiz görüntü elendi: waterfall and rainbow in forest
-[13:57:08] Sahne 8 (footage, 23.8 sn, 5 çekim, cümleye bağlı)
-[13:57:10]    ilgisiz görüntü elendi: wet rocks by ocean sunset
-[13:57:22]    ilgisiz görüntü elendi: water flowing over mossy rock
-[13:57:30]    ilgisiz görüntü elendi: aerial view of rocky coast
-[13:57:34]    ilgisiz görüntü elendi: aerial view of rocky mountains
-[13:59:21]    ilgisiz görüntü elendi: aerial view of baobab trees
-[13:59:24]    ilgisiz görüntü elendi: aerial view of dry desert
-[13:59:29]    ilgisiz görüntü elendi: several meerkats huddled together
-[13:59:32]    ilgisiz görüntü elendi: empty road through barren landscape
-[13:59:35] Sahne 9 (diagram, 26.3 sn, 5 çekim, cümleye bağlı)
-[13:59:43]    ilgisiz görüntü elendi: tall gothic european cathedral tower
-[13:59:47]    ilgisiz görüntü elendi: aerial view of old town
-[13:59:53]    ilgisiz görüntü elendi: medieval European stone building courtyard
-[13:59:59]    ilgisiz görüntü elendi: yellow european church facade exterior
-[14:00:05]    ilgisiz görüntü elendi: rocks and dry grass ground
-[14:00:07]    ilgisiz görüntü elendi: mortar and pestle grinding spices
-[14:00:24]    ilgisiz görüntü elendi: squid hanging out to dry
-[14:00:26]    ilgisiz görüntü elendi: dried prickly brown weed plant
-[14:00:29] Sahne 10 (diagram, 24.8 sn, 5 çekim, cümleye bağlı)
-[14:00:35]    ilgisiz görüntü elendi: Close up of lava lamp
-[14:00:39]    ilgisiz görüntü elendi: blue sparkling lights bokeh background
-[14:00:48]    ilgisiz görüntü elendi: blurry glowing colorful particles background
-[14:00:51]    ilgisiz görüntü elendi: aerial view of road intersection
-[14:00:57]    ilgisiz görüntü elendi: sun rays shining through clouds
-[14:01:01]    ilgisiz görüntü elendi: sunlight shining through forest trees
-[14:01:13]    alakasız görsel yeniden çizilecek: scrolls light beams night sky
-[14:03:28]    ilgisiz görüntü elendi: golden sunlight breaking through clouds
-[14:03:32]    ilgisiz görüntü elendi: underwater sunlight rays through water
-[14:03:36]    ilgisiz görüntü elendi: autumn leaves on tree branches
-[14:03:39]    ilgisiz görüntü elendi: sunlight breaking through dark clouds
-[14:03:42] Sahne 11 (footage, 28.6 sn, 6 çekim, cümleye bağlı)
-[14:03:45]    ilgisiz görüntü elendi: close up of green chameleon
-[14:03:47]    ilgisiz görüntü elendi: duck standing on wooden post
-[14:04:21]    alakasız görsel yeniden çizilecek: scale with weights and scroll
-[14:05:34]    ilgisiz görüntü elendi: green lizard on a branch
-[14:05:36]    ilgisiz görüntü elendi: people shaking hands and keys
-[14:05:41]    ilgisiz görüntü elendi: hippopotamus standing near water puddle
-[14:05:43]    ilgisiz görüntü elendi: aerial view of desert building
-[14:06:22]    alakasız görsel yeniden çizilecek: open book with Arabic text
-[14:07:37]    ilgisiz görüntü elendi: dog swimming in blue water
-[14:07:39]    ilgisiz görüntü elendi: A laptop on a table
-[14:07:44]    ilgisiz görüntü elendi: blurred office interior with people
-[14:07:49]    ilgisiz görüntü elendi: waterfall flowing into the sea
-[14:08:07] Sahne 12 (diagram, 30.6 sn, 6 çekim, cümleye bağlı)
-[14:08:09]    ilgisiz görüntü elendi: Wasp building nest on branch
-[14:08:11]    ilgisiz görüntü elendi: Woman holding flower arrangement indoor
-[14:08:31]    ilgisiz görüntü elendi: aerial view of a castle
-[14:08:37]    ilgisiz görüntü elendi: aerial view of stone bridge
-[14:08:42]    ilgisiz görüntü elendi: ocean waves washing onto sandy beach
-[14:08:44]    ilgisiz görüntü elendi: coastal rocks and sea waves
-[14:09:23]    ilgisiz görüntü elendi: aerial view of tropical resort
-[14:09:25]    ilgisiz görüntü elendi: a crab in the sand
-[14:09:33]    ilgisiz görüntü elendi: brown slug crawling on dirt
-[14:09:37]    ilgisiz görüntü elendi: goat resting in the dirt
-[14:09:42]    ilgisiz görüntü elendi: front view of vintage car
-[14:09:43]    ilgisiz görüntü elendi: orange liquid blobs floating around
-[14:10:17]    alakasız görsel yeniden çizilecek: golden magic lamp with smoke
-[14:11:29] Sahne 13 (footage, 27.0 sn, 5 çekim, cümleye bağlı)
-[14:11:32]    ilgisiz görüntü elendi: aerial view of coastal city
-[14:11:34]    ilgisiz görüntü elendi: woman wearing a face veil
-[14:11:43]    ilgisiz görüntü elendi: modern round glass light bulb
-[14:11:45]    ilgisiz görüntü elendi: plasma ball with electrical arcs
-[14:12:25]    ilgisiz görüntü elendi: colorful oil slick on water
-[14:12:27]    ilgisiz görüntü elendi: food frying in hot oil
-[14:12:52]    ilgisiz görüntü elendi: red squirrel on tree branch
-[14:12:53]    ilgisiz görüntü elendi: young man sitting on rocks
-[14:12:57] Sahne 14 (diagram, 27.8 sn, 5 çekim, cümleye bağlı)
-[14:13:11]    ilgisiz görüntü elendi: modern colorful books stacked together
-[14:13:13]    ilgisiz görüntü elendi: young man reading modern book
-[14:13:17]    ilgisiz görüntü elendi: old stone arch ruins structure
-[14:13:19]    ilgisiz görüntü elendi: exterior view of roman arena
-[14:13:37]    ilgisiz görüntü elendi: man holding a burning sparkler
-[14:13:51]    ilgisiz görüntü elendi: blurry out of focus lights
-[14:13:56]    ilgisiz görüntü elendi: stone ruins of ancient building
-[14:14:00]    ilgisiz görüntü elendi: aerial view of roman aqueduct
-[14:14:03] Sahne 15 (footage, 26.8 sn, 6 çekim, cümleye bağlı)
-[14:14:06]    ilgisiz görüntü elendi: finger pointing at book page
-[14:14:08]    ilgisiz görüntü elendi: turning pages of a textbook
-[14:14:20]    alakasız görsel yeniden çizilecek: old book with text pages
-[14:15:32]    ilgisiz görüntü elendi: open book against cloudy sky
-[14:15:44]    ilgisiz görüntü elendi: books on a modern shelf
-[14:15:46]    ilgisiz görüntü elendi: man turning pages of book
-[14:16:22]    ilgisiz görüntü elendi: girl reading a book indoors
-[14:16:24]    ilgisiz görüntü elendi: man reading book in library
-[14:16:29]    ilgisiz görüntü elendi: Woman reading book in library
-[14:16:31]    ilgisiz görüntü elendi: man reading book in library
-[14:16:36]    ilgisiz görüntü elendi: person holding an old book
-[14:16:38]    ilgisiz görüntü elendi: a surfer riding ocean waves
-[14:16:41] Sahne 16 (diagram, 30.3 sn, 5 çekim, cümleye bağlı)
-[14:16:44]    ilgisiz görüntü elendi: aerial view of a castle
-[14:16:47]    ilgisiz görüntü elendi: hills covered in morning fog
-[14:17:19]    alakasız görsel yeniden çizilecek: open book with arabic text
-[14:19:00]    ilgisiz görüntü elendi: aerial view of city skyline
-[14:19:03]    ilgisiz görüntü elendi: foggy landscape with houses and trees
-[14:19:08]    ilgisiz görüntü elendi: person setting table with strawberries
-[14:19:10]    ilgisiz görüntü elendi: A bowl of curry and rice
-[14:19:23]    alakasız görsel yeniden çizilecek: engraved metal bowl with letters
-[14:20:38]    ilgisiz görüntü elendi: wooden spoon stirring white liquid
-[14:20:40]    ilgisiz görüntü elendi: aerial view of coastal city
-[14:20:45]    ilgisiz görüntü elendi: gourmet shrimp dish with flowers
-[14:20:47]    ilgisiz görüntü elendi: noodles garnished with yellow flower
-[14:20:51] Sahne 17 (footage, 31.5 sn, 7 çekim, cümleye bağlı)
-[14:21:17]    alakasız görsel yeniden çizilecek: open book with text candle
-[14:22:29] Görsel aşaması zaman bütçesini aştı: kalan sahnelerde yalnız cümleye göre çizilen görseller (hızlı mod)
-[14:28:34] Sahne 18 (footage, 27.9 sn, 6 çekim, cümleye bağlı)
-[14:30:44] Sahne 19 (diagram, 30.7 sn, 6 çekim, cümleye bağlı)
-[14:30:45] Cloudflare günlük ücretsiz kota doldu: {"errors":[{"message":"AiError: AiError: you have used up your daily free allocation of 10,000 neurons, please upgrade to Cloudflare's Workers Paid plan if you would like to continue usage. (3da167fd- → bu video için Pexels fotoğraflarına geçiliyor
-[14:35:28] Sahne 20 (footage, 23.5 sn, 4 çekim, cümleye bağlı)
-[14:37:18] Sahne 21 (diagram, 29.0 sn, 6 çekim, cümleye bağlı)
-[14:38:47] Sahne 22 (footage, 29.0 sn, 5 çekim, cümleye bağlı)
-[14:40:43] Sahne 23 (footage, 25.9 sn, 5 çekim, cümleye bağlı)
-[14:41:41] Sahne 24 (diagram, 24.9 sn, 5 çekim, cümleye bağlı)
-[14:42:22] Sahne 25 (footage, 26.3 sn, 5 çekim, cümleye bağlı)
-[14:44:19] Sahne 26 (diagram, 26.5 sn, 5 çekim, cümleye bağlı)
-[14:47:50] Sahne 27 (footage, 34.8 sn, 7 çekim, cümleye bağlı)
-[14:50:15] Sahne 28 (footage, 25.6 sn, 5 çekim, cümleye bağlı)
-[14:51:47] Sahne 29 (diagram, 25.3 sn, 5 çekim, cümleye bağlı)
-[14:53:41] Sahne 30 (footage, 21.3 sn, 4 çekim, cümleye bağlı)
-[14:56:29] Sahne 31 (footage, 38.6 sn, 7 çekim, cümleye bağlı)
-[14:59:27] Sahne 32 (diagram, 32.5 sn, 6 çekim, cümleye bağlı)
-[15:01:23] Sahne 33 (diagram, 27.3 sn, 5 çekim, cümleye bağlı)
-[15:02:16] Sahne 34 (diagram, 29.6 sn, 5 çekim, cümleye bağlı)
-[15:08:20] Sahne 35 (footage, 36.8 sn, 6 çekim, cümleye bağlı)
-[15:25:30] Ana video: 1063 sn
-[15:25:58] Short 1: sahne 0-2, 29 sn — What Are Jinn Actually Made Of?
-[15:26:48] Short 2: sahne 12-15, 55 sn — The Real Origin of the Word Genie
-[15:27:21] Short 3: sahne 26-29, 35 sn — Why Jinn Cannot Predict the Future
-[15:27:21] Altyazı çevirisi: Turkish (309 satır)
-[15:27:31] Çeviri parçası eksik geldi (120-150), tekrar deneniyor
-[15:27:36] Çeviri parçası eksik geldi (150-180), tekrar deneniyor
-[15:27:38] Çeviri parçası eksik geldi (150-180), tekrar deneniyor
-[15:28:23] Altyazı eklendi: English
-[15:28:24] Altyazı eklendi: Türkçe
-[15:28:26] Oynatma listesine eklendi: Jinn: What the Sources Say
-[16:00:09] Instagram Reel hatası: Instagram yükleme 6 denemede başarısız: Instagram konteyner: 401 Error validating access token: Session has expired on Tuesday, 03-Nov-26 04:00:00 PST. The current time is Tuesday, 03-Nov-26 07:44:09 PST. (code 190)
-[16:00:11] Instagram sırasına eklendi: What Are Jinn Actually Made Of?
-[16:00:12] Bitti: https://youtu.be/jj2Ey8frTjE
-[16:00:12] Başarıyla bitti.
+[05:30:34] Başladı (test modu: False, yayın: scheduled)
+[05:30:36] Kanal doğrulandı: Beyond Qaf
+[05:30:38] Analitik: 1 video ölçüldü, sütun puanları: {"How it's made and what it really costs (steel, glass, chips, paper, concrete)": 1.518587076263208}
+[05:30:38] Seri bölümü seçildi: Mount Qaf: The Mountain at the Edge of the World Where the Jinn Live
+[05:30:43] Konu (1): Mount Qaf: The Mountain at the Edge of the World Where the Jinn Live  [Lost cities and legends of the ancient Middle East (Iram of the Pillars, Solomon's jinn, Dhul-Qarnayn's wall, the People of the Cave)]
+[05:31:45] Senaryo yazıldı: 33 sahne, 1927 kelime
+[05:32:32] Anlatım sadeleştirildi (1927 → 1811 kelime)
+[05:32:35] Doğrulama kaynağı: Google araması
+[05:32:35] Doğrulama turu 1: 10 iddia, 0 yanlış, 2 belirsiz
+[05:34:35] Doğrulama kaynağı: Google araması
+[05:34:35] Doğrulama turu 2: 10 iddia, 0 yanlış, 0 belirsiz
+[05:34:35] En çok arananlar: mount qaf | mount qaf puzzle | mount qaf treasure | mount qaf xerxes coin | mount qaf prince of persia puzzle | mount qaf islam | mount qaf lower city treasure | mount qaf location
+[05:34:47] Başlık seçildi: Mount Qaf: The Emerald Wall Where the Jinn Live  (önceki: Mount Qaf: The Legend of the Mountain Where Jinn Live) — It leads immediately with the core search phrase 'Mount Qaf', introduces the bizarre, concrete visual of the 'Emerald Wall', and connects it to the 'J
+[05:34:49] Editör (min 6, ort 7.1): {'originality': 7, 'hook': 6, 'clarity': 8, 'simplicity': 7, 'flow': 7, 'value_density': 7, 'audience_fit': 8, 'problems': ["Quote: 'al-Qazwini wrote a popular book of nature lore and cosmography.' Problem: 'cosmography' is a bit academic for a 12-year-old. Fix: 'a popular book about the universe and nature.'", "Quote: 'These were traditional bedtime stories and folk tales borrowed from older regional cultures to add colorful details around campfires.' Problem: 'Isra'iliyyat' is introduced later, but the Arabic term itself isn't explicitly translated on first drop. Fix: explain it right away as 'stories borrowed from older regional traditions.'", "Quote: 'Zoroastrianism, an ancient Persian religion that existed long before Islam.' Problem: Good explanation, but could be simpler. Fix: 'an ancient religion from Persia that existed long before Islam.'"], 'problems_tr': "Metin genel olarak anlaşılır ve akıcı; ancak 'cosmography' gibi bazı akademik terimler sadeleştirilebilir ve bazı yabancı terimlerin ilk geçişte daha net açıklanması hedef kitle için daha iyi olur."}
+[05:36:01] Anlatım sadeleştirildi (1775 → 1772 kelime)
+[05:36:04] Doğrulama kaynağı: Google araması
+[05:36:04] Doğrulama turu 1: 5 iddia, 0 yanlış, 0 belirsiz
+[05:36:05] Editör (min 7, ort 7.9): {'originality': 8, 'hook': 7, 'clarity': 8, 'simplicity': 7, 'flow': 8, 'value_density': 8, 'audience_fit': 9, 'problems': ["Quote: 'Chapter fifty is called Surah Qaf, and it opens with just one single Arabic letter: Qaf.' Fix: Explain briefly what a Surah is (a chapter of the Quran) for absolute beginners.", "Quote: 'In Arabic, letters like this are called disjointed letters, meaning individual letters that stand alone without forming a word.' Fix: Make the explanation of 'disjointed letters' even punchier for a 12-year-old.", "Quote: 'In the early centuries of Islam, some book writers collected Isra'iliyyat, which were stories borrowed from older regional traditions.' Fix: Simplify 'Isra'iliyyat' immediately as 'historical folklore and tales from older cultures'.", "Quote: 'In a trusted book of sayings called Sahih Muslim...' Fix: Briefly explain that 'Sahih' means authentic or verified."], 'problems_tr': "Metne yabancı olan izleyiciler için 'Sure', 'mukatta harfleri' (disjointed letters), 'İsrâiliyyat' ve 'Sahih' gibi dini terimlerin daha basit bir şekilde açıklanması faydalı olur."}
+[05:36:14] Seslendirme başlıyor (Gemini Charon)...
+[05:45:13] Seslendirme: 1032 sn
+[05:46:01] Thumbnail sıralaması: [1, 3, 2] - Thumbnail #1 is the strongest because the emerald mountain is striking, highly detailed, and legible even at phone size. The text 'NEVER IN THE QURAN' creates a massive curiosity gap against the title. Thumbnail #3 has great mood and scale with the human silhouette facing the glowing wall, but the text is slightly less punchy. Thumbnail #2 shows too much of a flat map graphic which scales down poorly and loses visual impact on a small phone screen.
+[05:48:05] Cümle cümle görsel planı: 32/33 sahne
+[05:48:05] Sahne 1 (diagram, 25.6 sn, 5 çekim, cümleye bağlı)
+[05:48:06]    ilgisiz görüntü elendi: sunlit mountain under dark clouds
+[05:48:23]    ilgisiz görüntü elendi: forest stream with autumn trees
+[05:48:41]    ilgisiz görüntü elendi: globe in green cosmic space
+[05:48:59]    ilgisiz görüntü elendi: garbage floating in ocean water
+[05:49:03]    ilgisiz görüntü elendi: aerial view of green fields
+[05:49:06] Sahne 2 (diagram, 26.5 sn, 6 çekim, cümleye bağlı)
+[05:49:08]    ilgisiz görüntü elendi: snowy mountain forest aerial view
+[05:49:29] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[05:49:29] Cloudflare günlük ücretsiz kota doldu: {"errors":[{"message":"AiError: AiError: you have used up your daily free allocation of 10,000 neurons, please upgrade to Cloudflare's Workers Paid plan if you would like to continue usage. (fc3e4c09- → bu video için Pexels fotoğraflarına geçiliyor
+[05:49:45]    ilgisiz görüntü elendi: campfire burning outdoors at night
+[05:49:50]    ilgisiz görüntü elendi: aerial view of coastal city
+[05:50:12] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[05:50:42]    alakasız görsel yeniden çizilecek: ruined city with map overlay
+[05:51:02] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[05:52:15]    ilgisiz görüntü elendi: church building framed by trees
+[05:52:33]    ilgisiz görüntü elendi: fried chicken and french fries
+[05:52:47]    alakasız görsel yeniden çizilecek: diagram with text crust moho
+[05:53:07] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[05:53:40]    ilgisiz görüntü elendi: audio mixing board with sliders
+[05:53:43] Sahne 3 (footage, 28.0 sn, 6 çekim, cümleye bağlı)
+[05:54:11]    ilgisiz görüntü elendi: aerial view of green valley
+[05:54:31]    ilgisiz görüntü elendi: industrial power plant with smoke
+[05:54:36]    ilgisiz görüntü elendi: bees flying around a hive
+[05:54:51]    ilgisiz görüntü elendi: small birds on pampas grass
+[05:54:54] Sahne 4 (footage, 29.4 sn, 6 çekim, cümleye bağlı)
+[05:54:56]    ilgisiz görüntü elendi: soldering metal frame structure closeup
+[05:55:41]    alakasız görsel yeniden çizilecek: man writing at desk
+[05:56:02] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[05:57:25]    ilgisiz görüntü elendi: many pink flamingos in water
+[05:57:37]    ilgisiz görüntü elendi: small bird in tall grass
+[05:57:42]    ilgisiz görüntü elendi: close up of red macaw
+[05:57:45] Sahne 5 (diagram, 30.3 sn, 7 çekim, cümleye bağlı)
+[05:58:02]    ilgisiz görüntü elendi: waterfall flowing in green forest
+[05:58:07]    ilgisiz görüntü elendi: open book with arabic text
+[05:58:22]    ilgisiz görüntü elendi: islamic mosque interior and dome
+[05:58:26]    ilgisiz görüntü elendi: Planet earth in deep space
+[05:59:20]    ilgisiz görüntü elendi: aerial view of church steeple
+[05:59:23] Sahne 6 (footage, 29.3 sn, 6 çekim, cümleye bağlı)
+[05:59:25]    ilgisiz görüntü elendi: snowy mountain peaks and cliffs
+[06:01:17]    ilgisiz görüntü elendi: historic European cathedral building facade
+[06:01:31]    ilgisiz görüntü elendi: world map made of nuts
+[06:01:48]    ilgisiz görüntü elendi: old stone building ruins outdoors
+[06:01:52]    ilgisiz görüntü elendi: person turning old book pages
+[06:02:10]    ilgisiz görüntü elendi: aerial view of coastal town
+[06:02:13] Sahne 7 (diagram, 33.5 sn, 7 çekim, cümleye bağlı)
+[06:02:15]    ilgisiz görüntü elendi: woman sitting by the water
+[06:02:30]    ilgisiz görüntü elendi: rocks in the sea water
+[06:02:43]    ilgisiz görüntü elendi: White mosque against blue sky
+[06:03:16]    ilgisiz görüntü elendi: ancient stone ruins and columns
+[06:03:33]    ilgisiz görüntü elendi: aerial view of green hill
+[06:03:38]    ilgisiz görüntü elendi: lit minaret against starry sky
+[06:03:41] Sahne 8 (diagram, 28.5 sn, 6 çekim, cümleye bağlı)
+[06:04:08]    ilgisiz görüntü elendi: person writing East Asian calligraphy
+[06:04:14]    ilgisiz görüntü elendi: islamic architectural tile and ceiling
+[06:04:29]    alakasız görsel yeniden çizilecek: old books in glass case
+[06:04:49] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:05:02]    ilgisiz görüntü elendi: people reading books on desks
+[06:05:06]    ilgisiz görüntü elendi: man picking book from shelf
+[06:05:28] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:05:58]    alakasız görsel yeniden çizilecek: arches and glowing neon lines
+[06:06:18] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:06:58]    ilgisiz görüntü elendi: ancient Egyptian stone temple columns
+[06:07:01] Sahne 9 (diagram, 24.2 sn, 6 çekim, cümleye bağlı)
+[06:07:05]    ilgisiz görüntü elendi: aerial view of desert monastery
+[06:07:31] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:08:02]    alakasız görsel yeniden çizilecek: glowing arabic script on manuscript
+[06:08:22] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:08:56]    ilgisiz görüntü elendi: large bronze Buddha statue outdoors
+[06:09:02]    ilgisiz görüntü elendi: aerial view of coastal island
+[06:09:24] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:09:53]    alakasız görsel yeniden çizilecek: open book and green stones
+[06:10:13] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:11:06]    ilgisiz görüntü elendi: water splashing on rocky shore
+[06:11:10]    ilgisiz görüntü elendi: red and yellow ink swirling
+[06:11:32] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:12:01]    alakasız görsel yeniden çizilecek: hand writing letter qaf
+[06:12:21] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:12:55]    ilgisiz görüntü elendi: blue ink dropped in water
+[06:12:58] Sahne 10 (footage, 27.4 sn, 5 çekim, cümleye bağlı)
+[06:13:01]    ilgisiz görüntü elendi: aerial view of green forest
+[06:13:24] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:14:02]    ilgisiz görüntü elendi: grand interior of a mosque
+[06:14:25] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:15:26]    ilgisiz görüntü elendi: ancient stone ruins and pillar
+[06:15:33]    ilgisiz görüntü elendi: camels walking in the desert
+[06:15:49]    ilgisiz görüntü elendi: close up of campfire flames
+[06:15:51] Sahne 11 (footage, 31.9 sn, 6 çekim, cümleye bağlı)
+[06:16:16]    ilgisiz görüntü elendi: an antique clock on table
+[06:16:24]    ilgisiz görüntü elendi: aerial view of walled fortress
+[06:16:45] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:17:06]    ilgisiz görüntü elendi: exterior view of old cathedral
+[06:18:06] Sahne 12 (diagram, 39.3 sn, 8 çekim, cümleye bağlı)
+[06:18:18]    ilgisiz görüntü elendi: two horses grazing in field
+[06:18:33]    alakasız görsel yeniden çizilecek: old book with candle
+[06:18:53]    ilgisiz görüntü elendi: city skyline at sunset
+[06:18:59]    ilgisiz görüntü elendi: water in a rocky hole
+[06:19:22] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:20:10]    alakasız görsel yeniden çizilecek: old map with text
+[06:20:30] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:21:04]    ilgisiz görüntü elendi: aerial view of modern city
+[06:21:09]    ilgisiz görüntü elendi: dusty desert landscape with mountains
+[06:21:31] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:22:10]    ilgisiz görüntü elendi: sand dunes in the desert
+[06:22:12] Sahne 13 (footage, 25.9 sn, 6 çekim, cümleye bağlı)
+[06:22:15]    ilgisiz görüntü elendi: a laptop on a table
+[06:22:44]    ilgisiz görüntü elendi: an open Arabic text book
+[06:22:56]    alakasız görsel yeniden çizilecek: Arabic script in ancient arch
+[06:23:16] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:23:50]    ilgisiz görüntü elendi: man turning pages of Quran
+[06:23:55]    ilgisiz görüntü elendi: sunset over mountain landscape
+[06:24:17] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:24:51]    ilgisiz görüntü elendi: bright orange camp fire burning
+[06:24:54] Sahne 14 (diagram, 28.3 sn, 6 çekim, cümleye bağlı)
+[06:25:19]    ilgisiz görüntü elendi: sunlight shining through forest trees
+[06:25:40] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:25:55]    ilgisiz görüntü elendi: person lying down casting shadow
+[06:26:01]    ilgisiz görüntü elendi: sunlit river through autumn forest
+[06:26:23] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:27:13]    ilgisiz görüntü elendi: foggy landscape at sunset
+[06:27:16] Sahne 15 (footage, 29.1 sn, 5 çekim, cümleye bağlı)
+[06:27:18]    ilgisiz görüntü elendi: aerial view of a town
+[06:27:40] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:27:56]    ilgisiz görüntü elendi: ancient ruins and large mountain
+[06:28:10]    ilgisiz görüntü elendi: cloudy sky over city rooftops
+[06:28:18]    ilgisiz görüntü elendi: bright sunset over the ocean
+[06:28:42] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:28:52]    alakasız görsel yeniden çizilecek: map with text at bottom
+[06:29:12] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:30:25] Sahne 16 (footage, 30.0 sn, 6 çekim, cümleye bağlı)
+[06:30:27]    ilgisiz görüntü elendi: ruined building in a field
+[06:30:35]    ilgisiz görüntü elendi: aerial view of rocky canyon
+[06:30:40]    ilgisiz görüntü elendi: mountain goats near rocky cave
+[06:30:51]    alakasız görsel yeniden çizilecek: rocky canyon with cave entrance
+[06:31:11] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:32:24] Görsel aşaması zaman bütçesini aştı: kalan sahnelerde yalnız cümleye göre çizilen görseller (hızlı mod)
+[06:32:47] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:33:02] Sahne 17 (diagram, 38.8 sn, 7 çekim, cümleye bağlı)
+[06:33:35] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:34:11] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:35:28] Sahne 18 (footage, 34.6 sn, 7 çekim, cümleye bağlı)
+[06:35:48] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:36:25] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:37:21] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:37:56] Sahne 19 (diagram, 29.1 sn, 6 çekim, cümleye bağlı)
+[06:38:32] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:39:27] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:40:03] Sahne 20 (footage, 34.7 sn, 7 çekim, cümleye bağlı)
+[06:40:36] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:41:24] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:41:59] Sahne 21 (diagram, 32.5 sn, 6 çekim, cümleye bağlı)
+[06:42:50] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:43:23] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:44:00] Sahne 22 (diagram, 34.1 sn, 7 çekim, cümleye bağlı)
+[06:44:21] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:45:14] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:46:04] Sahne 23/33 (diagram, 33.9 sn, 8 çekim)
+[06:46:24] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:46:25]    alakasız görsel yeniden çizilecek: buddhist monk in red robes
+[06:46:46] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:46:50]    ilgisiz görüntü elendi: person painting with watercolors
+[06:46:53]    ilgisiz görüntü elendi: pink and white cosmos flowers
+[06:46:55]    ilgisiz görüntü elendi: CGI swirling galaxy in space
+[06:47:02]    ilgisiz görüntü elendi: Planet earth viewed from space
+[06:47:03]    ilgisiz görüntü elendi: night sky with bright stars
+[06:47:06]    ilgisiz görüntü elendi: crescent moon in blue sky
+[06:47:13]    ilgisiz görüntü elendi: colorful ink swirling in water
+[06:47:15]    ilgisiz görüntü elendi: close up of painting canvas
+[06:47:16]    ilgisiz görüntü elendi: night sky with stars overhead
+[06:47:24]    ilgisiz görüntü elendi: aerial view of rocky desert
+[06:47:28]    ilgisiz görüntü elendi: spiral galaxy in outer space
+[06:47:29]    ilgisiz görüntü elendi: curved view of planet earth
+[06:47:33] Sahne 24 (footage, 38.0 sn, 8 çekim, cümleye bağlı)
+[06:48:29] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:49:04] Sahne 25 (diagram, 27.6 sn, 6 çekim, cümleye bağlı)
+[06:49:36] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:50:28] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:51:22] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:52:39] Sahne 26 (diagram, 33.3 sn, 7 çekim, cümleye bağlı)
+[06:52:59] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:53:31] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:54:24] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:55:16] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:56:52] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:57:07] Sahne 27 (footage, 37.0 sn, 7 çekim, cümleye bağlı)
+[06:57:42] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:58:36] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[06:59:13] Sahne 28 (footage, 31.8 sn, 6 çekim, cümleye bağlı)
+[06:59:51] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[07:00:06] Sahne 29 (footage, 35.9 sn, 8 çekim, cümleye bağlı)
+[07:00:42] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[07:01:37] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[07:02:32] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[07:03:27] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[07:04:00] Sahne 30 (diagram, 25.6 sn, 6 çekim, cümleye bağlı)
+[07:04:30] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[07:05:30] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[07:06:03] Sahne 31 (footage, 27.1 sn, 6 çekim, cümleye bağlı)
+[07:06:23] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[07:07:18] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[07:08:52] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[07:09:07] Sahne 32 (footage, 38.4 sn, 7 çekim, cümleye bağlı)
+[07:09:27] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[07:10:26] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[07:11:20] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[07:12:36] Sahne 33 (diagram, 32.3 sn, 7 çekim, cümleye bağlı)
+[07:12:56] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[07:13:32] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[07:14:29] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[07:34:43] Ana video: 1078 sn
+[07:35:47] Short 1: sahne 0-2, 52 sn — The Secret Legend of Mount Qaf
+[07:36:26] Short 2: sahne 6-8, 34 sn — Does the Quran Mention Mount Qaf?
+[07:37:02] Short 3: sahne 18-20, 29 sn — The Giant Bird of Mount Qaf
+[07:37:02] Altyazı çevirisi: Turkish (320 satır)
+[07:37:45] Altyazı eklendi: English
+[07:37:46] Altyazı eklendi: Türkçe
+[07:37:48] Oynatma listesine eklendi: Legends of the Ancient East
+[07:37:59] Instagram sırasına eklendi: The Secret Legend of Mount Qaf
+[07:38:01] Instagram sırasına eklendi: Does the Quran Mention Mount Qaf?
+[07:38:02] Instagram sırasına eklendi: The Giant Bird of Mount Qaf
+[08:09:34] Instagram Reel hatası: Instagram yükleme 6 denemede başarısız: Instagram konteyner: 401 Error validating access token: Session has expired on Tuesday, 03-Nov-26 04:00:00 PST. The current time is Tuesday, 03-Nov-26 23:53:34 PST. (code 190)
+[08:09:35] Bitti: https://youtu.be/HPPomKuVLwA
+[08:09:35] Başarıyla bitti.
