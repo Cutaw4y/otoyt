@@ -130,11 +130,14 @@ visual_style: >
   figures, no text or letters, 16:9
 watch_next_text: "▶ Sıradaki sayfa:"
 thumbnail_rules: >
-  Gölgedefter look: one mysterious subject (ancient artifact, ruin, lone silhouette, sealed
-  door, strange symbol) in fog with candle or moon light, amber highlights on deep shadow.
-  No gore, no blood, never depict prophets or holy figures' faces. Thumbnail text in Turkish.
-thumbnail_style: "dark cinematic mystery, one striking subject, strong rim light, fog, high contrast, amber and deep shadow"
-thumbnail_accent: [232, 158, 68]
+  (05.11 rakip analizi: bu nişte en çok tıklanan Türkçe kanalın küçük resimleri parlak, sıcak ışıklı, kalabalık/insan
+  içeren sinematik sahneler + 2-3 kelimelik dev, kalın yazı.) Gölgedefter look: ONE dramatic, vivid, cinematic scene of
+  the story's key moment (a ship in a storm, a ruined city, a chained giant in shadow, a flood, a desert caravan),
+  warm golden/fiery light against dark storm clouds, high saturation, ordinary people (never prophets or holy figures,
+  their faces never shown) with strong emotion (fear, awe) when it fits. Lots of space on the LEFT for big text.
+  No gore, no blood. Thumbnail text in Turkish.
+thumbnail_style: "vivid cinematic epic scene, warm golden and fiery light, dramatic storm sky, high saturation and contrast, one clear focal point"
+thumbnail_accent: [236, 44, 44]       # küçük resim vurgu satırı: canlı kırmızı (bu nişte en çok tıklanan stil)
 cover_bg: [16, 12, 10]           # oynatma listesi kapağı zemini
 caption_theme:            # bölüm kartı ve bilgi etiketleri: kehribar rengi (ASS &HAABBGGRR)
   chap_num: "&H00449EE8"
