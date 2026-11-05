@@ -2,6 +2,10 @@ name: Kod kontrolü (her değişiklikte)
 on:
   push:
     paths: ["*.py", "config.yaml", "channels/*.yaml", "tests/**/*.py", ".github/workflows/codecheck.yml"]
+concurrency:
+  group: audit-codecheck-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   check:
     runs-on: ubuntu-24.04
