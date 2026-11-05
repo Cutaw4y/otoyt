@@ -18,8 +18,8 @@ TR = timezone(timedelta(hours=3))
 
 # kanal → (iş akışı, geçmiş dosyası, video günleri (TR, 0=Pzt), en erken müdahale saati (TR), ad)
 CHANNELS = [
-    ("otoyt.yml", ROOT / "history.json", {0, 2, 4}, 9, "Beyond Qaf"),
-    ("otoyt_tr.yml", ROOT / "data/golgedefter/history.json", {1, 3, 5}, 13, "Gölgedefter"),
+    ("otoyt.yml", ROOT / "history.json", {0, 2, 4}, 8, "Beyond Qaf"),
+    ("otoyt_tr.yml", ROOT / "data/golgedefter/history.json", {1, 3, 5}, 12, "Gölgedefter"),
 ]
 
 
