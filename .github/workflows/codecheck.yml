@@ -1,7 +1,7 @@
 name: Kod kontrolü (her değişiklikte)
 on:
   push:
-    paths: ["*.py", "config.yaml", "channels/*.yaml"]
+    paths: ["*.py", "config.yaml", "channels/*.yaml", "tests/**/*.py", ".github/workflows/codecheck.yml"]
 jobs:
   check:
     runs-on: ubuntu-24.04
@@ -17,8 +17,10 @@ jobs:
           for c in config.yaml channels/golgedefter.yaml; do
             OTOYT_CONFIG=$c DRY_RUN=1 python -c "import pipeline, media, ai, voice, publish; p=pipeline; assert p.CFG['content_pillars']; print('OK', p.CFG['channel_name'])"
           done
+      - name: Güvenlik ve kurtarma senaryoları (ağ/yayın yapılmaz)
+        run: python -m unittest discover -s tests -p 'test_*.py' -v
       - name: Hata varsa Telegram'a haber ver
-        if: failure()
+        if: failure() && github.ref == 'refs/heads/main'
         env:
           T: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           C: ${{ secrets.TELEGRAM_CHAT_ID }}
