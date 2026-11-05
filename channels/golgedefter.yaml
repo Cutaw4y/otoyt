@@ -13,7 +13,7 @@ channel_brief: >
   geçer; sonunda neyin bilindiğini, neyin hâlâ bilinmediğini dürüstçe ayırır.
   Instagram marka etiketi: #gölgedefter
 audience: "gizem, tarih ve efsane meraklısı 18-45 yaş Türkçe konuşan izleyiciler"
-tone: "kısık sesli, sakin, gizemli bir belgesel anlatıcısı; ağırbaşlı, abartısız, merak uyandıran"
+tone: "kısık sesli, gizemli, sürükleyici bir belgesel anlatıcısı; gerilimi adım adım yükselten, dramatik ve heyecanlı ama asla uydurmayan; izleyiciyi her sahnede bir sonraki bilgiye merakla bağlayan"
 language: "Turkish"
 language_code: "tr"
 chapter_label: "BÖLÜM"
@@ -24,6 +24,12 @@ full_video_text: "Videonun tamamı:"
 wiki_langs: ["tr", "en"]
 
 script_rules: >
+  İZLEYİCİ GERİ BİLDİRİMİ (03.11, Deccal videosu): "Daha enteresan bilgiler verebilirdi (ör. Deccal'in sözlerinden
+  sonra 'göl kuruyacak' gibi rivayetler), biraz daha uzun ve dramatik olabilirdi; bizim insanımız bunu çok seviyor."
+  Buna göre: konuyla ilgili bilinen TÜM çarpıcı rivayetleri, ayrıntıları ve kehanetleri kaynağıyla anlat (hangi
+  kitapta geçtiği, sahih mi zayıf mı); "ve sonra ne oldu?" duygusunu her bölümde yeniden kur; gerilimi tırmandıran,
+  sahne sahne yaşatan dramatik bir dil kullan. Dramatiklik dilde olur, bilgide değil: hiçbir olay, sayı, isim veya
+  rivayet uydurulmaz; zayıf rivayet "zayıf rivayete göre" diye verilir.
   Türkçe yaz; doğal, akıcı, kulağa hitap eden cümleler (çeviri kokan ifade yok).
   GİRİŞ (ilk 2-3 cümle): olayın en çarpıcı anını ya da en tuhaf ayrıntısını hemen
   göster, izleyici doğru videoya tıkladığını anlasın; selamlama yok, "bugünkü
@@ -180,8 +186,8 @@ voice:
   name: "Charon"               # derin, bilgilendirici erkek sesi. Alternatif: "Enceladus" (fısıltılı), "Algenib" (boğuk)
   style: "Türkçe, kısık ve sakin bir sesle, gizemli bir belgesel anlatıcısı gibi, acele etmeden ve cümle aralarında kısa duraklarla oku"
   sentence_gap: 0.33           # cümle arası en az 0.33 sn (belgesel ağırlığı)
-  scenes_per_request: 8        # 8 sahne tek istekte → video başına ~5 ses isteği (ücretsiz günlük ses hakkı çok az)
-  max_chars: 2600
+  scenes_per_request: 4        # küçük parçalar: uzun istekte ses modeli kelime yutup sürçebiliyor (03.11 izleyici yorumu)
+  max_chars: 1400
   scene_gap: 0.6
   models: ["gemini-3.1-flash-tts-preview", "gemini-2.5-flash-preview-tts"]   # ikisi de ücretsiz katmanda çalışıyor (test edildi)
   lang: "tr"
@@ -210,7 +216,7 @@ burn_captions: true
 music_db: -20
 
 # ======================= KALİTE =======================
-target_words: 1700             # ~15-16 dk: Türkçe gizem kanallarında izleyici uzun belgesel seviyor (Gerçeği Bul ort. ~29 dk)
+target_words: 2200             # ~19-20 dk (03.11 izleyici yorumu: daha uzun ve dolu dolu olsun): Türkçe gizem kanallarında izleyici uzun belgesel seviyor (Gerçeği Bul ort. ~29 dk)
 words_per_minute: 110          # Türkçe anlatım hızı (bildirimdeki tahmini süre için)
 min_length_ratio: 0.85
 max_expand_rounds: 2
