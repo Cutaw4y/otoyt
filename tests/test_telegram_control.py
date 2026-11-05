@@ -4,6 +4,7 @@ import json
 import os
 import tempfile
 import unittest
+from contextlib import ExitStack
 from datetime import datetime, timezone
 from pathlib import Path
 from unittest import mock
@@ -165,6 +166,41 @@ class DurableGuards(unittest.TestCase):
 
 
 class PipelineIntegration(unittest.TestCase):
+    def test_approved_bundle_uses_existing_long_short_and_reel_path(self):
+        import pipeline
+        with tempfile.TemporaryDirectory() as tmp, ExitStack() as stack:
+            w = Path(tmp)
+            final, short = w / "long.mp4", w / "clip.mp4"
+            final.write_bytes(b"reviewed long")
+            short.write_bytes(b"reviewed short")
+            cfg = {**pipeline.CFG, "publish_mode": "scheduled", "localize_metadata": False,
+                   "subtitle_translation": {}, "short_captions": False}
+            for name, value in {"CFG": cfg, "DATA": w, "HISTORY": w / "history.json",
+                                "OUT": w / "out", "DRY_RUN": False, "UPLOAD_STARTED": False}.items():
+                stack.enter_context(mock.patch.object(pipeline, name, value))
+            for name in ["queue_comment", "record_vote", "mark_poll_used", "push_now",
+                         "add_to_pillar_playlist", "notify", "log"]:
+                stack.enter_context(mock.patch.object(pipeline, name))
+            stack.enter_context(mock.patch.object(pipeline, "watch_next_line", return_value=""))
+            stack.enter_context(mock.patch.object(pipeline, "_footer", return_value=""))
+            stack.enter_context(mock.patch.object(pipeline, "short_hashtags", return_value="#test"))
+            stack.enter_context(mock.patch.object(pipeline.related_video, "register"))
+            upload = stack.enter_context(mock.patch.object(pipeline.publish, "upload",
+                                                           side_effect=["abcdefghijk", "lmnopqrstuv"]))
+            reels = stack.enter_context(mock.patch.object(pipeline, "post_reels"))
+            script = {"title": "Reviewed title", "description": "Reviewed description", "tags": ["test"]}
+            history = []
+            pipeline.publish_rendered(script, {"pillar": "History"},
+                                      [{"file": short, "title": "Reviewed clip"}], None, None,
+                                      None, None, None, None, final, w, history, mock.Mock(),
+                                      {"id": "abc", "target_date": "2027-01-01"})
+            self.assertEqual(2, upload.call_count)
+            self.assertEqual("Reviewed title", upload.call_args_list[0].args[1]["title"])
+            self.assertIn("2027-01-01", upload.call_args_list[0].args[1]["publish_at"])
+            self.assertEqual(b"reviewed long", upload.call_args_list[0].args[0].read_bytes())
+            self.assertEqual(["long", "short"], [v["type"] for v in history])
+            reels.assert_called_once()
+
     def test_no_approval_stops_before_preflight_or_network(self):
         import pipeline
         cfg = {**pipeline.CFG, "telegram_editorial": {"enabled": True}}
