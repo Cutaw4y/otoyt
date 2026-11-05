@@ -41,6 +41,25 @@ class InstagramGuards(unittest.TestCase):
                     publish.instagram_reel("anything.mp4", "caption", expected_username="beyondqaf")
                 post.assert_not_called()
 
+    def test_missing_asset_rotates_to_back_without_loss(self):
+        with tempfile.TemporaryDirectory() as t:
+            root = Path(t)
+            queue = root / "ig_queue.json"
+            items = [{"asset": "missing.mp4", "title": "Missing", "caption": "first"},
+                     {"asset": "healthy.mp4", "title": "Healthy", "caption": "second"}]
+            queue.write_text(json.dumps(items), encoding="utf-8")
+            with mock.patch.object(ig_queue, "ROOT", root), \
+                 mock.patch.object(ig_queue, "DATA", root), \
+                 mock.patch.object(ig_queue, "QUEUE", queue), \
+                 mock.patch.object(ig_queue, "CFG", {"instagram_enabled": True}), \
+                 mock.patch.object(ig_queue, "gh", return_value=SimpleNamespace(returncode=1, stderr="404")), \
+                 mock.patch.object(ig_queue, "notify"), \
+                 mock.patch.dict(os.environ, {"IG_ACCESS_TOKEN": "fake", "IG_USER_ID": "123"}):
+                with self.assertRaises(RuntimeError):
+                    ig_queue.main()
+            rotated = json.loads(queue.read_text(encoding="utf-8"))
+            self.assertEqual([items[1], items[0]], rotated)
+
     def test_missing_release_asset_remains_in_queue(self):
         with tempfile.TemporaryDirectory() as t:
             root = Path(t)
