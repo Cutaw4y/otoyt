@@ -45,8 +45,10 @@ jobs:
           GDRIVE_REFRESH_TOKEN: ${{ secrets.GDRIVE_REFRESH_TOKEN }}
         # iki kanal tek işte sırayla (GitHub her işi en az 1 dk sayar → aylık dakika yarıya iner)
         run: |
-          OTOYT_CONFIG=config.yaml python pipeline.py || echo "::warning::Cutaway tamamlayıcı hata verdi"
-          OTOYT_CONFIG=channels/golgedefter.yaml python pipeline.py || echo "::warning::Gölgedefter tamamlayıcı hata verdi"
+          status=0
+          OTOYT_CONFIG=config.yaml python pipeline.py || { echo "::error::Beyond Qaf tamamlayıcı hata verdi"; status=1; }
+          OTOYT_CONFIG=channels/golgedefter.yaml python pipeline.py || { echo "::error::Gölgedefter tamamlayıcı hata verdi"; status=1; }
+          exit "$status"
       - name: Kaydet
         if: always()
         run: |
