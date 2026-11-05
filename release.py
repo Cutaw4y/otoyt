@@ -25,11 +25,11 @@ def _repo():
     return os.getenv("GITHUB_REPOSITORY")
 
 
-def create(tag, title, body, files):
+def create(tag, title, body, files, draft=False):
     """Release oluşturur, dosyaları yükler. (release_id, sayfa_bağlantısı) döner."""
     r = requests.post(f"{API}/repos/{_repo()}/releases", headers=_h(), timeout=60, json={
         "tag_name": tag, "target_commitish": os.getenv("GITHUB_SHA") or "main", "name": title,
-        "body": body[:120000], "draft": False, "prerelease": True})
+        "body": body[:120000], "draft": draft, "prerelease": True})
     r.raise_for_status()
     rel = r.json()
     up = rel["upload_url"].split("{")[0]
