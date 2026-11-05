@@ -773,7 +773,7 @@ def gen_image(prompt, out, fallback_query=None, ledger=None):
             return got
         except Exception as e:
             log(f"Imagen sahne görseli üretilemedi, Gemini/Cloudflare denenecek: {str(e)[:150]}")
-    if (CFG.get("scene_images") in ("gemini", "imagen") and ai.vertex_on()
+    if (CFG.get("scene_images") in ("gemini", "imagen") and ai.vertex_image_on()
             and _gem_imgs < CFG.get("max_gemini_scene_images", 45)):
         # yüksek kaliteli sahne görseli (Google Cloud kredisinden, ~0,04 $/görsel); olmazsa Cloudflare'e düşer
         try:
@@ -797,7 +797,7 @@ def gen_image(prompt, out, fallback_query=None, ledger=None):
         for q in (fallback_query, CFG["fallback_broll"]):
             if fetch_stock_photo(q, out, ledger):
                 return out
-    if ai.vertex_on():  # son çare: sınırı aşsa da Gemini (video yarıda kalmasın)
+    if ai.vertex_image_on():  # son çare; 429 soğuma modunda aynı isteği tekrarlama
         try:
             return ai.gemini_image(prompt + ". Cinematic, wide 16:9, no text.", out, models=())
         except Exception as e:
@@ -2942,14 +2942,18 @@ def credit_report(stage):
 
 def check_channel():
     """İzin anahtarı bu config'in kanalına mı bağlı? Değilse hiçbir şey yüklemeden dur."""
-    if DRY_RUN or CFG.get("uploader", "youtube") != "youtube" or not os.getenv("YT_REFRESH_TOKEN"):
+    if DRY_RUN or CFG.get("uploader", "youtube") != "youtube":
         return
+    if not os.getenv("YT_REFRESH_TOKEN"):
+        raise RuntimeError("YouTube erişim anahtarı eksik; kanal doğrulanmadan yayın yapılamaz")
     global CHANNEL_ID
     try:
         title, CHANNEL_ID = publish.my_channel()
     except Exception as e:
-        log(f"Kanal adı kontrol edilemedi: {str(e)[:150]}")
-        return
+        # Hesap doğrulaması başarısızsa yanlış YouTube kanalına yükleme riskini alma.
+        raise RuntimeError(f"YouTube kanalı doğrulanamadı; güvenlik nedeniyle yayın durduruldu: {str(e)[:150]}") from e
+    if not CHANNEL_ID:
+        raise RuntimeError("YouTube kanal kimliği alınamadı; yayın durduruldu")
     norm = lambda x: (x or "").replace("İ", "i").replace("I", "ı").lower().replace(" ", "")
     ok_names = {norm(n) for n in [CFG["channel_name"]] + list(CFG.get("channel_aliases") or [])}
     if CFG.get("channel_id"):  # kimlik biliniyorsa ad değişse de doğru kanal tanınır
@@ -3247,6 +3251,17 @@ def run_once():
 if __name__ == "__main__":
     RUNLOG.parent.mkdir(exist_ok=True)
     if os.getenv("OTOYT_ATTEMPT", "1") == "1":  # 2. denemede 1. denemenin kaydı silinmesin
+        # Yeni tamamlayıcı işi uzun video üretiminin kanıtlarını silmesin.
+        if RUNLOG.exists():
+            prev = RUNLOG.read_text(encoding="utf-8")
+            if len(prev) > 2000 and any(k in prev for k in ("Ana video:", "HATA:", "Seslendirme:")):
+                archive = RUNLOG.parent / "archive"
+                archive.mkdir(parents=True, exist_ok=True)
+                stamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
+                tag = os.getenv("GITHUB_RUN_ID", "local")
+                (archive / f"{stamp}-{tag}.txt").write_text(prev, encoding="utf-8")
+                for old in sorted(archive.glob("*.txt"))[:-15]:
+                    old.unlink()
         RUNLOG.write_text("", encoding="utf-8")
     ai.LOG = log
     log(f"Başladı (test modu: {DRY_RUN}, yayın: {CFG['publish_mode']})")
