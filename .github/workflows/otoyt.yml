@@ -11,6 +11,10 @@ on:
         description: "Test modu: video üret ama YouTube'a yükleme"
         type: boolean
         default: false
+      force_new_video:
+        description: "Bugün zaten video varsa BİLEREK ikinci video üret (normalde kapalı)"
+        type: boolean
+        default: false
 
 permissions:
   contents: write               # history.json / assets_used.json kaydı için
@@ -52,6 +56,7 @@ jobs:
         if: env.SKIP != '1'
         env:
           DRY_RUN: ${{ inputs.dry_run && '1' || '' }}
+          FORCE_NEW_VIDEO: ${{ inputs.force_new_video && '1' || '' }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_PAID_API_KEY: ${{ secrets.GEMINI_PAID_API_KEY }}
           GEMINI_TTS_EXTRA_KEYS: ${{ secrets.GEMINI_TTS_EXTRA_KEYS }}
