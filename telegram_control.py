@@ -1,7 +1,7 @@
 """Gölgedefter owner approvals. No upload or production without a persisted decision.
 
 All invocations share the production workflow's concurrency group. Telegram is
-polled by Actions, so button responses are asynchronous (normally <=30 minutes).
+polled by Actions 24/7 every five minutes; GitHub schedule latency may vary.
 """
 import hashlib
 import json
@@ -145,7 +145,7 @@ def review_message(job):
             "Henüz YouTube veya Instagram'a yüklenmedi. Yayınla seçeneği uzun videoyu, "
             "Shorts'u ve bağlı Reels paylaşımını onaylar. Geç kalan onay bir sonraki uygun yayın saatine alınır.\n"
             "Düzelt: Telegram'a istediğin değişikliği yaz, ardından Düzelt düğmesine dokun.\n"
-            "Düğmeler zamanlayıcının sonraki kontrolünde işlenir (normalde 30 dakika içinde).")
+            "Düğmeler 24 saat kontrol edilir; genelde birkaç dakika içinde işlenir (GitHub gecikebilir).")
 
 
 def review_buttons(job):
@@ -285,9 +285,16 @@ def deliver(state):
         text = f"📕 Gölgedefter — {job['target_date']} için konu seç\n\n"
         text += "\n\n".join(f"{i+1}. {v['title']}\n{v['angle'][:350]}\nNeden: {v['why'][:180]}"
                              for i, v in enumerate(job["ideas"]))
-        send(text + "\n\nSeçmezsen üretim bekler. Düğmeler normalde 30 dakika içinde işlenir.",
+        send(text + "\n\nSeçmezsen üretim bekler. Düğmeler 24 saat, yaklaşık 5 dakikada bir kontrol edilir (GitHub gecikebilir).",
              [(f"{i+1}. {v['title']}"[:60], key(job, f"choose-{i}"))
               for i, v in enumerate(job["ideas"])] + [("Bugün pas geç", key(job, "cancel"))])
+    elif status == "confirm":
+        # Confirm message delivery is durable: if Telegram fails after we persist
+        # the click/offset, the next scheduled poll retries this same message.
+        idea = job["ideas"][job["selected"]]
+        send(f"Seçtin: {idea['title']}\nÜretime başlansın mı?",
+             [("🎬 Üretime başla", key(job, f"produce-{job['selected']}")),
+              ("İptal", key(job, "cancel"))])
     elif status == "review":
         send(review_message(job), review_buttons(job))
     elif status in {"failed", "dispatch_uncertain"}:
@@ -442,10 +449,7 @@ def main():
         persist(state)
         job = state.get("job", {})
         if event == "confirm":
-            idea = job["ideas"][job["selected"]]
-            send(f"Seçtin: {idea['title']}\nÜretime başlansın mı?",
-                 [("🎬 Üretime başla", key(job, f"produce-{job['selected']}")),
-                  ("İptal", key(job, "cancel"))])
+            deliver(state)  # Durable message; retries if Telegram is unavailable.
         elif event == "need_note":
             send("Önce neyi değiştireceğimizi mesaj olarak yaz, sonra Düzelt'e dokun.", review_buttons(job))
         elif event in {"approved", "publish_approved", "cancelled"}:

@@ -23,7 +23,7 @@ ayarları değişmez. Eski videoların tarihleri bu akış tarafından değişti
   bir özel sohbet olmalı; yalnız o sohbetin sahibi karar verebilir.
 - Mevcut webhook varsa kaldırılmaz; kurulum hata verip bekler. Aynı botun başka
   bir getUpdates tüketicisiyle aynı anda çalıştırılmaması gerekir.
-- Kontrol 08:17–23:47 TR arasında yarım saatte bir çalışır. Anlık değildir.
+- Kontrol gece dahil 24 saat, yaklaşık her 5 dakikada bir çalışır. GitHub Actions zamanlayıcısı gecikebilir; düğme anlık değildir. Bir seçimden sonra Telegram'da ayrıca **Seçtin / Üretime başlansın mı?** mesajı beklenir. Üretim, ikinci düğmeye basılana kadar başlamaz.
   GitHub cron gecikebilir; üretim ve kontrol ortak sırayı kullandığından video
   üretimi sırasında karar işleme birkaç saat gecikebilir.
 - GitHub Actions, Telegram ve Gemini bağlantıları canlı kontrol gerektirir.

@@ -106,6 +106,29 @@ class DurableGuards(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "focus"):
                 tc.generate_ideas(cfg, [])
 
+    def test_selected_topic_confirmation_is_retried_after_telegram_failure(self):
+        s = state("confirm")
+        s["job"]["selected"] = 1
+        with mock.patch.object(tc, "persist") as persist, \
+             mock.patch.object(tc, "send", side_effect=[RuntimeError("telegram unavailable"), {}, {}]) as send:
+            with self.assertRaisesRegex(RuntimeError, "telegram unavailable"):
+                tc.deliver(s)
+            self.assertNotIn("delivered", s["job"])
+            tc.deliver(s)
+            self.assertEqual("abc:confirm:1", s["job"]["delivered"])
+            persist.assert_called_once()
+            self.assertEqual(2, send.call_count)
+            self.assertIn("Seçtin: B", send.call_args_list[0].args[0])
+            # No duplicate confirmation once its successful delivery was persisted.
+            tc.deliver(s)
+            self.assertEqual(2, send.call_count)
+
+    def test_telegram_polling_runs_around_the_clock(self):
+        workflow = Path(__file__).resolve().parents[1] / ".github/workflows/telegram_gd.yml"
+        text = workflow.read_text(encoding="utf-8")
+        self.assertIn('3,8,13,18,23,28,33,38,43,48,53,58 * * * *', text)
+        self.assertNotIn('17,47 5-20 * * *', text)
+
     def test_telegram_expired_popup_does_not_leak_token(self):
         with mock.patch.dict(os.environ, {"TELEGRAM_BOT_TOKEN": "secret-token"}), \
              mock.patch.object(tc.requests, "post", side_effect=RuntimeError("secret-token")):

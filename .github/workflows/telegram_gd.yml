@@ -4,7 +4,7 @@ on:
     branches: [main]
     paths: [".github/workflows/telegram_gd.yml"]
   schedule:
-    - cron: "17,47 5-20 * * *"  # TR 08:17–23:47; Actions may delay scheduled jobs
+    - cron: "3,8,13,18,23,28,33,38,43,48,53,58 * * * *"  # Her 5 dk, 24 saat; Actions gecikebilir
   workflow_dispatch:
     inputs:
       offer_now:
