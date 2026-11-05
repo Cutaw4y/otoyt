@@ -79,7 +79,8 @@ def main():
         raise RuntimeError(message)
     try:
         cap = publish.ig_link_cta(item["caption"], CFG.get("language_code") == "tr")  # "link profilde" çağrısı
-        mid, link = publish.instagram_reel(str(video), cap, ai_label=CFG.get("instagram_ai_label", True))
+        mid, link = publish.instagram_reel(str(video), cap, ai_label=CFG.get("instagram_ai_label", True),
+                                           expected_username=CFG.get("ig_username"))
     except Exception as e:
         (DATA / "ig_last_error.txt").write_text(f"{datetime.now().isoformat(timespec='minutes')} "
                                                 f"{item['title']}\n{e}\n", encoding="utf-8")
