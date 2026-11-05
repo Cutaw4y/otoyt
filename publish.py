@@ -248,13 +248,24 @@ def _ig_base(token):
     return "https://graph.instagram.com" if token.startswith("IG") else "https://graph.facebook.com"
 
 
-def instagram_check():
-    """Instagram anahtarı geçerli mi ve doğru hesaba mı ait? (hesap_adı) döner; geçersizse hata fırlatır."""
+def instagram_check(expected_username=None):
+    """Instagram token'ı doğru kanala mı ait? Doğrulanamazsa yayınlama."""
     token, ig_id = os.environ.get("IG_ACCESS_TOKEN", ""), os.environ.get("IG_USER_ID", "")
-    r = requests.get(f"{_ig_base(token)}/{ig_id}", params={"fields": "username", "access_token": token}, timeout=30)
+    if not token or not ig_id:
+        raise RuntimeError("Instagram erişim anahtarı veya hesap kimliği eksik")
+    # Instagram Login token'ının sahibi 'me' üzerinden doğrulanır; yapılandırmadaki ID tek başına yeterli değildir.
+    who = "me" if token.startswith("IG") else ig_id
+    r = requests.get(f"{_ig_base(token)}/{who}", params={"fields": "id,username", "access_token": token},
+                     timeout=30)
     if not r.ok:
         raise RuntimeError(_ig_err(r))
-    return r.json().get("username", "")
+    actual = (r.json().get("username") or "").strip().lstrip("@").casefold()
+    expected = (expected_username or "").strip().lstrip("@").casefold()
+    if expected and actual != expected:
+        raise RuntimeError(f"YANLIŞ INSTAGRAM HESABI: beklenen @{expected}, bağlı @{actual or 'belirsiz'}")
+    if not actual:
+        raise RuntimeError("Instagram hesap adı doğrulanamadı; güvenlik nedeniyle yayın engellendi")
+    return actual
 
 
 def instagram_refresh():
@@ -280,8 +291,11 @@ def _ig_err(r):
         return f"{r.status_code} {r.text[:300]}"
 
 
-def instagram_reel(video, caption, ai_label=True, poll_every=20, max_wait=900, dry=False):
-    """Reel yayınlar, (media_id, permalink) döner. dry=True: yükler ve işlenmesini bekler ama YAYINLAMAZ (test)."""
+def instagram_reel(video, caption, ai_label=True, poll_every=20, max_wait=900, dry=False,
+                   expected_username=None):
+    """Reel yayınlar; beklenen kanal hesabı eşleşmezse yayınlamadan hata verir."""
+    if expected_username:
+        instagram_check(expected_username)
     token, ig_id = os.environ["IG_ACCESS_TOKEN"], os.environ["IG_USER_ID"]
     IG = _ig_base(token)
     if token.startswith("IG"):

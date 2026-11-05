@@ -45,15 +45,17 @@ jobs:
           GDRIVE_REFRESH_TOKEN: ${{ secrets.GDRIVE_REFRESH_TOKEN }}
         # iki kanal tek işte sırayla (GitHub her işi en az 1 dk sayar → aylık dakika yarıya iner)
         run: |
-          OTOYT_CONFIG=config.yaml python pipeline.py || echo "::warning::Cutaway tamamlayıcı hata verdi"
-          OTOYT_CONFIG=channels/golgedefter.yaml python pipeline.py || echo "::warning::Gölgedefter tamamlayıcı hata verdi"
+          status=0
+          OTOYT_CONFIG=config.yaml python pipeline.py || { echo "::error::Beyond Qaf tamamlayıcı hata verdi"; status=1; }
+          OTOYT_CONFIG=channels/golgedefter.yaml python pipeline.py || { echo "::error::Gölgedefter tamamlayıcı hata verdi"; status=1; }
+          exit "$status"
       - name: Kaydet
         if: always()
         run: |
           git config user.name "otoyt-bot"; git config user.email "otoyt@users.noreply.github.com"
           for f in playlist_covers.json history.json assets_used.json assets/branding_done.json pending_comments.json playlists.json \
                    votes.json localizations_cleared.json manual_pending.json; do [ -f "$f" ] && git add "$f"; done
-          for d in manual data/golgedefter pending_captions thumb_alt; do [ -d "$d" ] && git add -A "$d"; done
+          for d in manual data/golgedefter pending_captions thumb_alt logs/archive; do [ -d "$d" ] && git add -A "$d"; done
           git diff --cached --quiet && exit 0
           git commit -q -m "tamamlayıcı"
           git stash -u -q || true   # kalan geçici değişiklikler pull'u engellemesin

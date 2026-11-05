@@ -11,6 +11,10 @@ on:
         description: "Test modu: video üret ama YouTube'a yükleme"
         type: boolean
         default: false
+      force_new_video:
+        description: "Bugün zaten video varsa BİLEREK ikinci video üret (normalde kapalı)"
+        type: boolean
+        default: false
 
 permissions:
   contents: write               # history.json / assets_used.json kaydı için
@@ -52,6 +56,7 @@ jobs:
         if: env.SKIP != '1'
         env:
           DRY_RUN: ${{ inputs.dry_run && '1' || '' }}
+          FORCE_NEW_VIDEO: ${{ inputs.force_new_video && '1' || '' }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_PAID_API_KEY: ${{ secrets.GEMINI_PAID_API_KEY }}
           GEMINI_TTS_EXTRA_KEYS: ${{ secrets.GEMINI_TTS_EXTRA_KEYS }}
@@ -81,7 +86,7 @@ jobs:
             OTOYT_ATTEMPT=2 python pipeline.py; code=$?
           fi
           # 3/4 = hata Telegram'a Türkçe bildirildi → GitHub ayrıca İngilizce "Run failed" e-postası atmasın
-          if [ $code -eq 3 ] || [ $code -eq 4 ]; then echo "::warning title=Üretim yapılamadı::Ayrıntı logs/last_run.txt"; exit 0; fi
+          if [ $code -eq 3 ] || [ $code -eq 4 ]; then echo "::error title=Üretim yapılamadı::Video üretilmedi veya tamamlanmadı, ayrıntı logs/last_run.txt"; exit "$code"; fi
           exit $code
       - name: Paket 1 – uzun video
         if: always() && hashFiles('out/ARTIFACT_NEEDED') != '' && env.SKIP != '1'
@@ -110,7 +115,7 @@ jobs:
           git config user.email "otoyt@users.noreply.github.com"
           for f in credit_ledger.json playlist_covers.json history.json assets_used.json assets/branding_done.json logs/last_run.txt \
                    pending_comments.json pending_script.json votes.json ig_queue.json playlists.json localizations_cleared.json manual_pending.json; do [ -f "$f" ] && git add "$f"; done
-          for d in pending_captions thumb_alt manual; do [ -d "$d" ] && git add -A "$d"; done
+          for d in pending_captions thumb_alt manual logs/archive; do [ -d "$d" ] && git add -A "$d"; done
           git diff --cached --quiet && exit 0
           git commit -m "otoyt: $(date -u +%F)"
           git stash -u -q || true

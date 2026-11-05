@@ -36,7 +36,7 @@ jobs:
         run: |
           git config user.name "otoyt-bot"
           git config user.email "otoyt@users.noreply.github.com"
-          for f in ig_queue.json history.json; do [ -f "$f" ] && git add "$f"; done
+          for f in ig_queue.json history.json ig_last_error.txt; do [ -f "$f" ] && git add "$f"; done
           git diff --cached --quiet && exit 0
           git commit -m "beyondqaf instagram: $(date -u +%F)"
           for i in 1 2 3; do

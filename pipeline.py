@@ -60,7 +60,9 @@ _SECRET_ENVS = ("GEMINI_API_KEY", "CLOUDFLARE_ACCOUNT_ID", "CLOUDFLARE_API_TOKEN
                 "PEXELS_API_KEY", "YT_CLIENT_ID", "YT_CLIENT_SECRET", "YT_REFRESH_TOKEN", "AYRSHARE_API_KEY",
                 "IG_ACCESS_TOKEN", "IG_USER_ID", "TELEGRAM_BOT_TOKEN", "TELEGRAM_CHAT_ID",
                 "WHATSAPP_PHONE", "WHATSAPP_APIKEY", "YT2_CLIENT_ID", "YT2_CLIENT_SECRET",
-                "YT2_REFRESH_TOKEN", "GEMINI_PAID_API_KEY")
+                "YT2_REFRESH_TOKEN", "GEMINI_PAID_API_KEY", "GEMINI_TTS_EXTRA_KEYS",
+                "GCP_SA_KEY", "GITHUB_TOKEN", "GD_IG_ACCESS_TOKEN", "GD_IG_USER_ID",
+                "GDRIVE_CLIENT_ID", "GDRIVE_CLIENT_SECRET", "GDRIVE_REFRESH_TOKEN")
 
 
 def redact(text):
@@ -69,7 +71,10 @@ def redact(text):
     for k in _SECRET_ENVS:
         v = os.getenv(k)
         if v and len(v) >= 4:
-            text = text.replace(v, f"***{k}***")
+            values = v.split(",") if k == "GEMINI_TTS_EXTRA_KEYS" else [v]
+            for secret in values:
+                if len(secret.strip()) >= 4:
+                    text = text.replace(secret.strip(), f"***{k}***")
     return re.sub(r"(key|token|apikey|signature|sig)=([^&\s\"']{6,})", r"\1=***", text, flags=re.I)
 
 
@@ -773,7 +778,7 @@ def gen_image(prompt, out, fallback_query=None, ledger=None):
             return got
         except Exception as e:
             log(f"Imagen sahne görseli üretilemedi, Gemini/Cloudflare denenecek: {str(e)[:150]}")
-    if (CFG.get("scene_images") in ("gemini", "imagen") and ai.vertex_on()
+    if (CFG.get("scene_images") in ("gemini", "imagen") and ai.vertex_image_on()
             and _gem_imgs < CFG.get("max_gemini_scene_images", 45)):
         # yüksek kaliteli sahne görseli (Google Cloud kredisinden, ~0,04 $/görsel); olmazsa Cloudflare'e düşer
         try:
@@ -797,7 +802,7 @@ def gen_image(prompt, out, fallback_query=None, ledger=None):
         for q in (fallback_query, CFG["fallback_broll"]):
             if fetch_stock_photo(q, out, ledger):
                 return out
-    if ai.vertex_on():  # son çare: sınırı aşsa da Gemini (video yarıda kalmasın)
+    if ai.vertex_image_on():  # son çare; 429 soğuma modunda aynı isteği tekrarlama
         try:
             return ai.gemini_image(prompt + ". Cinematic, wide 16:9, no text.", out, models=())
         except Exception as e:
@@ -2506,7 +2511,9 @@ def post_reels(script, idea, shorts, history, parent=None):
         return
     item, sh_ = queued[0]
     try:
-        mid, link = publish.instagram_reel(sh_["file"], item["caption"], ai_label=CFG.get("instagram_ai_label", True))
+        mid, link = publish.instagram_reel(sh_["file"], item["caption"],
+                                           ai_label=CFG.get("instagram_ai_label", True),
+                                           expected_username=CFG.get("ig_username"))
         history.append({"date": datetime.now().isoformat(timespec="minutes"), "type": "reel",
                         "title": item["title"], "pillar": idea["pillar"], "video_id": mid, "parent": parent})
         save_json(HISTORY, history)
@@ -2940,14 +2947,18 @@ def credit_report(stage):
 
 def check_channel():
     """İzin anahtarı bu config'in kanalına mı bağlı? Değilse hiçbir şey yüklemeden dur."""
-    if DRY_RUN or CFG.get("uploader", "youtube") != "youtube" or not os.getenv("YT_REFRESH_TOKEN"):
+    if DRY_RUN or CFG.get("uploader", "youtube") != "youtube":
         return
+    if not os.getenv("YT_REFRESH_TOKEN"):
+        raise RuntimeError("YouTube erişim anahtarı eksik; kanal doğrulanmadan yayın yapılamaz")
     global CHANNEL_ID
     try:
         title, CHANNEL_ID = publish.my_channel()
     except Exception as e:
-        log(f"Kanal adı kontrol edilemedi: {str(e)[:150]}")
-        return
+        # Hesap doğrulaması başarısızsa yanlış YouTube kanalına yükleme riskini alma.
+        raise RuntimeError(f"YouTube kanalı doğrulanamadı; güvenlik nedeniyle yayın durduruldu: {str(e)[:150]}") from e
+    if not CHANNEL_ID:
+        raise RuntimeError("YouTube kanal kimliği alınamadı; yayın durduruldu")
     norm = lambda x: (x or "").replace("İ", "i").replace("I", "ı").lower().replace(" ", "")
     ok_names = {norm(n) for n in [CFG["channel_name"]] + list(CFG.get("channel_aliases") or [])}
     if CFG.get("channel_id"):  # kimlik biliniyorsa ad değişse de doğru kanal tanınır
@@ -2986,8 +2997,8 @@ def preflight():
         return
     if CFG.get("instagram_enabled") and os.getenv("IG_ACCESS_TOKEN") and os.getenv("IG_USER_ID"):
         try:
-            user = publish.instagram_check()
-            log(f"Instagram anahtarı geçerli: @{user}")
+            user = publish.instagram_check(CFG.get("ig_username"))
+            log(f"Instagram anahtarı ve hesap kimliği doğrulandı: @{user}")
         except Exception as e:
             notify("🆘 CLAUDE'A YAZ — Instagram anahtarı çalışmıyor (süresi dolmuş olabilir). Video yine YouTube'a "
                    "yüklenecek, Reels sırada bekleyecek. Anahtar yenilenince otomatik paylaşılır.\n"
@@ -2995,11 +3006,14 @@ def preflight():
 
 
 def run_once():
-    if os.getenv("GITHUB_EVENT_NAME") == "schedule" and not os.getenv("CATCHUP"):
-        today = datetime.now().date().isoformat()
+    # Sadece cron değil, elle ve bekçi tarafından başlatılan çalışmalarda da çift üretimi engelle.
+    # Bilerek ikinci video istenirse workflow_dispatch içindeki force_new_video seçilebilir.
+    forced = os.getenv("FORCE_NEW_VIDEO", "").lower() in ("1", "true", "yes")
+    if not DRY_RUN and not forced:
+        today = datetime.now(timezone.utc).date().isoformat()
         if any(h.get("type", "long") == "long" and str(h.get("date", "")).startswith(today)
                for h in (load_json(HISTORY, []) if HISTORY.exists() else [])):
-            log("Bugünün videosu zaten (elle başlatılan çalışmayla) üretildi; zamanlanmış çalışma atlandı.")
+            log("Bugünün uzun videosu zaten kaydedilmiş; yeni üretim atlandı (tekrar yükleme engellendi).")
             return True
     check_channel()
     preflight()
@@ -3149,6 +3163,14 @@ def run_once():
         named = w / f"{slug(script.get('core_keyword') or script['title'])}.mp4"  # anlamlı dosya adı
         shutil.copy(final, named)
         vid = publish.upload(named, m_long, thumb, up)
+        # Video kimliğini derhal kalıcı kaydet: sonradan altyazı/Short/Instagram kesilirse
+        # yeniden başlatılan iş bu uzun videoyu ikinci kez üretmesin.
+        if not any(h.get("video_id") == vid for h in history):
+            history.append({"date": datetime.now(timezone.utc).isoformat(timespec="minutes"),
+                            "type": "long", "title": script["title"], "pillar": idea["pillar"],
+                            "video_id": vid, "series_id": idea.get("series_id")})
+            save_json(HISTORY, history)
+            push_now(HISTORY, "uzun video kimliği kaydedildi")
         queue_comment(vid, script.get("pinned_comment"))
         record_vote(vid, script)
         (DATA / "pending_script.json").unlink(missing_ok=True)  # yüklendi: yarım kalan senaryo kaydı silinir
@@ -3172,10 +3194,7 @@ def run_once():
                            "(get_token.bat bir kez). Altyazılar saklandı, izin yenilenince otomatik yüklenecek.")
                     cap_warned = True
         add_to_pillar_playlist(vid, idea["pillar"])
-        history.append({"date": datetime.now().isoformat(timespec="minutes"), "type": "long",
-                        "title": script["title"], "pillar": idea["pillar"], "video_id": vid,
-                        "series_id": idea.get("series_id")})
-        save_json(HISTORY, history)
+        # Uzun video, yüklemenin hemen ardından kaydedildi; burada ikinci kayıt oluşturma.
         ledger.save()
         if vid in publish.UPLOAD_WARNINGS:
             notify(f"🆘 CLAUDE'A YAZ — Video yüklendi ama YouTube yayın saatini kaydetmedi: https://youtu.be/{vid}\n"
@@ -3237,6 +3256,17 @@ def run_once():
 if __name__ == "__main__":
     RUNLOG.parent.mkdir(exist_ok=True)
     if os.getenv("OTOYT_ATTEMPT", "1") == "1":  # 2. denemede 1. denemenin kaydı silinmesin
+        # Yeni tamamlayıcı işi uzun video üretiminin kanıtlarını silmesin.
+        if RUNLOG.exists():
+            prev = RUNLOG.read_text(encoding="utf-8")
+            if len(prev) > 2000 and any(k in prev for k in ("Ana video:", "HATA:", "Seslendirme:")):
+                archive = RUNLOG.parent / "archive"
+                archive.mkdir(parents=True, exist_ok=True)
+                stamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
+                tag = os.getenv("GITHUB_RUN_ID", "local")
+                (archive / f"{stamp}-{tag}.txt").write_text(prev, encoding="utf-8")
+                for old in sorted(archive.glob("*.txt"))[:-15]:
+                    old.unlink()
         RUNLOG.write_text("", encoding="utf-8")
     ai.LOG = log
     log(f"Başladı (test modu: {DRY_RUN}, yayın: {CFG['publish_mode']})")
