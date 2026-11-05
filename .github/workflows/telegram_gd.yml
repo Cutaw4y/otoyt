@@ -28,7 +28,7 @@ jobs:
         with: {ref: main}
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
-      - run: pip install -q requests pyyaml
+      - run: pip install -q requests pyyaml google-auth
       - name: Konuları öner ve sahibinin kararlarını işle
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
