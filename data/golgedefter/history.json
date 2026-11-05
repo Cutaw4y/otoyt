@@ -175,11 +175,35 @@
     "parent": null
   },
   {
-    "date": "2026-11-05T09:25",
-    "type": "reel",
-    "title": "Islak Adada Zincirli Dev",
-    "pillar": "Kıyamet alametleri ve ahir zaman anlatıları (ayet ve hadis kaynaklarıyla, tarih tahmini yok)",
-    "video_id": "17938838532405395",
-    "parent": "ayKbYxbFMK8"
+    "date": "2026-11-05T11:25",
+    "type": "long",
+    "title": "Kaf Dağı Nerede? 500 Yıllık Yolun Sonundaki Korkunç Sır",
+    "pillar": "Anadolu ve dünya efsaneleri, mitolojik varlıklar, halk inançları",
+    "video_id": "cIuAjk2XCfY",
+    "series_id": "kaf-1"
+  },
+  {
+    "date": "2026-11-05T11:25",
+    "type": "short",
+    "title": "Gökyüzü Neden Mavidir? Kaf Dağı Efsanesi",
+    "pillar": "Anadolu ve dünya efsaneleri, mitolojik varlıklar, halk inançları",
+    "video_id": "3zzk6Ld7fUM",
+    "parent": "cIuAjk2XCfY"
+  },
+  {
+    "date": "2026-11-05T11:25",
+    "type": "short",
+    "title": "Kur'an'da Kaf Dağı Yazıyor mu?",
+    "pillar": "Anadolu ve dünya efsaneleri, mitolojik varlıklar, halk inançları",
+    "video_id": "fcHhnESoi2M",
+    "parent": "cIuAjk2XCfY"
+  },
+  {
+    "date": "2026-11-05T11:25",
+    "type": "short",
+    "title": "Kaf Dağı Kafkasya Olabilir mi?",
+    "pillar": "Anadolu ve dünya efsaneleri, mitolojik varlıklar, halk inançları",
+    "video_id": "pwV-9PJdL_4",
+    "parent": "cIuAjk2XCfY"
   }
 ]

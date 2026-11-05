@@ -1,3 +1,374 @@
+<<<<<<< Updated upstream
 [11:21:42] Başladı (test modu: False, yayın: scheduled)
 [11:21:43] Ücretli Gemini anahtarı kullanılıyor
 [11:21:43] Kanal doğrulandı: GölgeDefter
+=======
+[09:20:58] Başladı (test modu: False, yayın: scheduled)
+[09:20:59] Ücretli Gemini anahtarı kullanılıyor
+[09:21:00] Kanal doğrulandı: GölgeDefter
+[09:21:01] Instagram anahtarı geçerli: @golge.defter
+[09:21:02] Analitik: 2 video ölçüldü, sütun puanları: {'Anadolu ve dünya efsaneleri, mitolojik varlıklar, halk inançları': 3.0791281676782627, 'Açıklanamayan gerçek olaylar ve kayıplar (Dyatlov, Mary Celeste, Roanoke, Tunguska)': 1.4532443354501756}
+[09:21:02] Seri bölümü seçildi: Kaf Dağı Gerçekten Var mı? Cinlerin Yaşadığı Dünyanın Ucundaki Dağ
+[09:21:03] Konu (1): Kaf Dağı Gerçekten Var mı? Cinlerin Yaşadığı Dünyanın Ucundaki Dağ  [Anadolu ve dünya efsaneleri, mitolojik varlıklar, halk inançları]
+[09:22:41] Senaryo yazıldı: 42 sahne, 1924 kelime
+[09:23:53] Anlatım sadeleştirildi (1924 → 1573 kelime)
+[09:24:45] Doğrulama kaynağı: Google araması
+[09:24:45] Doğrulama turu 1: 15 iddia, 1 yanlış, 0 belirsiz
+[09:27:07] Doğrulama kaynağı: Google araması
+[09:27:07] Doğrulama turu 2: 15 iddia, 2 yanlış, 0 belirsiz
+[09:29:07] Doğrulama kaynağı: Google araması
+[09:29:07] Doğrulama turu 3: 14 iddia, 0 yanlış, 0 belirsiz
+[09:29:07] En çok arananlar: kaf dağı nerede | kaf dağı masalları | kaf dağının ardında | kaf dağında olsanda ecele çare varmı | kaf dağını aşsam | kaf dağı gerçek mi | kaf dağının ardında almora | kaf dağının gizemi
+[09:29:22] Başlık seçildi: Kaf Dağı Nerede? 500 Yıllık Yolun Sonundaki Korkunç Sır  (önceki: Kaf Dağı Nerede? Dünyanın Ucundaki Zümrüt Dağ ve Cinler Efsanesi) — En çok aratılan anahtar kelimeyi ilk 15 karakterde sunarken, videodaki 'yürüyerek 500 yılda ulaşılan sınır' detayını somut bir merak unsuru ve gizem d
+[09:29:24] Editör (min 6, ort 7.7): {'originality': 7, 'hook': 8, 'clarity': 8, 'simplicity': 6, 'flow': 8, 'value_density': 8, 'audience_fit': 9, 'problems': ["Quote: 'Bu devirde insanlar bu kitabı masal olarak değil, gerçek bir doğa tarihi kaynağı olarak okuyordu.' -> Fix: 'O dönemde matbaa olmadığı için bu tür kitaplardaki her şey, bugünkü fen bilgisi kitapları gibi gerçek kabul ediliyordu.'", "Quote: 'Tarihçiler bunu İsrailiyat kültürüyle açıklıyor.' -> Fix: 'Tarihçiler bunu, İslamiyet'ten önceki eski Yahudi ve İran kültürlerine ait masalların İslam dünyasına karışmasıyla açıklıyor.'", "Quote: 'Kâf harfi, Kur'an'daki bazı surelerin başında bulunan kesik harflerden biridir; tıpkı Elif-Lâm-Mîm veya Yâ-Sîn gibi.' -> Fix: 'Kâf harfi, Kur'an'daki bazı surelerin başında tek başına yazılan ve anlamı sadece Allah tarafından bilinen harflerden biridir.'", "Quote: 'Râzî, Kâf harfinin tek başına bir dağ adı olamayacağını belirtti. Çünkü ayette yemin bildiren bir harf yoktur ve kıraat kurallarına göre bu harf diğer hece harfleri gibi bağımsız okunur.' -> Fix: 'Râzî, bu harfin bir dağ ismi olamayacağını, çünkü Arap alfabesindeki okuma kurallarına uymadığını anlattı.'", "Quote: 'İbnü'l-Kayyim el-Cevziyye gibi büyük hadis tenkitçileri...' -> Fix: 'İbnü'l-Kayyim el-Cevziyye gibi dinî sözleri inceleyen büyük uzmanlar...'"], 'problems_tr': "Metinde geçen 'İsrailiyat', 'kesik harfler', 'kıraat kuralları' ve bazı Arapça âlim isimleri gibi terimler 12 yaşındaki bir çocuğun ilk dinleyişte anlamakta zorlanacağı kadar soyut ve açıklamasız bırakılmıştır."}
+[09:30:55] Anlatım sadeleştirildi (1563 → 1562 kelime)
+[09:30:55] Senaryo kısa (1562/2200 kelime) → genişletiliyor (1)
+[09:32:22] Senaryo kısa (1832/2200 kelime) → genişletiliyor (2)
+[09:33:33] Senaryo uzunluğu: 1940 kelime
+[09:34:59] Doğrulama kaynağı: Google araması
+[09:34:59] Doğrulama turu 1: 15 iddia, 1 yanlış, 0 belirsiz
+[09:37:26] Doğrulama kaynağı: Google araması
+[09:37:26] Doğrulama turu 2: 15 iddia, 0 yanlış, 0 belirsiz
+[09:37:29] Editör (min 6, ort 7.3): {'originality': 7, 'hook': 6, 'clarity': 8, 'simplicity': 6, 'flow': 7, 'value_density': 8, 'audience_fit': 9, 'problems': ["Quote: 'Zekeriya el-Kazvînî, Yaratıkların Harikaları adlı meşhur eserinde...' -> Fix: 'Yedi yüz elli yıl önce yaşayan İslam bilgini Zekeriya el-Kazvînî, o dönemde yazılan bir ansiklopedide...'", "Quote: 'Muhammed bin Cerîr et-Taberî de kendi tarih külliyatında...' -> Fix: 'Tarihçi Taberî ise yazdığı büyük tarih kitabında...'", "Quote: 'İbnü'l-Kayyim el-Cevziyye çok kesin bir tespit yaptı...' -> Fix: 'İslam âlimi İbnü'l-Kayyim el-Cevziyye çok net bir kuralı hatırlattı...'", "Quote: 'Bu coğrafi gerçek Kur'an-ı Kerim'deki Kehf Suresi'nde geçen Zülkarneyn kıssasıyla da örtüşür.' -> Fix: 'Bu gerçek, kutsal kitabımızdaki Zülkarneyn adlı hükümdarın hikayesiyle de benzerlik gösterir.'", "Quote: 'İsrailiyat kavramıyla açıklar.' -> Fix: 'daha önceki eski dinlere ve kültürlere ait hikayelerin İslam coğrafyasında anlatılmaya başlanmasıyla açıklar.'"], 'problems_tr_tr': "Metinde geçen bazı eski âlim ve kitap isimleri (Kazvînî, Taberî, İbnü'l-Kayyim el-Cevziyye gibi) 12 yaşındaki bir çocuğa veya konunun uzmanı olmayanlara ilk dinlemede karmaşık gelebilir; bu yüzden bu isimlerin yanına kısa açıklamalar eklenmelidir."}
+[09:39:35] Anlatım sadeleştirildi (1951 → 1940 kelime)
+[09:40:31] Doğrulama kaynağı: Google araması
+[09:40:31] Doğrulama turu 1: 15 iddia, 1 yanlış, 0 belirsiz
+[09:42:17] Doğrulama kaynağı: Google araması
+[09:42:17] Doğrulama turu 2: 15 iddia, 0 yanlış, 0 belirsiz
+[09:42:19] Editör (min 6, ort 7.7): {'originality': 7, 'hook': 7, 'clarity': 8, 'simplicity': 6, 'flow': 9, 'value_density': 8, 'audience_fit': 9, 'problems': ["Quote: 'Orta Çağ yazmalarına göre Kaf Dağı, yeryüzünün görünmez omurgası ve temel direğiydi.' -> Fix: 'Orta Çağ'daki eski el yazması kitaplara göre...'", "Quote: 'On dördüncü yüzyılın en büyük tefsir ve hadis otoritelerinden biri olan İbn Kesîr...' -> Fix: 'Dönemin en büyük dini metin uzmanlarından İbn Kesîr...'", "Quote: 'Büyük kelâm ve tefsir bilgini Fahreddin Râzî de Mefâtîhu'l-Gayb adlı dev tefsirinde...' -> Fix: 'Büyük İslam bilgini Fahreddin Râzî, yazdığı büyük din kitabı incelemesinde...'", "Quote: 'Zekeriya el-Kazvînî, o dönemde yazılan bir ansiklopedide Kaf Dağı'na çok geniş bir bölüm ayırmıştı.' -> Fix: 'Zekeriya el-Kazvînî, o dönemin bilgi derlemesi olan ansiklopedisinde...'", "Quote: 'İslam dünyasının en muteber hadis külliyatları olan Sahih-i Buhârî ve Sahih-i Müslim...' -> Fix: 'Peygamberimizin sözlerini derleyen en güvenilir kitaplar olan Buhârî ve Müslim...'"], 'problems_tr': "Metinde geçen 'tefsir', 'kelâm', 'muteber hadis külliyatı' ve 'muteber' gibi bazı dini ve akademik terimler 12 yaşındaki bir çocuğun ilk dinlemede kolayca anlayamayacağı kadar ağırdır; bu terimler daha sade günlük dille açıklanmalıdır."}
+[09:42:19] Konu kalite barajını geçemedi: Kaf Dağı Gerçekten Var mı? Cinlerin Yaşadığı Dünyanın Ucundaki Dağ
+[09:42:19] Baraj geçilemedi; en iyi senaryo kullanılıyor (min 6, ort 7.7)
+[09:42:23] Seslendirme başlıyor (Gemini Charon)...
+[09:53:02] Seslendirme: 981 sn
+[09:54:31] Thumbnail sıralaması: [1, 3, 2] - Candidate #1 has the strongest visual impact at phone size with the glowing mystical mountain and bold, highly readable 'DÜNYANIN SONU' text, creating an immediate sense of scale and dread that pairs well with the title. Candidate #3 follows with a striking, high-contrast, colorful object (the feather) that grabs attention, though slightly less menacing. Candidate #2 relies on an old map which becomes too dark and muddy when scaled down to real phone size, making the text harder to read quickly.
+[09:56:08] Cümle cümle görsel planı: 42/42 sahne
+[09:56:08] Sahne 1 (diagram, 31.3 sn, 7 çekim, cümleye bağlı)
+[09:56:22]    ilgisiz görüntü elendi: aerial view of medieval castle
+[09:56:31]    ilgisiz görüntü elendi: blank paper hanging outdoors grass
+[09:56:49]    ilgisiz görüntü elendi: aerial view of rocky coast
+[09:57:49]    ilgisiz görüntü elendi: looking up at forest canopy
+[09:58:03] Sahne 2 (diagram, 25.6 sn, 6 çekim, cümleye bağlı)
+[09:58:06]    ilgisiz görüntü elendi: sheep scratching against standing stone
+[09:58:28] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[09:58:32]    alakasız görsel yeniden çizilecek: old map with mountain illustration
+[09:58:52] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[09:59:09]    ilgisiz görüntü elendi: green aurora borealis in night sky
+[09:59:09] Pixabay foto hatası: 429 Client Error: Too Many Requests for url: https://pixabay.com/get/g06222a5cf12583c55d72312512dfbf6fe24fa72358675bc477878c5d6fca6ff7237143545f0aef16345b126b51dc02db860b1bc9cf1d1a73c367eae6eb28e14c_1280.jpg
+[09:59:22]    ilgisiz görüntü elendi: city highway with traffic lights at night
+[09:59:27]    ilgisiz görüntü elendi: ocean waves hitting rocky shore
+[09:59:49] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[09:59:57]    ilgisiz görüntü elendi: cooking food in a pan
+[10:00:00] Sahne 3 (footage, 21.0 sn, 5 çekim, cümleye bağlı)
+[10:00:02]    ilgisiz görüntü elendi: large waves crashing on shore
+[10:00:18]    ilgisiz görüntü elendi: dark city silhouette at night
+[10:00:19] Pixabay foto hatası: 429 Client Error: Too Many Requests for url: https://pixabay.com/get/g57856d358f9931840c2b6df5d37e8e019243ff0a92255c8a9d623077bdbb7fae7cf2a73d9edccc12ecb8c3ae05b2dd2c5526ebf1d133f662b76f5304d128a0b4_1280.jpg
+[10:00:39] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[10:00:46]    ilgisiz görüntü elendi: dark stormy clouds in sky
+[10:00:51]    ilgisiz görüntü elendi: aerial view of city traffic intersection
+[10:01:09]    ilgisiz görüntü elendi: close up of clock gears
+[10:01:12] Sahne 4 (footage, 20.2 sn, 5 çekim, cümleye bağlı)
+[10:01:16]    ilgisiz görüntü elendi: aerial view of dry riverbed
+[10:01:38] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[10:01:50]    alakasız görsel yeniden çizilecek: traveler walking on stone path
+[10:02:03]    ilgisiz görüntü elendi: cars driving on dirt road
+[10:02:07]    ilgisiz görüntü elendi: green mountains reflecting in water
+[10:02:29] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[10:02:39]    ilgisiz görüntü elendi: tall waterfall flowing down cliff
+[10:03:11]    ilgisiz görüntü elendi: lush green rocky mountain landscape
+[10:03:13] Sahne 5 (diagram, 22.3 sn, 5 çekim, cümleye bağlı)
+[10:03:15]    ilgisiz görüntü elendi: sunset over fluffy cloud layer
+[10:03:37] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[10:03:47]    ilgisiz görüntü elendi: dew drops on green grass
+[10:03:52]    ilgisiz görüntü elendi: snowy mountain peaks at sunset
+[10:04:10]    ilgisiz görüntü elendi: large atlas moth on leaf
+[10:04:32] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[10:04:41]    ilgisiz görüntü elendi: st mark s square in venice
+[10:04:44] Sahne 6 (footage, 20.6 sn, 4 çekim, cümleye bağlı)
+[10:04:48]    ilgisiz görüntü elendi: aerial view of snowy mountains
+[10:05:51]    ilgisiz görüntü elendi: large metal globe structure fountain
+[10:05:54] Sahne 7 (diagram, 17.2 sn, 4 çekim, cümleye bağlı)
+[10:05:56]    ilgisiz görüntü elendi: modern library bookshelves with books
+[10:06:18] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[10:06:21]    alakasız görsel yeniden çizilecek: library with books and chandelier
+[10:06:41] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[10:06:47]    ilgisiz görüntü elendi: close up of veiled woman
+[10:06:59]    alakasız görsel yeniden çizilecek: old book with text inside
+[10:07:19] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[10:07:49]    ilgisiz görüntü elendi: modern city skyline with skyscrapers
+[10:07:52] Sahne 8 (footage, 23.5 sn, 5 çekim, cümleye bağlı)
+[10:08:08]    ilgisiz görüntü elendi: aerial view of modern mosque roofs
+[10:08:30]    ilgisiz görüntü elendi: modern girl reading a book
+[10:08:52] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[10:08:59]    ilgisiz görüntü elendi: modern man reading in library
+[10:09:02] Sahne 9 (diagram, 23.2 sn, 5 çekim, cümleye bağlı)
+[10:09:13]    ilgisiz görüntü elendi: rough sea waves crashing against shore
+[10:09:29]    ilgisiz görüntü elendi: motion blurred subway train passing
+[10:09:34]    ilgisiz görüntü elendi: Close up of tree trunks
+[10:09:50]    ilgisiz görüntü elendi: A bee on purple flowers
+[10:09:54] Sahne 10 (footage, 26.1 sn, 6 çekim, cümleye bağlı)
+[10:10:07]    ilgisiz görüntü elendi: aerial view of ancient ruins
+[10:10:12]    ilgisiz görüntü elendi: stream flowing through rocky forest
+[10:10:34] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[10:10:44]    ilgisiz görüntü elendi: mountains under starry night sky
+[10:10:51]    ilgisiz görüntü elendi: a green frog on branch
+[10:11:10]    ilgisiz görüntü elendi: Reeds growing along a path
+[10:11:13] Sahne 11 (diagram, 28.8 sn, 6 çekim, cümleye bağlı)
+[10:11:22]    ilgisiz görüntü elendi: small brown bird on ground
+[10:11:40]    ilgisiz görüntü elendi: small bird on tree branch
+[10:11:46]    ilgisiz görüntü elendi: a single goose on water
+[10:12:09]    ilgisiz görüntü elendi: waterfall and pond with fishes
+[10:12:13] Sahne 12 (footage, 24.5 sn, 5 çekim, cümleye bağlı)
+[10:12:49]    ilgisiz görüntü elendi: small bird in tree hole
+[10:13:07]    ilgisiz görüntü elendi: small bird feeding in nest
+[10:13:12]    ilgisiz görüntü elendi: aerial view of urban city street
+[10:13:34] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[10:13:37]    alakasız görsel yeniden çizilecek: old map with text
+[10:13:50] Sahne 13 (diagram, 27.2 sn, 5 çekim, cümleye bağlı)
+[10:13:52]    ilgisiz görüntü elendi: two young men reading books
+[10:14:14] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[10:14:24]    ilgisiz görüntü elendi: aerial view of ancient town
+[10:14:46] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[10:14:49]    alakasız görsel yeniden çizilecek: scroll, books, and candles
+[10:15:02]    ilgisiz görüntü elendi: Person using a digital tablet
+[10:15:24] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[10:15:27]    alakasız görsel yeniden çizilecek: stone tablet with text
+[10:15:47] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[10:15:58]    ilgisiz görüntü elendi: people working with digital tablets
+[10:16:07]    ilgisiz görüntü elendi: aerial view of european town
+[10:16:18]    alakasız görsel yeniden çizilecek: man writing at desk
+[10:16:39] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[10:16:44] Sahne 14 (footage, 22.8 sn, 6 çekim, cümleye bağlı)
+[10:16:47]    ilgisiz görüntü elendi: close up of computer keyboard
+[10:17:03]    ilgisiz görüntü elendi: low angle of apartment building
+[10:17:10]    ilgisiz görüntü elendi: green garden with gazebo structures
+[10:17:14]    ilgisiz görüntü elendi: aerial view of green islands
+[10:17:36] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[10:17:45]    ilgisiz görüntü elendi: burning candles in the dark
+[10:17:50]    ilgisiz görüntü elendi: red train in green forest
+[10:18:01]    alakasız görsel yeniden çizilecek: people gathered in a mosque
+[10:18:21] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[10:18:26] Sahne 15 (diagram, 21.0 sn, 5 çekim, cümleye bağlı)
+[10:18:28]    ilgisiz görüntü elendi: flipping pages of a book
+[10:18:34]    ilgisiz görüntü elendi: abstract decorative frame with empty center
+[10:18:39]    ilgisiz görüntü elendi: aerial view of historical building
+[10:18:49]    alakasız görsel yeniden çizilecek: ancient map on table
+[10:19:09] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[10:19:42] Sahne 16 (diagram, 24.0 sn, 6 çekim, cümleye bağlı)
+[10:19:44]    ilgisiz görüntü elendi: person doing east asian calligraphy
+[10:19:59]    ilgisiz görüntü elendi: person typing on old typewriter
+[10:20:10]    alakasız görsel yeniden çizilecek: Arabic letter on parchment paper
+[10:20:15]    ilgisiz görüntü elendi: dandelion seed heads against dark background
+[10:20:22]    ilgisiz görüntü elendi: Woman doing yoga on mountain
+[10:20:26]    alakasız görsel yeniden çizilecek: mountain inside circular compass design
+[10:20:33]    ilgisiz görüntü elendi: diamond ring on white cloth
+[10:20:37]    ilgisiz görüntü elendi: people working in an office
+[10:20:42]    alakasız görsel yeniden çizilecek: open book with Arabic text
+[10:20:48] Sahne 17 (diagram, 24.8 sn, 5 çekim, cümleye bağlı)
+[10:20:53]    ilgisiz görüntü elendi: aerial view of rural mosque
+[10:21:01]    ilgisiz görüntü elendi: aerial view of desert monastery
+[10:21:07]    ilgisiz görüntü elendi: two horses grazing in field
+[10:21:15]    ilgisiz görüntü elendi: pink and blue ink clouds
+[10:21:24]    ilgisiz görüntü elendi: aerial view of green mountain
+[10:21:28] Sahne 18 (footage, 26.9 sn, 6 çekim, cümleye bağlı)
+[10:21:38]    ilgisiz görüntü elendi: hand editing a printed script
+[10:21:45]    ilgisiz görüntü elendi: aerial view of green landscape
+[10:21:50]    alakasız görsel yeniden çizilecek: mountain under the moon
+[10:21:58]    ilgisiz görüntü elendi: snowy mountains covered in clouds
+[10:22:03]    ilgisiz görüntü elendi: ancient historical ruins with columns
+[10:22:13]    ilgisiz görüntü elendi: aerial view of old castle
+[10:22:16] Sahne 19 (diagram, 24.6 sn, 5 çekim, cümleye bağlı)
+[10:22:26]    ilgisiz görüntü elendi: wiped clean dark slate chalkboard
+[10:22:32]    ilgisiz görüntü elendi: view of a grand mosque
+[10:22:36]    alakasız görsel yeniden çizilecek: candle and open book
+[10:22:44]    ilgisiz görüntü elendi: cup of tea and notebook
+[10:22:49]    alakasız görsel yeniden çizilecek: open holy book with text
+[10:22:56]    ilgisiz görüntü elendi: Person writing in a notebook
+[10:22:59] Sahne 20 (footage, 27.2 sn, 5 çekim, cümleye bağlı)
+[10:23:21]    ilgisiz görüntü elendi: A mushroom in green grass
+[10:23:26]    alakasız görsel yeniden çizilecek: book with english text visible
+[10:23:33]    ilgisiz görüntü elendi: man turning pages of book
+[10:23:46]    ilgisiz görüntü elendi: exterior view of a mosque
+[10:23:50] Sahne 21 (diagram, 17.7 sn, 4 çekim, cümleye bağlı)
+[10:24:00]    ilgisiz görüntü elendi: aerial view of a mosque
+[10:24:05]    ilgisiz görüntü elendi: ancient stone amphitheater arches exterior
+[10:24:10]    alakasız görsel yeniden çizilecek: ancient ruins under cloudy sky
+[10:24:18]    ilgisiz görüntü elendi: Hungarian Parliament building by water
+[10:24:21] Sahne 22 (footage, 19.6 sn, 4 çekim, cümleye bağlı)
+[10:24:24]    ilgisiz görüntü elendi: black car driving on road
+[10:24:28]    alakasız görsel yeniden çizilecek: figure standing before mountain
+[10:24:36]    ilgisiz görüntü elendi: man studying in modern library
+[10:24:41]    alakasız görsel yeniden çizilecek: old library with books
+[10:24:48]    ilgisiz görüntü elendi: stained glass window in church
+[10:24:58]    ilgisiz görüntü elendi: aerial view of medieval castle
+[10:25:02] Sahne 23 (diagram, 22.0 sn, 5 çekim, cümleye bağlı)
+[10:25:18]    ilgisiz görüntü elendi: blurry car side mirror reflection
+[10:25:27]    ilgisiz görüntü elendi: blurry blue bus on street
+[10:25:33]    ilgisiz görüntü elendi: sand dunes with blowing dust
+[10:25:44]    ilgisiz görüntü elendi: aerial view of rocky desert landscape
+[10:25:47] Sahne 24 (footage, 23.8 sn, 5 çekim, cümleye bağlı)
+[10:25:51]    ilgisiz görüntü elendi: white daisies blooming outdoors landscape
+[10:26:02]    ilgisiz görüntü elendi: small waves hitting coastal rocks
+[10:26:08]    ilgisiz görüntü elendi: aerial view of coastal town
+[10:26:13]    alakasız görsel yeniden çizilecek: castle gates at night moon
+[10:26:34]    ilgisiz görüntü elendi: boat on water at sunset
+[10:26:38] Sahne 25 (diagram, 22.9 sn, 5 çekim, cümleye bağlı)
+[10:27:00]    ilgisiz görüntü elendi: view through stone castle archway
+[10:27:08]    ilgisiz görüntü elendi: tree branches against blue sky
+[10:27:13]    ilgisiz görüntü elendi: crescent moon in dark sky
+[10:27:28]    ilgisiz görüntü elendi: aerial view of green valley
+[10:27:31] Sahne 26 (footage, 22.7 sn, 5 çekim, cümleye bağlı)
+[10:27:35]    ilgisiz görüntü elendi: person trimming green bonsai plant
+[10:27:40]    alakasız görsel yeniden çizilecek: floating golden structure over mountains
+[10:27:47]    ilgisiz görüntü elendi: beehive frame held by beekeeper
+[10:27:58]    ilgisiz görüntü elendi: yellow leaf floating on water
+[10:28:07]    ilgisiz görüntü elendi: aerial view of old castle
+[10:28:12]    alakasız görsel yeniden çizilecek: open book with text
+[10:28:19]    ilgisiz görüntü elendi: blurry colorful lights in dark
+[10:28:23] Sahne 27 (diagram, 22.4 sn, 6 çekim, cümleye bağlı)
+[10:28:31]    ilgisiz görüntü elendi: person making pottery in workshop
+[10:28:44]    ilgisiz görüntü elendi: beehive frame with honey bees
+[10:28:49]    ilgisiz görüntü elendi: fish swimming in kelp forest
+[10:28:53]    alakasız görsel yeniden çizilecek: ancient artifact with carved symbols
+[10:29:02]    ilgisiz görüntü elendi: aerial view of foggy beach
+[10:29:05] Sahne 28 (footage, 26.0 sn, 6 çekim, cümleye bağlı)
+[10:29:07]    ilgisiz görüntü elendi: bright sunrise over foggy mountains
+[10:29:16]    ilgisiz görüntü elendi: windy trees by a lake
+[10:29:20]    ilgisiz görüntü elendi: golden sunlight reflecting on ocean
+[10:29:30]    ilgisiz görüntü elendi: white daisies in a field
+[10:29:35]    ilgisiz görüntü elendi: panoramic view of rocky mountains
+[10:29:46]    ilgisiz görüntü elendi: clouds moving over rocky mountains
+[10:29:50] Sahne 29 (diagram, 22.6 sn, 5 çekim, cümleye bağlı)
+[10:29:53]    ilgisiz görüntü elendi: waves washing against rocky shore
+[10:30:00]    alakasız görsel yeniden çizilecek: sea cliffs waves sun sky
+[10:30:50]    ilgisiz görüntü elendi: colorful soap bubble curve closeup
+[10:31:01]    ilgisiz görüntü elendi: blue planet in deep space
+[10:31:05] Sahne 30 (footage, 22.3 sn, 5 çekim, cümleye bağlı)
+[10:31:16]    ilgisiz görüntü elendi: Speedboat driving near green island
+[10:31:21]    ilgisiz görüntü elendi: Close up of old map
+[10:31:45]    ilgisiz görüntü elendi: pine trees on a ridge
+[10:31:50] Sahne 31 (diagram, 21.6 sn, 5 çekim, cümleye bağlı)
+[10:32:31]    ilgisiz görüntü elendi: ruined stone wall in landscape
+[10:32:36]    alakasız görsel yeniden çizilecek: castle on mountain with moon
+[10:32:44]    ilgisiz görüntü elendi: modern city skyline and lake
+[10:32:47] Sahne 32 (footage, 27.3 sn, 6 çekim, cümleye bağlı)
+[10:32:56]    ilgisiz görüntü elendi: full moon in the night
+[10:33:27]    ilgisiz görüntü elendi: Woman touching camel in desert
+[10:33:48]    ilgisiz görüntü elendi: ski lift in snowy forest
+[10:33:57] Sahne 33 (diagram, 23.8 sn, 6 çekim, cümleye bağlı)
+[10:33:59]    ilgisiz görüntü elendi: ruined stone arch structure outdoors
+[10:34:04]    alakasız görsel yeniden çizilecek: open book with text
+[10:34:12]    ilgisiz görüntü elendi: aerial view of a pyramid
+[10:34:25]    ilgisiz görüntü elendi: river and pine tree forest
+[10:34:31]    ilgisiz görüntü elendi: aerial view of an island
+[10:34:42]    ilgisiz görüntü elendi: river flowing through rocky canyon
+[10:34:45] Sahne 34 (footage, 23.8 sn, 5 çekim, cümleye bağlı)
+[10:35:02]    ilgisiz görüntü elendi: active erupting volcano with lava
+[10:35:09]    ilgisiz görüntü elendi: pink and white ink mixing
+[10:35:11] Cloudflare günlük ücretsiz kota doldu: {"errors":[{"message":"AiError: AiError: you have used up your daily free allocation of 10,000 neurons, please upgrade to Cloudflare's Workers Paid plan if you would like to continue usage. (d886ac7a- → bu video için Pexels fotoğraflarına geçiliyor
+[10:35:26]    ilgisiz görüntü elendi: person painting a model airplane
+[10:35:28] Sahne 35 (diagram, 20.6 sn, 4 çekim, cümleye bağlı)
+[10:35:30]    ilgisiz görüntü elendi: vintage map of south america
+[10:35:41]    alakasız görsel yeniden çizilecek: man studying old maps
+[10:36:55]    ilgisiz görüntü elendi: aerial view of forest clearing
+[10:37:40]    ilgisiz görüntü elendi: person ice skating from above
+[10:37:44] Sahne 36 (footage, 22.4 sn, 5 çekim, cümleye bağlı)
+[10:38:31]    ilgisiz görüntü elendi: aerial view of rocky mountains
+[10:38:46]    ilgisiz görüntü elendi: frozen soap bubble on snow
+[10:38:49] Sahne 37 (diagram, 23.0 sn, 5 çekim, cümleye bağlı)
+[10:38:51]    ilgisiz görüntü elendi: man reading book in library
+[10:39:22]    alakasız görsel yeniden çizilecek: dark mysterious library with researchers
+[10:40:38] Görsel aşaması zaman bütçesini aştı: kalan sahnelerde yalnız cümleye göre çizilen görseller (hızlı mod)
+[10:42:28] Sahne 38 (footage, 24.6 sn, 5 çekim, cümleye bağlı)
+[10:46:51] Sahne 39 (diagram, 21.1 sn, 5 çekim, cümleye bağlı)
+[10:49:52] Sahne 40 (footage, 20.5 sn, 5 çekim, cümleye bağlı)
+[10:52:53] Sahne 41 (diagram, 24.4 sn, 5 çekim, cümleye bağlı)
+[10:54:50] Sahne 42 (footage, 23.8 sn, 5 çekim, cümleye bağlı)
+[11:20:03] Ana video: 1026 sn
+[11:21:35] Short 1: sahne 0-2, 57 sn — Gökyüzü Neden Mavidir? Kaf Dağı Efsanesi
+[11:22:49] Short 2: sahne 15-17, 49 sn — Kur'an'da Kaf Dağı Yazıyor mu?
+[11:24:09] Short 3: sahne 30-32, 49 sn — Kaf Dağı Kafkasya Olabilir mi?
+[11:24:09] Altyazı çevirisi: English (336 satır)
+[11:24:14] Çeviri parçası eksik geldi (60-90), tekrar deneniyor
+[11:24:20] Çeviri parçası eksik geldi (120-150), tekrar deneniyor
+[11:24:23] Çeviri parçası eksik geldi (150-180), tekrar deneniyor
+[11:24:27] Çeviri parçası eksik geldi (180-210), tekrar deneniyor
+[11:24:28] Çeviri parçası eksik geldi (180-210), tekrar deneniyor
+[11:24:33] Çeviri parçası eksik geldi (240-270), tekrar deneniyor
+[11:24:35] Çeviri parçası eksik geldi (240-270), tekrar deneniyor
+[11:24:36] Çeviri parçası eksik geldi (240-270), tekrar deneniyor
+[11:25:38] Altyazı eklendi: Türkçe
+[11:25:40] Altyazı eklendi: English
+[11:25:41] Oynatma listesine eklendi: Efsaneler ve Mitolojik Varlıklar
+[11:26:00] Instagram sırasına eklendi: Gökyüzü Neden Mavidir? Kaf Dağı Efsanesi
+[11:26:02] Instagram sırasına eklendi: Kur'an'da Kaf Dağı Yazıyor mu?
+[11:26:05] Instagram sırasına eklendi: Kaf Dağı Kafkasya Olabilir mi?
+>>>>>>> Stashed changes
+[12:01:06] Instagram Reel hatası: Instagram yükleme 6 denemede başarısız: Instagram yükleme: 400 {"debug_info":{"retriable":false,"type":"ProcessingFailedError","message":"Request processing failed"}} (code None)
+[12:01:07] Bitti: https://youtu.be/cIuAjk2XCfY
+[12:01:07] Başarıyla bitti.
