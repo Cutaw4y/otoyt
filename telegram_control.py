@@ -443,8 +443,14 @@ def main():
     state = load()
     updates = tg("getUpdates", offset=state.get("offset", 0), timeout=0,
                  allowed_updates=["message", "callback_query"])
+    # Public GitHub Actions logs: only totals and state names, NEVER IDs, messages or keys.
+    print(f"Telegram poll: updates={len(updates)} "
+          f"callback_count={sum(bool(u.get('callback_query')) for u in updates)} "
+          f"job_status={state.get('job', {}).get('status', 'none')}", flush=True)
     for update in updates:
         event = transition(state, update, owner)
+        print(f"Telegram event: kind={'callback' if update.get('callback_query') else 'message'} "
+              f"processed={bool(event)} result={event or 'none'}", flush=True)
         state["offset"] = update["update_id"] + 1
         persist(state)
         job = state.get("job", {})
