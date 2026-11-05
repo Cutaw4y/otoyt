@@ -102,6 +102,35 @@ class ProductionGuards(unittest.TestCase):
                 self.assertIs(True, pipeline.run_once())
                 channel.assert_not_called()
 
+    def test_youtube_verification_fails_closed(self):
+        with mock.patch.object(pipeline, "DRY_RUN", False), \
+             mock.patch.object(pipeline, "CFG", {"uploader": "youtube"}), \
+             mock.patch.dict(os.environ, {"YT_REFRESH_TOKEN": "test-key"}), \
+             mock.patch.object(publish, "my_channel", side_effect=RuntimeError("API unavailable")):
+            with self.assertRaisesRegex(RuntimeError, "doğrulanamadı"):
+                pipeline.check_channel()
+
+    def test_logs_redact_additional_keys_and_each_tts_token(self):
+        secrets = {"GCP_SA_KEY": "sensitive-service-account-test",
+                   "GEMINI_TTS_EXTRA_KEYS": "privateTtsKeyAlpha,privateTtsKeyBeta"}
+        with mock.patch.dict(os.environ, secrets):
+            got = pipeline.redact("sensitive-service-account-test privateTtsKeyAlpha privateTtsKeyBeta")
+            for value in ("sensitive-service-account-test", "privateTtsKeyAlpha", "privateTtsKeyBeta"):
+                self.assertNotIn(value, got)
+
+    def test_one_vertex_429_opens_circuit_without_sleep(self):
+        response = mock.Mock(status_code=429, text="Resource has been exhausted")
+        with mock.patch.object(ai, "vertex_on", return_value=True), \
+             mock.patch.object(ai, "_vx_image_pause_until", 0.0), \
+             mock.patch.object(ai, "_vertex_generate", return_value=response) as generate, \
+             mock.patch.object(ai.time, "sleep") as sleep, \
+             mock.patch.object(ai, "LOG"):
+            with self.assertRaises(RuntimeError):
+                ai.gemini_image("test", "will-not-write.jpg", models=(), quick=True)
+            self.assertEqual(1, generate.call_count)
+            sleep.assert_not_called()
+            self.assertGreater(ai._vx_image_pause_until, ai.time.monotonic())
+
     def test_vertex_image_pause_skips_quota_requests(self):
         with mock.patch.object(ai, "vertex_on", return_value=True):
             with mock.patch.object(ai, "_vx_image_pause_until",
