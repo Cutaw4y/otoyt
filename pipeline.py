@@ -3171,6 +3171,10 @@ def run_once():
                 sname = w / f"{slug(sh_['title'])}-shorts.mp4"
                 shutil.copy(sh_["file"], sname)
                 sid = publish.upload(sname, m_short, None, up)
+                # telefondan izleyen Short'tan uzun videoya geçebilsin: tıklanabilir bağlantılı kanal yorumu
+                # (YouTube API "ilgili video" bağlantısını desteklemiyor; yorum Short yayına girince yazılır)
+                queue_comment(sid, ("▶️ Videonun tamamı burada: " if CFG.get("language_code") == "tr"
+                                    else "▶️ Watch the full video here: ") + f"https://youtu.be/{vid}")
                 if tr_blocks and up == "youtube" and CFG.get("short_captions", False):  # YouTube kotası: Short'ta yazı zaten gömülü
                     off = script["scenes"][sh_["start"]].get("t0", 0.0)
                     sp = media.write_srt_blocks(shift_blocks(tr_blocks, off, sh_["len"]),
