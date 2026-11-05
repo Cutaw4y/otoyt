@@ -70,6 +70,11 @@ def main():
             continue
         r = requests.post(f"{API}/actions/workflows/{wf}/dispatches", headers=H,
                           json={"ref": "main", "inputs": {"dry_run": "false"}}, timeout=30)
+        if r.status_code != 204:
+            # Actions dispatch başarısızsa deneme harcama ve başarı bildirimi gönderme.
+            print(f"{name}: GitHub başlatma isteği reddedildi ({r.status_code}): {r.text[:200]}")
+            tg(f"🆘 {name}: video üretimi başlatılamadı (GitHub HTTP {r.status_code}). Deneme hakkı korunuyor.")
+            continue
         state[key + ":tries"] = tries + 1
         print(f"{name}: üretim başlatıldı ({r.status_code}), bugünkü deneme {tries + 1}")
         tg(f"🔁 {name}: bugünün videosu henüz çıkmamıştı (gecikme veya hata). Bekçi üretimi otomatik başlattı "
@@ -89,8 +94,13 @@ def main():
             continue
         if any(r["status"] in ("queued", "in_progress") for r in runs(wf_ig, today_utc)):
             continue
+        r = requests.post(f"{API}/actions/workflows/{wf_ig}/dispatches", headers=H,
+                          json={"ref": "main"}, timeout=30)
+        if r.status_code != 204:
+            print(f"{name}: Instagram başlatılamadı ({r.status_code}): {r.text[:200]}")
+            tg(f"🆘 {name}: Instagram kuyruğu başlatılamadı (GitHub HTTP {r.status_code}).")
+            continue
         state[key] = state.get(key, 0) + 1
-        requests.post(f"{API}/actions/workflows/{wf_ig}/dispatches", headers=H, json={"ref": "main"}, timeout=30)
         print(f"{name}: bugün Reel paylaşılmamıştı, Instagram işi başlatıldı")
     # Instagram anahtarı ~60 gün geçerli: yenilenme tarihi ig_token_dates.json'da; 53. günden itibaren bir kez haber ver
     tf = ROOT / "ig_token_dates.json"
