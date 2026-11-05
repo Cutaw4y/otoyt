@@ -25,6 +25,8 @@ jobs:
           done
       - name: Güvenlik ve kurtarma senaryoları (ağ/yayın yapılmaz)
         run: python -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Canlı kayıtların salt okunur tutarlılık denetimi
+        run: python audit_state.py --json
       - name: Hata varsa Telegram'a haber ver
         if: failure() && github.ref == 'refs/heads/main'
         env:
