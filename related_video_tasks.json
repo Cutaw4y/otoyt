@@ -7,7 +7,7 @@
     "state": "studio_unverified",
     "studio_url": "https://studio.youtube.com/video/odjfUwjw1II/edit",
     "parent_url": "https://youtu.be/jj2Ey8frTjE",
-    "registered_at": "2026-11-06T00:00:00+00:00"
+    "source": "history_backfill"
   },
   {
     "short_id": "BEOlG8TrnE0",
@@ -17,7 +17,7 @@
     "state": "studio_unverified",
     "studio_url": "https://studio.youtube.com/video/BEOlG8TrnE0/edit",
     "parent_url": "https://youtu.be/jj2Ey8frTjE",
-    "registered_at": "2026-11-06T00:00:00+00:00"
+    "source": "history_backfill"
   },
   {
     "short_id": "5O7z1Fx2mow",
@@ -27,7 +27,7 @@
     "state": "studio_unverified",
     "studio_url": "https://studio.youtube.com/video/5O7z1Fx2mow/edit",
     "parent_url": "https://youtu.be/jj2Ey8frTjE",
-    "registered_at": "2026-11-06T00:00:00+00:00"
+    "source": "history_backfill"
   },
   {
     "short_id": "jtlmLNRzDjE",
@@ -37,7 +37,7 @@
     "state": "studio_unverified",
     "studio_url": "https://studio.youtube.com/video/jtlmLNRzDjE/edit",
     "parent_url": "https://youtu.be/HPPomKuVLwA",
-    "registered_at": "2026-11-06T00:00:00+00:00"
+    "source": "history_backfill"
   },
   {
     "short_id": "hMQ4wuOGfcw",
@@ -47,7 +47,7 @@
     "state": "studio_unverified",
     "studio_url": "https://studio.youtube.com/video/hMQ4wuOGfcw/edit",
     "parent_url": "https://youtu.be/HPPomKuVLwA",
-    "registered_at": "2026-11-06T00:00:00+00:00"
+    "source": "history_backfill"
   },
   {
     "short_id": "KvIzoKnD1hI",
@@ -57,6 +57,6 @@
     "state": "studio_unverified",
     "studio_url": "https://studio.youtube.com/video/KvIzoKnD1hI/edit",
     "parent_url": "https://youtu.be/HPPomKuVLwA",
-    "registered_at": "2026-11-06T00:00:00+00:00"
+    "source": "history_backfill"
   }
 ]
