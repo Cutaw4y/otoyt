@@ -25,6 +25,7 @@ import drive
 import media
 import release
 import publish
+import short_recovery
 import voice
 
 ROOT = Path(__file__).parent
@@ -3203,26 +3204,47 @@ def run_once():
                + (f"Yayın: {fmt_local(main_t)} (TR saati). " if sched else "Şimdilik gizli (private). ")
                + "Beğenmezsen Studio'dan sil.")
 
+        # ÖNCE tüm Shorts için özel Drive yedeği oluştur: günlük kota ortada biterse
+        # sonraki Shorts hâlâ kurtarılabilir olsun. Public GitHub Release'e yükleme YOK.
+        short_jobs = []
         for k, sh_ in enumerate(shorts):
+            title = sh_["title"][:90].rstrip() + " #Shorts"
+            sdesc = (f"{sh_['title']}\n\n{CFG.get('full_video_text', 'Watch the full video:')} https://youtu.be/{vid}\n\n"
+                     + short_hashtags(script) + " #Shorts")
+            m_short = meta(title, sdesc, script["tags"], iso(short_ts[k]), is_short=True)
+            trt = (tr_meta or {}).get("short_titles") or []
+            if k < len(trt) and trt[k] and CFG.get("localize_metadata", True):
+                m_short["localizations"] = {sub_lang["code"]: {
+                    "title": str(trt[k])[:90] + " #Shorts",
+                    "description": f"{trt[k]}\n\n{sub_lang.get('full_video_text', 'Videonun tamamı:')} "
+                                   f"https://youtu.be/{vid}\n#Shorts"}}
+            marker = short_recovery.marker_for(vid, k + 1)
+            m_short = short_recovery.with_marker(m_short, marker)
+            sname = w / f"{slug(sh_['title'])}-shorts.mp4"
+            shutil.copy(sh_["file"], sname)
+            backup_id = None
+            if up == "youtube" and drive.enabled():
+                try:
+                    backup_id = short_recovery.stage(
+                        sname, CFG["channel_name"], vid, k + 1,
+                        sh_["title"], idea["pillar"], m_short)
+                    log(f"Short {k+1} özel Drive yedeğine kaydedildi.")
+                except Exception as e:
+                    log(f"Short {k+1} yedeği oluşturulamadı: {str(e)[:180]}")
+                    notify(f"🆘 Short {k+1} yedeği saklanamadı; otomatik telafi garantisi yok.")
+            short_jobs.append((k, sh_, m_short, sname, backup_id, marker))
+        if shorts and up == "youtube" and not drive.enabled():
+            notify("⚠️ Google Drive erişimi yok: Shorts yedekleme/telafi sistemi pasif. "
+                   "Normal YouTube yüklemeleri devam ediyor.")
+
+        for k, sh_, m_short, sname, backup_id, marker in short_jobs:
             try:
-                title = sh_["title"][:90].rstrip() + " #Shorts"
-                sdesc = (f"{sh_['title']}\n\n{CFG.get('full_video_text', 'Watch the full video:')} https://youtu.be/{vid}\n\n"
-                         + short_hashtags(script) + " #Shorts")
-                m_short = meta(title, sdesc, script["tags"], iso(short_ts[k]), is_short=True)
-                trt = (tr_meta or {}).get("short_titles") or []
-                if k < len(trt) and trt[k] and CFG.get("localize_metadata", True):
-                    m_short["localizations"] = {sub_lang["code"]: {
-                        "title": str(trt[k])[:90] + " #Shorts",
-                        "description": f"{trt[k]}\n\n{sub_lang.get('full_video_text', 'Videonun tamamı:')} "
-                                       f"https://youtu.be/{vid}\n#Shorts"}}
-                sname = w / f"{slug(sh_['title'])}-shorts.mp4"
-                shutil.copy(sh_["file"], sname)
-                sid = publish.upload(sname, m_short, None, up)
-                # telefondan izleyen Short'tan uzun videoya geçebilsin: tıklanabilir bağlantılı kanal yorumu
-                # (YouTube API "ilgili video" bağlantısını desteklemiyor; yorum Short yayına girince yazılır)
+                sid = short_recovery.upload(sname, m_short, up, backup_id=backup_id)
+                # Telefonda Short'tan uzun videoya geçiş: yorum yalnızca hatırlatma;
+                # tıklanabilir İlgili Video bağı YouTube Studio'da ayrıca seçilir.
                 queue_comment(sid, ("▶️ Videonun tamamı burada: " if CFG.get("language_code") == "tr"
                                     else "▶️ Watch the full video here: ") + f"https://youtu.be/{vid}")
-                if tr_blocks and up == "youtube" and CFG.get("short_captions", False):  # YouTube kotası: Short'ta yazı zaten gömülü
+                if tr_blocks and up == "youtube" and CFG.get("short_captions", False):
                     off = script["scenes"][sh_["start"]].get("t0", 0.0)
                     sp = media.write_srt_blocks(shift_blocks(tr_blocks, off, sh_["len"]),
                                                 w / f"short{k+1}_{sub_lang['code']}.srt")
@@ -3233,9 +3255,11 @@ def run_once():
                     except Exception as e:
                         log(f"Short {k+1} altyazısı eklenemedi: {str(e)[:200]}")
                         save_pending_caption(sid, sp, sub_lang["code"], sub_lang["label"])
-                history.append({"date": datetime.now().isoformat(timespec="minutes"), "type": "short",
-                                "title": sh_["title"], "pillar": idea["pillar"], "video_id": sid, "parent": vid})
+                history.append({"date": datetime.now(timezone.utc).isoformat(timespec="minutes"),
+                                "type": "short", "title": sh_["title"], "pillar": idea["pillar"],
+                                "video_id": sid, "parent": vid, "recovery_marker": marker})
                 save_json(HISTORY, history)
+                push_now(HISTORY, "Short kimliği kaydedildi")
                 trs = ((tr_meta or {}).get("short_titles") or [None] * (k + 1))
                 if CFG.get("language_code") == "tr":
                     trs = [None] * (k + 1)
@@ -3243,9 +3267,12 @@ def run_once():
                        + (f"(yayın: {fmt_local(short_ts[k])} TR saati) " if sched else "(şimdilik gizli) ")
                        + f"https://youtu.be/{sid}")
             except Exception as e:
-                notify(f"ℹ️ {k+1}. Short YouTube'a yüklenemedi. Uzun video etkilenmedi; ayrıntı kayıtta.")
+                log(f"Short {k+1} YouTube yükleme hatası: {str(e)[:220]}")
+                notify(f"ℹ️ {k+1}. Short YouTube'a yüklenemedi. Uzun video etkilenmedi; "
+                       + ("özel Drive yedeği saklandı ve kurtarma kontrolüne alınacak."
+                          if backup_id else "yedek yok; otomatik telafi yapılamayabilir."))
                 if "quota" in str(e).lower() or "uploadLimit" in str(e):
-                    break  # günlük yükleme hakkı doldu; kalanları zorlamayalım
+                    break  # günlük yükleme hakkı doldu; kalan yedekler Drive'da pending
 
         post_reels(script, idea, shorts, history, parent=vid)
         for f in OUT.glob("*"):
