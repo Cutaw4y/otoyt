@@ -1,5 +1,8 @@
 name: Gölgedefter Telegram konu ve onay
 on:
+  push:
+    branches: [main]
+    paths: [".github/workflows/telegram_gd.yml"]
   schedule:
     - cron: "17,47 5-20 * * *"  # TR 08:17–23:47; Actions may delay scheduled jobs
   workflow_dispatch:
@@ -33,5 +36,5 @@ jobs:
           GEMINI_PAID_API_KEY: ${{ secrets.GEMINI_PAID_API_KEY }}
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
           GITHUB_TOKEN: ${{ github.token }}
-          OFFER_NOW: ${{ inputs.offer_now && '1' || '' }}
+          OFFER_NOW: ${{ (inputs.offer_now || github.event_name == 'push') && '1' || '' }}
         run: python telegram_control.py
