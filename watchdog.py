@@ -92,6 +92,14 @@ def main():
         state[key] = state.get(key, 0) + 1
         requests.post(f"{API}/actions/workflows/{wf_ig}/dispatches", headers=H, json={"ref": "main"}, timeout=30)
         print(f"{name}: bugün Reel paylaşılmamıştı, Instagram işi başlatıldı")
+    # Instagram anahtarı ~60 gün geçerli: yenilenme tarihi ig_token_dates.json'da; 53. günden itibaren bir kez haber ver
+    tf = ROOT / "ig_token_dates.json"
+    for acc, d in (json.loads(tf.read_text()) if tf.exists() else {}).items():
+        age = (now.date() - datetime.fromisoformat(d).date()).days
+        if age >= 53 and not state.get(f"igtok:{acc}:{d}"):
+            state[f"igtok:{acc}:{d}"] = True
+            tg(f"🆘 CLAUDE'A YAZ — {acc} Instagram anahtarının süresi {60 - age} gün içinde doluyor. "
+               "Claude'a 'instagram anahtarı' yazman yeterli, adım adım yeniletir.")
     state_f.write_text(json.dumps(state, ensure_ascii=False, indent=1))
 
 
