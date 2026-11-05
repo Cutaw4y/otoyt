@@ -75,6 +75,9 @@ def main():
         message = f"Instagram kaynağı bulunamadı; kuyruk KORUNDU: {item['title']} ({detail})"
         (DATA / "ig_last_error.txt").write_text(
             f"{datetime.now().isoformat(timespec='minutes')} {message}\n", encoding="utf-8")
+        # Sıradaki diğer sağlıklı Reels engellenmesin: kayıp dosyayı sona taşı, silme.
+        if len(q) > 1:
+            save(QUEUE, q[1:] + [q[0]])
         notify(f"🆘 {message}")
         raise RuntimeError(message)
     try:
