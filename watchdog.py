@@ -8,6 +8,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import requests
+import yaml
 
 ROOT = Path(__file__).parent
 REPO = os.environ.get("GITHUB_REPOSITORY", "Cutaw4y/otoyt")
@@ -48,6 +49,10 @@ def main():
     state_f = ROOT / "watchdog_state.json"
     state = json.loads(state_f.read_text()) if state_f.exists() else {}
     for wf, hist_f, days, start_h, name in CHANNELS:
+        if wf == "otoyt_tr.yml":
+            cfg = yaml.safe_load((ROOT / "channels/golgedefter.yaml").read_text(encoding="utf-8"))
+            if cfg.get("telegram_editorial", {}).get("enabled"):
+                continue  # No autonomous production/alarm when owner approval is pending.
         if now.weekday() not in days or now.hour < start_h or now.hour >= 23:
             continue
         hist = json.loads(hist_f.read_text(encoding="utf-8")) if hist_f.exists() else []

@@ -2753,14 +2753,14 @@ def add_to_pillar_playlist_by_title(video_id, title):
         log(f"Oynatma listesine eklenemedi: {str(e)[:150]}")
 
 
-def produce_script(history, report):
+def produce_script(history, report, selected_idea=None):
     """Kaliteli senaryo bulana kadar dener: aynı konuda revizyon, olmazsa yeni konu.
     Hiçbiri barajı geçmezse, bilgi hatası olmayan en iyi senaryo alt sınırın üstündeyse kullanılır."""
     best = None  # (skor, fikir, senaryo)
     last_tr = ""
     tried = []
-    for topic_try in range(CFG.get("max_topic_attempts", 3)):
-        idea = pick_topic(history + [{"title": t, "type": "long"} for t in tried], report)
+    for topic_try in range(1 if selected_idea else CFG.get("max_topic_attempts", 3)):
+        idea = dict(selected_idea) if selected_idea else pick_topic(history + [{"title": t, "type": "long"} for t in tried], report)
         tried.append(idea["title"])
         log(f"Konu ({topic_try+1}): {idea['title']}  [{idea['pillar']}]")
         script = ensure_length(write_script(idea))
@@ -2801,7 +2801,7 @@ def produce_script(history, report):
         log(f"Konu kalite barajını geçemedi: {idea['title']}")
         if best and best[0][0] >= CFG["min_quality_score"] - 1:
             break  # bilgisi doğru, puanı 6+ : yeni konuya geçip günlük ücretsiz hakkı tüketme
-    floor = CFG.get("min_quality_floor", 0)
+    floor = CFG["min_quality_score"] if selected_idea else CFG.get("min_quality_floor", 0)
     if best and best[0][0] >= floor:
         log(f"Baraj geçilemedi; en iyi senaryo kullanılıyor (min {best[0][0]:.0f}, ort {best[0][1]:.1f})")
         notify(f"ℹ️ Senaryo kontrolü: yapay zekâ editörü senaryoya 10 üzerinden en düşük {best[0][0]:.0f}, "
@@ -3015,10 +3015,20 @@ def preflight():
 
 
 def run_once():
+    editorial_job = None
+    if not DRY_RUN and CFG.get("telegram_editorial", {}).get("enabled"):
+        import telegram_control as editorial
+        mode = os.getenv("EDITORIAL_ACTION", "")
+        editorial_job = editorial.claim(CFG, os.getenv("EDITORIAL_JOB", ""), mode)
+        if not editorial_job:
+            log("Telegram onayı yok; üretim ve yayın bekliyor.")
+            return True
+        if mode == "publish":
+            return publish_editorial(editorial_job)
     # Sadece cron değil, elle ve bekçi tarafından başlatılan çalışmalarda da çift üretimi engelle.
     # Bilerek ikinci video istenirse workflow_dispatch içindeki force_new_video seçilebilir.
     forced = os.getenv("FORCE_NEW_VIDEO", "").lower() in ("1", "true", "yes")
-    if not DRY_RUN and not forced:
+    if not DRY_RUN and not forced and not editorial_job:
         today = datetime.now(timezone.utc).date().isoformat()
         if any(h.get("type", "long") == "long" and str(h.get("date", "")).startswith(today)
                for h in (load_json(HISTORY, []) if HISTORY.exists() else [])):
@@ -3028,33 +3038,37 @@ def run_once():
     preflight()
     if not DRY_RUN:
         notify("🎬 Yeni video yapımı başladı: önce konu seçilecek ve senaryo yazılacak.")
-    ensure_branding()
-    clear_old_localizations()
-    retry_pending_captions()
+    if not editorial_job:
+        ensure_branding()
+        clear_old_localizations()
+        retry_pending_captions()
     history = load_json(HISTORY, [])
     ledger = media.AssetLedger(DATA / "assets_used.json")
 
     report = publish.performance_report(history)
     log(f"Analitik: {report['n']} video ölçüldü, sütun puanları: {report['pillar_scores']}")
-    finish_manual_uploads()
-    post_due_comments()
-    tally_votes()
-    ensure_playlist_covers()
-    maybe_swap_thumbnails(history)
+    if not editorial_job:
+        finish_manual_uploads()
+        post_due_comments()
+        tally_votes()
+        ensure_playlist_covers()
+        maybe_swap_thumbnails(history)
     PENDING_SCRIPT = DATA / "pending_script.json"
     pend = load_json(PENDING_SCRIPT, None) if PENDING_SCRIPT.exists() else None
-    if pend and pend.get("script") and (datetime.now() - datetime.fromisoformat(pend["date"])).days <= 7:
+    if not editorial_job and pend and pend.get("script") and (datetime.now() - datetime.fromisoformat(pend["date"])).days <= 7:
         # önceki çalışma hata/zaman aşımıyla yarıda kaldı: hazır (kalite ve bilgi kontrolünden geçmiş) senaryo çöpe gitmesin
         idea, script = pend["idea"], pend["script"]
         log(f"Yarıda kalan videonun senaryosu kullanılıyor: {script['title']}")
         notify(f"♻️ Önceki denemede yarıda kalan konu yeniden yapılıyor: {script['title']}{tr_note(script['title'])}")
     else:
-        idea, script = produce_script(history, report)
-        if script is not None:
+        idea, script = produce_script(history, report, editorial_job["idea"] if editorial_job else None)
+        if script is not None and not editorial_job:
             save_json(PENDING_SCRIPT, {"date": datetime.now().isoformat(timespec="minutes"), "idea": idea,
                                        "script": script})
             push_now(PENDING_SCRIPT, "yarım kalırsa diye senaryo kaydı")
     if script is None:
+        if editorial_job:
+            editorial_fail("Seçilen konu kalite/bilgi kontrolünü geçemedi; başka konuya geçilmedi.")
         return False
     kw = (script.get("core_keyword") or "").strip()  # revizyonlardan sonra da garanti
     if kw and _norm(kw) not in _norm(script.get("description", "")[:120]):
@@ -3133,7 +3147,7 @@ def run_once():
                 shutil.copy(f, OUT / Path(f).name)
         save_json(OUT / "script.json", script)
 
-        if CFG["publish_mode"] == "manual" and not DRY_RUN:
+        if CFG["publish_mode"] == "manual" and not DRY_RUN and not editorial_job:
             # YouTube API onayı gelene kadar: sistem üretir, sahibi Studio'dan elle yükler (kilit yok)
             post_reels(script, idea, shorts, history)  # Instagram'a otomatik (paket dosyaları silinmeden önce)
             make_manual_package(script, idea, shorts, thumb, en_srt, tr_srt, history, ledger)
@@ -3148,129 +3162,195 @@ def run_once():
             log("DRY_RUN: yükleme atlandı, dosyalar out/ klasöründe.")
             return
 
-        now = datetime.now(timezone.utc)
-        sched = CFG["publish_mode"] == "scheduled"
-        main_t, short_ts = plan_times(now, len(shorts))
-        iso = lambda t: t.strftime("%Y-%m-%dT%H:%M:%SZ") if sched else None
-        up = CFG.get("uploader", "youtube")
+        if editorial_job:
+            import telegram_control as editorial
+            editorial.stage(editorial_job, script, idea, shorts, thumb, thumb_alt, en_srt,
+                            tr_srt, tr_meta, tr_blocks, final, REAL_CREDITS)
+            ledger.save()
+            return True
+        publish_rendered(script, idea, shorts, thumb, thumb_alt, en_srt, tr_srt,
+                         tr_meta, tr_blocks, final, w, history, ledger)
 
-        global UPLOAD_STARTED
-        UPLOAD_STARTED = True
-        chs = script.get("_chapters") or []
-        sub_link = (f"\n\n{CFG.get('subscribe_text', '🔔 Subscribe for more:')} "
-                    f"https://www.youtube.com/channel/{CHANNEL_ID}?sub_confirmation=1") if CHANNEL_ID else ""
-        desc = (script["description"] + chapters_text(chs, header=CFG.get("chapters_heading", "Chapters"))
-                + watch_next_line(idea["pillar"]) + sub_link + _footer())
-        desc = tags_last(desc)
-        m_long = meta(script["title"], desc, script["tags"], iso(main_t))
-        if tr_meta and CFG.get("localize_metadata", True):
-            tr_desc = (tr_meta["description"]
-                       + chapters_text(chs, tr_meta.get("chapters"), sub_lang.get("chapters_heading", "Bölümler"))
-                       + _footer(sub_lang))
-            m_long["localizations"] = {sub_lang["code"]: {"title": tr_meta["title"][:100],
-                                                          "description": tr_desc[:4900]}}
-        named = w / f"{slug(script.get('core_keyword') or script['title'])}.mp4"  # anlamlı dosya adı
-        shutil.copy(final, named)
-        vid = publish.upload(named, m_long, thumb, up)
-        # Video kimliğini derhal kalıcı kaydet: sonradan altyazı/Short/Instagram kesilirse
-        # yeniden başlatılan iş bu uzun videoyu ikinci kez üretmesin.
-        if not any(h.get("video_id") == vid for h in history):
-            history.append({"date": datetime.now(timezone.utc).isoformat(timespec="minutes"),
-                            "type": "long", "title": script["title"], "pillar": idea["pillar"],
-                            "video_id": vid, "series_id": idea.get("series_id")})
+
+def publish_rendered(script, idea, shorts, thumb, thumb_alt, en_srt, tr_srt,
+                     tr_meta, tr_blocks, final, w, history, ledger, editorial_job=None):
+    """Existing upload path, shared by normal runs and owner-approved previews."""
+    sub_lang = CFG.get("subtitle_translation") or {}
+    now = datetime.now(timezone.utc)
+    sched = CFG["publish_mode"] == "scheduled"
+    if editorial_job:
+        from zoneinfo import ZoneInfo
+        target = datetime.fromisoformat(editorial_job["target_date"]).replace(tzinfo=ZoneInfo("Europe/Istanbul"))
+        now = max(now, target - timedelta(hours=CFG.get("min_lead_hours", 1.5)))
+    main_t, short_ts = plan_times(now, len(shorts))
+    if editorial_job:
+        from zoneinfo import ZoneInfo
+        allowed = set(CFG["telegram_editorial"].get("publish_days", range(7)))
+        local = main_t.astimezone(ZoneInfo("Europe/Istanbul"))
+        while local.weekday() not in allowed:
+            # Start at midnight of the next allowed local day; retain configured slots.
+            next_day = (local + timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
+            main_t, short_ts = plan_times(next_day - timedelta(hours=CFG.get("min_lead_hours", 1.5)), len(shorts))
+            local = main_t.astimezone(ZoneInfo("Europe/Istanbul"))
+    iso = lambda t: t.strftime("%Y-%m-%dT%H:%M:%SZ") if sched else None
+    up = CFG.get("uploader", "youtube")
+
+    global UPLOAD_STARTED
+    UPLOAD_STARTED = True
+    chs = script.get("_chapters") or []
+    sub_link = (f"\n\n{CFG.get('subscribe_text', '🔔 Subscribe for more:')} "
+                f"https://www.youtube.com/channel/{CHANNEL_ID}?sub_confirmation=1") if CHANNEL_ID else ""
+    desc = (script["description"] + chapters_text(chs, header=CFG.get("chapters_heading", "Chapters"))
+            + watch_next_line(idea["pillar"]) + sub_link + _footer())
+    desc = tags_last(desc)
+    m_long = meta(script["title"], desc, script["tags"], iso(main_t))
+    if tr_meta and CFG.get("localize_metadata", True):
+        tr_desc = (tr_meta["description"]
+                   + chapters_text(chs, tr_meta.get("chapters"), sub_lang.get("chapters_heading", "Bölümler"))
+                   + _footer(sub_lang))
+        m_long["localizations"] = {sub_lang["code"]: {"title": tr_meta["title"][:100],
+                                                      "description": tr_desc[:4900]}}
+    named = w / f"{slug(script.get('core_keyword') or script['title'])}.mp4"  # anlamlı dosya adı
+    shutil.copy(final, named)
+    vid = publish.upload(named, m_long, thumb, up)
+    # Video kimliğini derhal kalıcı kaydet: sonradan altyazı/Short/Instagram kesilirse
+    # yeniden başlatılan iş bu uzun videoyu ikinci kez üretmesin.
+    if not any(h.get("video_id") == vid for h in history):
+        history.append({"date": datetime.now(timezone.utc).isoformat(timespec="minutes"),
+                        "type": "long", "title": script["title"], "pillar": idea["pillar"],
+                        "video_id": vid, "series_id": idea.get("series_id")})
+        save_json(HISTORY, history)
+        push_now(HISTORY, "uzun video kimliği kaydedildi")
+    queue_comment(vid, script.get("pinned_comment"))
+    record_vote(vid, script)
+    (DATA / "pending_script.json").unlink(missing_ok=True)  # yüklendi: yarım kalan senaryo kaydı silinir
+    mark_poll_used()
+    if thumb_alt:
+        THUMB_ALT.mkdir(parents=True, exist_ok=True)
+        shutil.copy(thumb_alt, THUMB_ALT / f"{vid}.jpg")
+    cap_warned = False
+    for srt_path, code, name in ((en_srt, CFG.get("language_code", "en"), CFG.get("caption_label", "English")),
+                                 (tr_srt, sub_lang.get("code"), sub_lang.get("label"))):
+        if not srt_path or up != "youtube":
+            continue
+        try:
+            publish.upload_caption(vid, srt_path, code, name)
+            log(f"Altyazı eklendi: {name}")
+        except Exception as e:
+            log(f"Altyazı eklenemedi ({name}): {str(e)[:200]}")
+            save_pending_caption(vid, srt_path, code, name)
+            if not cap_warned and ("insufficient" in str(e).lower() or "403" in str(e)):
+                notify("🆘 CLAUDE'A YAZ — Altyazılar şimdilik yüklenemedi: YouTube izninin yenilenmesi gerekiyor "
+                       "(get_token.bat bir kez). Altyazılar saklandı, izin yenilenince otomatik yüklenecek.")
+                cap_warned = True
+    add_to_pillar_playlist(vid, idea["pillar"])
+    # Uzun video, yüklemenin hemen ardından kaydedildi; burada ikinci kayıt oluşturma.
+    ledger.save()
+    if vid in publish.UPLOAD_WARNINGS:
+        notify(f"🆘 CLAUDE'A YAZ — Video yüklendi ama YouTube yayın saatini kaydetmedi: https://youtu.be/{vid}\n"
+               f"Studio'dan Görünürlük → Planla → {fmt_local(main_t)} seç (bir kerelik).")
+    notify(f"✅ Video yüklendi: {tr_title(tr_meta, script['title'])}\nhttps://youtu.be/{vid}\n"
+           + (f"Yayın: {fmt_local(main_t)} (TR saati). " if sched else "Şimdilik gizli (private). ")
+           + "Beğenmezsen Studio'dan sil.")
+
+    for k, sh_ in enumerate(shorts):
+        try:
+            title = sh_["title"][:90].rstrip() + " #Shorts"
+            sdesc = (f"{sh_['title']}\n\n{CFG.get('full_video_text', 'Watch the full video:')} https://youtu.be/{vid}\n\n"
+                     + short_hashtags(script) + " #Shorts")
+            m_short = meta(title, sdesc, script["tags"], iso(short_ts[k]), is_short=True)
+            trt = (tr_meta or {}).get("short_titles") or []
+            if k < len(trt) and trt[k] and CFG.get("localize_metadata", True):
+                m_short["localizations"] = {sub_lang["code"]: {
+                    "title": str(trt[k])[:90] + " #Shorts",
+                    "description": f"{trt[k]}\n\n{sub_lang.get('full_video_text', 'Videonun tamamı:')} "
+                                   f"https://youtu.be/{vid}\n#Shorts"}}
+            sname = w / f"{slug(sh_['title'])}-shorts.mp4"
+            shutil.copy(sh_["file"], sname)
+            sid = publish.upload(sname, m_short, None, up)
+            # Açıklama ve Shorts yorumundaki URL'ler tıklanabilir değildir.
+            # Gerçek "İlgili video" öğesi Studio'dan ayarlanır; hedefi aşağıda kaydet.
+            queue_comment(sid, ("▶️ Videonun tamamı burada: " if CFG.get("language_code") == "tr"
+                                else "▶️ Watch the full video here: ") + f"https://youtu.be/{vid}")
+            if tr_blocks and up == "youtube" and CFG.get("short_captions", False):  # YouTube kotası: Short'ta yazı zaten gömülü
+                off = script["scenes"][sh_["start"]].get("t0", 0.0)
+                sp = media.write_srt_blocks(shift_blocks(tr_blocks, off, sh_["len"]),
+                                            w / f"short{k+1}_{sub_lang['code']}.srt")
+                try:
+                    if cap_warned:
+                        raise RuntimeError("izin yok, sonraya bırakıldı")
+                    publish.upload_caption(sid, sp, sub_lang["code"], sub_lang["label"])
+                except Exception as e:
+                    log(f"Short {k+1} altyazısı eklenemedi: {str(e)[:200]}")
+                    save_pending_caption(sid, sp, sub_lang["code"], sub_lang["label"])
+            history.append({"date": datetime.now().isoformat(timespec="minutes"), "type": "short",
+                            "title": sh_["title"], "pillar": idea["pillar"], "video_id": sid, "parent": vid})
             save_json(HISTORY, history)
-            push_now(HISTORY, "uzun video kimliği kaydedildi")
-        queue_comment(vid, script.get("pinned_comment"))
-        record_vote(vid, script)
-        (DATA / "pending_script.json").unlink(missing_ok=True)  # yüklendi: yarım kalan senaryo kaydı silinir
-        mark_poll_used()
-        if thumb_alt:
-            THUMB_ALT.mkdir(parents=True, exist_ok=True)
-            shutil.copy(thumb_alt, THUMB_ALT / f"{vid}.jpg")
-        cap_warned = False
-        for srt_path, code, name in ((en_srt, CFG.get("language_code", "en"), CFG.get("caption_label", "English")),
-                                     (tr_srt, sub_lang.get("code"), sub_lang.get("label"))):
-            if not srt_path or up != "youtube":
-                continue
-            try:
-                publish.upload_caption(vid, srt_path, code, name)
-                log(f"Altyazı eklendi: {name}")
-            except Exception as e:
-                log(f"Altyazı eklenemedi ({name}): {str(e)[:200]}")
-                save_pending_caption(vid, srt_path, code, name)
-                if not cap_warned and ("insufficient" in str(e).lower() or "403" in str(e)):
-                    notify("🆘 CLAUDE'A YAZ — Altyazılar şimdilik yüklenemedi: YouTube izninin yenilenmesi gerekiyor "
-                           "(get_token.bat bir kez). Altyazılar saklandı, izin yenilenince otomatik yüklenecek.")
-                    cap_warned = True
-        add_to_pillar_playlist(vid, idea["pillar"])
-        # Uzun video, yüklemenin hemen ardından kaydedildi; burada ikinci kayıt oluşturma.
-        ledger.save()
-        if vid in publish.UPLOAD_WARNINGS:
-            notify(f"🆘 CLAUDE'A YAZ — Video yüklendi ama YouTube yayın saatini kaydetmedi: https://youtu.be/{vid}\n"
-                   f"Studio'dan Görünürlük → Planla → {fmt_local(main_t)} seç (bir kerelik).")
-        notify(f"✅ Video yüklendi: {tr_title(tr_meta, script['title'])}\nhttps://youtu.be/{vid}\n"
-               + (f"Yayın: {fmt_local(main_t)} (TR saati). " if sched else "Şimdilik gizli (private). ")
-               + "Beğenmezsen Studio'dan sil.")
+            if up == "youtube":
+                try:
+                    related_video.register(DATA / "related_video_tasks.json",
+                                           sid, vid, sh_["title"], CFG["channel_name"])
+                    push_now(DATA / "related_video_tasks.json", "Short ilgili video Studio görevi")
+                except Exception as e:
+                    # Studio görevini kaydetme hatası, yüklenmiş videoyu başarısız saydırmamalı.
+                    log(f"Short {k+1} ilgili video görevi kaydedilemedi: {str(e)[:150]}")
+            trs = ((tr_meta or {}).get("short_titles") or [None] * (k + 1))
+            if CFG.get("language_code") == "tr":
+                trs = [None] * (k + 1)
+            notify(f"📱 Short {k+1}/{len(shorts)} yüklendi: {trs[k] if k < len(trs) and trs[k] else sh_['title']}\n"
+                   + (f"(yayın: {fmt_local(short_ts[k])} TR saati) " if sched else "(şimdilik gizli) ")
+                   + f"https://youtu.be/{sid}"
+                   + (f"\nİlgili video (Studio): https://studio.youtube.com/video/{sid}/edit"
+                      f"\nHedef uzun video: https://youtu.be/{vid}"
+                      if up == "youtube" else ""))
+        except Exception as e:
+            if editorial_job:
+                raise
+            notify(f"ℹ️ {k+1}. Short YouTube'a yüklenemedi. Uzun video etkilenmedi; ayrıntı kayıtta.")
+            if "quota" in str(e).lower() or "uploadLimit" in str(e):
+                break  # günlük yükleme hakkı doldu; kalanları zorlamayalım
 
-        for k, sh_ in enumerate(shorts):
-            try:
-                title = sh_["title"][:90].rstrip() + " #Shorts"
-                sdesc = (f"{sh_['title']}\n\n{CFG.get('full_video_text', 'Watch the full video:')} https://youtu.be/{vid}\n\n"
-                         + short_hashtags(script) + " #Shorts")
-                m_short = meta(title, sdesc, script["tags"], iso(short_ts[k]), is_short=True)
-                trt = (tr_meta or {}).get("short_titles") or []
-                if k < len(trt) and trt[k] and CFG.get("localize_metadata", True):
-                    m_short["localizations"] = {sub_lang["code"]: {
-                        "title": str(trt[k])[:90] + " #Shorts",
-                        "description": f"{trt[k]}\n\n{sub_lang.get('full_video_text', 'Videonun tamamı:')} "
-                                       f"https://youtu.be/{vid}\n#Shorts"}}
-                sname = w / f"{slug(sh_['title'])}-shorts.mp4"
-                shutil.copy(sh_["file"], sname)
-                sid = publish.upload(sname, m_short, None, up)
-                # Açıklama ve Shorts yorumundaki URL'ler tıklanabilir değildir.
-                # Gerçek "İlgili video" öğesi Studio'dan ayarlanır; hedefi aşağıda kaydet.
-                queue_comment(sid, ("▶️ Videonun tamamı burada: " if CFG.get("language_code") == "tr"
-                                    else "▶️ Watch the full video here: ") + f"https://youtu.be/{vid}")
-                if tr_blocks and up == "youtube" and CFG.get("short_captions", False):  # YouTube kotası: Short'ta yazı zaten gömülü
-                    off = script["scenes"][sh_["start"]].get("t0", 0.0)
-                    sp = media.write_srt_blocks(shift_blocks(tr_blocks, off, sh_["len"]),
-                                                w / f"short{k+1}_{sub_lang['code']}.srt")
-                    try:
-                        if cap_warned:
-                            raise RuntimeError("izin yok, sonraya bırakıldı")
-                        publish.upload_caption(sid, sp, sub_lang["code"], sub_lang["label"])
-                    except Exception as e:
-                        log(f"Short {k+1} altyazısı eklenemedi: {str(e)[:200]}")
-                        save_pending_caption(sid, sp, sub_lang["code"], sub_lang["label"])
-                history.append({"date": datetime.now().isoformat(timespec="minutes"), "type": "short",
-                                "title": sh_["title"], "pillar": idea["pillar"], "video_id": sid, "parent": vid})
-                save_json(HISTORY, history)
-                if up == "youtube":
-                    try:
-                        related_video.register(DATA / "related_video_tasks.json",
-                                               sid, vid, sh_["title"], CFG["channel_name"])
-                        push_now(DATA / "related_video_tasks.json", "Short ilgili video Studio görevi")
-                    except Exception as e:
-                        # Studio görevini kaydetme hatası, yüklenmiş videoyu başarısız saydırmamalı.
-                        log(f"Short {k+1} ilgili video görevi kaydedilemedi: {str(e)[:150]}")
-                trs = ((tr_meta or {}).get("short_titles") or [None] * (k + 1))
-                if CFG.get("language_code") == "tr":
-                    trs = [None] * (k + 1)
-                notify(f"📱 Short {k+1}/{len(shorts)} yüklendi: {trs[k] if k < len(trs) and trs[k] else sh_['title']}\n"
-                       + (f"(yayın: {fmt_local(short_ts[k])} TR saati) " if sched else "(şimdilik gizli) ")
-                       + f"https://youtu.be/{sid}"
-                       + (f"\nİlgili video (Studio): https://studio.youtube.com/video/{sid}/edit"
-                          f"\nHedef uzun video: https://youtu.be/{vid}"
-                          if up == "youtube" else ""))
-            except Exception as e:
-                notify(f"ℹ️ {k+1}. Short YouTube'a yüklenemedi. Uzun video etkilenmedi; ayrıntı kayıtta.")
-                if "quota" in str(e).lower() or "uploadLimit" in str(e):
-                    break  # günlük yükleme hakkı doldu; kalanları zorlamayalım
-
-        post_reels(script, idea, shorts, history, parent=vid)
-        for f in OUT.glob("*"):
-            f.unlink()
+    post_reels(script, idea, shorts, history, parent=vid)
+    for f in OUT.glob("*"):
+        f.unlink()
     log(f"Bitti: https://youtu.be/{vid}")
+
+
+def editorial_fail(message):
+    import telegram_control as editorial
+    state = editorial.load()
+    if state.get("job", {}).get("id") == os.getenv("EDITORIAL_JOB"):
+        state["job"]["status"] = "failed"
+        editorial.persist(state)
+        editorial.send("⚠️ Gölgedefter: " + message)
+
+
+def publish_editorial(job):
+    import telegram_control as editorial
+    check_channel()  # fresh exact channel check before any upload
+    with tempfile.TemporaryDirectory() as tmp:
+        w = Path(tmp)
+        r = _gh("release", "download", job["bundle"]["tag"], "-D", str(w))
+        if r.returncode:
+            raise RuntimeError("Onaylanan ön izleme indirilemedi")
+        bundle = editorial.read_bundle(w, job)
+        path = lambda key: w / bundle[key] if bundle.get(key) else None
+        shorts = [{**sh, "file": w / sh["file"]} for sh in bundle["shorts"]]
+        REAL_CREDITS[:] = bundle.get("credits", [])
+        script = bundle["script"]
+        script["_final"] = str(path("final"))
+        history = load_json(HISTORY, [])
+        ledger = media.AssetLedger(DATA / "assets_used.json")
+        publish_rendered(script, bundle["idea"], shorts, path("thumb"), path("thumb_alt"),
+                         path("main_srt"), path("sub_srt"), bundle.get("tr_meta"),
+                         bundle.get("tr_blocks"), path("final"), w, history, ledger, job)
+        state = editorial.load()
+        if state["job"]["id"] != job["id"]:
+            raise RuntimeError("Yayın işi kimliği değişti")
+        state["job"]["status"] = "done"
+        editorial.persist(state)
+        editorial.send("✅ Gölgedefter: onayladığın video ve Shorts yükleme akışı tamamlandı.")
+    return True
 
 
 if __name__ == "__main__":
@@ -3457,6 +3537,10 @@ if __name__ == "__main__":
         print("::error title=HATA ayrıntısı::" + err[-3000:].replace("%", "%25").replace("\r", "").replace("\n", "%0A"))
         last = [l for l in err.strip().splitlines() if l.strip()][-1][:300]
         retry = (not UPLOAD_STARTED) and os.getenv("OTOYT_ATTEMPT", "1") == "1"
+        if os.getenv("EDITORIAL_JOB") and CFG.get("telegram_editorial", {}).get("enabled"):
+            editorial_fail("Üretim/yayın kesildi; çift yüklemeyi önlemek için otomatik tekrar durdu.")
+            credit_report("end")
+            sys.exit(4)
         guide = explain_error(err)
         if guide and any(k in guide for k in ("get_token", "anahtar")):
             retry = False  # izin/anahtar sorununu beklemek çözmez
