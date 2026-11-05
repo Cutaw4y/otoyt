@@ -63,7 +63,16 @@ def trash(folder_id):
 # paylaşılmayan uygulama klasöründe tutulur. OAuth drive.file erişimiyle sınırlıdır.
 def _shorts_folder(d, channel):
     root = _folder(d, "OtoYT SHORTS KURTARMA")
-    return _folder(d, channel, root)
+    fid = _folder(d, channel, root)
+    # Yedekleri yanlışlıkla herkese açık veya kurum geneline açık bir klasöre koyma.
+    # İzin bilgisi okunamazsa güvenli varsayım: yükleme durur.
+    try:
+        access = d.permissions().list(fileId=fid, fields="permissions(type,role)").execute()
+    except Exception as e:
+        raise RuntimeError("Özel Shorts klasörünün paylaşım izni doğrulanamadı") from e
+    if any(p.get("type") in ("anyone", "domain") for p in access.get("permissions", [])):
+        raise RuntimeError("Shorts yedek klasörü paylaşılmış; gizlilik için yükleme reddedildi")
+    return fid
 
 
 def list_short_backups(channel):
