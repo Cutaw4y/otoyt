@@ -1,7 +1,3 @@
-[12:06:31] Başladı (test modu: False, yayın: scheduled)
-[12:06:31] Ücretli Gemini anahtarı kullanılıyor
-[12:06:33] Kanal doğrulandı: GölgeDefter
-[12:06:34] Instagram anahtarı geçerli: @golge.defter
-[12:06:36] Analitik: 2 video ölçüldü, sütun puanları: {'Anadolu ve dünya efsaneleri, mitolojik varlıklar, halk inançları': 3.0791281676782627, 'Açıklanamayan gerçek olaylar ve kayıplar (Dyatlov, Mary Celeste, Roanoke, Tunguska)': 1.4532443354501756}
-[12:06:37] Yarıda kalan videonun senaryosu kullanılıyor: Kaf Dağı Nerede? 500 Yıllık Yolun Sonundaki Korkunç Sır
-[12:06:38] Seslendirme başlıyor (Gemini Charon)...
+[14:30:28] Başladı (test modu: False, yayın: scheduled)
+[14:30:29] Ücretli Gemini anahtarı kullanılıyor
+[14:30:29] Kanal doğrulandı: GölgeDefter
