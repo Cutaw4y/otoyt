@@ -82,6 +82,23 @@ class WatchdogGuards(unittest.TestCase):
         state = self._dispatch(403)
         self.assertFalse(any(k.endswith(":tries") for k in state))
 
+    def test_refused_dispatch_alerts_only_once_per_day(self):
+        with tempfile.TemporaryDirectory() as t:
+            root = Path(t)
+            hist = root / "history.json"
+            with mock.patch.object(watchdog, "ROOT", root), \
+                 mock.patch.object(watchdog, "CHANNELS", [("otoyt.yml", hist, {4}, 8, "Beyond Qaf")]), \
+                 mock.patch.object(watchdog, "runs", return_value=[]), \
+                 mock.patch.object(watchdog, "tg") as tg, \
+                 mock.patch.object(watchdog.requests, "post",
+                                   return_value=SimpleNamespace(status_code=403, text="forbidden")), \
+                 mock.patch.object(watchdog, "datetime") as dt:
+                dt.now.return_value = datetime(2026, 11, 6, 12, 0,
+                                               tzinfo=timezone(timedelta(hours=3)))
+                watchdog.main()
+                watchdog.main()
+                self.assertEqual(1, tg.call_count)
+
     def test_successful_dispatch_consumes_one_retry(self):
         state = self._dispatch(204)
         self.assertEqual(1, state.get("otoyt.yml:2026-11-06:tries"))
