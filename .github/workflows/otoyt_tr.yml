@@ -29,11 +29,16 @@ jobs:
       - name: Disk alanı aç (kullanılmayan araçlar silinir, ~30 GB)
         run: sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL /usr/local/share/boost; df -h / | tail -1
       - uses: actions/checkout@v4
+        with: {ref: main}   # sırada bekleyen iş de en güncel kaydı görsün
       - name: Telafi gerekli mi
         run: |
           if [ "${{ github.event.schedule }}" = "41 8 * * 0,3,5" ]; then
             if [ -f data/golgedefter/missed.json ]; then echo "CATCHUP=1" >> $GITHUB_ENV; else echo "SKIP=1" >> $GITHUB_ENV; fi
           fi
+      - name: Bugünün videosu zaten çıktı mı (çıktıysa 1 dk'da kapan, dakika harcama)
+        if: github.event_name == 'schedule' && env.CATCHUP != '1'
+        run: |
+          python3 -c "import json,datetime,sys; d=datetime.datetime.utcnow().date().isoformat(); h=json.load(open('data/golgedefter/history.json')); sys.exit(0 if any(x.get('type','long')=='long' and str(x.get('date','')).startswith(d) for x in h) else 1)" && echo "SKIP=1" >> $GITHUB_ENV && echo "Bugünün videosu zaten çıktı, atlanıyor" || true
       - uses: actions/setup-python@v5
         if: env.SKIP != '1'
         with:

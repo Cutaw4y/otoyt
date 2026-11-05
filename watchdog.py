@@ -21,6 +21,8 @@ CHANNELS = [
     ("otoyt.yml", ROOT / "history.json", {0, 2, 4}, 8, "Beyond Qaf"),
     ("otoyt_tr.yml", ROOT / "data/golgedefter/history.json", {1, 3, 5}, 12, "Gölgedefter"),
 ]
+# bu saate (TR) kadar video çıkmadıysa Furkan'a Telegram'dan haber ver
+ALARM_H = {"Beyond Qaf": 17, "Gölgedefter": 17}
 
 
 def tg(text):
@@ -51,11 +53,14 @@ def main():
         hist = json.loads(hist_f.read_text(encoding="utf-8")) if hist_f.exists() else []
         if any(h.get("type", "long") == "long" and str(h.get("date", "")).startswith(today_utc) for h in hist):
             continue  # bugünün videosu çıktı
-        rs = runs(wf, today_utc)
+        key = f"{wf}:{today_utc}"
+        if now.hour >= ALARM_H[name] and not state.get(key + ":late_alert"):
+            state[key + ":late_alert"] = True
+            tg(f"📭 {name}: saat {now:%H:%M} oldu, bugünün videosu henüz YouTube'a çıkmadı. "
+               "Bekçi kendisi uğraşıyor; akşama kadar çıkmazsa 🆘 ile yazarım.")
         busy = ("queued", "in_progress", "waiting", "pending", "requested")
         if any(r["status"] in busy for w in ("otoyt.yml", "otoyt_tr.yml") for r in runs(w, today_utc)):
             continue  # bir kanal şu an üretiyor (iki kanal aynı anda üretmez; sıradaki işi bozmayalım)
-        key = f"{wf}:{today_utc}"
         tries = int(state.get(key + ":tries", 0))  # yalnız bekçinin kendi denemeleri sayılır
         if tries >= MAX_TRIES:
             if not state.get(key + ":gave_up"):

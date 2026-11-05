@@ -1,7 +1,7 @@
 name: Bekçi (video çıkmadıysa otomatik yeniden dene)
 on:
   schedule:
-    - cron: "17 * * * *"   # her saat: bugünün videosu çıkmadıysa ve üretim çalışmıyorsa başlatır
+    - cron: "17 5-19 * * *"   # her saat: bugünün videosu çıkmadıysa ve üretim çalışmıyorsa başlatır
   workflow_dispatch:
 permissions:
   contents: write
@@ -13,6 +13,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
+        with: {ref: main}   # sırada bekleyen iş de en güncel kaydı görsün
       - run: pip install -q requests
       - env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

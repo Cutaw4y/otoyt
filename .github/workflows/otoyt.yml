@@ -25,22 +25,31 @@ jobs:
       - name: Disk alanı aç (kullanılmayan araçlar silinir, ~30 GB)
         run: sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL /usr/local/share/boost; df -h / | tail -1
       - uses: actions/checkout@v4
+        with: {ref: main}   # sırada bekleyen iş de en güncel kaydı görsün
+      - name: Bugünün videosu zaten çıktı mı (çıktıysa 1 dk'da kapan, dakika harcama)
+        if: github.event_name == 'schedule' && env.CATCHUP != '1'
+        run: |
+          python3 -c "import json,datetime,sys; d=datetime.datetime.utcnow().date().isoformat(); h=json.load(open('history.json')); sys.exit(0 if any(x.get('type','long')=='long' and str(x.get('date','')).startswith(d) for x in h) else 1)" && echo "SKIP=1" >> $GITHUB_ENV && echo "Bugünün videosu zaten çıktı, atlanıyor" || true
       - uses: actions/setup-python@v5
+        if: env.SKIP != '1'
         with:
           python-version: "3.12"
           cache: pip
       - name: Ses modeli önbelleği (her seferinde indirmesin)
+        if: env.SKIP != '1'
         uses: actions/cache@v4
         with:
           path: ~/.cache/huggingface
           key: kokoro-${{ hashFiles('config.yaml') }}
           restore-keys: kokoro-
       - name: Bağımlılıklar
+        if: env.SKIP != '1'
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg fonts-dejavu-core espeak-ng
           pip install -q torch --index-url https://download.pytorch.org/whl/cpu
           pip install -q -r requirements.txt
       - name: Video üret ve yükle
+        if: env.SKIP != '1'
         env:
           DRY_RUN: ${{ inputs.dry_run && '1' || '' }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -75,7 +84,7 @@ jobs:
           if [ $code -eq 3 ] || [ $code -eq 4 ]; then echo "::warning title=Üretim yapılamadı::Ayrıntı logs/last_run.txt"; exit 0; fi
           exit $code
       - name: Paket 1 – uzun video
-        if: always() && hashFiles('out/ARTIFACT_NEEDED') != ''
+        if: always() && hashFiles('out/ARTIFACT_NEEDED') != '' && env.SKIP != '1'
         uses: actions/upload-artifact@v4
         with:
           name: video-${{ github.run_number }}-1-uzun-video
@@ -84,7 +93,7 @@ jobs:
           retention-days: 2
           compression-level: 0
       - name: Paket 2 – Shorts, küçük resim, altyazılar, yükleme bilgileri
-        if: always() && hashFiles('out/ARTIFACT_NEEDED') != ''
+        if: always() && hashFiles('out/ARTIFACT_NEEDED') != '' && env.SKIP != '1'
         uses: actions/upload-artifact@v4
         with:
           name: video-${{ github.run_number }}-2-shorts-ve-bilgiler
@@ -95,7 +104,7 @@ jobs:
           retention-days: 2
           compression-level: 0
       - name: Geçmişi kaydet
-        if: always()
+        if: always() && env.SKIP != '1'
         run: |
           git config user.name "otoyt-bot"
           git config user.email "otoyt@users.noreply.github.com"
