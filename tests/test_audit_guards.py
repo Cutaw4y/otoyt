@@ -138,6 +138,20 @@ class ProductionGuards(unittest.TestCase):
                 self.assertIs(True, pipeline.run_once())
                 channel.assert_not_called()
 
+    def test_catchup_cannot_repeat_todays_video(self):
+        with tempfile.TemporaryDirectory() as t:
+            history = Path(t) / "history.json"
+            today = datetime.now(timezone.utc).date().isoformat()
+            history.write_text(json.dumps([{"date": today + "T10:00", "type": "long",
+                                            "video_id": "already_done"}]), encoding="utf-8")
+            with mock.patch.object(pipeline, "HISTORY", history), \
+                 mock.patch.object(pipeline, "DRY_RUN", False), \
+                 mock.patch.object(pipeline, "check_channel") as channel, \
+                 mock.patch.dict(os.environ, {"GITHUB_EVENT_NAME": "workflow_dispatch",
+                                              "FORCE_NEW_VIDEO": "", "CATCHUP": "1"}):
+                self.assertTrue(pipeline.run_once())
+                channel.assert_not_called()
+
     def test_youtube_verification_fails_closed(self):
         with mock.patch.object(pipeline, "DRY_RUN", False), \
              mock.patch.object(pipeline, "CFG", {"uploader": "youtube"}), \
