@@ -70,9 +70,13 @@ def main():
         r = gh("release", "download", rel, "-p", item["asset"], "-D", str(tmp))
         video = tmp / item["asset"]
     if (r is not None and r.returncode != 0) or not video.exists():
-        notify(f"ℹ️ Instagram sırasındaki video bulunamadı, atlandı: {item['title']}")
-        save(QUEUE, q[1:])
-        return
+        # Kayıp Release dosyası veya geçici indirme hatası, kuyruktaki işi silmemeli.
+        detail = r.stderr[:200] if r is not None else "yerel dosya yok"
+        message = f"Instagram kaynağı bulunamadı; kuyruk KORUNDU: {item['title']} ({detail})"
+        (DATA / "ig_last_error.txt").write_text(
+            f"{datetime.now().isoformat(timespec='minutes')} {message}\n", encoding="utf-8")
+        notify(f"🆘 {message}")
+        raise RuntimeError(message)
     try:
         cap = publish.ig_link_cta(item["caption"], CFG.get("language_code") == "tr")  # "link profilde" çağrısı
         mid, link = publish.instagram_reel(str(video), cap, ai_label=CFG.get("instagram_ai_label", True))
