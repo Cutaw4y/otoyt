@@ -1,0 +1,47 @@
+name: Geçici Shorts kurtarma yetki kontrolü (sadece okuma)
+on:
+  push:
+    paths:
+      - ".github/workflows/recovery_auth_probe.yml"
+permissions:
+  contents: read
+jobs:
+  preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: pip install -q requests pyyaml google-api-python-client google-auth
+      - name: Drive ve iki YouTube OAuth anahtarını salt okunur doğrula
+        env:
+          GDRIVE_CLIENT_ID: ${{ secrets.GDRIVE_CLIENT_ID }}
+          GDRIVE_CLIENT_SECRET: ${{ secrets.GDRIVE_CLIENT_SECRET }}
+          GDRIVE_REFRESH_TOKEN: ${{ secrets.GDRIVE_REFRESH_TOKEN }}
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+          YT2_CLIENT_ID: ${{ secrets.YT2_CLIENT_ID }}
+          YT2_CLIENT_SECRET: ${{ secrets.YT2_CLIENT_SECRET }}
+          YT2_REFRESH_TOKEN: ${{ secrets.YT2_REFRESH_TOKEN }}
+        run: |
+          python - <<'PY'
+          import os
+          import drive
+          import publish
+          assert drive.enabled(), "Google Drive Secrets eksik, kurtarma canlıya alınmamalı"
+          d = drive._drive()
+          d.files().list(pageSize=1, fields="files(id)", spaces="drive").execute()
+          print("Drive OAuth erişimi: OK")
+          title, channel_id = publish.my_channel()
+          assert channel_id == "UCH4bEob06jM9poDzHWAlWqQ", "Beyond Qaf kimliği beklenenden farklı"
+          print("Beyond Qaf YouTube OAuth: OK")
+          for suffix in ("CLIENT_ID", "CLIENT_SECRET", "REFRESH_TOKEN"):
+              value = os.getenv("YT2_" + suffix)
+              assert value, "Gölgedefter OAuth anahtarı eksik: " + suffix
+              os.environ["YT_" + suffix] = value
+          title, channel_id = publish.my_channel()
+          assert title and title.casefold().replace(" ", "") == "gölgedefter", "Gölgedefter hesabı doğrulanamadı"
+          print("Gölgedefter YouTube OAuth: OK")
+          PY
