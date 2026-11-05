@@ -14,7 +14,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: {python-version: "3.12", cache: pip}
-      - run: pip install -q -r requirements.txt 2>/dev/null || pip install -q requests pyyaml pillow numpy google-api-python-client google-auth
+      # Sadece import/ünite testleri: Kokoro ve Whisper gibi GB'lık modelleri kurma.
+      # Gerçek üretim işlerindeki requirements.txt aynen korunur.
+      - run: pip install -q requests pyyaml pillow numpy
       - name: Derleme, ayar ve içe aktarma testi (iki kanal)
         run: |
           python -m py_compile *.py
