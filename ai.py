@@ -21,6 +21,7 @@ GEMINI = "https://generativelanguage.googleapis.com/v1beta/models"
 VERTEX_MODELS = {"gemini-flash-latest": "gemini-3.8-flash", "gemini-flash-lite-latest": "gemini-3.5-flash-lite",
                  "gemini-pro-latest": "gemini-3.1-pro-preview"}
 _vx = {"cred": None, "proj": None, "off": False}
+_vx_image_pause_until = 0.0  # Görsel API 429 verirse 15 dk boyunca aynı kota hatasını tekrar deneme
 # kullanım sayacı (maliyet tahmini için): {"vertex:model"/"studio:model": [girdi_token, çıktı_token, çağrı]}
 USAGE = {"tokens": {}, "tts_seconds": {"vertex": 0.0, "studio": 0.0}, "images": {"vertex": 0, "studio": 0},
          "search_calls": 0}
@@ -40,6 +41,11 @@ def _count(where, model, j):
 
 def vertex_on():
     return bool(os.getenv("GCP_SA_KEY")) and not _vx["off"] and not os.getenv("NO_VERTEX")
+
+
+def vertex_image_on():
+    """Görsel üretim servisi kota beklemesindeyken pahalı tekrarları atla."""
+    return vertex_on() and time.monotonic() >= _vx_image_pause_until
 
 
 def _vertex_headers():
@@ -255,7 +261,8 @@ def gemini_image(prompt, out, models=("gemini-2.5-flash-image", "gemini-3-pro-im
     """Gemini ile görsel üretimi (küçük resim). Önce Vertex (Cloud kredisi), sonra AI Studio anahtarı."""
     key = os.environ.get("GEMINI_API_KEY", "")
     last = None
-    if vertex_on():
+    global _vx_image_pause_until
+    if vertex_image_on():
         for vm in (("gemini-3.1-flash-image",) if quick else ("gemini-3.1-flash-image", "gemini-3-pro-image")):
             try:
                 for attempt in range(1 if quick else 4):  # görsel modeli dakika sınırı: 429'da bekle, tekrar dene
@@ -263,6 +270,11 @@ def gemini_image(prompt, out, models=("gemini-2.5-flash-image", "gemini-3-pro-im
                     r = _vertex_generate(vm, {"contents": [{"role": "user", "parts": [{"text": prompt}]}],
                                               "generationConfig": {"responseModalities": ["IMAGE"],
                                                                    "imageConfig": {"aspectRatio": aspect}}}, timeout=180)
+                    if quick and r.status_code == 429:
+                        # Sahne başına yüzlerce tekrar yerine 15 dk soğuma; Cloudflare/gerçek fotoğraf devralır.
+                        _vx_image_pause_until = time.monotonic() + 900
+                        LOG("Vertex görsel kotası 429: 15 dakika bekleme moduna geçildi; yedek görseller kullanılacak")
+                        break
                     if r.status_code not in (429, 500, 503):
                         break
                     time.sleep(20 * (attempt + 1))
