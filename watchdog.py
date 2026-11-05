@@ -73,7 +73,11 @@ def main():
         if r.status_code != 204:
             # Actions dispatch başarısızsa deneme harcama ve başarı bildirimi gönderme.
             print(f"{name}: GitHub başlatma isteği reddedildi ({r.status_code}): {r.text[:200]}")
-            tg(f"🆘 {name}: video üretimi başlatılamadı (GitHub HTTP {r.status_code}). Deneme hakkı korunuyor.")
+            # Aynı izin/API hatası saat başı tekrar Telegram'a yağmasın.
+            err_key = f"{key}:dispatch_error:{r.status_code}"
+            if not state.get(err_key):
+                state[err_key] = True
+                tg(f"🆘 {name}: video üretimi başlatılamadı (GitHub HTTP {r.status_code}). Deneme hakkı korunuyor.")
             continue
         state[key + ":tries"] = tries + 1
         print(f"{name}: üretim başlatıldı ({r.status_code}), bugünkü deneme {tries + 1}")
@@ -98,7 +102,10 @@ def main():
                           json={"ref": "main"}, timeout=30)
         if r.status_code != 204:
             print(f"{name}: Instagram başlatılamadı ({r.status_code}): {r.text[:200]}")
-            tg(f"🆘 {name}: Instagram kuyruğu başlatılamadı (GitHub HTTP {r.status_code}).")
+            err_key = f"{key}:dispatch_error:{r.status_code}"
+            if not state.get(err_key):
+                state[err_key] = True
+                tg(f"🆘 {name}: Instagram kuyruğu başlatılamadı (GitHub HTTP {r.status_code}).")
             continue
         state[key] = state.get(key, 0) + 1
         print(f"{name}: bugün Reel paylaşılmamıştı, Instagram işi başlatıldı")
