@@ -60,7 +60,9 @@ _SECRET_ENVS = ("GEMINI_API_KEY", "CLOUDFLARE_ACCOUNT_ID", "CLOUDFLARE_API_TOKEN
                 "PEXELS_API_KEY", "YT_CLIENT_ID", "YT_CLIENT_SECRET", "YT_REFRESH_TOKEN", "AYRSHARE_API_KEY",
                 "IG_ACCESS_TOKEN", "IG_USER_ID", "TELEGRAM_BOT_TOKEN", "TELEGRAM_CHAT_ID",
                 "WHATSAPP_PHONE", "WHATSAPP_APIKEY", "YT2_CLIENT_ID", "YT2_CLIENT_SECRET",
-                "YT2_REFRESH_TOKEN", "GEMINI_PAID_API_KEY")
+                "YT2_REFRESH_TOKEN", "GEMINI_PAID_API_KEY", "GEMINI_TTS_EXTRA_KEYS",
+                "GCP_SA_KEY", "GITHUB_TOKEN", "GD_IG_ACCESS_TOKEN", "GD_IG_USER_ID",
+                "GDRIVE_CLIENT_ID", "GDRIVE_CLIENT_SECRET", "GDRIVE_REFRESH_TOKEN")
 
 
 def redact(text):
@@ -69,7 +71,10 @@ def redact(text):
     for k in _SECRET_ENVS:
         v = os.getenv(k)
         if v and len(v) >= 4:
-            text = text.replace(v, f"***{k}***")
+            values = v.split(",") if k == "GEMINI_TTS_EXTRA_KEYS" else [v]
+            for secret in values:
+                if len(secret.strip()) >= 4:
+                    text = text.replace(secret.strip(), f"***{k}***")
     return re.sub(r"(key|token|apikey|signature|sig)=([^&\s\"']{6,})", r"\1=***", text, flags=re.I)
 
 
