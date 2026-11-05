@@ -1279,6 +1279,25 @@ def veo_title_card(topic, w):
     return None
 
 
+
+def endscreen_card(base, w):
+    """Bitiş ekranı karesi: sol kutuya önceki videonun, sağ kutuya ondan önceki videonun küçük resmi."""
+    import make_endscreen
+    longs = [h for h in load_json(HISTORY, []) if h.get("type", "long") == "long" and h.get("video_id")]
+    thumbs = []
+    for h in reversed(longs[-2:]):
+        t = Path(w) / f"es_{h['video_id']}.jpg"
+        for q in ("maxresdefault", "hqdefault"):
+            try:
+                r = requests.get(f"https://i.ytimg.com/vi/{h['video_id']}/{q}.jpg", timeout=20)
+                if r.ok and len(r.content) > 5000:
+                    t.write_bytes(r.content)
+                    break
+            except Exception:
+                pass
+        thumbs.append(str(t) if t.exists() else None)
+    return make_endscreen.endscreen_frame(base, thumbs, Path(w) / "endscreen_frame.png")
+
 def assemble(script, workdir, music):
     """Hook (1. sahne) → marka intro → içerik → kapanış cümlesi + kapanış kartı. Kare hassasiyetinde."""
     w = Path(workdir)
@@ -1336,10 +1355,19 @@ def assemble(script, workdir, music):
     # kapanış: her videoda aynı imza cümlesi + kapanış kartı
     line = CFG.get("outro_line")
     card = A / "outro.png"
-    if line and card.exists():
+    es = A / "endscreen.png"   # bitiş ekranı: önceki 2 video + logo/abone ol (YouTube öğeleri üstüne oturur)
+    if line and (card.exists() or es.exists()):
         f, d, ws = narrate_line(line, w, "outro_vo")
         fr = int(math.ceil((d + CFG.get("outro_hold_seconds", 8)) * media.FPS))
-        ov = media.render_still(card, fr, w / "outro_v.mp4", move="in")
+        move = "in"
+        if es.exists():
+            try:
+                card = endscreen_card(es, w)
+                move = "still"
+                fr = max(fr, int(21 * media.FPS))  # YouTube bitiş ekranı en çok 20 sn; tamamı bu kartın üstünde kalsın
+            except Exception as e:
+                log(f"Bitiş ekranı hazırlanamadı, eski kapanış kartı kullanılıyor: {e}")
+        ov = media.render_still(card, fr, w / "outro_v.mp4", move=move)
         oa = media.to_wav(f, w / "outro_a.wav", frames=fr)
         parts.append((ov, oa, ws))
         owners.append(None)

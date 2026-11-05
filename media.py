@@ -95,6 +95,8 @@ def render_still(image, frames, out, move="in", focus=(0.5, 0.5)):
         z = f"1.32+0.10*on/{n}"
         x = f"max(0,min(iw-iw/zoom,iw*{fx}-iw/zoom/2))"
         y = f"max(0,min(ih-ih/zoom,ih*{fy}-ih/zoom/2))"
+    elif move == "still":  # bitiş ekranı: YouTube öğeleri kutulara otursun diye hiç hareket yok
+        z, x, y = "1.0", "0", "0"
     elif move == "out":
         z, x, y = f"1.12-0.10*on/{n}", "iw/2-(iw/zoom/2)", "ih/2-(ih/zoom/2)"
     elif move == "left":
