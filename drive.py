@@ -75,7 +75,7 @@ def list_short_backups(channel):
         res = d.files().list(
             q=f"'{fid}' in parents and trashed = false and mimeType = 'video/mp4'",
             fields="nextPageToken,files(id,name,description,appProperties,size,md5Checksum,createdTime)",
-            page_size=100, pageToken=token, spaces="drive").execute()
+            pageSize=100, pageToken=token, spaces="drive").execute()
         out.extend(res.get("files", []))
         token = res.get("nextPageToken")
         if not token:
@@ -98,8 +98,12 @@ def stage_short_backup(path, channel, marker, metadata):
         q=f"name = '{safe_name}' and '{fid}' in parents and trashed = false",
         fields="files(id,name,description,appProperties,size)", spaces="drive").execute().get("files", [])
     if found:
-        if found[0].get("description") != data:
-            raise RuntimeError("Kurtarma anahtarı mevcut ama video metaverisi eşleşmiyor")
+        previous = json.loads(found[0].get("description") or "{}")
+        # Önceki Google Drive yanıtı kaybolsa bile aynı videoya ikinci yedek oluşturma;
+        # farklı ikili dosyayı aynı marker altında yeniden kullanmak da yasak.
+        keys = ("marker", "parent", "index", "sha256")
+        if any(previous.get(key) != metadata.get(key) for key in keys):
+            raise RuntimeError("Kurtarma anahtarı mevcut ama dosya kimliği eşleşmiyor")
         return found[0]["id"]
     body = {"name": safe_name, "parents": [fid], "description": data,
             "appProperties": {"otoyt_marker": marker, "otoyt_state": "pending"}}
