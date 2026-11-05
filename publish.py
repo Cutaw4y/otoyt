@@ -304,7 +304,7 @@ def instagram_reel(video, caption, ai_label=True, poll_every=20, max_wait=900, d
         size = os.path.getsize(video)
         with open(video, "rb") as fh:
             u = requests.post(uri, headers={**auth, "offset": "0", "file_size": str(size)},
-                              data=fh, timeout=1800)
+                              data=fh, timeout=(30, 240))  # takılırsa 4 dk sonra yeniden dener
         if not u.ok or not u.json().get("success", False):
             raise RuntimeError(f"Instagram yükleme: {_ig_err(u)}")
         return cid
