@@ -36,11 +36,15 @@ def stage(video, channel, parent, index, title, pillar, meta):
     if not drive.enabled():
         return None
     marker = marker_for(parent, index)
+    import hashlib
+    sha = hashlib.sha256()
+    with open(video, "rb") as f:
+        for block in iter(lambda: f.read(4 * 1024 * 1024), b""):
+            sha.update(block)
     record = {
         "version": 1, "marker": marker, "parent": parent,
         "index": index, "title": title, "pillar": pillar,
-        "meta": with_marker(meta, marker),
-        "staged_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "sha256": sha.hexdigest(), "meta": with_marker(meta, marker),
     }
     return drive.stage_short_backup(video, channel, marker, record)
 
