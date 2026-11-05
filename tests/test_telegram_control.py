@@ -75,6 +75,37 @@ class OwnerDecisions(unittest.TestCase):
 
 
 class DurableGuards(unittest.TestCase):
+    def test_only_offers_on_eve_of_four_publish_days(self):
+        cfg = {"telegram_editorial": {"publish_days": [1, 3, 5, 6]}}
+        # 2 November 2026 is Monday: offers Tue/Thu/Sat/Sun on Mon/Wed/Fri/Sat.
+        with mock.patch.object(tc, "generate_ideas", return_value=[]), \
+             mock.patch.object(tc, "persist"), mock.patch.dict(os.environ, {"OFFER_NOW": "1"}):
+            offered = []
+            for day in range(7):
+                s = {}
+                tc.offer(s, cfg, datetime(2026, 11, 2 + day, 17, tzinfo=timezone.utc))
+                if s.get("job"):
+                    offered.append(day)
+            self.assertEqual([0, 2, 4, 5], offered)
+
+    def test_owner_topic_feedback_excludes_kaf_and_enforces_focus(self):
+        import ai
+        cfg = {"channel_name": "Gölgedefter", "channel_brief": "Mystery", "text_models": ["fake"],
+               "content_pillars": ["History", "Supernatural"],
+               "telegram_editorial": {"focus_pillars": [1], "min_focus_topics": 3,
+                                      "excluded_topics": ["Kaf Dağı"]}}
+        ideas = [{"title": f"Topic {i}", "angle": "Mystery encounter", "why": "Unknown",
+                  "search_query": "mystery", "pillar": "Supernatural"} for i in range(4)]
+        with mock.patch.object(ai, "gemini_json", return_value={"ideas": ideas}):
+            self.assertEqual(4, len(tc.generate_ideas(cfg, [])))
+            ideas[0]["title"] = "Kaf Dağı"
+            with self.assertRaisesRegex(ValueError, "excluded"):
+                tc.generate_ideas(cfg, [])
+            ideas[0]["title"] = "Other topic"
+            ideas[0]["pillar"] = ideas[1]["pillar"] = "History"
+            with self.assertRaisesRegex(ValueError, "focus"):
+                tc.generate_ideas(cfg, [])
+
     def test_telegram_expired_popup_does_not_leak_token(self):
         with mock.patch.dict(os.environ, {"TELEGRAM_BOT_TOKEN": "secret-token"}), \
              mock.patch.object(tc.requests, "post", side_effect=RuntimeError("secret-token")):
@@ -174,7 +205,7 @@ class PipelineIntegration(unittest.TestCase):
             final.write_bytes(b"reviewed long")
             short.write_bytes(b"reviewed short")
             cfg = {**pipeline.CFG, "publish_mode": "scheduled", "localize_metadata": False,
-                   "subtitle_translation": {}, "short_captions": False}
+                   "subtitle_translation": {}, "short_captions": False, "telegram_editorial": {}}
             for name, value in {"CFG": cfg, "DATA": w, "HISTORY": w / "history.json",
                                 "OUT": w / "out", "DRY_RUN": False, "UPLOAD_STARTED": False}.items():
                 stack.enter_context(mock.patch.object(pipeline, name, value))

@@ -274,8 +274,8 @@ def make_banner(out):
     d = ImageDraw.Draw(im)
     spaced(d, (960, 570), NAME, font(SERIF, 140), PARCH, track=0.08)  # güvenli alan: x ≤ 2053
     d.text((966, 765), TAG, font=font(INTER + "InterDisplay-Medium.otf", 60), fill=AMBER)
-    d.text((966, 862), "YENİ SAYFALAR  ·  SALI  ·  PERŞEMBE  ·  CUMARTESİ",
-           font=font(INTER + "InterDisplay-Bold.otf", 36), fill=SMOKE)
+    d.text((966, 862), "YENİ SAYFALAR · SALI · PERŞEMBE · CUMARTESİ · PAZAR",
+           font=font(INTER + "InterDisplay-Bold.otf", 30), fill=SMOKE)
     im.save(out, quality=92)
     return out
 

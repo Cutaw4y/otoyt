@@ -232,19 +232,32 @@ def generate_ideas(cfg, history):
         if idea["pillar"] not in cfg["content_pillars"] or normal(idea["title"]) in seen:
             raise ValueError("Duplicate topic or unknown pillar")
         seen.add(normal(idea["title"]))
+    editorial = cfg.get("telegram_editorial", {})
+    excluded = editorial.get("excluded_topics", [])
+    if any(normal(term) in normal(idea["title"] + " " + idea["angle"])
+           for term in excluded for idea in ideas):
+        raise ValueError("Topic excluded by channel owner's feedback")
+    focus = {cfg["content_pillars"][i] for i in editorial.get("focus_pillars", [])}
+    if sum(idea["pillar"] in focus for idea in ideas) < editorial.get("min_focus_topics", 0):
+        raise ValueError("Topic suggestions do not match channel owner's focus")
     return ideas
 
 
 def offer(state, cfg, now):
     job = state.get("job", {})
-    target = (now.astimezone(TR).date() + timedelta(days=1)).isoformat()
+    target_day = now.astimezone(TR).date() + timedelta(days=1)
+    target = target_day.isoformat()
+    editorial = cfg["telegram_editorial"]
+    if target_day.weekday() not in editorial.get("publish_days", range(7)):
+        return
     if (not os.getenv("OFFER_NOW") == "1" and
             now.astimezone(TR).hour < cfg["telegram_editorial"].get("offer_hour", 20)):
         return
     if job and (job["status"] not in TERMINAL or job["target_date"] >= target):
         return
     start = state.get("trial_start_date", target)
-    if datetime.fromisoformat(target) >= datetime.fromisoformat(start) + timedelta(days=7):
+    trial_days = editorial.get("trial_days", 0)
+    if trial_days and datetime.fromisoformat(target) >= datetime.fromisoformat(start) + timedelta(days=trial_days):
         if not state.get("trial_complete_notified"):
             send("📊 Gölgedefter'in bir haftalık günlük video denemesi tamamlandı. "
                  "Yeni üretim durdu; maliyet ve video performansını değerlendirip devam edebiliriz.")

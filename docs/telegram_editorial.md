@@ -1,11 +1,10 @@
-# Gölgedefter: Telegram üzerinden günlük konu ve yayın onayı
+# Gölgedefter: Telegram üzerinden konu ve yayın onayı
 
-Gölgedefter için bir haftalık günlük video denemesi. Beyond Qaf'ın yayın sıklığı ve
+Gölgedefter için haftada dört video: salı, perşembe, cumartesi ve pazar. Beyond Qaf'ın yayın sıklığı ve
 ayarları değişmez. Eski videoların tarihleri bu akış tarafından değiştirilmez.
 
-1. Her akşam Türkiye saatiyle 20:00 sonrasındaki ilk kontrolde, ertesi gün için
-   dört konu, kısa özet ve ilgi çekme gerekçesi gönderilir. İlk öneri gününden
-   itibaren yedi günlük deneme uygulanır; sonrasında yeni teklifler durur.
+1. Yayın günlerinden bir önceki akşam Türkiye saatiyle 20:00 sonrasındaki ilk kontrolde, ertesi gün için
+   dört konu, kısa özet ve ilgi çekme gerekçesi gönderilir. Doğaüstü varlıklar ve kıyamet anlatıları önceliklidir; Kaf Dağı önerilmez.
 2. Bir konu seçilir, ardından **Üretime başla** onayı verilir. Seçim yapılmazsa
    üretim başlamaz. Önceki iş tamamlanmadan ikinci bir iş açılmaz.
 3. Yalnız seçilen konu kaynak ve kalite kontrolünden geçirilir; başarısız konu
@@ -29,10 +28,10 @@ ayarları değişmez. Eski videoların tarihleri bu akış tarafından değişti
   üretimi sırasında karar işleme birkaç saat gecikebilir.
 - GitHub Actions, Telegram ve Gemini bağlantıları canlı kontrol gerektirir.
   Çevrimdışı testler servis yetkisini veya gerçek render kalitesini kanıtlamaz.
-- Günlük üretim AI kullanımını artırır. Kontrol işi günde en çok 32 hafif çalışma
+- Haftada dört üretim AI kullanımını artırır. Kontrol işi günde en çok 32 hafif çalışma
   ekler; üretim yalnız sahibin onayından sonra ücretli API kullanır.
-- İlk hafta sonunda devam için deneme başlangıcı bilinçli olarak sıfırlanmalı
-  veya süre kuralı değiştirilmelidir; sistem kendiliğinden sınırsız devam etmez.
+- Haftada dört yayın düzeni süresizdir; `trial_days: 0`. Tercihen ilk hafta sonunda
+  maliyet ve performans birlikte değerlendirilir.
 
 ## Kalıcılık ve hata davranışı
 

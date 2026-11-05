@@ -11,6 +11,11 @@ channel_brief: >
   Nazca çizgileri, Dyatlov Geçidi, Voynich El Yazması, Anadolu'nun alkarısı inancı). Önce anlatılanları
   hikâye gibi kurar, sonra kayıtlara, belgelere ve bilim insanlarının açıklamalarına
   geçer; sonunda neyin bilindiğini, neyin hâlâ bilinmediğini dürüstçe ayırır.
+  Editoryal öncelik: izleyicide bilinmezlik, doğaüstü karşılaşma, korku ve
+  "bu gerçekten yaşandı mı?" merakı uyandıran anlatılar. Kanal sahibinin son
+  geri bildirimine göre Deccal ve Alkarısı beğenildi; Kaf Dağı tarzı soyut
+  coğrafya ve masal dünyası anlatıları beğenilmedi. Bu geri bildirim konu
+  önerilerinde önceliklidir; gerçek izlenme istatistiği gibi sunulmaz.
   Instagram marka etiketi: #gölgedefter
 audience: "gizem, tarih ve efsane meraklısı 18-45 yaş Türkçe konuşan izleyiciler"
 tone: "kısık sesli, gizemli, sürükleyici bir belgesel anlatıcısı; gerilimi adım adım yükselten, dramatik ve heyecanlı ama asla uydurmayan; izleyiciyi her sahnede bir sonraki bilgiye merakla bağlayan"
@@ -23,7 +28,25 @@ caption_label: "Türkçe"
 full_video_text: "Videonun tamamı:"
 wiki_langs: ["tr", "en"]
 
+idea_rules: >
+  Kanal sahibinin güncel tercihi: daha doğaüstü, sıra dışı ve ürpertici olaylar.
+  Deccal ve Alkarısı anlatıları izleyici geri bildiriminde daha çok beğenildi.
+  Soyut mitolojik coğrafya, dağların/masal ülkelerinin kökeni ve Kaf Dağı türü
+  anlatıları ŞİMDİLİK ÖNERME. Dört adayın en az üçü kıyamet anlatıları veya
+  doğaüstü varlık/halk inancı kategorisinden olsun; kalan aday da somut bir
+  esrarengiz karşılaşma, tanık anlatısı veya açıklanamayan olay etrafında kurulsun.
+  Her adayda tek bir varlık/olay, çarpıcı somut bir ayrıntı ve cevabı merak
+  ettiren bir soru bulunsun. Yalnızca karanlık atmosfer veya fantastik mekân yetmez.
+  Deccal/Alkarısı videolarını tekrar önerme; benzer merak ve gerilim taşıyan
+  FARKLI konular seç. Söylentiyi gerçek, zayıf rivayeti sahih veya uydurma
+  tanıklığı belgeli olay gibi gösterme. Konu önerisinde kısa Türkçe özet,
+  izleyicinin neden merak edeceği ve anlatının dayandığı kaynak türü belirt.
+
 script_rules: >
+  GÜNCEL İZLEYİCİ YÖNÜ: Deccal ve Alkarısı gibi varlık/karşılaşma merkezli,
+  bilinmezlik duygusu güçlü anlatılar. Kaf Dağı tarzı soyut coğrafya anlatımı
+  yerine olay, korku, tanıklık ve cevapsız soru etrafında ilerle. Kaynağın
+  söylediğinden daha kesin veya daha olağanüstü bir iddia üretme.
   İZLEYİCİ GERİ BİLDİRİMİ (03.11, Deccal videosu): "Daha enteresan bilgiler verebilirdi (ör. Deccal'in sözlerinden
   sonra 'göl kuruyacak' gibi rivayetler), biraz daha uzun ve dramatik olabilirdi; bizim insanımız bunu çok seviyor."
   Buna göre: konuyla ilgili bilinen TÜM çarpıcı rivayetleri, ayrıntıları ve kehanetleri kaynağıyla anlat (hangi
@@ -115,6 +138,8 @@ content_pillars:   # izlenme verisine göre sistem en çok tutanlara ağırlık 
   - "Anadolu ve dünya efsaneleri, mitolojik varlıklar, halk inançları"
   - "Çözülemeyen şifreler, yasak bilgi ve antik astronot iddiaları (bilimin cevabıyla birlikte)"
 
+pillar_weights: [1, 2, 6, 2, 6, 1]
+
 playlists:
   "Kayıp medeniyetler ve antik gizemler (Göbeklitepe, Sümerler, Nazca, Atlantis efsanesi, Mohenjo-daro)": "Kayıp Medeniyetler ve Antik Gizemler"
   "İslam tarihi ve kutsal kıssalar (Ashab-ı Kehf, Zülkarneyn, İrem ve Ad kavmi, Semud, Nuh tufanı)": "Kutsal Kıssalar ve İslam Tarihi"
@@ -155,7 +180,7 @@ branding:
     🏺 Göbeklitepe'den Sümerlere, İrem şehrinden Zülkarneyn'in seddine; antik uygarlıklar, arkeolojik keşifler ve dünyanın en esrarengiz olayları.
     📖 Ayetler, hadis kaynakları, tarihî belgeler ve akademik araştırmalar ışığında: ne anlatılıyor, kayıtlar ne diyor, bilim ne açıklıyor, hâlâ ne bilinmiyor.
     🔎 Amacımız spekülasyon üretmek değil; bilgiye dayalı, düşündüren ve merak uyandıran sayfalar açmak.
-    🕯 Yeni sayfalar her Salı, Perşembe ve Cumartesi. Kaçırmamak için abone olmayı unutmayın.
+    🕯 Yeni sayfalar her Salı, Perşembe, Cumartesi ve Pazar. Kaçırmamak için abone olmayı unutmayın.
 
 subscribe_text: "🔔 Yeni sayfaları kaçırmamak için abone ol:"
 made_for_kids: false
@@ -305,4 +330,9 @@ series:
 channel_id: "UC17T58dqlAqBoQZjactX5rg"
 telegram_editorial:
   enabled: true
-  offer_hour: 20  # Europe/Istanbul; next day's topic
+  offer_hour: 20  # Europe/Istanbul; next scheduled day's topic
+  publish_days: [1, 3, 5, 6]  # Salı, Perşembe, Cumartesi, Pazar
+  trial_days: 0  # Haftada dört video; kendiliğinden bir hafta sonra durmaz
+  focus_pillars: [2, 4]  # kıyamet anlatıları ve doğaüstü halk inançları
+  min_focus_topics: 3
+  excluded_topics: ["Kaf Dağı", "Kaf Dagi", "Kafdagi"]

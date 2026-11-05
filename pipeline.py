@@ -3183,6 +3183,15 @@ def publish_rendered(script, idea, shorts, thumb, thumb_alt, en_srt, tr_srt,
         target = datetime.fromisoformat(editorial_job["target_date"]).replace(tzinfo=ZoneInfo("Europe/Istanbul"))
         now = max(now, target - timedelta(hours=CFG.get("min_lead_hours", 1.5)))
     main_t, short_ts = plan_times(now, len(shorts))
+    if editorial_job:
+        from zoneinfo import ZoneInfo
+        allowed = set(CFG["telegram_editorial"].get("publish_days", range(7)))
+        local = main_t.astimezone(ZoneInfo("Europe/Istanbul"))
+        while local.weekday() not in allowed:
+            # Start at midnight of the next allowed local day; retain configured slots.
+            next_day = (local + timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
+            main_t, short_ts = plan_times(next_day - timedelta(hours=CFG.get("min_lead_hours", 1.5)), len(shorts))
+            local = main_t.astimezone(ZoneInfo("Europe/Istanbul"))
     iso = lambda t: t.strftime("%Y-%m-%dT%H:%M:%SZ") if sched else None
     up = CFG.get("uploader", "youtube")
 
