@@ -3009,7 +3009,7 @@ def run_once():
     # Sadece cron değil, elle ve bekçi tarafından başlatılan çalışmalarda da çift üretimi engelle.
     # Bilerek ikinci video istenirse workflow_dispatch içindeki force_new_video seçilebilir.
     forced = os.getenv("FORCE_NEW_VIDEO", "").lower() in ("1", "true", "yes")
-    if not DRY_RUN and not forced and not os.getenv("CATCHUP"):
+    if not DRY_RUN and not forced:
         today = datetime.now(timezone.utc).date().isoformat()
         if any(h.get("type", "long") == "long" and str(h.get("date", "")).startswith(today)
                for h in (load_json(HISTORY, []) if HISTORY.exists() else [])):
