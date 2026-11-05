@@ -2506,7 +2506,9 @@ def post_reels(script, idea, shorts, history, parent=None):
         return
     item, sh_ = queued[0]
     try:
-        mid, link = publish.instagram_reel(sh_["file"], item["caption"], ai_label=CFG.get("instagram_ai_label", True))
+        mid, link = publish.instagram_reel(sh_["file"], item["caption"],
+                                           ai_label=CFG.get("instagram_ai_label", True),
+                                           expected_username=CFG.get("ig_username"))
         history.append({"date": datetime.now().isoformat(timespec="minutes"), "type": "reel",
                         "title": item["title"], "pillar": idea["pillar"], "video_id": mid, "parent": parent})
         save_json(HISTORY, history)
@@ -2986,8 +2988,8 @@ def preflight():
         return
     if CFG.get("instagram_enabled") and os.getenv("IG_ACCESS_TOKEN") and os.getenv("IG_USER_ID"):
         try:
-            user = publish.instagram_check()
-            log(f"Instagram anahtarı geçerli: @{user}")
+            user = publish.instagram_check(CFG.get("ig_username"))
+            log(f"Instagram anahtarı ve hesap kimliği doğrulandı: @{user}")
         except Exception as e:
             notify("🆘 CLAUDE'A YAZ — Instagram anahtarı çalışmıyor (süresi dolmuş olabilir). Video yine YouTube'a "
                    "yüklenecek, Reels sırada bekleyecek. Anahtar yenilenince otomatik paylaşılır.\n"
@@ -2995,11 +2997,14 @@ def preflight():
 
 
 def run_once():
-    if os.getenv("GITHUB_EVENT_NAME") == "schedule" and not os.getenv("CATCHUP"):
-        today = datetime.now().date().isoformat()
+    # Sadece cron değil, elle ve bekçi tarafından başlatılan çalışmalarda da çift üretimi engelle.
+    # Bilerek ikinci video istenirse workflow_dispatch içindeki force_new_video seçilebilir.
+    forced = os.getenv("FORCE_NEW_VIDEO", "").lower() in ("1", "true", "yes")
+    if not DRY_RUN and not forced and not os.getenv("CATCHUP"):
+        today = datetime.now(timezone.utc).date().isoformat()
         if any(h.get("type", "long") == "long" and str(h.get("date", "")).startswith(today)
                for h in (load_json(HISTORY, []) if HISTORY.exists() else [])):
-            log("Bugünün videosu zaten (elle başlatılan çalışmayla) üretildi; zamanlanmış çalışma atlandı.")
+            log("Bugünün uzun videosu zaten kaydedilmiş; yeni üretim atlandı (tekrar yükleme engellendi).")
             return True
     check_channel()
     preflight()
@@ -3149,6 +3154,14 @@ def run_once():
         named = w / f"{slug(script.get('core_keyword') or script['title'])}.mp4"  # anlamlı dosya adı
         shutil.copy(final, named)
         vid = publish.upload(named, m_long, thumb, up)
+        # Video kimliğini derhal kalıcı kaydet: sonradan altyazı/Short/Instagram kesilirse
+        # yeniden başlatılan iş bu uzun videoyu ikinci kez üretmesin.
+        if not any(h.get("video_id") == vid for h in history):
+            history.append({"date": datetime.now(timezone.utc).isoformat(timespec="minutes"),
+                            "type": "long", "title": script["title"], "pillar": idea["pillar"],
+                            "video_id": vid, "series_id": idea.get("series_id")})
+            save_json(HISTORY, history)
+            push_now(HISTORY, "uzun video kimliği kaydedildi")
         queue_comment(vid, script.get("pinned_comment"))
         record_vote(vid, script)
         (DATA / "pending_script.json").unlink(missing_ok=True)  # yüklendi: yarım kalan senaryo kaydı silinir
@@ -3172,10 +3185,7 @@ def run_once():
                            "(get_token.bat bir kez). Altyazılar saklandı, izin yenilenince otomatik yüklenecek.")
                     cap_warned = True
         add_to_pillar_playlist(vid, idea["pillar"])
-        history.append({"date": datetime.now().isoformat(timespec="minutes"), "type": "long",
-                        "title": script["title"], "pillar": idea["pillar"], "video_id": vid,
-                        "series_id": idea.get("series_id")})
-        save_json(HISTORY, history)
+        # Uzun video, yüklemenin hemen ardından kaydedildi; burada ikinci kayıt oluşturma.
         ledger.save()
         if vid in publish.UPLOAD_WARNINGS:
             notify(f"🆘 CLAUDE'A YAZ — Video yüklendi ama YouTube yayın saatini kaydetmedi: https://youtu.be/{vid}\n"
