@@ -1,0 +1,37 @@
+name: Gölgedefter Telegram konu ve onay
+on:
+  schedule:
+    - cron: "17,47 5-20 * * *"  # TR 08:17–23:47; Actions may delay scheduled jobs
+  workflow_dispatch:
+    inputs:
+      offer_now:
+        description: "İlk konu seçeneklerini şimdi gönder (üretim/yayın başlatmaz)"
+        type: boolean
+        default: false
+permissions:
+  contents: write
+  actions: write
+# All editorial state changes and production claims serialize together.
+concurrency:
+  group: otoyt-uretim
+  cancel-in-progress: false
+  queue: max
+jobs:
+  editorial:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: main}
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: pip install -q requests pyyaml
+      - name: Konuları öner ve sahibinin kararlarını işle
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          GEMINI_PAID_API_KEY: ${{ secrets.GEMINI_PAID_API_KEY }}
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+          GITHUB_TOKEN: ${{ github.token }}
+          OFFER_NOW: ${{ inputs.offer_now && '1' || '' }}
+        run: python telegram_control.py

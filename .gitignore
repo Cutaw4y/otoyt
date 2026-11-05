@@ -5,3 +5,7 @@ client_secret.json
 youtube_anahtarlar.txt
 instagram_anahtarlar.txt
 selftest_tr_out/
+
+# Private editorial decisions must never enter the public repository.
+data/golgedefter/editorial.json
+data/golgedefter/editorial.tmp

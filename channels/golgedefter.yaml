@@ -300,3 +300,9 @@ series:
       (Kazvînî'nin Acâibü'l-Mahlûkât'ı, Feridüddin Attâr'ın Mantıku't-Tayr'ı, tefsirlerdeki rivayetler) ve efsaneyi
       Kur'an'dan net biçimde ayır: Kaf Suresi "Kaf" harfiyle başlar ama Kur'an'da böyle bir dağdan söz edilmez.
       Kafkas Dağları ile ilişkilendirilmesi ve masallardaki yeri. Hangi kısmın efsane olduğunu açıkça söyle, saygılı anlat.
+
+# Owner-approved daily production (Gölgedefter only).
+channel_id: "UC17T58dqlAqBoQZjactX5rg"
+telegram_editorial:
+  enabled: true
+  offer_hour: 20  # Europe/Istanbul; next day's topic
