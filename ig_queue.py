@@ -3,6 +3,7 @@ pipeline.py her videonun ilk Short'unu hemen paylaşır, kalanları GitHub Relea
 data/<kanal>/ig_queue.json'a ekler. Bu betik günde bir çalışır (ig_tr.yml)."""
 import json
 import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -38,14 +39,46 @@ def notify(text):
 
 
 def load(path, default):
-    try:
-        return json.loads(path.read_text(encoding="utf-8"))
-    except Exception:
+    """Bozulmuş var olan kuyruğu boş sanıp üzerine yazma; hata ver ve kayıtları koru."""
+    if not path.exists():
         return default
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as e:
+        raise RuntimeError(f"Instagram kaydı bozuk/okunamadı: {path}; dosya KORUNDU") from e
+    if not isinstance(data, list):
+        raise RuntimeError(f"Instagram kaydı liste değil: {path}; dosya KORUNDU")
+    return data
 
 
 def save(path, data):
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+    """Kuyruğu atomik değiştir; işlem yarıda kesilirse eski JSON aynen kalsın."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_name(path.name + ".tmp")
+    try:
+        with tmp.open("w", encoding="utf-8") as handle:
+            json.dump(data, handle, ensure_ascii=False, indent=2)
+            handle.write("\n")
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(tmp, path)
+    finally:
+        tmp.unlink(missing_ok=True)
+
+
+def safe_error(error):
+    """Açık GitHub deposuna yazılan hata kayıtlarında gizli token bırakma."""
+    message = str(error)
+    for key in ("IG_ACCESS_TOKEN", "GD_IG_ACCESS_TOKEN", "TELEGRAM_BOT_TOKEN",
+                "GITHUB_TOKEN", "GH_TOKEN", "IG_APP_SECRET"):
+        value = os.getenv(key, "")
+        if len(value) >= 6:
+            message = message.replace(value, "[REDACTED]")
+    message = re.sub(r"(?i)(access_token|client_secret|api_key|apikey|token)\s*"
+                     r"(=|:)\s*(['\"]?)[^&\s,\"']{6,}",
+                     r"\1\2[REDACTED]", message)
+    message = re.sub(r"(?i)Bearer\s+\S+", "Bearer [REDACTED]", message)
+    return message[:700]
 
 
 def gh(*args):
@@ -61,6 +94,15 @@ def main():
         print("Sıra boş.")
         return
     item = q[0]
+    queue_key = f"{item.get('release', RELEASE)}:{item.get('asset')}" if item.get("asset") else (
+        f"local:{item.get('path')}")
+    previous = load(HISTORY, [])
+    if any(row.get("type") == "reel" and row.get("queue_key") == queue_key
+           for row in previous if isinstance(row, dict)):
+        # Reel gerçekten kaydedilmiş, sadece kuyruk ilerletme adımı kesilmiş.
+        save(QUEUE, q[1:])
+        notify(f"ℹ️ Instagram Reel zaten yayımlanmış; tekrar yüklemeden kuyruk düzeltildi: {item.get('title', '')}")
+        return
     tmp = Path(tempfile.mkdtemp())
     rel = item.get("release", RELEASE)  # elle eklenen öğe videoyu başka bir Release'ten (ör. paket) alabilir
     local = ROOT / item["path"] if item.get("path") else None  # elle eklenen öğe videoyu repodan da alabilir
@@ -71,7 +113,7 @@ def main():
         video = tmp / item["asset"]
     if (r is not None and r.returncode != 0) or not video.exists():
         # Kayıp Release dosyası veya geçici indirme hatası, kuyruktaki işi silmemeli.
-        detail = r.stderr[:200] if r is not None else "yerel dosya yok"
+        detail = safe_error(r.stderr[:200]) if r is not None else "yerel dosya yok"
         message = f"Instagram kaynağı bulunamadı; kuyruk KORUNDU: {item['title']} ({detail})"
         (DATA / "ig_last_error.txt").write_text(
             f"{datetime.now().isoformat(timespec='minutes')} {message}\n", encoding="utf-8")
@@ -86,16 +128,17 @@ def main():
                                            expected_username=CFG.get("ig_username"))
     except Exception as e:
         (DATA / "ig_last_error.txt").write_text(f"{datetime.now().isoformat(timespec='minutes')} "
-                                                f"{item['title']}\n{e}\n", encoding="utf-8")
+                                                f"{item['title']}\n{safe_error(e)}\n", encoding="utf-8")
         if "190" in str(e) or "access token" in str(e).lower():
             notify("🆘 CLAUDE'A YAZ — Instagram anahtarı geçersiz (süresi dolmuş). Reels sırada bekliyor; "
                    "anahtar yenilenince otomatik paylaşılır.")
         else:
-            notify(f"ℹ️ Instagram Reel yüklenemedi (yarın tekrar denenecek): {str(e)[:300]}")
+            notify(f"ℹ️ Instagram Reel yüklenemedi (yarın tekrar denenecek): {safe_error(e)[:300]}")
         sys.exit(1)
     hist = load(HISTORY, [])
     hist.append({"date": datetime.now().isoformat(timespec="minutes"), "type": "reel", "title": item["title"],
-                 "pillar": item.get("pillar"), "video_id": mid, "parent": item.get("parent")})
+                 "pillar": item.get("pillar"), "video_id": mid, "parent": item.get("parent"),
+                 "queue_key": queue_key})
     save(HISTORY, hist)
     save(QUEUE, q[1:])
     if local:  # repoya elle konan video paylaşıldı: repoyu şişirmesin diye silinir
