@@ -74,7 +74,9 @@ def youtube_upload(video, meta, thumb=None):
             _, resp = req.next_chunk(num_retries=5)
         return resp["id"]
 
-    vid = _retry(do, what="YouTube yükleme")
+    # Yeni bir videos.insert oturumu açarak tekrar denemek belirsiz sonuçlarda
+    # aynı videoyu iki kez yükleyebilir. Resumable chunk yeniden denemesi do() içinde.
+    vid = _retry(do, tries=1, what="YouTube yükleme")
     try:  # API onayı/kilit kontrolü: planlı yayın gerçekten kaydedildi mi?
         st = yt.videos().list(part="status", id=vid).execute()["items"][0]["status"]
         if meta.get("publish_at") and not st.get("publishAt"):

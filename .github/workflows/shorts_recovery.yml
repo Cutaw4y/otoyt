@@ -1,0 +1,59 @@
+name: Shorts kurtarma (iki kanal, özel Drive yedeği)
+
+on:
+  schedule:
+    - cron: "37 20 * * *"   # 23:37 Türkiye: normal üretimler tamamlandıktan sonra
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# Video üretimi veya diğer Shorts kurtarma işlemiyle ASLA aynı anda yükleme yapma.
+concurrency:
+  group: otoyt-uretim
+  cancel-in-progress: false
+
+jobs:
+  recover:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: main}
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12", cache: pip}
+      - run: pip install -q requests pyyaml pillow numpy google-api-python-client google-auth
+      - name: Önce Beyond Qaf, ardından Gölgedefter (maks. 2 Short/kanal)
+        env:
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+          YT2_CLIENT_ID: ${{ secrets.YT2_CLIENT_ID }}
+          YT2_CLIENT_SECRET: ${{ secrets.YT2_CLIENT_SECRET }}
+          YT2_REFRESH_TOKEN: ${{ secrets.YT2_REFRESH_TOKEN }}
+          GDRIVE_CLIENT_ID: ${{ secrets.GDRIVE_CLIENT_ID }}
+          GDRIVE_CLIENT_SECRET: ${{ secrets.GDRIVE_CLIENT_SECRET }}
+          GDRIVE_REFRESH_TOKEN: ${{ secrets.GDRIVE_REFRESH_TOKEN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          status=0
+          OTOYT_CONFIG=config.yaml python short_recovery.py || { echo "::error::Beyond Qaf Shorts kurtarma hatası"; status=1; }
+          OTOYT_CONFIG=channels/golgedefter.yaml python short_recovery.py || { echo "::error::Gölgedefter Shorts kurtarma hatası"; status=1; }
+          exit "$status"
+      - name: Güncellenen Shorts geçmişini koru
+        if: always()
+        run: |
+          git config user.name "otoyt-bot"
+          git config user.email "otoyt@users.noreply.github.com"
+          for f in history.json data/golgedefter/history.json; do [ -f "$f" ] && git add "$f"; done
+          git diff --cached --quiet && exit 0
+          git commit -m "shorts: güvenli kurtarma kaydı"
+          git stash -u -q || true
+          for i in 1 2 3; do
+            git pull --rebase -X theirs -q && git push -q && exit 0
+            git rebase --abort 2>/dev/null
+            sleep 5
+          done
+          exit 1

@@ -57,3 +57,108 @@ def trash(folder_id):
         return True
     except Exception:
         return False
+
+
+# Shorts yedekleri, herkese açık GitHub Releases yerine varsayılan olarak
+# paylaşılmayan uygulama klasöründe tutulur. OAuth drive.file erişimiyle sınırlıdır.
+def _shorts_folder(d, channel):
+    root = _folder(d, "OtoYT SHORTS KURTARMA")
+    fid = _folder(d, channel, root)
+    # Yedekleri yanlışlıkla herkese açık veya kurum geneline açık bir klasöre koyma.
+    # İzin bilgisi okunamazsa güvenli varsayım: yükleme durur.
+    try:
+        access = d.permissions().list(fileId=fid, fields="permissions(type,role)").execute()
+    except Exception as e:
+        raise RuntimeError("Özel Shorts klasörünün paylaşım izni doğrulanamadı") from e
+    if any(p.get("type") in ("anyone", "domain") for p in access.get("permissions", [])):
+        raise RuntimeError("Shorts yedek klasörü paylaşılmış; gizlilik için yükleme reddedildi")
+    return fid
+
+
+def list_short_backups(channel):
+    """Kanalın özel Drive klasöründeki yedek video/meta kayıtlarını döndür."""
+    d = _drive()
+    fid = _shorts_folder(d, channel)
+    out, token = [], None
+    while True:
+        res = d.files().list(
+            q=f"'{fid}' in parents and trashed = false and mimeType = 'video/mp4'",
+            fields="nextPageToken,files(id,name,description,appProperties,size,md5Checksum,createdTime)",
+            pageSize=100, pageToken=token, spaces="drive").execute()
+        out.extend(res.get("files", []))
+        token = res.get("nextPageToken")
+        if not token:
+            break
+    return out
+
+
+def stage_short_backup(path, channel, marker, metadata):
+    """Yüklemeden ÖNCE, dosyayı özel Drive klasörüne idempotent biçimde kopyala."""
+    import json
+    from googleapiclient.http import MediaFileUpload
+    data = json.dumps(metadata, ensure_ascii=False, separators=(",", ":"))
+    if len(data.encode("utf-8")) > 15000:
+        raise ValueError("Shorts kurtarma metaverisi fazla büyük")
+    d = _drive()
+    fid = _shorts_folder(d, channel)
+    safe_name = marker.replace(":", "_") + ".mp4"
+    # Bir önceki isteğin cevabı kaybolsa bile aynı dosyadan ikinci kopya oluşturma.
+    found = d.files().list(
+        q=f"name = '{safe_name}' and '{fid}' in parents and trashed = false",
+        fields="files(id,name,description,appProperties,size)", spaces="drive").execute().get("files", [])
+    if found:
+        previous = json.loads(found[0].get("description") or "{}")
+        # Önceki Google Drive yanıtı kaybolsa bile aynı videoya ikinci yedek oluşturma;
+        # farklı ikili dosyayı aynı marker altında yeniden kullanmak da yasak.
+        keys = ("marker", "parent", "index", "sha256")
+        if any(previous.get(key) != metadata.get(key) for key in keys):
+            raise RuntimeError("Kurtarma anahtarı mevcut ama dosya kimliği eşleşmiyor")
+        return found[0]["id"]
+    body = {"name": safe_name, "parents": [fid], "description": data,
+            "appProperties": {"otoyt_marker": marker, "otoyt_state": "pending"}}
+    media = MediaFileUpload(str(path), mimetype="video/mp4", resumable=True, chunksize=8 * 1024 * 1024)
+    req = d.files().create(body=body, media_body=media, fields="id,size")
+    response = None
+    while response is None:
+        _, response = req.next_chunk(num_retries=3)
+    return response["id"]
+
+
+def short_backup_status(file_id, state, youtube_id=None):
+    """API sonucu belirsizse durumu 'uncertain' olarak sakla; kendiliğinden çift yükleme yapma."""
+    props = {"otoyt_state": state}
+    if youtube_id:
+        props["youtube_id"] = youtube_id
+    return _drive().files().update(fileId=file_id, body={"appProperties": props},
+                                   fields="id,appProperties").execute()
+
+
+def download_short_backup(file_id, dest):
+    """Dosyayı yeniden yükleme için özel Drive'dan indir ve MD5 bütünlüğünü kontrol et."""
+    import hashlib
+    import io
+    from googleapiclient.http import MediaIoBaseDownload
+    from pathlib import Path
+    d = _drive()
+    info = d.files().get(fileId=file_id, fields="id,size,md5Checksum").execute()
+    dest = Path(dest)
+    temp = dest.with_suffix(dest.suffix + ".part")
+    try:
+        with temp.open("wb") as f:
+            req = d.files().get_media(fileId=file_id)
+            down = MediaIoBaseDownload(f, req, chunksize=8 * 1024 * 1024)
+            done = False
+            while not done:
+                _, done = down.next_chunk(num_retries=3)
+        if int(info.get("size", "-1")) != temp.stat().st_size:
+            raise RuntimeError("Drive Shorts yedeği eksik indirildi")
+        md5 = hashlib.md5()
+        with temp.open("rb") as f:
+            for chunk in iter(lambda: f.read(4 * 1024 * 1024), b""):
+                md5.update(chunk)
+        if info.get("md5Checksum") and info["md5Checksum"] != md5.hexdigest():
+            raise RuntimeError("Drive Shorts yedeği checksum uyuşmazlığı")
+        temp.replace(dest)
+        return dest
+    finally:
+        temp.unlink(missing_ok=True)
