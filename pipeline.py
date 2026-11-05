@@ -25,6 +25,7 @@ import drive
 import media
 import release
 import publish
+import related_video
 import voice
 
 ROOT = Path(__file__).parent
@@ -2661,8 +2662,16 @@ def finish_manual_uploads():
             else:
                 if it["kind"] == "short":
                     hist.append({"date": datetime.now().isoformat(timespec="minutes"), "type": "short",
-                                 "title": it["title"], "video_id": v["id"], "manual": True})
+                                 "title": it["title"], "video_id": v["id"], "manual": True,
+                                 "parent": long_item["video_id"] if long_item else None})
             save_json(HISTORY, hist)
+            if it["kind"] == "short" and long_item and long_item.get("video_id"):
+                try:
+                    if related_video.register(DATA / "related_video_tasks.json", v["id"],
+                                              long_item["video_id"], it["title"], CFG["channel_name"]):
+                        push_now(DATA / "related_video_tasks.json", "elle yüklenen Short için Studio görevi")
+                except Exception as e:
+                    log(f"İlgili video Studio görevi kaydedilemedi ({v['id']}): {str(e)[:150]}")
     keep = []
     for pk in pend:
         age = (datetime.now() - datetime.fromisoformat(pk["created"])).days
@@ -3218,8 +3227,8 @@ def run_once():
                 sname = w / f"{slug(sh_['title'])}-shorts.mp4"
                 shutil.copy(sh_["file"], sname)
                 sid = publish.upload(sname, m_short, None, up)
-                # telefondan izleyen Short'tan uzun videoya geçebilsin: tıklanabilir bağlantılı kanal yorumu
-                # (YouTube API "ilgili video" bağlantısını desteklemiyor; yorum Short yayına girince yazılır)
+                # Açıklama ve Shorts yorumundaki URL'ler tıklanabilir değildir.
+                # Gerçek "İlgili video" öğesi Studio'dan ayarlanır; hedefi aşağıda kaydet.
                 queue_comment(sid, ("▶️ Videonun tamamı burada: " if CFG.get("language_code") == "tr"
                                     else "▶️ Watch the full video here: ") + f"https://youtu.be/{vid}")
                 if tr_blocks and up == "youtube" and CFG.get("short_captions", False):  # YouTube kotası: Short'ta yazı zaten gömülü
@@ -3236,12 +3245,23 @@ def run_once():
                 history.append({"date": datetime.now().isoformat(timespec="minutes"), "type": "short",
                                 "title": sh_["title"], "pillar": idea["pillar"], "video_id": sid, "parent": vid})
                 save_json(HISTORY, history)
+                if up == "youtube":
+                    try:
+                        related_video.register(DATA / "related_video_tasks.json",
+                                               sid, vid, sh_["title"], CFG["channel_name"])
+                        push_now(DATA / "related_video_tasks.json", "Short ilgili video Studio görevi")
+                    except Exception as e:
+                        # Studio görevini kaydetme hatası, yüklenmiş videoyu başarısız saydırmamalı.
+                        log(f"Short {k+1} ilgili video görevi kaydedilemedi: {str(e)[:150]}")
                 trs = ((tr_meta or {}).get("short_titles") or [None] * (k + 1))
                 if CFG.get("language_code") == "tr":
                     trs = [None] * (k + 1)
                 notify(f"📱 Short {k+1}/{len(shorts)} yüklendi: {trs[k] if k < len(trs) and trs[k] else sh_['title']}\n"
                        + (f"(yayın: {fmt_local(short_ts[k])} TR saati) " if sched else "(şimdilik gizli) ")
-                       + f"https://youtu.be/{sid}")
+                       + f"https://youtu.be/{sid}"
+                       + (f"\nİlgili video (Studio): https://studio.youtube.com/video/{sid}/edit"
+                          f"\nHedef uzun video: https://youtu.be/{vid}"
+                          if up == "youtube" else ""))
             except Exception as e:
                 notify(f"ℹ️ {k+1}. Short YouTube'a yüklenemedi. Uzun video etkilenmedi; ayrıntı kayıtta.")
                 if "quota" in str(e).lower() or "uploadLimit" in str(e):
