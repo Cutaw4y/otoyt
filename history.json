@@ -179,6 +179,23 @@
     "idea_title": "Karabasan: The Jinn Encounters Millions of Turks Report",
     "pillar": "Reported jinn encounters and places people avoid, from documented accounts",
     "video_id": "e__IHqcFCiI",
-    "series_id": "jinn-2"
+    "series_id": "jinn-2",
+    "ab_offered": true
+  },
+  {
+    "date": "2026-11-06T19:30",
+    "type": "short",
+    "title": "Why Millions in Turkey Fear Karabasan",
+    "pillar": "Reported jinn encounters and places people avoid, from documented accounts",
+    "video_id": "kzT7BSkOeYk",
+    "parent": "e__IHqcFCiI"
+  },
+  {
+    "date": "2026-11-06T19:31",
+    "type": "reel",
+    "title": "Why Millions in Turkey Fear Karabasan",
+    "pillar": "Reported jinn encounters and places people avoid, from documented accounts",
+    "video_id": "17959123170258651",
+    "parent": "e__IHqcFCiI"
   }
 ]

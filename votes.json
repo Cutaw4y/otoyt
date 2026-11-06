@@ -7,7 +7,13 @@
       "Ancient records",
       "Western pop culture"
     ],
-    "added": "2026-11-03T15:28"
+    "added": "2026-11-03T15:28",
+    "counted": "2026-11-06T18:17",
+    "counts": [
+      0,
+      0
+    ],
+    "comments": 0
   },
   {
     "video_id": "HPPomKuVLwA",
@@ -38,5 +44,15 @@
       "Unseen jinn entity"
     ],
     "added": "2026-11-06T10:58"
+  },
+  {
+    "video_id": "e__IHqcFCiI",
+    "title": "Karabasan Sleep Paralysis: Why Your Room Turns Icy Cold",
+    "question": "When people wake up paralyzed by karabasan, what do you think is primarily happening?",
+    "options": [
+      "Brain chemistry",
+      "Unseen presence"
+    ],
+    "added": "2026-11-06T19:30"
   }
 ]

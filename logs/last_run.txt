@@ -1,4 +1,5 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 [06:35:23] Başladı (test modu: False, yayın: scheduled)
 [06:35:24] HATA:
 Traceback (most recent call last):
@@ -407,3 +408,244 @@ json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes:
 [22:07:28] Bugünün uzun videosu zaten kaydedilmiş; yeni üretim atlandı (tekrar yükleme engellendi).
 [22:07:28] Bugünün uzun videosu zaten kaydedilmiş; yeni üretim atlandı (tekrar yükleme engellendi).
 [22:07:28] Telegram onayı yok; üretim ve yayın bekliyor.
+=======
+[18:16:57] Başladı (test modu: False, yayın: scheduled)
+[18:16:59] Kanal doğrulandı: Beyond Qaf
+[18:16:59] Instagram anahtarı ve hesap kimliği doğrulandı: @beyondqaf
+[18:17:02] Analitik: 2 video ölçüldü, sütun puanları: {"How it's made and what it really costs (steel, glass, chips, paper, concrete)": 1.518587076263208, 'Hidden engineering you see every day but never notice (road details, tower bases, manholes, rail joints)': 0.5525769323423884}
+[18:17:05] Oylama: "What Are Jinn in Islam? The Quran's Unseen Civilization" videosuna 0 yorum, oy yok
+[18:17:05] Seri bölümü seçildi: Karabasan: The Jinn Encounters Millions of Turks Report
+[18:17:12] Konu (1): Karabasan: The Jinn Encounters Millions of Turks Report  [Reported jinn encounters and places people avoid, from documented accounts]
+[18:18:06] Senaryo yazıldı: 33 sahne, 1588 kelime
+[18:18:57] Anlatım sadeleştirildi (1588 → 1517 kelime)
+[18:19:00] Doğrulama kaynağı: Google araması
+[18:19:00] Doğrulama turu 1: 5 iddia, 1 yanlış, 0 belirsiz
+[18:19:39] Doğrulama kaynağı: Google araması
+[18:19:39] Doğrulama turu 2: 11 iddia, 0 yanlış, 0 belirsiz
+[18:19:39] En çok arananlar: scary sleep paralysis demons | scary sleep paralysis | sleep paralysis waking up | karabasan shorty | karabasan | karabasan film | karabasan movie | karabasan basma anı
+[18:19:57] Başlık seçildi: Karabasan Sleep Paralysis: Why Your Room Turns Icy Cold  (önceki: Karabasan Sleep Paralysis: What Millions in Turkey Report) — It leads with the exact core search phrase in the first 25 characters, perfectly matches the channel's signature lore style, and introduces an eerie, 
+[18:19:58] Editör (min 7, ort 8.0): {'originality': 8, 'hook': 8, 'clarity': 8, 'simplicity': 7, 'flow': 8, 'value_density': 8, 'audience_fit': 9, 'problems': ["Quote: 'This stage of deep sleep when your brain makes intense dreams.' Fix: 'REM sleep, which is the stage of deep sleep when your brain makes intense dreams.'", "Quote: 'Your brain's fear alarm, an almond-shaped part called the amygdala, goes into full panic.' Fix: 'Your brain's fear alarm, an almond-shaped part called the amygdala, goes into full panic mode.'", "Quote: 'Anthropologists explain that when a community talks about an entity, the brain borrows that story whenever it panics.' Fix: 'Experts who study human culture explain that when a community talks about a spirit, the brain borrows that story whenever it panics.'"], 'problems_tr': 'Metinde bazı teknik terimler (REM uykusu, amygdala, antropologlar) ilk geçtiğinde daha basit şekilde açıklanabilir.'}
+[18:20:08] Seslendirme başlıyor (Gemini Charon)...
+[18:28:14] Seslendirme: 900 sn
+[18:28:44] Thumbnail sıralaması: [2, 1, 3] - Thumbnail #2 wins because the extreme close-up of a terrified face with wide eyes immediately communicates intense fear and vulnerability, perfectly capturing the feeling of sleep paralysis and matching the curiosity gap of the title. Thumbnail #1 is visually striking with the icy blue spirit, but the text is a bit generic and the wide shot reduces emotional connection at phone size. Thumbnail #3 is too abstract and relies on objects (key and clock) rather than human emotion, making it less compelling on a busy mobile feed.
+[18:31:11] Cümle cümle görsel planı: 33/33 sahne
+[18:31:11] Sahne 1 (diagram, 30.1 sn, 6 çekim, cümleye bağlı)
+[18:31:14]    ilgisiz görüntü elendi: caterpillar crawling on dirt ground
+[18:31:29]    ilgisiz görüntü elendi: raindrops falling on green leaves
+[18:31:40]    alakasız görsel yeniden çizilecek: text and arrows on screen
+[18:31:55]    ilgisiz görüntü elendi: green wheat field in breeze
+[18:32:01]    ilgisiz görüntü elendi: green leaves on a plant
+[18:32:12]    ilgisiz görüntü elendi: mountains reflecting in dark lake
+[18:32:14] Sahne 2 (diagram, 31.9 sn, 6 çekim, cümleye bağlı)
+[18:32:19]    ilgisiz görüntü elendi: Woman in santa hat using phone
+[18:32:27] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[18:32:35]    alakasız görsel yeniden çizilecek: people gathered in dark room
+[18:32:35] Cloudflare günlük ücretsiz kota doldu: {"errors":[{"message":"AiError: AiError: you have used up your daily free allocation of 10,000 neurons, please upgrade to Cloudflare's Workers Paid plan if you would like to continue usage. (e204a477- → bu video için Pexels fotoğraflarına geçiliyor
+[18:33:58]    ilgisiz görüntü elendi: three baboons sitting on branch
+[18:34:18]    ilgisiz görüntü elendi: close up of burning candle
+[18:34:37]    ilgisiz görüntü elendi: sunset over a calm lake
+[18:34:39] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[18:34:52]    alakasız görsel yeniden çizilecek: shadow sitting on chest
+[18:36:08]    ilgisiz görüntü elendi: aerial view of wide river
+[18:36:10] Sahne 3 (footage, 29.3 sn, 6 çekim, cümleye bağlı)
+[18:36:22]    ilgisiz görüntü elendi: aerial view of blue mountains
+[18:36:27]    ilgisiz görüntü elendi: green mug on open book
+[18:36:41]    ilgisiz görüntü elendi: dark misty forest at night
+[18:36:47]    ilgisiz görüntü elendi: waterfalls in a lush canyon
+[18:36:54]    ilgisiz görüntü elendi: dark clouds at sunset landscape
+[18:37:07]    alakasız görsel yeniden çizilecek: dark bedroom with lit doorway
+[18:37:07] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[18:37:20] Sahne 4 (diagram, 26.2 sn, 5 çekim, cümleye bağlı)
+[18:37:25]    ilgisiz görüntü elendi: turkish flag waving against sky
+[18:38:34]    alakasız görsel yeniden çizilecek: old book with candle light
+[18:38:34] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[18:38:55]    ilgisiz görüntü elendi: yellow ink in dark water
+[18:39:58]    alakasız görsel yeniden çizilecek: map with text and books
+[18:40:11]    ilgisiz görüntü elendi: pink ink blooming in water
+[18:40:20]    ilgisiz görüntü elendi: a snail on green leaf
+[18:40:22] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[18:40:33]    alakasız görsel yeniden çizilecek: ui elements at the bottom
+[18:41:51]    ilgisiz görüntü elendi: aerial view of beach waves
+[18:41:53] Sahne 5 (footage, 30.5 sn, 6 çekim, cümleye bağlı)
+[18:41:57]    ilgisiz görüntü elendi: vinyl record spinning on turntable
+[18:42:06]    ilgisiz görüntü elendi: animated movie projector projecting light
+[18:42:22]    ilgisiz görüntü elendi: close up of vinyl record
+[18:42:27]    ilgisiz görüntü elendi: close up of a dandelion
+[18:42:29] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[18:42:40]    alakasız görsel yeniden çizilecek: arrows diagram over dark room
+[18:43:57]    ilgisiz görüntü elendi: bee on white flower
+[18:44:02]    ilgisiz görüntü elendi: sheep grazing in a field
+[18:44:04] Sahne 6 (diagram, 24.8 sn, 5 çekim, cümleye bağlı)
+[18:44:08]    ilgisiz görüntü elendi: man walking in snowy forest
+[18:44:19]    alakasız görsel yeniden çizilecek: frosty room with maps
+[18:44:19] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[18:44:33]    ilgisiz görüntü elendi: raindrops on a window pane
+[18:44:37]    ilgisiz görüntü elendi: cold winter landscape at sunset
+[18:45:48]    alakasız görsel yeniden çizilecek: text or letters in image
+[18:45:48] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[18:46:04]    ilgisiz görüntü elendi: heavy snow falling in forest
+[18:46:09]    ilgisiz görüntü elendi: icicles hanging over flowing water
+[18:46:12] Sahne 7 (diagram, 27.1 sn, 6 çekim, cümleye bağlı)
+[18:46:15]    ilgisiz görüntü elendi: Pocket watch hanging on blossoms
+[18:47:15]    alakasız görsel yeniden çizilecek: clock and map at night
+[18:47:26]    ilgisiz görüntü elendi: person drinking from water bottle
+[18:47:28] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[18:47:39]    alakasız görsel yeniden çizilecek: man screaming in bed
+[18:48:56]    ilgisiz görüntü elendi: stone house against blue sky
+[18:49:05]    ilgisiz görüntü elendi: aerial view of coastal town
+[18:49:10]    ilgisiz görüntü elendi: aerial view of people surfing
+[18:49:26]    ilgisiz görüntü elendi: doctor using a digital tablet
+[18:49:28] Sahne 8 (diagram, 33.1 sn, 7 çekim, cümleye bağlı)
+[18:49:37]    ilgisiz görüntü elendi: lit city skyline at night
+[18:49:42]    ilgisiz görüntü elendi: hanging turkish flags string outdoors
+[18:49:47]    ilgisiz görüntü elendi: A sailboat on the ocean
+[18:49:49] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[18:50:01]    alakasız görsel yeniden çizilecek: map with charts and text
+[18:51:17]    ilgisiz görüntü elendi: sunset over river in city
+[18:51:22]    ilgisiz görüntü elendi: tree silhouette against sunset sky
+[18:51:36]    ilgisiz görüntü elendi: communication towers on a hill
+[18:51:38] Sahne 9 (footage, 24.3 sn, 5 çekim, cümleye bağlı)
+[18:51:47] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[18:52:05]    ilgisiz görüntü elendi: person silhouetted between dark pillars
+[18:52:10]    ilgisiz görüntü elendi: breakfast table with food
+[18:53:13]    alakasız görsel yeniden çizilecek: bed with pillows and crumbs
+[18:53:27]    ilgisiz görüntü elendi: large field of ripe wheat
+[18:53:31]    ilgisiz görüntü elendi: person cutting food on plate
+[18:53:33] Sahne 10 (diagram, 26.6 sn, 5 çekim, cümleye bağlı)
+[18:53:36]    ilgisiz görüntü elendi: ladybug on a plant stem
+[18:53:53]    ilgisiz görüntü elendi: several white dandelion seed heads
+[18:53:58]    ilgisiz görüntü elendi: close up of dandelion flower
+[18:54:03]    ilgisiz görüntü elendi: water flowing over river rocks
+[18:54:05] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[18:54:20]    ilgisiz görüntü elendi: smiling woman holding credit card
+[18:54:22] Sahne 11 (footage, 28.9 sn, 6 çekim, cümleye bağlı)
+[18:54:25]    ilgisiz görüntü elendi: two modern desk clocks
+[18:54:35]    ilgisiz görüntü elendi: aerial view of large mosque
+[18:55:46]    alakasız görsel yeniden çizilecek: holy books with text
+[18:55:59]    ilgisiz görüntü elendi: low angle shot of tree
+[18:56:00] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[18:56:11]    alakasız görsel yeniden çizilecek: old map with arabic script
+[18:57:51]    ilgisiz görüntü elendi: aerial view of mountains
+[18:57:55]    ilgisiz görüntü elendi: White daisies by stone wall
+[18:57:58] Sahne 12 (diagram, 30.1 sn, 6 çekim, cümleye bağlı)
+[18:58:01]    ilgisiz görüntü elendi: narrow alley between old buildings
+[18:58:12]    ilgisiz görüntü elendi: aerial view of mountain village
+[18:58:13] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[18:58:36]    ilgisiz görüntü elendi: aerial view of a mosque
+[18:58:40]    ilgisiz görüntü elendi: view of jerusalem city scape
+[18:58:44]    ilgisiz görüntü elendi: person walking through banana plantation
+[18:58:47] Sahne 13 (diagram, 29.1 sn, 5 çekim, cümleye bağlı)
+[18:59:03]    ilgisiz görüntü elendi: aerial view of old city
+[18:59:43]    alakasız görsel yeniden çizilecek: anatomical chart with arabic text
+[18:59:56]    ilgisiz görüntü elendi: aerial view of old church
+[19:00:00]    ilgisiz görüntü elendi: stained glass window in church
+[19:00:02] Sahne 14 (footage, 29.7 sn, 5 çekim, cümleye bağlı)
+[19:00:11]    ilgisiz görüntü elendi: baby inside a hospital incubator
+[19:00:16]    ilgisiz görüntü elendi: automated laboratory liquid dispensing machine
+[19:00:31]    ilgisiz görüntü elendi: three carved marble female busts
+[19:00:35]    ilgisiz görüntü elendi: wet rocks by the ocean
+[19:01:00]    ilgisiz görüntü elendi: white marble sculpture of women
+[19:01:05]    ilgisiz görüntü elendi: stepping stones across a stream
+[19:01:07] Sahne 15 (diagram, 25.2 sn, 4 çekim, cümleye bağlı)
+[19:01:13]    ilgisiz görüntü elendi: yellow flowers on sea cliff
+[19:01:15] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[19:01:31]    ilgisiz görüntü elendi: purple flower on black background
+[19:01:47]    ilgisiz görüntü elendi: Woman speaking in a room
+[19:01:50]    ilgisiz görüntü elendi: person using medical lab equipment
+[19:01:53] Sahne 16 (footage, 38.2 sn, 8 çekim, cümleye bağlı)
+[19:01:56]    ilgisiz görüntü elendi: interior of a large church
+[19:02:40]    alakasız görsel yeniden çizilecek: open book and prayer beads
+[19:02:52]    ilgisiz görüntü elendi: woman stretching arms in park
+[19:02:56]    ilgisiz görüntü elendi: a bench in autumn forest
+[19:03:15]    ilgisiz görüntü elendi: music video graphic with text
+[19:03:18]    ilgisiz görüntü elendi: aerial view of the Kaaba
+[19:03:22]    ilgisiz görüntü elendi: Close up of beer mug
+[19:03:27]    ilgisiz görüntü elendi: man thinking in dark background
+[19:03:29] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[19:03:44]    ilgisiz görüntü elendi: human skull on fire dark
+[19:03:45] Sahne 17 (diagram, 23.9 sn, 5 çekim, cümleye bağlı)
+[19:03:57]    ilgisiz görüntü elendi: sea lion near green water
+[19:04:17]    ilgisiz görüntü elendi: close up of sleeping dog
+[19:04:19]    ilgisiz görüntü elendi: train moving on railway tracks
+[19:05:14]    ilgisiz görüntü elendi: A stream flowing through woods
+[19:05:16] Sahne 18 (diagram, 23.8 sn, 4 çekim, cümleye bağlı)
+[19:05:20]    ilgisiz görüntü elendi: Water droplets on dark surface
+[19:05:37]    ilgisiz görüntü elendi: person using a sewing machine
+[19:05:56]    ilgisiz görüntü elendi: man lying on bed of nails
+[19:06:00]    ilgisiz görüntü elendi: businessman standing with crossed arms
+[19:06:12]    alakasız görsel yeniden çizilecek: man in bed with books
+[19:06:12] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[19:06:28]    ilgisiz görüntü elendi: woman lying on bed eating chocolate
+[19:06:31] Sahne 19 (diagram, 29.2 sn, 6 çekim, cümleye bağlı)
+[19:06:46]    ilgisiz görüntü elendi: child holding adult's hand indoors
+[19:06:51]    ilgisiz görüntü elendi: smiling man standing outside outdoors
+[19:07:50]    ilgisiz görüntü elendi: man talking in an interview
+[19:07:53]    ilgisiz görüntü elendi: bee on purple lavender flowers
+[19:07:57]    ilgisiz görüntü elendi: sun reflecting on calm water
+[19:08:08]    alakasız görsel yeniden çizilecek: person awake in bed
+[19:08:08] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[19:08:23]    ilgisiz görüntü elendi: hands typing on wireless keyboard
+[19:08:27]    ilgisiz görüntü elendi: an analog desk clock ticking
+[19:08:31]    ilgisiz görüntü elendi: tall historic building with clock tower
+[19:08:33] Sahne 20 (diagram, 23.2 sn, 5 çekim, cümleye bağlı)
+[19:08:36]    ilgisiz görüntü elendi: aerial view of mountain road
+[19:09:37]    alakasız görsel yeniden çizilecek: illustration of lungs with text
+[19:09:37] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[19:09:51]    ilgisiz görüntü elendi: Person playing an acoustic guitar
+[19:09:57]    ilgisiz görüntü elendi: aerial view of concrete building
+[19:11:13]    ilgisiz görüntü elendi: man lifting red kettlebell outside
+[19:11:18]    ilgisiz görüntü elendi: people at a skate park
+[19:11:20] Sahne 21 (diagram, 24.9 sn, 5 çekim, cümleye bağlı)
+[19:11:37]    ilgisiz görüntü elendi: Person pointing at red object
+[19:11:40]    ilgisiz görüntü elendi: Snowy mountains and pine trees
+[19:11:44]    ilgisiz görüntü elendi: bronze equestrian statue in city
+[19:11:56]    alakasız görsel yeniden çizilecek: dark room with arrows
+[19:12:10]    ilgisiz görüntü elendi: plush reindeer toy on grass
+[19:12:30]    ilgisiz görüntü elendi: single autumn leaf on branch
+[19:12:32] Sahne 22 (diagram, 31.4 sn, 6 çekim, cümleye bağlı)
+[19:12:50]    ilgisiz görüntü elendi: pixelated cartoon wolf running away
+[19:12:55]    ilgisiz görüntü elendi: blurry red lights on black
+[19:13:07]    ilgisiz görüntü elendi: sunlight shining through forest trees
+[19:13:56]    ilgisiz görüntü elendi: bright green sunny forest trees
+[19:13:58] Görsel aşaması zaman bütçesini aştı: kalan sahnelerde yalnız cümleye göre çizilen görseller (hızlı mod)
+[19:14:03] Sahne 23 (diagram, 22.1 sn, 4 çekim, cümleye bağlı)
+[19:14:15] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[19:14:30] Sahne 24 (footage, 26.6 sn, 5 çekim, cümleye bağlı)
+[19:14:41] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[19:14:45] Sahne 25 (diagram, 24.2 sn, 5 çekim, cümleye bağlı)
+[19:14:45] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[19:14:47] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[19:14:55] Sahne 26 (footage, 24.6 sn, 5 çekim, cümleye bağlı)
+[19:14:55] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[19:15:09] Sahne 27 (diagram, 24.6 sn, 5 çekim, cümleye bağlı)
+[19:15:20] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[19:15:26] Sahne 28 (footage, 28.5 sn, 6 çekim, cümleye bağlı)
+[19:15:26] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[19:15:45] Sahne 29 (diagram, 25.7 sn, 5 çekim, cümleye bağlı)
+[19:15:46] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[19:16:02] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[19:16:06] Sahne 30 (diagram, 25.9 sn, 5 çekim, cümleye bağlı)
+[19:16:26] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[19:16:33] Sahne 31 (footage, 24.4 sn, 4 çekim, cümleye bağlı)
+[19:16:33] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[19:16:43] Sahne 32 (footage, 28.1 sn, 5 çekim, cümleye bağlı)
+[19:16:43] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[19:16:51] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[19:16:54] Sahne 33 (footage, 24.3 sn, 5 çekim, cümleye bağlı)
+[19:16:54] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[19:17:00] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[19:28:12] Ana video: 946 sn
+[19:28:35] Short 1: sahne 0-2, 30 sn — Why Millions in Turkey Fear Karabasan
+[19:28:59] Short 2: sahne 11-13, 30 sn — The Classical Jinn Mentioned in Ancient Texts
+[19:29:40] Short 3: sahne 17-19, 53 sn — The Brain Glitch That Feels Like a Demon
+[19:29:40] Altyazı çevirisi: Turkish (281 satır)
+[19:30:01] Bugünün yayın saati kaçtı; video aynı gün 16:00 (yerel) yayınlanacak
+>>>>>>> Stashed changes
+[19:30:19] Altyazı eklendi: English
+[19:30:20] Altyazı eklendi: Türkçe
+[19:30:21] Oynatma listesine eklendi: Reported Encounters
+[19:30:26] Instagram sırasına eklendi: Why Millions in Turkey Fear Karabasan
+[19:30:27] Instagram sırasına eklendi: The Classical Jinn Mentioned in Ancient Texts
+[19:30:30] Instagram sırasına eklendi: The Brain Glitch That Feels Like a Demon
+[19:31:04] Bitti: https://youtu.be/e__IHqcFCiI
+[19:31:04] Başarıyla bitti.
