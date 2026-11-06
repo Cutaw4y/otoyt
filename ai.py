@@ -43,6 +43,16 @@ def vertex_on():
     return bool(os.getenv("GCP_SA_KEY")) and not _vx["off"] and not os.getenv("NO_VERTEX")
 
 
+IMG_MIN_GAP = 4.0     # sn: Vertex görsel modeli dakika kotası
+_img_last = [0.0]
+_img_429 = [0]
+
+
+def vertex_image_wait_s():
+    """Görsel kota beklemesinin bitmesine kalan saniye (0 = hazır)."""
+    return max(0.0, _vx_image_pause_until - time.monotonic())
+
+
 def vertex_image_on():
     """Görsel üretim servisi kota beklemesindeyken pahalı tekrarları atla."""
     return vertex_on() and time.monotonic() >= _vx_image_pause_until
@@ -263,18 +273,30 @@ def gemini_image(prompt, out, models=("gemini-2.5-flash-image", "gemini-3-pro-im
     last = None
     global _vx_image_pause_until
     if vertex_image_on():
-        for vm in (("gemini-3.1-flash-image",) if quick else ("gemini-3.1-flash-image", "gemini-3-pro-image")):
+        for vm in (("gemini-3.1-flash-image", "gemini-2.5-flash-image") if quick
+                   else ("gemini-3.1-flash-image", "gemini-3-pro-image")):
+            if not vertex_image_on() and vm != "gemini-2.5-flash-image":
+                continue
             try:
                 for attempt in range(1 if quick else 4):  # görsel modeli dakika sınırı: 429'da bekle, tekrar dene
-                    # quick (sahne görselleri): beklemeden ücretsiz modele düş; saatlerce 429 beklemesi olmasın
+                    # dakika kotasını aşmamak için istekler arası en az IMG_MIN_GAP sn
+                    gap = IMG_MIN_GAP - (time.monotonic() - _img_last[0])
+                    if gap > 0:
+                        time.sleep(gap)
+                    _img_last[0] = time.monotonic()
                     r = _vertex_generate(vm, {"contents": [{"role": "user", "parts": [{"text": prompt}]}],
                                               "generationConfig": {"responseModalities": ["IMAGE"],
                                                                    "imageConfig": {"aspectRatio": aspect}}}, timeout=180)
                     if quick and r.status_code == 429:
-                        # Sahne başına yüzlerce tekrar yerine 15 dk soğuma; Cloudflare/gerçek fotoğraf devralır.
-                        _vx_image_pause_until = time.monotonic() + 900
-                        LOG("Vertex görsel kotası 429: 15 dakika bekleme moduna geçildi; yedek görseller kullanılacak")
+                        # 06.11: 15 dk soğuma tüm videoyu 3-4 görsele mahkûm etti. 429 dakika kotasıdır →
+                        # kısa ve artan bekleme (75 sn → en çok 5 dk); arada yedek model denenir.
+                        _img_429[0] += 1
+                        wait = min(75 * _img_429[0], 300)
+                        _vx_image_pause_until = time.monotonic() + wait
+                        LOG(f"Vertex görsel kotası 429: {wait} sn bekleme; bu arada yedek model/fotoğraf denenecek")
                         break
+                    if r.status_code == 200:
+                        _img_429[0] = 0
                     if r.status_code not in (429, 500, 503):
                         break
                     time.sleep(20 * (attempt + 1))

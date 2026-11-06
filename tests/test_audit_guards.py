@@ -177,9 +177,13 @@ class ProductionGuards(unittest.TestCase):
              mock.patch.object(ai, "LOG"):
             with self.assertRaises(RuntimeError):
                 ai.gemini_image("test", "will-not-write.jpg", models=(), quick=True)
-            self.assertEqual(1, generate.call_count)
-            sleep.assert_not_called()
+            # 06.11 (Claude): 429'da yedek model bir kez denenir (en çok 2 istek); uzun bekleme yok,
+            # yalnız dakika kotası için kısa aralık (≤ IMG_MIN_GAP). Ayrıntı NOTLAR.md.
+            self.assertLessEqual(generate.call_count, 2)
+            for c in sleep.call_args_list:
+                self.assertLessEqual(c.args[0], ai.IMG_MIN_GAP)
             self.assertGreater(ai._vx_image_pause_until, ai.time.monotonic())
+            self.assertLessEqual(ai._vx_image_pause_until - ai.time.monotonic(), 300)
 
     def test_vertex_image_pause_skips_quota_requests(self):
         with mock.patch.object(ai, "vertex_on", return_value=True):

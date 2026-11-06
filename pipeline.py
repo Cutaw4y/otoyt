@@ -822,9 +822,12 @@ def gen_image(prompt, out, fallback_query=None, ledger=None):
         for q in (fallback_query, CFG["fallback_broll"]):
             if fetch_stock_photo(q, out, ledger):
                 return out
-    if ai.vertex_image_on():  # son çare; 429 soğuma modunda aynı isteği tekrarlama
+    if ai.vertex_on() and not ai.vertex_image_on() and ai.vertex_image_wait_s() <= 300 and not vis_hurry():
+        # 06.11: kota beklemesi kısa → aynı görseli tekrar tekrar kullanmak yerine birkaç dakika bekle
+        time.sleep(ai.vertex_image_wait_s() + 1)
+    if ai.vertex_image_on():  # son çare
         try:
-            return ai.gemini_image(prompt + ". Cinematic, wide 16:9, no text.", out, models=())
+            return ai.gemini_image(prompt + ". Cinematic, wide 16:9, no text.", out, models=(), quick=True)
         except Exception as e:
             log(f"Son çare Gemini görseli de olmadı: {str(e)[:120]}")
     # 06.11: tüm kaynaklar tükendi diye video çökmesin → bu videoda daha önce üretilmiş bir sahne görseli kullanılır
@@ -833,7 +836,8 @@ def gen_image(prompt, out, fallback_query=None, ledger=None):
     if _LAST_IMG and Path(_LAST_IMG).exists():
         prev.append(Path(_LAST_IMG))
     if prev:
-        pick = prev[-1 - (abs(hash(prompt)) % min(len(prev), 6))]  # son 6'dan biri: art arda aynı kare olmasın
+        pick = min(prev[-12:], key=lambda f: (_REUSE.get(str(f), 0), -f.stat().st_mtime))  # en az kullanılan
+        _REUSE[str(pick)] = _REUSE.get(str(pick), 0) + 1
         shutil.copyfile(pick, out)
         log("Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı")
         return out
@@ -956,6 +960,7 @@ def fetch_openverse(subject, out, context=""):
 
 _VIS_T0 = None
 _LAST_IMG = None
+_REUSE = {}  # yedek olarak yeniden kullanılan görsel → kaç kez (tek görselin videoyu doldurmasını engeller)
 
 
 def vis_hurry():
@@ -1212,7 +1217,8 @@ def build_beat_scene(sc, i, bshots, workdir, ledger, style, hook, img_budget):
             except Exception:
                 prev = [v for v in imgs.values() if v]
                 if prev:
-                    imgs[j] = prev[-1]
+                    imgs[j] = min(prev, key=lambda f: _REUSE.get(str(f), 0))  # aynı kare art arda gelmesin
+                    _REUSE[str(imgs[j])] = _REUSE.get(str(imgs[j]), 0) + 1
                 elif _LAST_IMG and Path(_LAST_IMG).exists():
                     imgs[j] = _LAST_IMG
                 else:
