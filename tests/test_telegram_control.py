@@ -50,7 +50,8 @@ class OwnerDecisions(unittest.TestCase):
             self.assertEqual(before, s)
 
     def test_reply_keyboard_send_is_message_not_inline_callback(self):
-        with mock.patch.object(tc, "tg", return_value={"message_id": 1}) as request:
+        with mock.patch.object(tc, "tg", return_value={"message_id": 1}) as request, \
+             mock.patch.dict(os.environ, {"TELEGRAM_CHAT_ID": str(OWNER)}):
             tc.send("Choose", text_choices=["1", "2", "3", "4"])
         markup = request.call_args.kwargs["reply_markup"]
         self.assertIn("keyboard", markup)
@@ -59,6 +60,8 @@ class OwnerDecisions(unittest.TestCase):
 
     def test_old_topic_message_is_resent_as_reply_keyboard(self):
         s = state()
+        for item in s["job"]["ideas"]:
+            item["why"] = "Important"
         s["job"]["delivered"] = "abc:topic:"
         with mock.patch.object(tc, "persist"), \
              mock.patch.object(tc, "send") as send:
