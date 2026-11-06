@@ -8,7 +8,10 @@ on:
 permissions:
   contents: write               # ig_queue.json / history.json kaydı + Release'teki videolar
 
-concurrency: ig-golgedefter
+concurrency:
+  group: otoyt-uretim
+  cancel-in-progress: false
+  queue: max
 
 env:
   OTOYT_CONFIG: channels/golgedefter.yaml
@@ -35,6 +38,7 @@ jobs:
       - name: Kaydet
         if: always()
         run: |
+          python3 json_guard.py  # bozuk JSON veya Git çakışması asla git'e yazılmasın
           git config user.name "otoyt-bot"
           git config user.email "otoyt@users.noreply.github.com"
           git add -A data/golgedefter
