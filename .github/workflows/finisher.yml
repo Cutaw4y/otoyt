@@ -14,7 +14,10 @@ on:
         default: ""
 permissions:
   contents: write
-concurrency: otoyt-finisher
+concurrency:
+  group: otoyt-uretim
+  cancel-in-progress: false
+  queue: max
 jobs:
   finish:
     runs-on: ubuntu-24.04
@@ -52,6 +55,7 @@ jobs:
       - name: Kaydet
         if: always()
         run: |
+          python3 json_guard.py  # bozuk JSON veya Git çakışması asla git'e yazılmasın
           git config user.name "otoyt-bot"; git config user.email "otoyt@users.noreply.github.com"
           for f in playlist_covers.json history.json assets_used.json assets/branding_done.json pending_comments.json playlists.json \
                    votes.json localizations_cleared.json manual_pending.json related_video_tasks.json; do [ -f "$f" ] && git add "$f"; done
