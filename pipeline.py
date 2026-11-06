@@ -48,6 +48,7 @@ HISTORY = DATA / "history.json"
 OUT = ROOT / "out"
 DRY_RUN = os.getenv("DRY_RUN", "").lower() in ("1", "true", "yes")
 UPLOAD_STARTED = False   # True olduktan sonra hata olursa otomatik tekrar deneme YAPILMAZ (çift yükleme olmasın)
+QUALITY_RETRY_PENDING = False  # Kalite kontrolünde upload öncesi planlanan Telegram tekrar
 
 
 # ---------------------------------------------------------------- yardımcılar
@@ -2814,8 +2815,11 @@ def produce_script(history, report, selected_idea=None):
                "senden bir şey gerekmiyor.")
         best[2]["_score"] = best[0]
         return best[1], best[2]
-    notify("⛔ Bugün video üretilmedi: hiçbir senaryo kalite alt sınırını geçemedi. "
-           f"Bir sonraki çalışmada tekrar denenecek.\nEditör notu: {last_tr}"[:1500])
+    if not selected_idea:
+        notify("⛔ Bugün video üretilmedi: hiçbir senaryo kalite alt sınırını geçemedi. "
+               f"Bir sonraki çalışmada tekrar denenecek.\nEditör notu: {last_tr}"[:1500])
+    # Selected-topic notifications are emitted by the durable retry scheduler;
+    # do not tell the user to choose a different topic or send duplicates.
     log("Hiçbir senaryo alt sınırı geçemedi, video üretilmedi.")
     return None, None
 
@@ -3027,6 +3031,8 @@ def preflight():
 
 
 def run_once():
+    global QUALITY_RETRY_PENDING
+    QUALITY_RETRY_PENDING = False
     editorial_job = None
     if not DRY_RUN and CFG.get("telegram_editorial", {}).get("enabled"):
         import telegram_control as editorial
@@ -3083,7 +3089,7 @@ def run_once():
             # This has not reached the upload boundary. The original ÜRET
             # decision remains valid, so a bounded same-topic retry is safe.
             import telegram_control as editorial
-            editorial.schedule_quality_retry(
+            QUALITY_RETRY_PENDING = editorial.schedule_quality_retry(
                 editorial_job, upload_started=UPLOAD_STARTED,
                 max_retries=CFG.get("telegram_editorial", {}).get("max_quality_retries", 2))
         return False
@@ -3570,9 +3576,15 @@ if __name__ == "__main__":
         if res is False and os.getenv("EDITORIAL_JOB") and not DRY_RUN:
             # A quality-gate failure is not a successful produced video.  Its
             # durable Telegram state has already scheduled a bounded retry.
-            print("::warning title=Gölgedefter kalite kontrolü::"
-                  "Video oluşturulamadı; aynı onaylı konu için güvenli tekrar kaydedildi "
-                  "veya deneme sınırına ulaşıldı.", flush=True)
+            if QUALITY_RETRY_PENDING:
+                print("::notice title=Gölgedefter otomatik tekrar::"
+                      "Video henüz üretilmedi. Aynı onaylı konu için yeni deneme "
+                      "kalıcı olarak sıraya alındı; bu planlı bekleme hata değildir.",
+                      flush=True)
+                sys.exit(0)  # Telegram holds retry; no spurious GitHub failure email.
+            print("::error title=Gölgedefter kalite kontrolü::"
+                  "Video güvenli tekrar sınırında da oluşturulamadı. "
+                  "Yayın yapılmadı.", flush=True)
             sys.exit(4)
         if res is not False and not DRY_RUN:
             (DATA / "missed.json").unlink(missing_ok=True)
