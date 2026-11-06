@@ -37,6 +37,8 @@ _WD = (datetime.now(timezone.utc) + timedelta(hours=3)).weekday()
 if os.getenv("OTOYT_WEEKDAY", "").isdigit():
     _WD = int(os.getenv("OTOYT_WEEKDAY"))
 CFG.update((CFG.get("weekday_overrides") or {}).get(_WD, {}))
+if CFG.get("extra_script_rules"):
+    CFG["script_rules"] = CFG.get("script_rules", "") + "\n" + CFG["extra_script_rules"]
 # Kanal başına anahtar eşlemesi (ör. YT_REFRESH_TOKEN ← YT2_REFRESH_TOKEN)
 # seslendirme için öbür kanalın anahtarı da yedek olarak kullanılır (iki kanal farklı günlerde üretiyor;
 # Google'ın ücretsiz günlük ses hakkı anahtar/proje başına → toplam ses hakkı iki katına çıkar)

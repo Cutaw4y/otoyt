@@ -274,6 +274,23 @@ weekday_overrides:
     visual_time_budget_min: 75
     max_gemini_scene_images: 45
     max_expand_rounds: 3
+    extra_script_rules: >
+      CUMA BELGESELİ (uzun, sinematik belgesel tadında; LEMMiNO, Barely Sociable, Wendigoon, Hakikat Avcısı tarzı
+      uzun anlatı kanallarının yöntemleri — metin/başlık KOPYALANMAZ):
+      1) SOĞUK AÇILIŞ: ilk 40-60 saniyede olayın en ürpertici, belgeli anını sahne sahne anlat (yer, yıl, kişi),
+      sonra "bu hikâye nasıl başladı?" diye geri dön. Selamlama/kanal tanıtımı yok.
+      2) PERDELER: anlatıyı 6-8 bölüme (perde/dosya) ayır. Her bölüm küçük bir merak kancasıyla açılsın ve
+      cevabı sonraki bölümde verilen açık bir soruyla bitsin (her 3-4 dakikada yeniden kanca).
+      3) BİRİNCİL KAYNAK: arşiv kaydı, mahkeme/kadı sicili, seyyah notu, gazete haberi gibi kaynakları tarih ve
+      yer vererek, yavaşça, alıntı tonunda aktar; hangi kaynağın ne kadar güvenilir olduğunu söyle.
+      4) İNSAN ODAĞI: olayı yaşayan somut kişileri (köylü, kadı, doktor, tanık) takip et; onların gözünden anlat.
+      5) ZAMAN VE MEKÂN ÇAPASI: tarihleri, yerleri ve mesafeleri sık ver; izleyici haritada nerede olduğunu bilsin.
+      6) TEMPO: atmosferik, yavaş betimleme paragraflarını hızlı açıklama/ifşa paragraflarıyla değiştir;
+      kritik cümleden önce kısa, tek cümlelik duraklar kullan.
+      7) TEORİLER VE BİLİM: son üçte birde rasyonel/bilimsel açıklamaları (tıp, ayrışma, salgınlar, psikoloji)
+      ve karşı görüşleri adil biçimde ver; hangisinin güçlü olduğunu kanıta göre tart.
+      8) KAPANIŞ: "bugün kesin bilinenler / hâlâ bilinmeyenler" ayrımı, akılda kalan son bir görüntü ve
+      izleyiciye tek bir tartışma sorusu. Uydurma kişi, alıntı, tarih veya belge YOK.
 max_topic_attempts: 2          # fiyat/performans: en fazla 2 konu denenir, en iyi senaryo yayınlanır
 selected_topic_attempts: 2      # ÜRET ile seçilen AYNI konu için 2 bağımsız senaryo denemesi; konu değiştirilmez
 max_rewrites: 2
