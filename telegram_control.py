@@ -129,10 +129,18 @@ def owner_id():
     return chat
 
 
-def send(text, buttons=()):
-    return tg("sendMessage", chat_id=owner_id(), text=text[:4000],
-              reply_markup={"inline_keyboard": [[{"text": label, "callback_data": data}]
-                                                for label, data in buttons]})
+def send(text, buttons=(), text_choices=()):
+    if buttons and text_choices:
+        raise ValueError("Use one Telegram keyboard kind per message")
+    if text_choices:
+        # Reply keyboard sends an ordinary chat message immediately; no
+        # endlessly spinning inline callback while GitHub polling is delayed.
+        markup = {"keyboard": [[{"text": label}] for label in text_choices],
+                  "resize_keyboard": True, "one_time_keyboard": True}
+    else:
+        markup = {"inline_keyboard": [[{"text": label, "callback_data": data}]
+                                     for label, data in buttons]}
+    return tg("sendMessage", chat_id=owner_id(), text=text[:4000], reply_markup=markup)
 
 
 def key(job, action):
@@ -159,10 +167,23 @@ def transition(state, update, owner):
     msg = update.get("message", {})
     if (job and msg.get("chat", {}).get("id") == owner and
             msg.get("chat", {}).get("type") == "private" and
-            msg.get("from", {}).get("id") == owner and job["status"] == "review"):
+            msg.get("from", {}).get("id") == owner):
         text = msg.get("text", "").strip()
-        if text and not text.startswith("/"):
-            job["revision_note"] = text[:2000]
+        status = job["status"]
+        if status in {"topic", "confirm"} and text in {"1", "2", "3", "4"}:
+            i = int(text) - 1
+            if i < len(job["ideas"]):
+                job.update(status="confirm", selected=i)
+                return "confirm"
+        if status == "confirm" and text.upper() == "ÜRET":
+            job.update(status="approved", idea=job["ideas"][job["selected"]])
+            return "approved"
+        if status in {"topic", "confirm", "review"} and text.upper() == "İPTAL":
+            job["status"] = "cancelled"
+            return "cancelled"
+        if status == "review":
+            if text and not text.startswith("/"):
+                job["revision_note"] = text[:2000]
         return None
     cb = update.get("callback_query", {})
     chat = cb.get("message", {}).get("chat", {})
@@ -278,23 +299,23 @@ def deliver(state):
     if not job:
         return
     status = job["status"]
-    marker = f"{job['id']}:{status}:{job.get('selected', '')}"
+    marker = f"reply-keyboard-v2:{job['id']}:{status}:{job.get('selected', '')}"
     if job.get("delivered") == marker:
         return
     if status == "topic":
         text = f"📕 Gölgedefter — {job['target_date']} için konu seç\n\n"
         text += "\n\n".join(f"{i+1}. {v['title']}\n{v['angle'][:350]}\nNeden: {v['why'][:180]}"
                              for i, v in enumerate(job["ideas"]))
-        send(text + "\n\nSeçmezsen üretim bekler. Düğmeler 24 saat, yaklaşık 5 dakikada bir kontrol edilir (GitHub gecikebilir).",
-             [(f"{i+1}. {v['title']}"[:60], key(job, f"choose-{i}"))
-              for i, v in enumerate(job["ideas"])] + [("Bugün pas geç", key(job, "cancel"))])
+        send(text + "\n\nAşağıdan 1, 2, 3 veya 4'e dokun. Bu bir mesaj olarak gönderilir; "
+             "seçimin 24 saat kontrol edilir (GitHub gecikebilir).",
+             text_choices=[str(i+1) for i in range(len(job["ideas"]))] + ["İPTAL"])
     elif status == "confirm":
         # Confirm message delivery is durable: if Telegram fails after we persist
         # the click/offset, the next scheduled poll retries this same message.
         idea = job["ideas"][job["selected"]]
-        send(f"Seçtin: {idea['title']}\nÜretime başlansın mı?",
-             [("🎬 Üretime başla", key(job, f"produce-{job['selected']}")),
-              ("İptal", key(job, "cancel"))])
+        send(f"Seçtin: {idea['title']}\nÜretime başlansın mı? "
+             "Onaylamak için ÜRET'e dokun. Ayrı yayın onayı da gerekecek.",
+             text_choices=["ÜRET", "İPTAL"])
     elif status == "review":
         send(review_message(job), review_buttons(job))
     elif status in {"failed", "dispatch_uncertain"}:
