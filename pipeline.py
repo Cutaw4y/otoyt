@@ -2759,7 +2759,11 @@ def produce_script(history, report, selected_idea=None):
     best = None  # (skor, fikir, senaryo)
     last_tr = ""
     tried = []
-    for topic_try in range(1 if selected_idea else CFG.get("max_topic_attempts", 3)):
+    # An owner-approved topic cannot be silently replaced. Generate fresh
+    # independent drafts for that SAME topic if earlier rewrites score poorly.
+    max_ideas = (CFG.get("selected_topic_attempts", 2) if selected_idea
+                 else CFG.get("max_topic_attempts", 3))
+    for topic_try in range(max_ideas):
         idea = dict(selected_idea) if selected_idea else pick_topic(history + [{"title": t, "type": "long"} for t in tried], report)
         tried.append(idea["title"])
         log(f"Konu ({topic_try+1}): {idea['title']}  [{idea['pillar']}]")
@@ -2799,8 +2803,8 @@ def produce_script(history, report, selected_idea=None):
                 break
             script = revised
         log(f"Konu kalite barajını geçemedi: {idea['title']}")
-        if best and best[0][0] >= CFG["min_quality_score"] - 1:
-            break  # bilgisi doğru, puanı 6+ : yeni konuya geçip günlük ücretsiz hakkı tüketme
+        if best and best[0][0] >= CFG["min_quality_score"] - 1 and not selected_idea:
+            break  # Başka konu tüketme; onaylı konudaysa yeni taslakla yeniden dene
     floor = CFG["min_quality_score"] if selected_idea else CFG.get("min_quality_floor", 0)
     if best and best[0][0] >= floor:
         log(f"Baraj geçilemedi; en iyi senaryo kullanılıyor (min {best[0][0]:.0f}, ort {best[0][1]:.1f})")
@@ -3076,7 +3080,10 @@ def run_once():
             push_now(PENDING_SCRIPT, "yarım kalırsa diye senaryo kaydı")
     if script is None:
         if editorial_job:
-            editorial_fail("Seçilen konu kalite/bilgi kontrolünü geçemedi; başka konuya geçilmedi.")
+            # This has not reached the upload boundary. The original ÜRET
+            # decision remains valid, so a bounded same-topic retry is safe.
+            import telegram_control as editorial
+            editorial.schedule_quality_retry(editorial_job, upload_started=UPLOAD_STARTED)
         return False
     kw = (script.get("core_keyword") or "").strip()  # revizyonlardan sonra da garanti
     if kw and _norm(kw) not in _norm(script.get("description", "")[:120]):
@@ -3558,6 +3565,13 @@ if __name__ == "__main__":
         res = run_once()
         credit_report("end")
         log("Bitti: video üretilmedi." if res is False else "Başarıyla bitti.")
+        if res is False and os.getenv("EDITORIAL_JOB") and not DRY_RUN:
+            # A quality-gate failure is not a successful produced video.  Its
+            # durable Telegram state has already scheduled a bounded retry.
+            print("::warning title=Gölgedefter kalite kontrolü::"
+                  "Video oluşturulamadı; aynı onaylı konu için güvenli tekrar kaydedildi "
+                  "veya deneme sınırına ulaşıldı.", flush=True)
+            sys.exit(4)
         if res is not False and not DRY_RUN:
             (DATA / "missed.json").unlink(missing_ok=True)
     except Exception:
