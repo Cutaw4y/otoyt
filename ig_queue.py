@@ -26,6 +26,9 @@ RELEASE = CFG.get("ig_release", "ig-queue")
 
 
 def notify(text):
+    if not text.startswith("🆘"):  # sade Telegram: Instagram'da yalnız müdahale gereken durumlar bildirilir
+        print(text)
+        return
     if CFG.get("notify_prefix"):
         text = f"{CFG['notify_prefix']} {text}"
     tok, chat = os.getenv("TELEGRAM_BOT_TOKEN"), os.getenv("TELEGRAM_CHAT_ID")

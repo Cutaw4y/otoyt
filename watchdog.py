@@ -23,7 +23,7 @@ CHANNELS = [
     ("otoyt_tr.yml", ROOT / "data/golgedefter/history.json", {1, 4, 5, 6}, 10, "Gölgedefter"),
 ]
 # bu saate (TR) kadar video çıkmadıysa Furkan'a Telegram'dan haber ver
-ALARM_H = {"Beyond Qaf": 17, "Gölgedefter": 17}
+ALARM_H = {"Beyond Qaf": 21, "Gölgedefter": 19}  # yayın saatine kadar video yüklenmediyse (hafta sonu GD 16)
 
 
 def tg(text):
@@ -59,10 +59,11 @@ def main():
         if any(h.get("type", "long") == "long" and str(h.get("date", "")).startswith(today_utc) for h in hist):
             continue  # bugünün videosu çıktı
         key = f"{wf}:{today_utc}"
-        if now.hour >= ALARM_H[name] and not state.get(key + ":late_alert"):
+        alarm_h = 16 if (name == "Gölgedefter" and now.weekday() >= 5) else ALARM_H[name]
+        if now.hour >= alarm_h and not state.get(key + ":late_alert"):
             state[key + ":late_alert"] = True
-            tg(f"📭 {name}: saat {now:%H:%M} oldu, bugünün videosu henüz YouTube'a çıkmadı. "
-               "Bekçi kendisi uğraşıyor; akşama kadar çıkmazsa 🆘 ile yazarım.")
+            tg(f"📭 {name}: yayın saati geldi ama bugünün videosu henüz yüklenmedi. Sistem uğraşıyor; "
+               "gece yarısına kadar aynı gün yayınlanır. Çözülmezse 🆘 ile yazarım.")
         busy = ("queued", "in_progress", "waiting", "pending", "requested")
         if any(r["status"] in busy for w in ("otoyt.yml", "otoyt_tr.yml") for r in runs(w, today_utc)):
             continue  # bir kanal şu an üretiyor (iki kanal aynı anda üretmez; sıradaki işi bozmayalım)
@@ -86,8 +87,7 @@ def main():
             continue
         state[key + ":tries"] = tries + 1
         print(f"{name}: üretim başlatıldı ({r.status_code}), bugünkü deneme {tries + 1}")
-        tg(f"🔁 {name}: bugünün videosu henüz çıkmamıştı (gecikme veya hata). Bekçi üretimi otomatik başlattı "
-           f"(bugünkü {tries + 1}. deneme). Yarıda kalan konu varsa aynısıyla devam edilir. Senden bir şey gerekmiyor.")
+        # 🔁 yeniden başlatma sessiz (kayıtta); yalnız sonuç (✅) veya 🆘 bildirilir
     # Instagram bekçisi: bugün video çıktıysa ama Reels paylaşılmadıysa günlük Instagram işini hemen çalıştır
     for wf_ig, hist_f, qfile, name in (("ig_en.yml", ROOT / "history.json", ROOT / "ig_queue.json", "Beyond Qaf"),
                                        ("ig_tr.yml", ROOT / "data/golgedefter/history.json",

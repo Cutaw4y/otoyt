@@ -164,6 +164,25 @@ class FridayDocumentaryFailures(unittest.TestCase):
         self.assertIn('"target_words": CFG["target_words"]', src)
 
 
+class CleanTelegram(unittest.TestCase):
+    """06.11 Furkan: Telegram sade olsun — ara adımlar susar, sonuç ve müdahale mesajları gider."""
+
+    def sent(self, text):
+        with mock.patch.dict(os.environ, {"TELEGRAM_BOT_TOKEN": "t", "TELEGRAM_CHAT_ID": "c"}), \
+                mock.patch.object(pipeline.requests, "post") as post:
+            pipeline.notify(text)
+        return post.called
+
+    def test_noise_is_quiet(self):
+        for t in ("🎬 Yeni video yapımı başladı", "💳 Yapım başlıyor", "🎙 Seslendirme bitti", "📌 Konu seçildi: x",
+                  "💰 Bu videonun tahmini maliyeti", "📱 Short 1/3 yüklendi", "ℹ️ Video üretiminde bir aksaklık oldu"):
+            self.assertFalse(self.sent(t), t)
+
+    def test_important_is_sent(self):
+        for t in ("✅ Başlık\n🕒 Yayın", "🆘 CLAUDE'A YAZ — x", "⛔ Bugün video üretilmedi", "📊 İzleyici analizi: x"):
+            self.assertTrue(self.sent(t), t)
+
+
 class LongDocumentaryFitsTimeLimit(unittest.TestCase):
     """Hata 4: uzun belgesel 5,5 saatlik iş sınırını aşmasın (kaba bütçe kontrolü)."""
 

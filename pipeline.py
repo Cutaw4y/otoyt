@@ -98,9 +98,18 @@ def log(msg):
         pass
 
 
+# 06.11 Furkan: "Telegram çok kirli". Sade düzen: video başına TEK ✅ özet, 🆘 (müdahale), ⛔ (video çıkmadı),
+# 📊 izleyici analizi, 🖼 küçük resim seçenekleri. Ara adım ve kendi kendine toparlanan aksaklıklar yalnız kayda yazılır.
+QUIET_PREFIXES = ("📚", "🔎", "💳", "🎬", "♻️", "📌", "🎙", "🖼 Görseller", "🖼 Az izlenen", "🎞", "💰", "📱",
+                  "📸", "💬", "🏷", "📝", "🎨 Kanal", "🧹", "ℹ️", "✅ Türkçe", "✅ English", "🗳️ Oylama sonucu: \"")
+
+
 def notify(text, code=None):
     """Telegram ve/veya WhatsApp'a (CallMeBot) bildirim. Hangisinin anahtarı varsa ona gider.
     code: Telegram'da dokununca kopyalanan kutu içinde gösterilir (başlık gibi)."""
+    if text.startswith(QUIET_PREFIXES) and not text.startswith("ℹ️ Ücretli Gemini"):
+        print(f"[sessiz bildirim] {text[:300]}")
+        return
     if CFG.get("notify_prefix"):  # birden çok kanal: mesaj hangi kanaldan geliyor belli olsun
         text = f"{CFG['notify_prefix']} {text}"
     tok, chat = os.getenv("TELEGRAM_BOT_TOKEN"), os.getenv("TELEGRAM_CHAT_ID")
@@ -2010,8 +2019,7 @@ def tally_votes(min_days=3):
         v.update(counted=now.isoformat(timespec="minutes"), counts=counts, comments=seen)
         changed = True
         if n == 0:
-            if seen:
-                notify(f"🗳️ Oylama sonucu: \"{v['title']}\" videosuna 3 günde {seen} yorum geldi ama oy veren olmadı.")
+            log(f"Oylama: \"{v['title']}\" videosuna {seen} yorum, oy yok")
             continue
         pa = round(100 * counts[0] / n)
         tr = CFG.get("language_code", "en").startswith("tr")
@@ -3479,9 +3487,15 @@ def publish_rendered(script, idea, shorts, thumb, thumb_alt, en_srt, tr_srt,
     if vid in publish.UPLOAD_WARNINGS:
         notify(f"🆘 CLAUDE'A YAZ — Video yüklendi ama YouTube yayın saatini kaydetmedi: https://youtu.be/{vid}\n"
                f"Studio'dan Görünürlük → Planla → {fmt_local(main_t)} seç (bir kerelik).")
-    notify(f"✅ Video yüklendi: {tr_title(tr_meta, script['title'])}\nhttps://youtu.be/{vid}\n"
-           + (f"Yayın: {fmt_local(main_t)} (TR saati). " if sched else "Şimdilik gizli (private). ")
-           + "Beğenmezsen Studio'dan sil.")
+    try:
+        _v, _s = ai.cost_usd()
+        _rate = float((load_json(CREDIT_LEDGER, {}) if CREDIT_LEDGER.exists() else {}).get("usd_tl", 49.0))
+        _cost = f"\nMaliyet: ~{(_v + _s) * _rate:,.0f} TL"
+    except Exception:
+        _cost = ""
+    notify(f"✅ {tr_title(tr_meta, script['title'])}\n"
+           + (f"🕒 Yayın: {fmt_local(main_t)}" if sched else "Şimdilik gizli (private)")
+           + f" · {len(shorts)} Short sonraki günlerde\nhttps://youtu.be/{vid}{_cost}")
 
     for k, sh_ in enumerate(shorts):
         try:
