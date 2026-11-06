@@ -316,7 +316,7 @@ def deliver(state):
         text += "\n\n".join(f"{i+1}. {v['title']}\n{v['angle'][:350]}\nNeden: {v['why'][:180]}"
                              for i, v in enumerate(job["ideas"]))
         send(text + "\n\nAşağıdan 1, 2, 3 veya 4'e dokun. Bu bir mesaj olarak gönderilir; "
-             "seçimin 24 saat kontrol edilir (GitHub gecikebilir).",
+             "Saat 23:00'e kadar seçmezsen 1. konuyu ben seçip üretime başlarım.",
              text_choices=[str(i+1) for i in range(len(job["ideas"]))] + ["İPTAL"])
     elif status == "confirm":
         # Confirm message delivery is durable: if Telegram fails after we persist
@@ -341,6 +341,24 @@ def deliver(state):
         return
     job["delivered"] = marker
     persist(state)
+
+
+def auto_choose(state, cfg, now):
+    """Sahip saat auto_choose_hour'a (TR, yayından önceki akşam) kadar seçim yapmazsa video kaçmasın:
+    seçtiği konu varsa o, yoksa sistemin 1. sıradaki (en güçlü) önerisi onaylanır."""
+    job = state.get("job", {})
+    hour = cfg["telegram_editorial"].get("auto_choose_hour")
+    if hour is None or not job or job.get("status") not in {"topic", "confirm"} or not job.get("ideas"):
+        return
+    deadline = datetime.combine(datetime.fromisoformat(job["target_date"]).date() - timedelta(days=1),
+                                datetime.min.time(), tzinfo=TR) + timedelta(hours=hour)
+    if now.astimezone(TR) < deadline:
+        return
+    i = job.get("selected", 0) if job.get("status") == "confirm" else 0
+    job.update(status="approved", selected=i, idea=job["ideas"][i], publish_authorized=True, auto_chosen=True)
+    persist(state)
+    send(f"⏰ {hour}:00'e kadar seçim gelmedi; video kaçmasın diye konuyu ben seçtim: "
+         f"{job['ideas'][i]['title']}\nÜretim başlıyor, yayın normal saatinde.")
 
 
 def dispatch(state):
@@ -614,6 +632,7 @@ def main():
     reconcile(state)
     offer(state, cfg, datetime.now(timezone.utc))
     deliver(state)
+    auto_choose(state, cfg, datetime.now(timezone.utc))
     dispatch(state)
 
 
