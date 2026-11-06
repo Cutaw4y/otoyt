@@ -26,6 +26,46 @@ def click(action, owner=OWNER, chat=OWNER, job="abc"):
 
 
 class OwnerDecisions(unittest.TestCase):
+    def test_reply_keyboard_text_selection_without_callback_query(self):
+        s = state()
+        msg = {"message": {"chat": {"id": OWNER, "type": "private"},
+                           "from": {"id": OWNER}, "text": "2"}}
+        self.assertEqual("confirm", tc.transition(s, msg, OWNER))
+        self.assertEqual(1, s["job"]["selected"])
+        self.assertEqual("confirm", s["job"]["status"])
+        self.assertNotIn("idea", s["job"])
+        approved = {"message": {"chat": {"id": OWNER, "type": "private"},
+                                "from": {"id": OWNER}, "text": "ÜRET"}}
+        self.assertEqual("approved", tc.transition(s, approved, OWNER))
+        self.assertEqual("B", s["job"]["idea"]["title"])
+
+    def test_reply_keyboard_does_not_honor_wrong_sender_or_invalid_selection(self):
+        for from_id, chat_id, msg in [(456, OWNER, "1"), (OWNER, 456, "1"),
+                                      (OWNER, OWNER, "5"), (OWNER, OWNER, "ÜRET")]:
+            s = state()
+            before = copy.deepcopy(s)
+            self.assertIsNone(tc.transition(s, {"message": {
+                "chat": {"id": chat_id, "type": "private"},
+                "from": {"id": from_id}, "text": msg}}, OWNER))
+            self.assertEqual(before, s)
+
+    def test_reply_keyboard_send_is_message_not_inline_callback(self):
+        with mock.patch.object(tc, "tg", return_value={"message_id": 1}) as request:
+            tc.send("Choose", text_choices=["1", "2", "3", "4"])
+        markup = request.call_args.kwargs["reply_markup"]
+        self.assertIn("keyboard", markup)
+        self.assertNotIn("inline_keyboard", markup)
+        self.assertEqual("1", markup["keyboard"][0][0]["text"])
+
+    def test_old_topic_message_is_resent_as_reply_keyboard(self):
+        s = state()
+        s["job"]["delivered"] = "abc:topic:"
+        with mock.patch.object(tc, "persist"), \
+             mock.patch.object(tc, "send") as send:
+            tc.deliver(s)
+            self.assertIn("text_choices", send.call_args.kwargs)
+            self.assertEqual("reply-keyboard-v2:abc:topic:", s["job"]["delivered"])
+
     def test_two_distinct_approvals_required(self):
         s = state()
         self.assertIsNone(tc.transition(s, click("produce-0"), OWNER))
@@ -115,7 +155,7 @@ class DurableGuards(unittest.TestCase):
                 tc.deliver(s)
             self.assertNotIn("delivered", s["job"])
             tc.deliver(s)
-            self.assertEqual("abc:confirm:1", s["job"]["delivered"])
+            self.assertEqual("reply-keyboard-v2:abc:confirm:1", s["job"]["delivered"])
             persist.assert_called_once()
             self.assertEqual(2, send.call_count)
             self.assertIn("Seçtin: B", send.call_args_list[0].args[0])
