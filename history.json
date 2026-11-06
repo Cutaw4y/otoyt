@@ -146,7 +146,6 @@
     "series_id": "qaf-1"
   },
   {
-<<<<<<< Updated upstream
     "date": "2026-11-06T06:18",
     "type": "reel",
     "title": "The Secret Legend of Mount Qaf",
@@ -154,7 +153,8 @@
     "video_id": "18164505271501341",
     "parent": "XGbn1i8ALlA",
     "queue_key": "ig-queue-beyondqaf:202611060613-the-secret-legend-of-mount-qaf-1.mp4"
-=======
+  },
+  {
     "date": "2026-11-06T06:12",
     "type": "short",
     "title": "The Secret Legend of Mount Qaf",
@@ -185,6 +185,5 @@
     "pillar": "Lost cities and legends of the ancient Middle East (Iram of the Pillars, Solomon's jinn, Dhul-Qarnayn's wall, the People of the Cave)",
     "video_id": "18116351437858771",
     "parent": "XGbn1i8ALlA"
->>>>>>> Stashed changes
   }
 ]
