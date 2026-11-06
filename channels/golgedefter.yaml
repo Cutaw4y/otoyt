@@ -270,9 +270,9 @@ min_quality_floor: 0
 # CUMA = uzun belgesel (kanal sahibi isteği 06.11): ~30-35 dk, daha çok görsel ve süre payı
 weekday_overrides:
   4:
-    target_words: 4200
-    visual_time_budget_min: 75
-    max_gemini_scene_images: 45
+    target_words: 5000            # ~40+ dk (kanal sahibi: Cuma belgeseli en az 40 dk)
+    visual_time_budget_min: 90
+    max_gemini_scene_images: 55
     max_expand_rounds: 3
     extra_script_rules: >
       CUMA BELGESELİ (uzun, sinematik belgesel tadında; LEMMiNO, Barely Sociable, Wendigoon, Hakikat Avcısı tarzı
