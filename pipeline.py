@@ -2786,6 +2786,101 @@ def add_to_pillar_playlist_by_title(video_id, title):
         log(f"Oynatma listesine eklenemedi: {str(e)[:150]}")
 
 
+LESSONS = DATA / "lessons.json"
+
+
+def _at(curve, x):
+    """Eğride x oranındaki izleyici oranı (doğrusal ara değer)."""
+    for (a0, b0), (a1, b1) in zip(curve, curve[1:]):
+        if a0 <= x <= a1:
+            return b0 + (b1 - b0) * (x - a0) / max(a1 - a0, 1e-9)
+    return curve[-1][1] if curve else 0.0
+
+
+def _chapters(desc):
+    out = []
+    for line in (desc or "").splitlines():
+        m = re.match(r"\s*(\d{1,2}):(\d{2})(?::(\d{2}))?\s+(.+)", line)
+        if m:
+            h, mi, se = (0, int(m[1]), int(m[2])) if m[3] is None else (int(m[1]), int(m[2]), int(m[3]))
+            out.append((h * 3600 + mi * 60 + se, m[4].strip()))
+    return out
+
+
+def retention_stats(curve, dur, chapters=()):
+    """İlk 30 sn'de kalan oran, ortalama izlenme oranı ve en büyük 3 kayıp noktası (dakika + bölüm)."""
+    r30 = _at(curve, min(30 / max(dur, 1), 1.0))
+    avg = sum(b for _, b in curve) / len(curve)
+    drops = []
+    for (a0, b0), (a1, b1) in zip(curve, curve[1:]):
+        if 0.03 <= a0 and a1 <= 0.95 and b0 > b1:
+            drops.append((b0 - b1, a1 * dur))
+    drops = sorted(drops, reverse=True)[:3]
+    def chap(t):
+        names = [n for s_, n in chapters if s_ <= t]
+        return names[-1] if names else ""
+    return {"r30": round(r30, 3), "avg": round(avg, 3),
+            "drops": [{"at": f"{int(t // 60)}:{int(t % 60):02d}", "lost": round(d, 3), "chapter": chap(t)}
+                      for d, t in sorted(drops, key=lambda x: x[1])]}
+
+
+def retention_review(history, max_n=2):
+    """Yayından ≥3 gün sonra her uzun videonun izleyici tutma eğrisini okur; ilk 30 sn ve kayıp noktalarından
+    sonraki senaryolar için somut dersler çıkarır (lessons.json) ve Telegram'a kısa özet yollar."""
+    if DRY_RUN or not os.getenv("YT_REFRESH_TOKEN"):
+        return
+    done = 0
+    for h in reversed(history):
+        if done >= max_n:
+            break
+        if h.get("type", "long") != "long" or not h.get("video_id") or h.get("retention_done"):
+            continue
+        try:
+            age = (datetime.utcnow() - publish.hist_dt(h["date"])).days
+        except Exception:
+            continue
+        if age < 3:
+            continue
+        data = publish.retention(h["video_id"], publish.hist_dt(h["date"]).date())
+        if not data or len(data["curve"]) < 10 or data["views"] < 30:
+            if age > 21:
+                h["retention_done"] = True  # veri hiç oluşmadı; tekrar tekrar sorma
+            continue
+        st = retention_stats(data["curve"], data["duration"], _chapters(data["description"]))
+        try:
+            r = llm_json(
+                "You are a YouTube retention analyst for a documentary channel. Be concrete and brief.",
+                f"Channel: {CFG['channel_name']} (language: {CFG['language_code']}). Video: {h.get('title')}\n"
+                f"Length: {data['duration'] // 60} min. Views: {data['views']}.\n"
+                f"Still watching at 0:30: {st['r30']:.0%}. Average share watched: {st['avg']:.0%}.\n"
+                f"Biggest drop points: {st['drops']}\n"
+                "Write 3 short, concrete, reusable rules for FUTURE scripts of this channel based on this data "
+                "(e.g. how to open, what to cut, where to add a hook). English, imperative, max 25 words each. "
+                "Also a 3-sentence plain Turkish summary for the channel owner (no jargon). "
+                'JSON: {"lessons":["..."],"summary_tr":"..."}',
+                required=("lessons", "summary_tr"), judge=True)
+        except Exception as e:
+            log(f"İzleyici analizi yorumlanamadı: {str(e)[:150]}")
+            continue
+        les = load_json(LESSONS, [])
+        les.append({"video_id": h["video_id"], "title": h.get("title"), "date": datetime.utcnow().date().isoformat(),
+                    **st, "lessons": [str(x)[:220] for x in r["lessons"][:3]]})
+        save_json(LESSONS, les[-10:])
+        h["retention_done"] = True
+        save_json(HISTORY, history)
+        done += 1
+        notify(f"📊 İzleyici analizi: {h.get('title')}\n"
+               f"İlk 30 saniyede kalan: %{st['r30'] * 100:.0f} · ortalama izlenen: %{st['avg'] * 100:.0f}\n"
+               f"{r['summary_tr']}\nBu dersler sonraki videoların senaryosuna otomatik eklendi.")
+
+
+def lessons_text():
+    les = load_json(LESSONS, []) if LESSONS.exists() else []
+    rules = [x for e in reversed(les[-4:]) for x in e.get("lessons", [])][:8]
+    return ("LESSONS FROM REAL VIEWER RETENTION DATA OF OUR PREVIOUS VIDEOS (follow them):\n"
+            + "\n".join(f"- {x}" for x in rules)) if rules else ""
+
+
 def pending_already_uploaded(pend, history):
     """Yarım kalan senaryo kaydı zaten yüklenmiş bir videoya mı ait? (Kopya video üretimini engeller.)"""
     if not pend or not pend.get("script"):
@@ -3105,6 +3200,12 @@ def run_once():
     history = load_json(HISTORY, [])
     ledger = media.AssetLedger(DATA / "assets_used.json")
 
+    try:
+        retention_review(history)
+    except Exception as e:  # analiz başarısız olsa da video üretimi sürsün
+        log(f"İzleyici analizi yapılamadı: {str(e)[:200]}")
+    if lessons_text():
+        CFG["script_rules"] = CFG.get("script_rules", "") + "\n" + lessons_text()
     report = publish.performance_report(history)
     log(f"Analitik: {report['n']} video ölçüldü, sütun puanları: {report['pillar_scores']}")
     if not editorial_job:
@@ -3611,6 +3712,10 @@ if __name__ == "__main__":
         finish_manual_uploads()
         post_due_comments()
         ensure_playlist_covers()
+        try:
+            retention_review(load_json(HISTORY, []))
+        except Exception as e:
+            log(f"İzleyici analizi yapılamadı: {str(e)[:200]}")
         sys.exit(0)
     if os.getenv("BRANDING_ONLY"):  # sadece kanal açıklaması/afiş/anahtar kelimeler (video üretmez)
         check_channel()

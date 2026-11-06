@@ -16,3 +16,4 @@
 - 2026-11-06 17:15 [Claude] Sistem paketleri (ffmpeg/espeak) actions/cache ile önbellekte; apt kısa zaman aşımı+yeniden deneme (bugün apt 47 dk takıldı)
 - 2026-11-06 18:25 [Claude] ACİL: '+00:00' tarihli kayıt dilimsiz tarihlerle karşılaştırılınca (performance_report, thumbnail değişimi) üretim çökecekti → publish.hist_dt, kayıt düzeltildi, test eklendi
 - 2026-11-06 18:35 [Claude] (ChatGPT ile ortak plan, adım 1) min_quality_floor 0→5 iki kanalda; her videodan sonra 3 küçük resim adayı Studio A/B testi için Telegram'a (send_thumb_options)
+- 2026-11-06 18:50 [Claude] (Ortak plan adım 2) İzleyici tutma analizi: yayından ≥3 gün sonra eğri okunur (publish.retention), ilk 30 sn + en büyük kayıplar → lessons.json → sonraki senaryo kurallarına eklenir, Telegram'a özet. Not: Codex incelemesi henüz kurulmadığı için doğrudan main'e; kurulunca PR akışı başlayacak

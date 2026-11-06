@@ -384,6 +384,29 @@ def video_stats(video_ids):
     return out
 
 
+def retention(video_id, published):
+    """İzleyici tutma eğrisi: [(videonun oranı 0-1, o noktada izleyen oranı)], süre (sn), görüntülenme.
+    Yetki/veri yoksa None (sistem durmaz)."""
+    if not os.getenv("YT_REFRESH_TOKEN"):
+        return None
+    try:
+        import re as _re
+        from googleapiclient.discovery import build
+        ya = build("youtubeAnalytics", "v2", credentials=_creds(), cache_discovery=False)
+        r = ya.reports().query(ids="channel==MINE", startDate=str(published)[:10], endDate=date.today().isoformat(),
+                               metrics="audienceWatchRatio", dimensions="elapsedVideoTimeRatio",
+                               filters=f"video=={video_id}").execute()
+        curve = [(float(a), float(b)) for a, b in r.get("rows", [])]
+        it = _yt().videos().list(part="contentDetails,statistics,snippet", id=video_id).execute()["items"][0]
+        m = _re.match(r"PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?", it["contentDetails"]["duration"])
+        dur = sum(int(x or 0) * k for x, k in zip(m.groups(), (3600, 60, 1)))
+        return {"curve": curve, "duration": dur, "views": int(it["statistics"].get("viewCount", 0)),
+                "description": it["snippet"].get("description", "")}
+    except Exception as e:
+        print(f"İzleyici tutma verisi okunamadı ({video_id}): {str(e)[:200]}")
+        return None
+
+
 def score(stat):
     """İzlenme (log) × izleyici tutma. Tutma, algoritmanın en çok önemsediği sinyal."""
     return math.log1p(stat["views"]) * (0.5 + stat["avg_pct"] / 100)

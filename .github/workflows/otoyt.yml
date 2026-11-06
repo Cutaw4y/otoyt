@@ -131,7 +131,7 @@ jobs:
           git config user.name "otoyt-bot"
           git config user.email "otoyt@users.noreply.github.com"
           for f in credit_ledger.json playlist_covers.json history.json assets_used.json assets/branding_done.json logs/last_run.txt \
-                   pending_comments.json pending_script.json votes.json ig_queue.json playlists.json localizations_cleared.json manual_pending.json related_video_tasks.json; do [ -f "$f" ] && git add "$f"; done
+                   pending_comments.json pending_script.json votes.json ig_queue.json playlists.json localizations_cleared.json manual_pending.json related_video_tasks.json lessons.json; do [ -f "$f" ] && git add "$f"; done
           git add -A pending_script.json 2>/dev/null || true   # silindiyse silinmesi de kaydedilsin
           for d in pending_captions thumb_alt manual logs/archive; do [ -d "$d" ] && git add -A "$d"; done
           git diff --cached --quiet && exit 0

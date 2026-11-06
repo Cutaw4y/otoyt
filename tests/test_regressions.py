@@ -115,6 +115,25 @@ class MixedDateFormats(unittest.TestCase):
             publish.performance_report(hist)  # hata vermemeli
 
 
+class RetentionLearning(unittest.TestCase):
+    """Ortak plan adım 2: gerçek izleyici tutma verisinden ders çıkarma."""
+
+    def test_stats_find_30s_and_biggest_drop_with_chapter(self):
+        curve = [(i / 100, 1.0 - 0.003 * i - (0.2 if i >= 40 else 0)) for i in range(101)]
+        st = pipeline.retention_stats(curve, 1000, pipeline._chapters("0:00 Giriş\n6:00 Kanıtlar\n9:00 Son"))
+        self.assertAlmostEqual(st["r30"], 1.0 - 0.003 * 3, places=2)
+        self.assertEqual(st["drops"][0]["chapter"] if st["drops"][0]["lost"] > 0.1 else
+                         max(st["drops"], key=lambda d: d["lost"])["chapter"], "Kanıtlar")
+
+    def test_lessons_are_injected(self):
+        import json, tempfile
+        with tempfile.TemporaryDirectory() as d:
+            f = Path(d) / "lessons.json"
+            f.write_text(json.dumps([{"lessons": ["Open with the strongest fact."]}]))
+            with mock.patch.object(pipeline, "LESSONS", f):
+                self.assertIn("Open with the strongest fact.", pipeline.lessons_text())
+
+
 class LongDocumentaryFitsTimeLimit(unittest.TestCase):
     """Hata 4: uzun belgesel 5,5 saatlik iş sınırını aşmasın (kaba bütçe kontrolü)."""
 
