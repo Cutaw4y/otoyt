@@ -235,9 +235,15 @@ def generate_ideas(cfg, history):
         if os.getenv(source):
             os.environ[target] = os.environ[source]
     past = [h.get("title", "") for h in history if h.get("type", "long") == "long"][-100:]
+    editorial = cfg.get("telegram_editorial", {})
     result = ai.gemini_json(
         f"You plan Turkish documentaries for {cfg['channel_name']}. {cfg['channel_brief']}\n"
-        f"Rules: {cfg.get('idea_rules', '')}",
+        f"Rules: {cfg.get('idea_rules', '')}\n"
+        "Subject inspiration (examples to vary, not repeat mechanically): "
+        + json.dumps(editorial.get("topic_inspiration", []), ensure_ascii=False)
+        + "\nNarrative techniques seen in other mystery channels; learn the method, "
+          "never copy titles, text, scripts or unverified conclusions: "
+        + json.dumps(editorial.get("inspiration_method", []), ensure_ascii=False),
         "Propose exactly 4 distinct topics. Do not repeat or closely paraphrase these published titles:\n"
         + json.dumps(past, ensure_ascii=False) + "\nChoose pillars only from: "
         + json.dumps(cfg["content_pillars"], ensure_ascii=False)
