@@ -1,17 +1,47 @@
-[11:29:55] Başladı (test modu: False, yayın: scheduled)
-[11:29:56] Ücretli Gemini anahtarı kullanılıyor
-[11:29:57] Kanal doğrulandı: GölgeDefter
-[11:29:58] Instagram anahtarı ve hesap kimliği doğrulandı: @golge.defter
-[11:29:59] Analitik: 3 video ölçüldü, sütun puanları: {'Anadolu ve dünya efsaneleri, mitolojik varlıklar, halk inançları': 3.1621411456103647, 'Açıklanamayan gerçek olaylar ve kayıplar (Dyatlov, Mary Celeste, Roanoke, Tunguska)': 1.4532443354501756, 'İslam tarihi ve kutsal kıssalar (Ashab-ı Kehf, Zülkarneyn, İrem ve Ad kavmi, Semud, Nuh tufanı)': 4.455603446915414}
-[11:31:04] Rakip analizi: 'Mezarı Açılıp Kalbine Kazık Çakılan Ölüler: Osmanlı Mahkemesinin Hortlak Davaları' seçildi (1/10 büyük rakip). Açı: Efsane veya korku hikayesi anlatmak yerine konuyu tamamen resmi bürokrasiye dayandırmak: Şeyhülislam Ebussuud Efendi'nin mezardan kalkan cesetlerin kalbine kazı
-[11:31:05] Konu (1): Mezarı Açılıp Kalbine Kazık Çakılan Ölüler: Osmanlı Mahkemesinin Hortlak Davaları  [Anadolu ve dünya efsaneleri, mitolojik varlıklar, halk inançları]
-[11:33:01] Senaryo yazıldı: 44 sahne, 2122 kelime
-[11:34:07] Anlatım sadeleştirildi (2122 → 1702 kelime)
-[11:35:13] Doğrulama kaynağı: Google araması
-[11:35:13] Doğrulama turu 1: 14 iddia, 3 yanlış, 0 belirsiz
-[11:37:14] Doğrulama kaynağı: Google araması
-[11:37:14] Doğrulama turu 2: 15 iddia, 0 yanlış, 0 belirsiz
-[11:37:14] En çok arananlar: osmanlı vampir olayı | osmanlıda vampirler | osmanlı'da vampir vakası | osmanlıda kültür ve medeniyet | osmanlıda kış | osmanlıda | osmanlıda doğsaydın | osmanlıda toprak sistemi
-[11:37:32] Başlık seçildi: Osmanlıda Vampir Vakaları: Gözleri Açık 2 Cesedin Gizemi  (önceki: Osmanlıda Vampir Vakaları: Mezardan Çıkarılan Cesetlerin Mahkeme Kayıtları) — Kanalın sevdiği 'Konu: Somut detay + Cevapsız soru' şablonuna birebir uyuyor. En çok aratılan anahtar kelimeyi ilk 25 karakterde veriyor, '2 ceset' so
-[11:37:34] Editör (min 7, ort 7.9): {'originality': 8, 'hook': 7, 'clarity': 8, 'simplicity': 7, 'flow': 8, 'value_density': 8, 'audience_fit': 9, 'problems': ['"kadı mahkemelerinin resmi kayıt defterleri olan şer\'iyye sicillerinde şaşırtıcı belgeler saklıdır" -> \'Şer\'iyye sicili\' terimi açıklanmadan kullanılmış. Daha basit ifade: \'Mahkemelerin eski resmi kayıt defterlerinde...\'', '"Osmanlı\'nın Balkan topraklarındaki bu davalar, aslında tüm Avrupa\'yı sarsan dev bir dalganın parçasıydı." -> \'Balkanlar\' kelimesi geçiyor ama coğrafi bağlam biraz hızlı geçilmiş.', '"Ancak fetva bununla sınırlı değildi" -> \'Fetva\' kelimesi daha önce açıklandı ama bu cümlede tekrar ederken tanımı verilmeden kullanılmış.'], 'problems_tr': "Metinde geçen 'şer'iyye sicili' gibi Osmanlıca terimler ilk defa duyacaklar için kısaca açıklanabilirdi."}
-[11:37:38] Seslendirme başlıyor (Gemini Charon)...
+[12:29:28] Başladı (test modu: False, yayın: scheduled)
+[12:29:28] Ücretli Gemini anahtarı kullanılıyor
+[12:29:30] Kanal doğrulandı: GölgeDefter
+[12:29:31] Instagram anahtarı ve hesap kimliği doğrulandı: @golge.defter
+[12:29:32] Analitik: 3 video ölçüldü, sütun puanları: {'Anadolu ve dünya efsaneleri, mitolojik varlıklar, halk inançları': 3.1621411456103647, 'Açıklanamayan gerçek olaylar ve kayıplar (Dyatlov, Mary Celeste, Roanoke, Tunguska)': 1.4532443354501756, 'İslam tarihi ve kutsal kıssalar (Ashab-ı Kehf, Zülkarneyn, İrem ve Ad kavmi, Semud, Nuh tufanı)': 4.455603446915414}
+[12:29:33] Aynı konu bugünkü uzunlukta yeniden yazılıyor: Osmanlıda Vampir Vakaları: Gözleri Açık 2 Cesedin Gizemi
+[12:29:33] Konu (1): Mezarı Açılıp Kalbine Kazık Çakılan Ölüler: Osmanlı Mahkemesinin Hortlak Davaları  [Anadolu ve dünya efsaneleri, mitolojik varlıklar, halk inançları]
+[12:31:23] Senaryo kısa (3134/4200 kelime) → genişletiliyor (1)
+[12:33:53] Senaryo kısa (3533/4200 kelime) → genişletiliyor (2)
+[12:36:09] Senaryo yazıldı: 111 sahne, 4298 kelime
+[12:38:33] Anlatım sadeleştirildi (4298 → 3504 kelime)
+[12:39:29] Doğrulama kaynağı: Google araması
+[12:39:29] Doğrulama turu 1: 15 iddia, 1 yanlış, 0 belirsiz
+[12:42:37] Doğrulama kaynağı: Google araması
+[12:42:37] Doğrulama turu 2: 15 iddia, 1 yanlış, 1 belirsiz
+[12:45:55] Doğrulama kaynağı: Google araması
+[12:45:55] Doğrulama turu 3: 15 iddia, 0 yanlış, 0 belirsiz
+[12:45:55] En çok arananlar: osmanlı'da vampir vakası | osmanlı vampir olayı | osmanlıda vampirler | osmanlıda kültür ve medeniyet | osmanlıda kış | osmanlıda | osmanlıda doğsaydın | osmanlıda toprak sistemi
+[12:46:23] Editör (min 6, ort 7.6): {'originality': 8, 'hook': 8, 'clarity': 7, 'simplicity': 6, 'flow': 7, 'value_density': 8, 'audience_fit': 9, 'problems': ["'Takvim-i Vekayi' kelimesi ilk geçtiğinde resmi devlet gazetesi olduğu söyleniyor ancak dönemi için ne ifade ettiği veya neden önemli olduğu biraz daha sadeleştirilebilirdi.", "'Kadı Ahmet Şükrü Efendi' gibi unvan ve isim geçişlerinde dönemin hukuk sistemi (kadı) tek cümleyle özetlenmiş olsa da 12 yaşındaki bir çocuğun tam anlaması için 'osmanlı hakimi' ifadesi biraz daha açılabilirdi.", "'Şeyhülislam Ebussuud Efendi' ve 'Hoca Sâdeddin Efendi' isimleri peş peşe ve dini/hukuki rütbeleriyle ağır bir şekilde veriliyor, 'Osmanlı'nın baş din adamı ve hukuk danışmanı' gibi bir basitleştirme yapılabilirdi."], 'problems_tr': "Metinde geçen 'Şeyhülislam', 'Kadı' ve döneme ait bazı özel kurum isimleri 12 yaşındaki bir dinleyicinin zorlanabileceği kadar ağırdır; bu terimler daha yalın ifadelerle (örneğin baş hukuk danışmanı gibi) basitleştirilmelidir."}
+[12:50:54] Anlatım sadeleştirildi (3550 → 3555 kelime)
+[12:50:54] Senaryo kısa (3555/4200 kelime) → genişletiliyor (1)
+[12:54:37] Doğrulama kaynağı: Google araması
+[12:54:37] Doğrulama turu 1: 15 iddia, 2 yanlış, 0 belirsiz
+[12:58:27] Doğrulama kaynağı: Google araması
+[12:58:27] Doğrulama turu 2: 15 iddia, 2 yanlış, 0 belirsiz
+[13:01:26] Doğrulama kaynağı: Google araması
+[13:01:26] Doğrulama turu 3: 13 iddia, 0 yanlış, 0 belirsiz
+[13:01:28] Editör (min 6, ort 7.6): {'originality': 7, 'hook': 6, 'clarity': 8, 'simplicity': 7, 'flow': 8, 'value_density': 8, 'audience_fit': 9, 'problems': ["Quote: 'Takvim-i Vekayi akıl almaz bir haber bastı.' -> Fix: 'Osmanlı'nın ilk resmi gazetesi olan Takvim-i Vekayi akıl almaz bir haber bastı.'", "Quote: 'Şeyhülislam fetvalarında yazan en sert önlem devreye sokulacaktı.' -> Fix: 'Osmanlı'nın baş din adamı olan şeyhülislamın dini izin belgesindeki en sert önlem devreye sokulacaktı.'", "Quote: 'Uyku felci sırasında göğüs kasları tam açılamaz ve nefes sıkışır.' -> Fix: 'Halk arasında karabasan bilinen uyku felci sırasında göğüs kasları tam açılamaz ve nefes sıkışır.'"], 'problems_tr': 'Metinde geçen Takvim-i Vekayi, şeyhülislam fetvası ve uyku felci gibi terimler ilk başta kısaca açıklanarak daha anlaşılır hale getirilebilir.'}
+[13:05:45] Anlatım sadeleştirildi (3728 → 3728 kelime)
+[13:06:44] Doğrulama kaynağı: Google araması
+[13:06:44] Doğrulama turu 1: 15 iddia, 0 yanlış, 0 belirsiz
+[13:06:46] Editör (min 6, ort 7.7): {'originality': 8, 'hook': 8, 'clarity': 7, 'simplicity': 6, 'flow': 8, 'value_density': 8, 'audience_fit': 9, 'problems': ['"Osmanlı\'nın ilk resmi gazetesi olan Takvim-i Vekayi" - Takvim-i Vekayi adının ne olduğu veya kelime anlamı açıklanmamış. Basit düzeltme: "Osmanlı\'nın ilk resmi gazetesi, yani devletin haber dergisi Takvim-i Vekayi" denilebilirdi.', '"Kadı, yani hem başhakimi hem de kaymakamı sayılan Ahmet Şükrü Efendi" - Kadı kelimesi açıklandı ama kaymakam terimi 12 yaşındaki biri için tam oturtulamayabilir.', '"Şeyhülislam Ebussuud Efendi" - Şeyhülislam unvanının Osmanlı\'nın en büyük din ve hukuk danışmanı olduğu daha sonra geçiyor ama ilk geçtiğinde biraz hızlı kalmış.', '"Vukodlak" - Yerel Balkan dilindeki bu terim ilk duyulduğunda yabancı gelebilir, hemen "Yani yerel vampir kelimesi" gibi basitleştirilebilirdi.'], 'problems_tr': 'Metinde Takvim-i Vekayi ve Şeyhülislam gibi bazı tarihi terimler ilk geçtiğinde yeterince basit açıklanmamış; 12 yaşındaki bir dinleyicinin rahatça anlaması için bu kavramların daha sadeleştirilmesi gerekirdi.'}
+[13:06:46] Konu kalite barajını geçemedi: Mezarı Açılıp Kalbine Kazık Çakılan Ölüler: Osmanlı Mahkemesinin Hortlak Davaları
+[13:06:46] Konu (2): Mezarı Açılıp Kalbine Kazık Çakılan Ölüler: Osmanlı Mahkemesinin Hortlak Davaları  [Anadolu ve dünya efsaneleri, mitolojik varlıklar, halk inançları]
+[13:10:22] Senaryo kısa (2607/4200 kelime) → genişletiliyor (1)
+[13:12:41] Senaryo kısa (3432/4200 kelime) → genişletiliyor (2)
+[13:14:22] Senaryo yazıldı: 90 sahne, 3646 kelime
+[13:16:23] Sadeleştirme sahne yapısını bozdu → eski metin kalıyor
+[13:17:25] Doğrulama kaynağı: Google araması
+[13:17:25] Doğrulama turu 1: 15 iddia, 5 yanlış, 0 belirsiz
+[13:21:30] Doğrulama kaynağı: Google araması
+[13:21:30] Doğrulama turu 2: 15 iddia, 3 yanlış, 0 belirsiz
+[13:24:35] Doğrulama kaynağı: Google araması
+[13:24:35] Doğrulama turu 3: 14 iddia, 1 yanlış, 0 belirsiz
+[13:24:35] Bilgi doğrulamadan geçemedi → yeni konu
+[13:24:35] Hiçbir senaryo alt sınırı geçemedi, video üretilmedi.
+[13:24:35] Bitti: video üretilmedi.
