@@ -267,6 +267,13 @@ max_expand_rounds: 2
 min_diagram_ratio: 0.5         # sahnelerin en az yarısı atmosferik AI görseli
 min_quality_score: 7
 min_quality_floor: 0
+# CUMA = uzun belgesel (kanal sahibi isteği 06.11): ~30-35 dk, daha çok görsel ve süre payı
+weekday_overrides:
+  4:
+    target_words: 4200
+    visual_time_budget_min: 75
+    max_gemini_scene_images: 45
+    max_expand_rounds: 3
 max_topic_attempts: 2          # fiyat/performans: en fazla 2 konu denenir, en iyi senaryo yayınlanır
 selected_topic_attempts: 2      # ÜRET ile seçilen AYNI konu için 2 bağımsız senaryo denemesi; konu değiştirilmez
 max_rewrites: 2

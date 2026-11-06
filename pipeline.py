@@ -32,6 +32,11 @@ ROOT = Path(__file__).parent
 # Kanal seçimi: OTOYT_CONFIG=channels/golgedefter.yaml gibi (varsayılan: Cutaway → config.yaml)
 CONFIG_PATH = ROOT / os.getenv("OTOYT_CONFIG", "config.yaml")
 CFG = yaml.safe_load(CONFIG_PATH.read_text(encoding="utf-8"))
+# Gün bazlı ayar: ör. Gölgedefter'de Cuma = uzun belgesel (weekday_overrides: {4: {target_words: ...}}, TR günü, 0=Pzt)
+_WD = (datetime.now(timezone.utc) + timedelta(hours=3)).weekday()
+if os.getenv("OTOYT_WEEKDAY", "").isdigit():
+    _WD = int(os.getenv("OTOYT_WEEKDAY"))
+CFG.update((CFG.get("weekday_overrides") or {}).get(_WD, {}))
 # Kanal başına anahtar eşlemesi (ör. YT_REFRESH_TOKEN ← YT2_REFRESH_TOKEN)
 # seslendirme için öbür kanalın anahtarı da yedek olarak kullanılır (iki kanal farklı günlerde üretiyor;
 # Google'ın ücretsiz günlük ses hakkı anahtar/proje başına → toplam ses hakkı iki katına çıkar)
@@ -3078,7 +3083,16 @@ def run_once():
         log(f"Yarım kalan senaryo kaydı zaten yüklenmiş bir videoya ait, atlanıyor: {pend['script'].get('title')}")
         PENDING_SCRIPT.unlink(missing_ok=True)
         pend = None
-    if not editorial_job and pend and pend.get("script") and (datetime.now() - datetime.fromisoformat(pend["date"])).days <= 7:
+    if (pend and pend.get("script") and pend.get("idea") and not editorial_job
+            and word_count(pend["script"]) < CFG["target_words"] * CFG.get("min_length_ratio", 0.85)):
+        # yarım kalan senaryo bugünkü hedef uzunluktan kısa (ör. Cuma belgeseli): aynı konuyla uzun senaryo yazılır
+        log(f"Aynı konu bugünkü uzunlukta yeniden yazılıyor: {pend['script'].get('title')}")
+        idea, script = produce_script(history, report, pend["idea"])
+        if script is not None:
+            save_json(PENDING_SCRIPT, {"date": datetime.now().isoformat(timespec="minutes"), "idea": idea,
+                                       "script": script})
+            push_now(PENDING_SCRIPT, "yarım kalırsa diye senaryo kaydı")
+    elif not editorial_job and pend and pend.get("script") and (datetime.now() - datetime.fromisoformat(pend["date"])).days <= 7:
         # önceki çalışma hata/zaman aşımıyla yarıda kaldı: hazır (kalite ve bilgi kontrolünden geçmiş) senaryo çöpe gitmesin
         idea, script = pend["idea"], pend["script"]
         log(f"Yarıda kalan videonun senaryosu kullanılıyor: {script['title']}")

@@ -338,3 +338,6 @@ json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes:
 [10:58:52] Instagram sırasına eklendi: Why Your Brain Locks Your Body at Night
 [10:59:26] Bitti: https://youtu.be/c05dhpIzinA
 [10:59:27] Başarıyla bitti.
+[14:34:18] Bugünün uzun videosu zaten kaydedilmiş; yeni üretim atlandı (tekrar yükleme engellendi).
+[14:34:18] Bugünün uzun videosu zaten kaydedilmiş; yeni üretim atlandı (tekrar yükleme engellendi).
+[14:34:18] Telegram onayı yok; üretim ve yayın bekliyor.
