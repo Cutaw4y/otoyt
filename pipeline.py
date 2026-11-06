@@ -3163,13 +3163,25 @@ def run_once():
             return
 
         if editorial_job:
-            import telegram_control as editorial
-            editorial.stage(editorial_job, script, idea, shorts, thumb, thumb_alt, en_srt,
-                            tr_srt, tr_meta, tr_blocks, final, REAL_CREDITS)
-            ledger.save()
-            return True
+            return auto_publish_editorial(editorial_job, script, idea, shorts, thumb, thumb_alt,
+                                          en_srt, tr_srt, tr_meta, tr_blocks, final, w,
+                                          history, ledger)
         publish_rendered(script, idea, shorts, thumb, thumb_alt, en_srt, tr_srt,
                          tr_meta, tr_blocks, final, w, history, ledger)
+
+
+def auto_publish_editorial(job, script, idea, shorts, thumb, thumb_alt,
+                           en_srt, tr_srt, tr_meta, tr_blocks, final, w, history, ledger):
+    """ÜRET authorizes production AND scheduled upload; no second Studio/Telegram approval."""
+    import telegram_control as editorial
+    if job.get("publish_authorized") is not True:
+        raise RuntimeError("Gölgedefter için yayın yetkisi verilmeden yükleme yapılamaz")
+    # Existing publisher handles exact channel, timestamps, Shorts, reels, and
+    # immediate video ID ledger. It is not retried after an uncertain upload.
+    publish_rendered(script, idea, shorts, thumb, thumb_alt, en_srt, tr_srt,
+                     tr_meta, tr_blocks, final, w, history, ledger, job)
+    editorial.complete_auto_publish(job)
+    return True
 
 
 def publish_rendered(script, idea, shorts, thumb, thumb_alt, en_srt, tr_srt,
@@ -3319,7 +3331,8 @@ def publish_rendered(script, idea, shorts, thumb, thumb_alt, en_srt, tr_srt,
 def editorial_fail(message):
     import telegram_control as editorial
     state = editorial.load()
-    if state.get("job", {}).get("id") == os.getenv("EDITORIAL_JOB"):
+    if (state.get("job", {}).get("id") == os.getenv("EDITORIAL_JOB") and
+            state["job"].get("status") not in {"done", "cancelled"}):
         state["job"]["status"] = "failed"
         editorial.persist(state)
         editorial.send("⚠️ Gölgedefter: " + message)
