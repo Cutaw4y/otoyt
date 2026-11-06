@@ -56,5 +56,34 @@
       "Eliminate slow historical descriptions around 3:34 by merging background details with active narrative stakes to retain viewers.",
       "Keep the intro under 30 seconds since 34 percent of the audience leaves before the main title segment begins."
     ]
+  },
+  {
+    "video_id": "eJFXozJEZtc",
+    "title": "Alkarısı Nedir? Beşiklerin Başındaki Bin Yıllık Korku",
+    "date": "2026-11-06",
+    "r30": 0.552,
+    "avg": 0.216,
+    "drops": [
+      {
+        "at": "0:34",
+        "lost": 0.089,
+        "chapter": "Alkarısı Nedir ve Neden Korkulur"
+      },
+      {
+        "at": "1:00",
+        "lost": 0.051,
+        "chapter": "Alkarısı Nedir ve Neden Korkulur"
+      },
+      {
+        "at": "3:35",
+        "lost": 0.051,
+        "chapter": "Sümerlerden Günümüze Kadim İzler"
+      }
+    ],
+    "lessons": [
+      "Eliminate slow introductions and deliver the core mystery immediately to prevent early drop-off before 0:34.",
+      "Remove academic preamble and start historical context with a compelling narrative hook at minute three.",
+      "Maintain high pacing and visual variety during the first minute to keep initial retention above sixty percent."
+    ]
   }
 ]

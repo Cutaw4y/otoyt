@@ -242,6 +242,39 @@
     "idea_title": "Mezarı Açılıp Kalbine Kazık Çakılan Ölüler: Osmanlı Mahkemesinin Hortlak Davaları",
     "pillar": "Anadolu ve dünya efsaneleri, mitolojik varlıklar, halk inançları",
     "video_id": "D37VtsIELPM",
-    "series_id": null
+    "series_id": null,
+    "ab_offered": true
+  },
+  {
+    "date": "2026-11-06T18:12",
+    "type": "short",
+    "title": "Osmanlı'nın Resmi Hortlak Dosyaları",
+    "pillar": "Anadolu ve dünya efsaneleri, mitolojik varlıklar, halk inançları",
+    "video_id": "Vgr48JKts4c",
+    "parent": "D37VtsIELPM"
+  },
+  {
+    "date": "2026-11-06T18:12",
+    "type": "short",
+    "title": "Ebussuud Efendi'nin Mezar Fetvası",
+    "pillar": "Anadolu ve dünya efsaneleri, mitolojik varlıklar, halk inançları",
+    "video_id": "XwlmhpH3PcM",
+    "parent": "D37VtsIELPM"
+  },
+  {
+    "date": "2026-11-06T18:12",
+    "type": "short",
+    "title": "Devlet Gazetesindeki Vampir Haberi",
+    "pillar": "Anadolu ve dünya efsaneleri, mitolojik varlıklar, halk inançları",
+    "video_id": "OiD2pjmnqtA",
+    "parent": "D37VtsIELPM"
+  },
+  {
+    "date": "2026-11-06T18:13",
+    "type": "reel",
+    "title": "Osmanlı'nın Resmi Hortlak Dosyaları",
+    "pillar": "Anadolu ve dünya efsaneleri, mitolojik varlıklar, halk inançları",
+    "video_id": "18001012065104087",
+    "parent": "D37VtsIELPM"
   }
 ]

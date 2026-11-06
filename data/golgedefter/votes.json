@@ -7,7 +7,13 @@
       "Fiziksel olay",
       "Mecazi anlatım"
     ],
-    "added": "2026-11-03T16:18"
+    "added": "2026-11-03T16:18",
+    "counted": "2026-11-06T16:37",
+    "counts": [
+      0,
+      0
+    ],
+    "comments": 0
   },
   {
     "video_id": "cIuAjk2XCfY",
@@ -18,5 +24,15 @@
       "Mistik bir sembol"
     ],
     "added": "2026-11-05T11:25"
+  },
+  {
+    "video_id": "D37VtsIELPM",
+    "title": "Osmanlı Hortlak Davaları: Kadı Neden Kalbe Kazık Çaktırdı?",
+    "question": "Osmanlı mahkemelerinin mezarları açtırıp cesetlere kazık çaktırması sizce hangisiydi?",
+    "options": [
+      "Akılcı kriz yönetimi",
+      "Gerçek inanç"
+    ],
+    "added": "2026-11-06T18:12"
   }
 ]
