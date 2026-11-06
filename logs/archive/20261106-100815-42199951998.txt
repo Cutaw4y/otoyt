@@ -1,0 +1,58 @@
+[06:35:23] Başladı (test modu: False, yayın: scheduled)
+[06:35:24] HATA:
+Traceback (most recent call last):
+  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 3550, in <module>
+    res = run_once()
+          ^^^^^^^^^^
+  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 3034, in run_once
+    for h in (load_json(HISTORY, []) if HISTORY.exists() else [])):
+              ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 127, in load_json
+    return json.loads(path.read_text(encoding="utf-8")) if path.exists() else default
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/json/decoder.py", line 338, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/json/decoder.py", line 354, in raw_decode
+    obj, end = self.scan_once(s, idx)
+               ^^^^^^^^^^^^^^^^^^^^^^
+json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes: line 149 column 1 (char 4982)
+
+[06:45:26] Başladı (test modu: False, yayın: scheduled)
+[06:45:27] HATA:
+Traceback (most recent call last):
+  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 3550, in <module>
+    res = run_once()
+          ^^^^^^^^^^
+  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 3034, in run_once
+    for h in (load_json(HISTORY, []) if HISTORY.exists() else [])):
+              ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 127, in load_json
+    return json.loads(path.read_text(encoding="utf-8")) if path.exists() else default
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/json/decoder.py", line 338, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/json/decoder.py", line 354, in raw_decode
+    obj, end = self.scan_once(s, idx)
+               ^^^^^^^^^^^^^^^^^^^^^^
+json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes: line 149 column 1 (char 4982)
+
+[13:03:51] Bugünün uzun videosu zaten kaydedilmiş; yeni üretim atlandı (tekrar yükleme engellendi).
+[13:03:51] Bugünün uzun videosu zaten kaydedilmiş; yeni üretim atlandı (tekrar yükleme engellendi).
+[13:03:51] Telegram onayı yok; üretim ve yayın bekliyor.
+[13:03:54] Bugünün uzun videosu zaten kaydedilmiş; yeni üretim atlandı (tekrar yükleme engellendi).
+[13:03:54] Bugünün uzun videosu zaten kaydedilmiş; yeni üretim atlandı (tekrar yükleme engellendi).
+[13:03:54] Telegram onayı yok; üretim ve yayın bekliyor.
+[13:04:01] Bugünün uzun videosu zaten kaydedilmiş; yeni üretim atlandı (tekrar yükleme engellendi).
+[13:04:01] Bugünün uzun videosu zaten kaydedilmiş; yeni üretim atlandı (tekrar yükleme engellendi).
+[13:04:01] Telegram onayı yok; üretim ve yayın bekliyor.
+[13:06:13] Bugünün uzun videosu zaten kaydedilmiş; yeni üretim atlandı (tekrar yükleme engellendi).
+[13:06:13] Bugünün uzun videosu zaten kaydedilmiş; yeni üretim atlandı (tekrar yükleme engellendi).
+[13:06:13] Telegram onayı yok; üretim ve yayın bekliyor.

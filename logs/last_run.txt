@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 [06:35:23] Başladı (test modu: False, yayın: scheduled)
 [06:35:24] HATA:
 Traceback (most recent call last):
@@ -65,12 +66,275 @@ json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes:
 [13:20:40] Bugünün uzun videosu zaten kaydedilmiş; yeni üretim atlandı (tekrar yükleme engellendi).
 [13:20:40] Bugünün uzun videosu zaten kaydedilmiş; yeni üretim atlandı (tekrar yükleme engellendi).
 [13:20:40] Telegram onayı yok; üretim ve yayın bekliyor.
-[13:23:26] Bugünün uzun videosu zaten kaydedilmiş; yeni üretim atlandı (tekrar yükleme engellendi).
-[13:23:26] Bugünün uzun videosu zaten kaydedilmiş; yeni üretim atlandı (tekrar yükleme engellendi).
-[13:23:27] Telegram onayı yok; üretim ve yayın bekliyor.
-[13:23:29] Bugünün uzun videosu zaten kaydedilmiş; yeni üretim atlandı (tekrar yükleme engellendi).
-[13:23:29] Bugünün uzun videosu zaten kaydedilmiş; yeni üretim atlandı (tekrar yükleme engellendi).
-[13:23:30] Telegram onayı yok; üretim ve yayın bekliyor.
-[13:23:39] Bugünün uzun videosu zaten kaydedilmiş; yeni üretim atlandı (tekrar yükleme engellendi).
-[13:23:39] Bugünün uzun videosu zaten kaydedilmiş; yeni üretim atlandı (tekrar yükleme engellendi).
-[13:23:39] Telegram onayı yok; üretim ve yayın bekliyor.
+=======
+[10:08:15] Başladı (test modu: False, yayın: scheduled)
+[10:08:17] Kanal doğrulandı: Beyond Qaf
+[10:08:17] Instagram anahtarı ve hesap kimliği doğrulandı: @beyondqaf
+[10:08:18] Analitik: 2 video ölçüldü, sütun puanları: {"How it's made and what it really costs (steel, glass, chips, paper, concrete)": 1.518587076263208, 'Hidden engineering you see every day but never notice (road details, tower bases, manholes, rail joints)': 0.5525769323423884}
+[10:08:20] Seri bölümü seçildi: Karabasan: The Jinn Encounters Millions of Turks Report
+[10:08:25] Konu (1): Karabasan: The Jinn Encounters Millions of Turks Report  [Reported jinn encounters and places people avoid, from documented accounts]
+[10:09:24] Senaryo yazıldı: 33 sahne, 2245 kelime
+[10:10:33] Anlatım sadeleştirildi (2245 → 1956 kelime)
+[10:10:37] Doğrulama kaynağı: Google araması
+[10:10:37] Doğrulama turu 1: 8 iddia, 0 yanlış, 2 belirsiz
+[10:14:29] Doğrulama kaynağı: Google araması
+[10:14:29] Doğrulama turu 2: 8 iddia, 1 yanlış, 0 belirsiz
+[10:15:25] Doğrulama kaynağı: Google araması
+[10:15:25] Doğrulama turu 3: 4 iddia, 0 yanlış, 0 belirsiz
+[10:15:25] En çok arananlar: scary sleep paralysis demons | sleep paralysis waking up | scary sleep paralysis | karabasan shorty | karabasan | karabasan film | karabasan movie | karabasan basma anı
+[10:15:37] Başlık seçildi: Karabasan Sleep Paralysis: The Shadow on Your Chest  (önceki: Karabasan Sleep Paralysis: What Turkey's Records Show) — It places the exact high-intent search phrase 'Karabasan Sleep Paralysis' right at the beginning (first 25 characters) and follows up with an intensel
+[10:15:39] Editör (min 6, ort 8.0): {'originality': 8, 'hook': 8, 'clarity': 8, 'simplicity': 6, 'flow': 9, 'value_density': 8, 'audience_fit': 9, 'problems': ['"In the authentic hadith collection called Sahih al-Bukhari, in record five thousand ten..." needs a simpler intro as it drops a formal religious citation style quickly.', '"These early records also explain bad dreams, calling them hulm..." introduces an Arabic term without a slow enough contextual setup for absolute beginners.', '"...supine position, significantly increases the odds..." uses a medical term (supine) right after naming it without instantly translating it to "lying flat on your back" in the same breath.', '"Two control centers in the brain stem squirt out calming chemicals called GABA and glycine." uses advanced neurochemistry terms (GABA, glycine) that a 12-year-old might stumble on, even though explained broadly as calming chemicals.'], 'problems_tr': 'Metindeki "sahih hadis", "supine (sırt üstü yatış)" ve "GABA ve glisin" gibi bazı teknik ve yabancı terimler, 12 yaşındaki bir dinleyicinin ilk dinleyişte anlamakta zorlanabileceği kadar hızlı geçilmiştir. Bu terimler daha basit günlük kelimelerle açıklanabilirdi.'}
+[10:16:53] Anlatım sadeleştirildi (1950 → 1951 kelime)
+[10:16:58] Doğrulama kaynağı: Google araması
+[10:16:58] Doğrulama turu 1: 10 iddia, 0 yanlış, 1 belirsiz
+[10:17:39] Doğrulama kaynağı: Google araması
+[10:17:39] Doğrulama turu 2: 9 iddia, 0 yanlış, 0 belirsiz
+[10:17:41] Editör (min 6, ort 7.4): {'originality': 7, 'hook': 6, 'clarity': 8, 'simplicity': 6, 'flow': 8, 'value_density': 8, 'audience_fit': 9, 'problems': ['"Surah Al-Baqarah, verse two hundred fifty-five, known as the Throne Verse" -> needs an explanation that this is a specific protective verse from the Quran.', '"Sahih al-Bukhari" -> should be briefly explained as an authoritative collection of the Prophet Muhammad\'s traditions.', '"hulm" -> should be explicitly defined as a bad dream or nightmare in this context.', '"Pertev Boratav" -> needs context that he was a prominent Turkish folklorist.', '"supine position" -> should be translated to "lying flat on your back" immediately without assuming the listener knows the medical term.', '"Barzakh" -> needs a brief explanation as the intermediary realm between death and the Day of Judgment.', '"al-Kabus" -> should be explicitly translated in the text as "the crusher or presser" right when introduced.', '"isolated sleep paralysis" -> can be simplified to just "sleep paralysis" for a 12-year-old.', '"muscle atonia" -> should be defined simply as "temporary muscle shutdown" right when used, though the script partially does this, it can be tighter.', '"amygdala" -> should be described simply as the brain\'s fear alarm center without relying only on the anatomical term.'], 'problems_tr': 'Metindeki "Surah Al-Baqarah", "Sahih al-Bukhari", "hulm", "Barzakh", "supine position" ve "amygdala" gibi bazı dini, tıbbi ve edebi terimler 12 yaşındaki bir çocuğun ilk dinlemede zorlanabileceği şekilde açıklamasız veya doğrudan verilmiştir; bu terimlerin daha basit günlük ifadelerle özetlenmesi gerekir.'}
+[10:20:25] Anlatım sadeleştirildi (1952 → 1708 kelime)
+[10:20:29] Doğrulama kaynağı: Google araması
+[10:20:29] Doğrulama turu 1: 8 iddia, 0 yanlış, 1 belirsiz
+[10:21:04] Doğrulama kaynağı: Google araması
+[10:21:04] Doğrulama turu 2: 5 iddia, 0 yanlış, 1 belirsiz
+[10:21:35] Doğrulama kaynağı: Google araması
+[10:21:35] Doğrulama turu 3: 10 iddia, 0 yanlış, 0 belirsiz
+[10:21:37] Editör (min 7, ort 8.0): {'originality': 8, 'hook': 8, 'clarity': 8, 'simplicity': 7, 'flow': 8, 'value_density': 8, 'audience_fit': 9, 'problems': ['"In Turkish university studies, up to forty out of every one hundred students report waking up pinned flat under an invisible, crushing weight." -> Fix: Change to "In Turkish university studies, nearly half of all students report waking up pinned flat under an invisible, crushing weight."', '"This is a special protective verse from the Quran that believers recite to shield themselves from spiritual harm while they sleep." -> Fix: Change to "This is a special protective verse from the Quran that believers say out loud to keep themselves safe while they sleep."', '"In this record, a companion named Abu Huraira caught a nighttime intruder who confessed that reciting the Throne Verse before sleep places an angel over you until morning." -> Fix: Change to "In this old record, a close friend of the Prophet named Abu Huraira caught someone trying to steal food at night. The thief confessed that saying this protective verse before bed places a guarding angel over you until morning."', '"During dream sleep, your brain turns on a safety switch called muscle atonia, which means temporary muscle shutdown." -> Fix: Change to "During dream sleep, your brain turns on an internal safety switch that temporarily shuts down your muscles."'], '_tr_problems': 'Metin genel olarak anlaşılır, ancak bazı dini terimler ve "muscle atonia" gibi bilimsel ifadeler daha basit açıklanabilir.'}
+>>>>>>> Stashed changes
+[10:21:49] Seslendirme başlıyor (Gemini Charon)...
+[10:27:59] Seslendirme: 967 sn
+[10:29:28] Thumbnail sıralaması: [2, 1, 3] - Candidate #2 performs best on a mobile feed because the extreme close-up of the terrified eye with a silhouette reflection inside creates an immediate, highly emotional hook that remains readable at tiny phone sizes. Candidate #1 is solid with a clear ghostly figure and bedroom context, but slightly darker overall. Candidate #3 is too complex and abstract with the anatomical cross-section and anvil, reducing instant comprehension for a scrolling viewer.
+[10:32:40] Cümle cümle görsel planı: 33/33 sahne
+[10:32:40] Sahne 1 (diagram, 32.7 sn, 7 çekim, cümleye bağlı)
+[10:32:43]    ilgisiz görüntü elendi: water flowing over river rocks
+[10:32:49]    ilgisiz görüntü elendi: Young woman standing outdoors
+[10:33:01]    ilgisiz görüntü elendi: girl reading book on bed
+[10:33:05]    ilgisiz görüntü elendi: man sleeping peacefully in bed
+[10:33:09]    ilgisiz görüntü elendi: A cat looking around indoors
+[10:33:11]    ilgisiz görüntü elendi: large satellite dish against sky
+[10:33:26]    ilgisiz görüntü elendi: large satellite dish in trees
+[10:33:28] Sahne 2 (diagram, 29.8 sn, 6 çekim, cümleye bağlı)
+[10:33:31]    ilgisiz görüntü elendi: burning logs with visible smoke
+[10:33:32] Vertex görsel kotası 429: 15 dakika bekleme moduna geçildi; yedek görseller kullanılacak
+[10:33:32] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
+  "error": {
+    "code": 429,
+    "message": "Resource has been exhausted (e.g. check qu
+[10:33:32] Cloudflare günlük ücretsiz kota doldu: {"errors":[{"message":"AiError: AiError: you have used up your daily free allocation of 10,000 neurons, please upgrade to Cloudflare's Workers Paid plan if you would like to continue usage. (f06adaa4- → bu video için Pexels fotoğraflarına geçiliyor
+[10:33:36]    ilgisiz görüntü elendi: burning wood logs with smoke
+[10:33:40]    ilgisiz görüntü elendi: frightened woman in red light
+[10:33:45]    ilgisiz görüntü elendi: blue sky with white clouds
+[10:33:49]    ilgisiz görüntü elendi: rainy path in green forest
+[10:33:55]    ilgisiz görüntü elendi: rain falling on muddy path
+[10:33:57] Sahne 3 (footage, 25.6 sn, 5 çekim, cümleye bağlı)
+[10:33:58]    ilgisiz görüntü elendi: Woman waking up and stretching
+[10:34:03]    ilgisiz görüntü elendi: sunset clouds in the sky
+[10:34:08]    ilgisiz görüntü elendi: trainer helping woman at gym
+[10:34:12]    ilgisiz görüntü elendi: close up of horse eye
+[10:34:23] Sahne 4 (footage, 25.2 sn, 5 çekim, cümleye bağlı)
+[10:34:24]    ilgisiz görüntü elendi: spider in web with prey
+[10:34:30]    ilgisiz görüntü elendi: wooden boat floating on water
+[10:34:34]    ilgisiz görüntü elendi: close up of chess board
+[10:34:38]    ilgisiz görüntü elendi: foggy landscape with hills and houses
+[10:34:43]    ilgisiz görüntü elendi: wheat field in the sun
+[10:34:45] Sahne 5 (diagram, 26.5 sn, 6 çekim, cümleye bağlı)
+[10:34:47]    ilgisiz görüntü elendi: stone statue wearing medical mask
+[10:34:52]    ilgisiz görüntü elendi: close up of bleeding heart flowers
+[10:35:03]    ilgisiz görüntü elendi: purple clouds in the sky
+[10:35:09]    ilgisiz görüntü elendi: bride and groom holding hands
+[10:35:13]    ilgisiz görüntü elendi: traditional East Asian outdoor gazebo
+[10:35:15] Sahne 6 (footage, 26.8 sn, 5 çekim, cümleye bağlı)
+[10:35:17]    ilgisiz görüntü elendi: man holding rifle under tree
+[10:35:24]    ilgisiz görüntü elendi: man writing chinese calligraphy characters
+[10:35:29]    ilgisiz görüntü elendi: forest reflected in a lake
+[10:35:32]    ilgisiz görüntü elendi: colorful flowers blooming in garden
+[10:35:38]    ilgisiz görüntü elendi: a raccoon climbing a tree
+[10:35:40] Sahne 7 (diagram, 29.0 sn, 6 çekim, cümleye bağlı)
+[10:35:41]    ilgisiz görüntü elendi: close up of wheat field
+[10:35:47]    ilgisiz görüntü elendi: aerial view of rural village
+[10:35:51]    ilgisiz görüntü elendi: busy illuminated city street at night
+[10:35:56]    ilgisiz görüntü elendi: modern city highway at night
+[10:35:59]    ilgisiz görüntü elendi: moon behind tree silhouettes at night
+[10:36:03]    ilgisiz görüntü elendi: chairs and table outdoors sunny
+[10:36:05] Sahne 8 (footage, 32.5 sn, 7 çekim, cümleye bağlı)
+[10:36:06]    ilgisiz görüntü elendi: bronze statue of Neptune outdoors
+[10:36:10]    ilgisiz görüntü elendi: dark church interior with chandelier
+[10:36:24]    ilgisiz görüntü elendi: turning pages of handwritten notebook
+[10:36:28]    ilgisiz görüntü elendi: several thin lit candles burning
+[10:36:34]    ilgisiz görüntü elendi: candles shaped like year 2024
+[10:36:35] Sahne 9 (footage, 29.8 sn, 6 çekim, cümleye bağlı)
+[10:36:44]    ilgisiz görüntü elendi: rally car driving on dirt
+[10:36:47]    ilgisiz görüntü elendi: crowded sunny town market square
+[10:37:04]    ilgisiz görüntü elendi: aerial view of mecca at night
+[10:37:08]    ilgisiz görüntü elendi: child writing in notebook
+[10:37:10] Sahne 10 (diagram, 25.3 sn, 5 çekim, cümleye bağlı)
+[10:37:12]    ilgisiz görüntü elendi: close up of woman face
+[10:37:17]    ilgisiz görüntü elendi: mountains reflected in a lake
+[10:37:23]    ilgisiz görüntü elendi: aerial view of beach shoreline
+[10:37:28]    ilgisiz görüntü elendi: aerial view of cracked ice
+[10:37:33]    ilgisiz görüntü elendi: modern building by river water
+[10:37:35] Sahne 11 (footage, 31.2 sn, 7 çekim, cümleye bağlı)
+[10:37:38]    ilgisiz görüntü elendi: traditional japanese houses in snow
+[10:37:43]    ilgisiz görüntü elendi: aerial view of city buildings
+[10:37:46]    ilgisiz görüntü elendi: close up of metal chain
+[10:37:50]    ilgisiz görüntü elendi: Ancient stone temple carved in rock
+[10:38:04]    ilgisiz görüntü elendi: scientist using microscope in lab
+[10:38:10]    ilgisiz görüntü elendi: aerial view of green mountains
+[10:38:11] Sahne 12 (footage, 35.5 sn, 6 çekim, cümleye bağlı)
+[10:38:13]    ilgisiz görüntü elendi: abstract glowing particles floating background
+[10:38:21]    ilgisiz görüntü elendi: Close up of electronic equipment
+[10:38:38]    ilgisiz görüntü elendi: scenic view of a field
+[10:38:42]    ilgisiz görüntü elendi: tall grass in the rain
+[10:38:44] Sahne 13 (diagram, 29.5 sn, 6 çekim, cümleye bağlı)
+[10:38:46]    ilgisiz görüntü elendi: purple flower in green grass
+[10:38:51]    ilgisiz görüntü elendi: dandelion seed heads against black
+[10:38:55]    ilgisiz görüntü elendi: a brown goat on rock
+[10:39:08]    ilgisiz görüntü elendi: two goats grazing in grass
+[10:39:12]    ilgisiz görüntü elendi: raindrops on a glass window
+[10:39:16]    ilgisiz görüntü elendi: fast flowing river in winter
+[10:39:17] Sahne 14 (footage, 27.8 sn, 5 çekim, cümleye bağlı)
+[10:39:19]    ilgisiz görüntü elendi: close up of white flowers
+[10:39:30]    ilgisiz görüntü elendi: people with umbrellas at night
+[10:39:35]    ilgisiz görüntü elendi: person washing hands at sink
+[10:39:40]    ilgisiz görüntü elendi: person panning for gold outdoors
+[10:39:47]    ilgisiz görüntü elendi: ferry boat on the water
+[10:39:49] Sahne 15 (diagram, 27.0 sn, 6 çekim, cümleye bağlı)
+[10:39:51]    ilgisiz görüntü elendi: doctor looking at tablet screen
+[10:39:56]    ilgisiz görüntü elendi: dentist office chair and equipment
+[10:39:59]    ilgisiz görüntü elendi: dog lying on wooden floor
+[10:40:05]    ilgisiz görüntü elendi: ripples on clear water surface
+[10:40:10]    ilgisiz görüntü elendi: red liquid dissolving in water
+[10:40:13]    ilgisiz görüntü elendi: aerial view of beach and ocean
+[10:40:15] Sahne 16 (footage, 28.1 sn, 6 çekim, cümleye bağlı)
+[10:40:17]    ilgisiz görüntü elendi: two wolves resting in grass
+[10:40:28]    ilgisiz görüntü elendi: a sleeping polar bear resting
+[10:40:31]    ilgisiz görüntü elendi: student writing notes at desk
+[10:40:35]    ilgisiz görüntü elendi: student reading book in library
+[10:40:39]    ilgisiz görüntü elendi: aerial city view at night
+[10:40:42] Sahne 17 (diagram, 28.3 sn, 6 çekim, cümleye bağlı)
+[10:40:44]    ilgisiz görüntü elendi: doctor examining boy with stethoscope
+[10:40:48]    ilgisiz görüntü elendi: white cat sleeping indoors
+[10:40:51]    ilgisiz görüntü elendi: a cat sleeping on car
+[10:40:56]    ilgisiz görüntü elendi: kitten sleeping on wooden floor
+[10:41:00]    ilgisiz görüntü elendi: traditional Japanese castle at night
+[10:41:05]    ilgisiz görüntü elendi: worker shoveling sand outdoors daytime
+[10:41:07] Sahne 18 (footage, 30.4 sn, 6 çekim, cümleye bağlı)
+[10:41:08]    ilgisiz görüntü elendi: graveyard with old tombstones outdoors
+[10:41:13]    ilgisiz görüntü elendi: old cemetery with gravestones outdoors
+[10:41:17]    ilgisiz görüntü elendi: cooking fish in a pan
+[10:41:21]    ilgisiz görüntü elendi: wine glasses on restaurant table
+[10:41:32]    ilgisiz görüntü elendi: silhouetted leaves against bright sky
+[10:41:35] Sahne 19 (footage, 26.1 sn, 6 çekim, cümleye bağlı)
+[10:41:37]    ilgisiz görüntü elendi: man writing at desk
+[10:41:43]    ilgisiz görüntü elendi: ancient stone ruins and hills
+[10:41:48]    ilgisiz görüntü elendi: person in robe reading book
+[10:41:54]    ilgisiz görüntü elendi: aerial view of a city
+[10:41:57]    ilgisiz görüntü elendi: close up of toy airplane
+[10:42:02]    ilgisiz görüntü elendi: plastic model airplane propeller part
+[10:42:03] Sahne 20 (diagram, 30.3 sn, 7 çekim, cümleye bağlı)
+[10:42:05]    ilgisiz görüntü elendi: person standing in heavy rain
+[10:42:09]    ilgisiz görüntü elendi: dark stormy clouds over mountains
+[10:42:12]    ilgisiz görüntü elendi: Woman reading book in library
+[10:42:17]    ilgisiz görüntü elendi: man taking book from shelf
+[10:42:22]    ilgisiz görüntü elendi: silhouettes of sailboats at sunset
+[10:42:27]    ilgisiz görüntü elendi: gray foggy ocean and sky
+[10:42:32]    ilgisiz görüntü elendi: boat sailing on the ocean
+[10:42:33] Sahne 21 (footage, 24.7 sn, 5 çekim, cümleye bağlı)
+[10:42:35]    ilgisiz görüntü elendi: medical mannequin CPR training procedure
+[10:42:40]    ilgisiz görüntü elendi: digital thermometer checking kid temperature
+[10:42:44]    ilgisiz görüntü elendi: Doctor attaching electrodes to child
+[10:42:50]    ilgisiz görüntü elendi: person sharpening a wooden pencil
+[10:42:54]    ilgisiz görüntü elendi: wiped clean dark school chalkboard
+[10:42:56] Sahne 22 (footage, 32.7 sn, 7 çekim, cümleye bağlı)
+[10:43:03]    ilgisiz görüntü elendi: modern medical heart monitor paper
+[10:43:06]    ilgisiz görüntü elendi: doctor performing ultrasound on patient
+[10:43:09]    ilgisiz görüntü elendi: woman smiling and using phone
+[10:43:15]    ilgisiz görüntü elendi: close up of person texting
+[10:43:18]    ilgisiz görüntü elendi: aerial view of snowy city
+[10:43:23]    ilgisiz görüntü elendi: stuffed pasta shells with flower
+[10:43:24] Sahne 23 (diagram, 32.4 sn, 7 çekim, cümleye bağlı)
+[10:43:26]    ilgisiz görüntü elendi: an old human skull artifact
+[10:43:51]    ilgisiz görüntü elendi: nurse with tablet and patient
+[10:43:55]    ilgisiz görüntü elendi: blue ink in clear water
+[10:43:59]    ilgisiz görüntü elendi: colorful dots on dark surface
+[10:44:02]    ilgisiz görüntü elendi: old medieval castle exterior view
+[10:44:06]    ilgisiz görüntü elendi: 3D render of virus cells
+[10:44:09]    ilgisiz görüntü elendi: tattoo artist tattooing a person
+[10:44:13] Sahne 24 (diagram, 27.3 sn, 5 çekim, cümleye bağlı)
+[10:44:15]    ilgisiz görüntü elendi: a sleeping cat on floor
+[10:44:20]    ilgisiz görüntü elendi: doctor looking at brain scans
+[10:44:25]    ilgisiz görüntü elendi: busy city street with traffic
+[10:44:30]    ilgisiz görüntü elendi: rocks under clear water surface
+[10:44:35]    ilgisiz görüntü elendi: dark alleyway at night
+[10:44:38] Sahne 25 (diagram, 25.4 sn, 5 çekim, cümleye bağlı)
+[10:44:47]    ilgisiz görüntü elendi: wispy white clouds in sky
+[10:44:53]    ilgisiz görüntü elendi: close up of purple orchids
+[10:44:58]    ilgisiz görüntü elendi: boat motor running on water
+[10:45:03]    ilgisiz görüntü elendi: churning white water in ocean
+[10:45:05] Sahne 26 (footage, 21.6 sn, 5 çekim, cümleye bağlı)
+[10:45:07]    ilgisiz görüntü elendi: man leaning against wire fence
+[10:45:12]    ilgisiz görüntü elendi: trees against blue sky
+[10:45:16]    ilgisiz görüntü elendi: domino pieces falling down line
+[10:45:24]    ilgisiz görüntü elendi: breakdancer doing a handstand spin
+[10:45:27] Sahne 27 (diagram, 29.4 sn, 6 çekim, cümleye bağlı)
+[10:45:29]    ilgisiz görüntü elendi: Close up of a sleeping cat
+[10:45:34]    ilgisiz görüntü elendi: wind turbines at sunset silhouette
+[10:45:37]    ilgisiz görüntü elendi: green leaves on a branch
+[10:45:43]    ilgisiz görüntü elendi: large ferris wheel by river
+[10:45:48]    ilgisiz görüntü elendi: cougar resting in the forest
+[10:45:52]    ilgisiz görüntü elendi: cheetah resting in the grass
+[10:45:54] Sahne 28 (diagram, 31.8 sn, 7 çekim, cümleye bağlı)
+[10:45:56]    ilgisiz görüntü elendi: balanced rocks on beach
+[10:46:01]    ilgisiz görüntü elendi: serious bald man in dark
+[10:46:04]    ilgisiz görüntü elendi: human skeleton model on display
+[10:46:09]    ilgisiz görüntü elendi: x-ray of human hand bones
+[10:46:12]    ilgisiz görüntü elendi: large satellite dish outdoors
+[10:46:18]    ilgisiz görüntü elendi: hands solving a rubik cube
+[10:46:20]    ilgisiz görüntü elendi: rubiks cube on patterned surface
+[10:46:22] Sahne 29 (footage, 29.5 sn, 6 çekim, cümleye bağlı)
+[10:46:25]    ilgisiz görüntü elendi: burning campfire with glowing coals
+[10:46:30]    ilgisiz görüntü elendi: white smoke against black background
+[10:46:33]    ilgisiz görüntü elendi: aerial view of rocky cliffs
+[10:46:38]    ilgisiz görüntü elendi: dark clouds in night sky
+[10:46:42]    ilgisiz görüntü elendi: abstract glowing yellow and green lines
+[10:46:48]    ilgisiz görüntü elendi: large school of blue fish
+[10:46:50] Sahne 30 (diagram, 34.4 sn, 7 çekim, cümleye bağlı)
+[10:46:52]    ilgisiz görüntü elendi: solid black screen with nothing
+[10:46:58]    ilgisiz görüntü elendi: snowy village at night
+[10:47:02]    ilgisiz görüntü elendi: modern and old city architecture
+[10:47:09]    ilgisiz görüntü elendi: lush green mossy forest landscape
+[10:47:13]    ilgisiz görüntü elendi: Variety of sushi rolls displayed
+[10:47:16]    ilgisiz görüntü elendi: clouds in the blue sky
+[10:47:21]    ilgisiz görüntü elendi: close up of grey parrot
+[10:47:23] Sahne 31 (footage, 31.9 sn, 7 çekim, cümleye bağlı)
+[10:47:25]    ilgisiz görüntü elendi: scientist holding a green flask
+[10:47:30]    ilgisiz görüntü elendi: a pigeon resting on ground
+[10:47:34]    ilgisiz görüntü elendi: aerial view of green forest
+[10:47:39]    ilgisiz görüntü elendi: aerial view of river town
+[10:47:43]    ilgisiz görüntü elendi: a snake in the water
+[10:47:47]    ilgisiz görüntü elendi: Scenic mountain landscape with flowers
+[10:47:51]    ilgisiz görüntü elendi: two elephants playing in water
+[10:47:53] Sahne 32 (footage, 32.3 sn, 6 çekim, cümleye bağlı)
+[10:47:55]    ilgisiz görüntü elendi: aerial view of rocky coast
+[10:48:00]    ilgisiz görüntü elendi: boat on calm sea water
+[10:48:03]    ilgisiz görüntü elendi: ocean waves crashing on rocks
+[10:48:06]    ilgisiz görüntü elendi: nurse working in neonatal ward
+[10:48:11]    ilgisiz görüntü elendi: Doctor examining boy with stethoscope
+[10:48:15]    ilgisiz görüntü elendi: hand holding medical plastic syringe
+[10:48:18] Sahne 33 (diagram, 36.1 sn, 7 çekim, cümleye bağlı)
+[10:48:19]    ilgisiz görüntü elendi: green mug on open book
+[10:48:25]    ilgisiz görüntü elendi: empty outdoor building at night
+[10:48:29]    ilgisiz görüntü elendi: close up of typing keyboard
+[10:48:33]    ilgisiz görüntü elendi: sunlight reflecting on water surface
+[10:48:48]    ilgisiz görüntü elendi: fireworks exploding in the dark
+[10:56:49] Ana video: 1012 sn
+[10:57:06] Short 1: sahne 0-2, 33 sn — Millions Experience Karabasan in Their Sleep
+[10:57:26] Short 2: sahne 11-13, 36 sn — The Dark Entity with the Felt Hat
+[10:57:54] Short 3: sahne 23-25, 53 sn — Why Your Brain Locks Your Body at Night
+[10:57:54] Altyazı çevirisi: Turkish (310 satır)
+[10:58:35] Altyazı eklendi: English
+[10:58:35] Altyazı eklendi: Türkçe
+[10:58:37] Oynatma listesine eklendi: Reported Encounters
+[10:58:48] Instagram sırasına eklendi: Millions Experience Karabasan in Their Sleep
+[10:58:50] Instagram sırasına eklendi: The Dark Entity with the Felt Hat
+[10:58:52] Instagram sırasına eklendi: Why Your Brain Locks Your Body at Night
+[10:59:26] Bitti: https://youtu.be/c05dhpIzinA
+[10:59:27] Başarıyla bitti.
