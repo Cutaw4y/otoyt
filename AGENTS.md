@@ -36,4 +36,6 @@ Birbirimizle doğrudan konuşamadığımız için köprü bu dosya ve `NOTLAR.md
 - **Telegram:** yalnız önemli durumlar; müdahale gerekiyorsa mesaj `🆘 CLAUDE'A YAZ` ile başlar.
 - **Görseller:** önce gerçek ve doğrulanmış foto/video, alakasız görsel yok (`strict_visuals: true`).
 - **Gizli bilgiler** yalnız GitHub Secrets'ta; depo herkese açık — günlüklere anahtar, kimlik, kişisel veri yazma.
+- `tests/test_regressions.py` geçmeden hiçbir değişiklik gönderilmez; bir test başarısızsa testi değil kodu düzelt
+  (testi değiştirmek gerekiyorsa sebebini NOTLAR.md'ye yaz).
 - Testler canlı kayıt dosyalarındaki (history.json vb.) belirli video kimliklerine/sayılarına bağlanmamalı.

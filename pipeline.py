@@ -2761,6 +2761,15 @@ def add_to_pillar_playlist_by_title(video_id, title):
         log(f"Oynatma listesine eklenemedi: {str(e)[:150]}")
 
 
+def pending_already_uploaded(pend, history):
+    """Yarım kalan senaryo kaydı zaten yüklenmiş bir videoya mı ait? (Kopya video üretimini engeller.)"""
+    if not pend or not pend.get("script"):
+        return False
+    names = {pend["script"].get("title"), (pend.get("idea") or {}).get("title")} - {None, ""}
+    return any(h.get("type", "long") == "long" and names & {h.get("title"), h.get("orig_title"), h.get("idea_title")}
+               for h in history)
+
+
 def produce_script(history, report, selected_idea=None, strict=True):
     # strict: Telegram'da sahibinin onayladığı konu (kalite tabanı yüksek). Yarım kalan konuyu yeniden yazarken strict=False.
     """Kaliteli senaryo bulana kadar dener: aynı konuda revizyon, olmazsa yeni konu.
@@ -3081,8 +3090,7 @@ def run_once():
         maybe_swap_thumbnails(history)
     PENDING_SCRIPT = DATA / "pending_script.json"
     pend = load_json(PENDING_SCRIPT, None) if PENDING_SCRIPT.exists() else None
-    if pend and pend.get("script") and any(h.get("type", "long") == "long" and h.get("title") == pend["script"].get("title")
-                                           for h in history):
+    if pending_already_uploaded(pend, history):
         log(f"Yarım kalan senaryo kaydı zaten yüklenmiş bir videoya ait, atlanıyor: {pend['script'].get('title')}")
         PENDING_SCRIPT.unlink(missing_ok=True)
         pend = None
@@ -3282,7 +3290,8 @@ def publish_rendered(script, idea, shorts, thumb, thumb_alt, en_srt, tr_srt,
     # yeniden başlatılan iş bu uzun videoyu ikinci kez üretmesin.
     if not any(h.get("video_id") == vid for h in history):
         history.append({"date": datetime.now(timezone.utc).isoformat(timespec="minutes"),
-                        "type": "long", "title": script["title"], "pillar": idea["pillar"],
+                        "type": "long", "title": script["title"], "orig_title": script["title"],
+                        "idea_title": idea.get("title"), "pillar": idea["pillar"],
                         "video_id": vid, "series_id": idea.get("series_id")})
         save_json(HISTORY, history)
         push_now(HISTORY, "uzun video kimliği kaydedildi")
