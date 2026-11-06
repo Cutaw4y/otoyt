@@ -393,6 +393,81 @@ class PipelineIntegration(unittest.TestCase):
             preflight.assert_not_called()
             upload.assert_not_called()
 
+    def test_quality_failure_retries_same_approved_job_but_never_reuploads(self):
+        s = state("producing")
+        job = s["job"]
+        job.update(publish_authorized=True, idea=job["ideas"][0])
+        with mock.patch.object(tc, "load", return_value=s), \
+             mock.patch.object(tc, "persist") as persist, \
+             mock.patch.object(tc, "send") as send:
+            self.assertTrue(tc.schedule_quality_retry(job, upload_started=False, max_retries=2))
+            self.assertEqual("quality_retry_wait", job["status"])
+            self.assertEqual(1, job["quality_failures"])
+            self.assertIn("quality_retry_after", job)
+            self.assertEqual(job["ideas"][0], job["idea"])
+            persist.assert_called_once()
+            send.assert_called_once()
+            with self.assertRaisesRegex(RuntimeError, "Yükleme başladı"):
+                tc.schedule_quality_retry(job, upload_started=True)
+        self.assertEqual("quality_retry_wait", job["status"])
+
+    def test_quality_retry_exhaustion_stops_without_new_topic(self):
+        s = state("producing")
+        job = s["job"]
+        job.update(publish_authorized=True, idea=job["ideas"][0], quality_failures=2)
+        with mock.patch.object(tc, "load", return_value=s), \
+             mock.patch.object(tc, "persist"), mock.patch.object(tc, "send"):
+            self.assertFalse(tc.schedule_quality_retry(job, upload_started=False, max_retries=2))
+        self.assertEqual("failed", job["status"])
+        self.assertEqual("quality_exhausted", job["failure_kind"])
+        self.assertEqual(3, job["quality_failures"])
+        self.assertNotIn("quality_retry_after", job)
+
+    def test_quality_retry_requires_signed_off_job_and_correct_status(self):
+        s = state("producing")
+        job = s["job"]
+        with mock.patch.object(tc, "load", return_value=s), \
+             mock.patch.object(tc, "persist") as persist:
+            with self.assertRaisesRegex(RuntimeError, "ÜRET"):
+                tc.schedule_quality_retry(job, upload_started=False)
+            job["publish_authorized"] = True
+            with self.assertRaises(ValueError):
+                tc.schedule_quality_retry(job, upload_started=False, max_retries=12)
+            persist.assert_not_called()
+
+    def test_due_quality_retry_returns_to_approved_without_upload(self):
+        s = state("quality_retry_wait")
+        job = s["job"]
+        job["publish_authorized"] = True
+        job["quality_retry_after"] = "2026-01-01T00:00:00+00:00"
+        with mock.patch.object(tc, "persist") as persist:
+            tc.reconcile(s)
+        self.assertEqual("approved", job["status"])
+        self.assertNotIn("quality_retry_after", job)
+        persist.assert_called_once()
+
+    def test_legacy_failure_recovery_is_specific_and_never_guesses(self):
+        s = state("failed")
+        job = s["job"]
+        job.update(id="1c3c19baa9f1", publish_authorized=True)
+        hist = [{"type": "long", "video_id": "abcdefghijk", "date": "2026-11-06T01:00"}]
+        with tempfile.TemporaryDirectory() as temp:
+            base = Path(temp)
+            (base / "data/golgedefter").mkdir(parents=True)
+            (base / "data/golgedefter/history.json").write_text(json.dumps(hist))
+            with mock.patch.object(tc, "ROOT", base), \
+                 mock.patch.object(tc, "persist") as persist:
+                self.assertFalse(tc.recover_verified_legacy_quality_failure(s))
+                persist.assert_not_called()
+                (base / "data/golgedefter/history.json").write_text("[]")
+                self.assertFalse(tc.recover_verified_legacy_quality_failure(
+                    {"job": {**job, "id": "other"}}))
+                with mock.patch.object(tc, "send"):
+                    self.assertTrue(tc.recover_verified_legacy_quality_failure(s))
+                self.assertEqual("quality_retry_wait", job["status"])
+                self.assertEqual(1, job["quality_failures"])
+                persist.assert_called_once()
+
     def test_failed_selected_topic_never_switches_to_other_idea(self):
         import pipeline
         idea = {"title": "Selected", "angle": "Angle", "pillar": "History"}
@@ -406,7 +481,8 @@ class PipelineIntegration(unittest.TestCase):
              mock.patch.object(pipeline, "notify"), mock.patch.object(pipeline, "log"):
             self.assertEqual((None, None), pipeline.produce_script([], {}, idea))
             pick.assert_not_called()
-            write.assert_called_once_with(idea)
+            self.assertEqual(2, write.call_count)
+            self.assertTrue(all(call.args == (idea,) for call in write.call_args_list))
 
 
 if __name__ == "__main__":

@@ -263,6 +263,7 @@ min_diagram_ratio: 0.5         # sahnelerin en az yarısı atmosferik AI görsel
 min_quality_score: 7
 min_quality_floor: 0
 max_topic_attempts: 2          # fiyat/performans: en fazla 2 konu denenir, en iyi senaryo yayınlanır
+selected_topic_attempts: 2      # ÜRET ile seçilen AYNI konu için 2 bağımsız senaryo denemesi; konu değiştirilmez
 max_rewrites: 2
 units_rule: >
   Metrik birimler kullan (metre, kilometre, kilogram, derece). Her sayıyı göz önünde canlanan bir
@@ -362,3 +363,4 @@ telegram_editorial:
     - "UnchartedX: gözlemlenebilir eser ve alanlardan hareketle inceleme"
     - "Miniminuteman: alternatif iddiaları arkeolojik kaynaklara karşı sınama"
   no_second_publish_approval: true  # ÜRET, üretim ve planlı yayına birlikte onaydır
+  max_quality_retries: 2  # kalite barajında, upload başlamadan en fazla 2 ek üretim denemesi (sınırsız ücret yok)

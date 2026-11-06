@@ -329,9 +329,14 @@ def deliver(state):
     elif status == "review":
         send(review_message(job), review_buttons(job))
     elif status in {"failed", "dispatch_uncertain"}:
-        send("⚠️ Gölgedefter işi durdu. Çift yüklemeyi önlemek için otomatik tekrar yapılmıyor. "
-             "Kayıt incelenebilir veya bu işi kapatıp yeni konu seçebilirsin.",
-             [("Bu işi kapat", key(job, "cancel"))])
+        if job.get("failure_kind") == "quality_exhausted":
+            msg = ("⚠️ Gölgedefter: aynı konu deneme sınırına rağmen kalite kontrolünden geçmedi. "
+                   "Video yüklenmedi. Başka konu seçmek için bu işi kapatabilirsin.")
+        else:
+            msg = ("⚠️ Gölgedefter işi durdu. Çift yüklemeyi önlemek için otomatik "
+                   "tekrar yapılmıyor. Kayıt incelenebilir veya bu işi kapatıp "
+                   "yeni konu seçebilirsin.")
+        send(msg, [("Bu işi kapat", key(job, "cancel"))])
     else:
         return
     job["delivered"] = marker
@@ -367,10 +372,92 @@ def dispatch(state):
         raise RuntimeError("GitHub dispatch outcome uncertain") from None
 
 
+def schedule_quality_retry(job, *, upload_started, max_retries=2):
+    """Bounded retry ONLY before any YouTube upload has begun.
+
+    A persisted ÜRET (production+scheduled publication) remains the owner's
+    authorization for the SAME topic; we never infer permission for another.
+    """
+    if upload_started:
+        raise RuntimeError("Yükleme başladı; kalite hatası için kör tekrar güvenli değil")
+    state = load()
+    current = state.get("job", {})
+    if (current.get("id") != job.get("id") or
+            current.get("status") != "producing" or
+            current.get("publish_authorized") is not True):
+        raise RuntimeError("Kalite tekrarı reddedildi: iş veya ÜRET onayı uyuşmuyor")
+    if not 0 <= max_retries <= 4:
+        raise ValueError("Kalite tekrar sınırı güvenli aralık dışında")
+    failures = int(current.get("quality_failures", 0)) + 1
+    current["quality_failures"] = failures
+    if failures <= max_retries:
+        current.update(status="quality_retry_wait", failure_kind="quality_gate",
+                       quality_retry_after=(datetime.now(timezone.utc) +
+                                            timedelta(minutes=20)).isoformat())
+        notice = (f"⚠️ Gölgedefter: seçtiğin konu ilk senaryo kalite kontrolünden geçmedi. "
+                  f"Aynı konu otomatik tekrar denenecek ({failures}/{max_retries}). "
+                  "ÜRET onayın geçerli; başka konuya geçilmeyecek, henüz video yüklenmedi.")
+    else:
+        current.update(status="failed", failure_kind="quality_exhausted")
+        current.pop("quality_retry_after", None)
+        notice = ("⚠️ Gölgedefter: aynı konu güvenli deneme sınırında da kalite kontrolünden "
+                  "geçemedi. Video yüklenmedi; doğrulanmamış senaryo yayımlanmıyor. "
+                  "Yeni konu seçimi gerekiyor.")
+    persist(state)  # Required BEFORE sending or exiting the worker.
+    try:
+        send(notice)
+    except RuntimeError:
+        # Telegram delivery may fail; durable state still schedules retry.
+        pass
+    return failures <= max_retries
+
+
+def recover_verified_legacy_quality_failure(state):
+    """One-time recovery of the *known* no-video Dâbbetü'l-Arz quality failure.
+
+    Strict identity, date, authorization and no-record checks; do not migrate
+    any other 'failed' job, because it might have partially uploaded media.
+    """
+    job = state.get("job", {})
+    if (job.get("id") != "1c3c19baa9f1" or
+            job.get("target_date") != "2026-11-07" or
+            job.get("status") != "failed" or
+            job.get("publish_authorized") is not True or
+            job.get("bundle") or job.get("quality_failures")):
+        return False
+    history_file = ROOT / "data/golgedefter/history.json"
+    records = json.loads(history_file.read_text(encoding="utf-8"))
+    # The original GitHub run explicitly logged "video üretilmedi" and no upload.
+    # Refuse recovery if an uploaded long video has since been recorded.
+    if any(isinstance(row, dict) and row.get("type", "long") == "long"
+           and str(row.get("date", ""))[:10] >= "2026-11-06"
+           for row in records):
+        return False
+    job.update(status="quality_retry_wait", quality_failures=1,
+               failure_kind="quality_gate",
+               quality_retry_after=datetime.now(timezone.utc).isoformat())
+    persist(state)
+    try:
+        send("♻️ Gölgedefter: önceden ÜRET dediğin Dâbbetü'l-Arz bölümü "
+             "kalite kontrolünde kaldığı için yeniden deneme sırasına alındı. "
+             "Video yüklenmemişti; aynı konu ve önceki yayın onayın korunuyor.")
+    except RuntimeError:
+        pass
+    return True
+
+
 def reconcile(state):
-    """Recover only work that never claimed its job. Interrupted uploads need review."""
+    """Recover never-claimed work and only proven pre-upload quality retries."""
     job = state.get("job", {})
     status = job.get("status")
+    if status == "quality_retry_wait":
+        if job.get("publish_authorized") is not True:
+            raise RuntimeError("Kalite tekrarında geçerli ÜRET onayı bulunamadı")
+        if datetime.now(timezone.utc) >= datetime.fromisoformat(job["quality_retry_after"]):
+            job["status"] = "approved"
+            job.pop("quality_retry_after", None)
+            persist(state)
+        return
     if status not in {"produce_queued", "publish_queued", "producing", "publishing"}:
         return
     mode = "produce" if status in {"produce_queued", "producing"} else "publish"
@@ -523,6 +610,7 @@ def main():
                 tg("answerCallbackQuery", callback_query_id=cb["id"], text="İşlendi" if event else "Eski/geçersiz seçim")
             except RuntimeError:
                 pass  # Telegram expires callback-query popups before an Actions poll may run.
+    recover_verified_legacy_quality_failure(state)
     reconcile(state)
     offer(state, cfg, datetime.now(timezone.utc))
     deliver(state)
