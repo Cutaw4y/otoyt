@@ -1,5 +1,5 @@
 {
-  "cloud_tl": 13837.6,
+  "cloud_tl": 13792.51,
   "studio_tl": 105.84,
   "usd_tl": 49.0,
   "checked": "2026-11-02 17:48 (Billing sayfalarından)",
@@ -32,6 +32,12 @@
       "date": "2026-11-06T01:04",
       "channel": "Gölgedefter",
       "cloud_tl": 22.69,
+      "studio_tl": 0.0
+    },
+    {
+      "date": "2026-11-06T06:32",
+      "channel": "Beyond Qaf",
+      "cloud_tl": 45.09,
       "studio_tl": 0.0
     }
   ]
