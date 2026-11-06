@@ -193,6 +193,33 @@ class VisualRepeatGate(unittest.TestCase):
         self.assertIn("sched = False", body)
 
 
+class NoUncheckedStockVisuals(unittest.TestCase):
+    """06.11 izleyici şikâyeti: kazık/ölü yakma anlatılırken fok balığı, basketbol potası, Japon yaya geçidi."""
+
+    def test_strict_mode_never_uses_unchecked_stock_photo(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as d:
+            def fake_stock(q, out, ledger):
+                Path(out).write_bytes(b"x" * 20000)
+                return out
+            with mock.patch.dict(pipeline.CFG, {"strict_visuals": True}), \
+                    mock.patch.dict(os.environ, {"CLOUDFLARE_API_TOKEN": "", "CLOUDFLARE_ACCOUNT_ID": ""}), \
+                    mock.patch.object(pipeline.ai, "vertex_image_on", return_value=False), \
+                    mock.patch.object(pipeline.ai, "vertex_on", return_value=False), \
+                    mock.patch.object(pipeline, "fetch_stock_photo", side_effect=fake_stock) as fs, \
+                    mock.patch.object(pipeline, "image_matches", return_value=False), \
+                    mock.patch.object(pipeline, "log", lambda *a, **k: None):
+                with self.assertRaises(RuntimeError):  # alakasız stok yerine hata (önceki görsel de yok)
+                    pipeline.gen_image("stake through the heart", Path(d) / "img_01_b00.jpg", "stake", object())
+                self.assertEqual(1, fs.call_count)  # genel "yedek" arama yapılmadı
+
+    def test_footage_check_uses_three_frames_and_topic(self):
+        src = (ROOT / "pipeline.py").read_text(encoding="utf-8")
+        body = src[src.index("def clip_matches"):][:2500]
+        self.assertIn("(0.2, 0.5, 0.8)", body)
+        self.assertIn("_TOPIC[0]", body)
+
+
 class LongDocumentaryFitsTimeLimit(unittest.TestCase):
     """Hata 4: uzun belgesel 5,5 saatlik iş sınırını aşmasın (kaba bütçe kontrolü)."""
 

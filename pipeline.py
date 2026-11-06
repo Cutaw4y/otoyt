@@ -923,9 +923,15 @@ def gen_image(prompt, out, fallback_query=None, ledger=None):
         except Exception as e:
             log(f"Görsel üretilemedi, yedek kullanılacak: {e}")
     if fallback_query and ledger is not None:
-        for q in (fallback_query, CFG["fallback_broll"]):
+        # 06.11 izleyici şikâyeti (kazık/ölü yakma anlatılırken fok balığı, basketbol potası, Japon yaya geçidi):
+        # kaynak bu yoldu — kota dolunca stok fotoğraf KONTROLSÜZ ve genel "yedek" aramayla geliyordu.
+        # Artık: genel yedek arama yok; katı modda stok fotoğraf anlatılanla eşleştiği doğrulanmadan kullanılmaz.
+        strict = CFG.get("strict_visuals")
+        for q in ((fallback_query,) if strict else (fallback_query, CFG["fallback_broll"])):
             if fetch_stock_photo(q, out, ledger):
-                return out
+                if not strict or image_matches(out, prompt[:400]):
+                    return out
+                Path(out).unlink(missing_ok=True)
     if ai.vertex_on() and not ai.vertex_image_on() and ai.vertex_image_wait_s() <= 300 and not vis_hurry():
         # 06.11: kota beklemesi kısa → aynı görseli tekrar tekrar kullanmak yerine birkaç dakika bekle
         time.sleep(ai.vertex_image_wait_s() + 1)
@@ -1064,6 +1070,7 @@ def fetch_openverse(subject, out, context=""):
 
 _VIS_T0 = None
 _LAST_IMG = None
+_TOPIC = [""]  # videonun konusu/başlığı (görsel alaka kontrolünde bağlam)
 _REUSE = {}  # yedek olarak yeniden kullanılan görsel → kaç kez (tek görselin videoyu doldurmasını engeller)
 
 
@@ -1110,9 +1117,11 @@ def image_matches(path, what):
         sm = Path(path).with_name(Path(path).stem + "_chk.jpg")
         Image.open(path).convert("RGB").resize((480, 270)).save(sm, quality=80)
         lite = [m for m in CFG["judge_models"] if "lite" in m] or CFG["judge_models"][:1]
-        r = ai.gemini_json("You check photos for a documentary. Be strict.",
-                           f"Narration: {what}\nDoes this photo clearly show this exact real place/object/event (or a "
-                           "very close real view of it)? Maps, logos, tiny thumbnails, unrelated people = no. "
+        r = ai.gemini_json("You check photos for a documentary. Be very strict: animals, sports, traffic, modern city "
+                           "life or anything out of place for the topic = no unless literally mentioned.",
+                           f"Video topic: {_TOPIC[0]}\nNarration: {what}\nDoes this photo clearly show this exact real "
+                           "place/object/event (or a very close real view of it)? Maps, logos, tiny thumbnails, "
+                           "unrelated people = no. "
                            'JSON: {"match": true or false}', images=[sm], required=("match",), models=lite,
                            temperature=0.1)
         return bool(r.get("match"))
@@ -1128,16 +1137,22 @@ def clip_matches(clip, sc, workdir):
         return not CFG.get("strict_visuals")  # katı modda kontrol edilemeyen video kullanılmaz
     _CLIP_CHECKS += 1
     try:
-        fr = Path(workdir) / (Path(clip).stem + "_chk.jpg")
         d = media.duration(clip)
-        media.sh(["ffmpeg", "-y", "-ss", f"{d / 2:.2f}", "-i", clip, "-frames:v", "1", "-vf", "scale=480:-2", fr])
+        frs = []
+        for n, pos in enumerate((0.2, 0.5, 0.8)):  # 06.11: tek kare yetmedi → başı, ortası, sonu
+            fr = Path(workdir) / (Path(clip).stem + f"_chk{n}.jpg")
+            media.sh(["ffmpeg", "-y", "-ss", f"{d * pos:.2f}", "-i", clip, "-frames:v", "1", "-vf", "scale=480:-2", fr])
+            frs.append(fr)
         lite = [m for m in CFG["judge_models"] if "lite" in m] or CFG["judge_models"][:1]
-        r = ai.gemini_json("You check stock footage for an explainer video. Be strict: generic or unrelated = no.",
-                     f"Narration of this scene: {sc['narration']}\nSearch query used: {sc.get('broll_query', '')}\n"
-                     "Would a viewer immediately see that this frame shows the thing being talked about "
-                     "(same object, place, process or a very close real-world example)? "
-                     'Return JSON: {"match": true or false, "seen": "what the frame shows, 5 words"}',
-                     images=[fr], required=("match",), models=lite, temperature=0.2)
+        r = ai.gemini_json("You check footage for a documentary. Be very strict: generic, unrelated, modern-looking "
+                           "when the story is historical, animals/sports/traffic/city life unless literally mentioned = no.",
+                     f"Video topic: {_TOPIC[0]}\nNarration of this moment: {sc['narration']}\n"
+                     f"Search query used: {sc.get('broll_query', '')}\n"
+                     "The 3 images are frames from the SAME clip. Would a viewer immediately see that ALL of them show "
+                     "the thing being talked about (same object, place, era, ritual or a very close real example) and "
+                     "nothing that feels out of place for this topic? "
+                     'Return JSON: {"match": true or false, "seen": "what the frames show, 6 words"}',
+                     images=frs, required=("match",), models=lite, temperature=0.1)
         ok = bool(r.get("match"))
         if not ok:
             VIS_STATS["rejected"] += 1
@@ -1233,6 +1248,7 @@ def beat_shots(sc, min_sec=2.0, max_sec=6.5):
 
 def build_scene_videos(script, workdir, ledger):
     """Her sahneyi ~4-5 sn'lik çekimlere böler (profesyonel tempo), sahne videosunu döndürür."""
+    _TOPIC[0] = script.get("title", "")
     style = CFG["visual_style"]
     scenes = script["scenes"]
     need = int(len(scenes) * CFG["min_diagram_ratio"] + 0.999)
@@ -1259,7 +1275,7 @@ def build_scene_videos(script, workdir, ledger):
             continue
         shots = media.split_frames(sc["frames"], shot_sec)
         log(f"Sahne {i+1}/{len(scenes)} ({sc.get('visual')}, {sc['duration']:.1f} sn, {len(shots)} çekim)")
-        q = sc.get("broll_query") or CFG["fallback_broll"]
+        q = sc.get("broll_query") or ("" if CFG.get("strict_visuals") else CFG["fallback_broll"])
         img = None
         if sc.get("visual") == "diagram" or CFG.get("strict_visuals"):  # katı mod: yedek görsel hazır olsun
             img = gen_image(f"{sc.get('image_prompt') or sc['narration']}. Style: {style}",

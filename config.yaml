@@ -238,7 +238,7 @@ scene_images: "gemini"          # sahne görselleri Gemini (Vertex kredisi) ile:
 max_gemini_scene_images: 25     # fiyat/performans: ilk ~5 dakika (en çok izlenen kısım) Gemini kalitesinde, gerisi ücretsiz model
 strict_visuals: true            # alakasız görüntü yok: önce gerçek fotoğraf/video (yapay zekâ ile kontrol), olmazsa cümleye göre çizilip kontrol edilen görsel
 max_sentence_images: 140        # video başına cümle görseli üst sınırı (aşılırsa sahnenin önceki görseli farklı açıyla)
-max_footage_checks: 320         # stok video/fotoğrafın cümleyle uyumunu kontrol (ucuz Gemini modeli)
+max_footage_checks: 600         # stok video/fotoğrafın cümleyle uyumunu kontrol (ucuz Gemini modeli)
 music_db: -21                  # müzik seviyesi (anlatım varken ayrıca otomatik kısılır)
 
 # ======================= KALİTE =======================
