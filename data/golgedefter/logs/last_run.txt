@@ -1,3 +1,17 @@
-[11:19:31] Başladı (test modu: False, yayın: scheduled)
-[11:19:31] Ücretli Gemini anahtarı kullanılıyor
-[11:19:32] Kanal doğrulandı: GölgeDefter
+[11:29:55] Başladı (test modu: False, yayın: scheduled)
+[11:29:56] Ücretli Gemini anahtarı kullanılıyor
+[11:29:57] Kanal doğrulandı: GölgeDefter
+[11:29:58] Instagram anahtarı ve hesap kimliği doğrulandı: @golge.defter
+[11:29:59] Analitik: 3 video ölçüldü, sütun puanları: {'Anadolu ve dünya efsaneleri, mitolojik varlıklar, halk inançları': 3.1621411456103647, 'Açıklanamayan gerçek olaylar ve kayıplar (Dyatlov, Mary Celeste, Roanoke, Tunguska)': 1.4532443354501756, 'İslam tarihi ve kutsal kıssalar (Ashab-ı Kehf, Zülkarneyn, İrem ve Ad kavmi, Semud, Nuh tufanı)': 4.455603446915414}
+[11:31:04] Rakip analizi: 'Mezarı Açılıp Kalbine Kazık Çakılan Ölüler: Osmanlı Mahkemesinin Hortlak Davaları' seçildi (1/10 büyük rakip). Açı: Efsane veya korku hikayesi anlatmak yerine konuyu tamamen resmi bürokrasiye dayandırmak: Şeyhülislam Ebussuud Efendi'nin mezardan kalkan cesetlerin kalbine kazı
+[11:31:05] Konu (1): Mezarı Açılıp Kalbine Kazık Çakılan Ölüler: Osmanlı Mahkemesinin Hortlak Davaları  [Anadolu ve dünya efsaneleri, mitolojik varlıklar, halk inançları]
+[11:33:01] Senaryo yazıldı: 44 sahne, 2122 kelime
+[11:34:07] Anlatım sadeleştirildi (2122 → 1702 kelime)
+[11:35:13] Doğrulama kaynağı: Google araması
+[11:35:13] Doğrulama turu 1: 14 iddia, 3 yanlış, 0 belirsiz
+[11:37:14] Doğrulama kaynağı: Google araması
+[11:37:14] Doğrulama turu 2: 15 iddia, 0 yanlış, 0 belirsiz
+[11:37:14] En çok arananlar: osmanlı vampir olayı | osmanlıda vampirler | osmanlı'da vampir vakası | osmanlıda kültür ve medeniyet | osmanlıda kış | osmanlıda | osmanlıda doğsaydın | osmanlıda toprak sistemi
+[11:37:32] Başlık seçildi: Osmanlıda Vampir Vakaları: Gözleri Açık 2 Cesedin Gizemi  (önceki: Osmanlıda Vampir Vakaları: Mezardan Çıkarılan Cesetlerin Mahkeme Kayıtları) — Kanalın sevdiği 'Konu: Somut detay + Cevapsız soru' şablonuna birebir uyuyor. En çok aratılan anahtar kelimeyi ilk 25 karakterde veriyor, '2 ceset' so
+[11:37:34] Editör (min 7, ort 7.9): {'originality': 8, 'hook': 7, 'clarity': 8, 'simplicity': 7, 'flow': 8, 'value_density': 8, 'audience_fit': 9, 'problems': ['"kadı mahkemelerinin resmi kayıt defterleri olan şer\'iyye sicillerinde şaşırtıcı belgeler saklıdır" -> \'Şer\'iyye sicili\' terimi açıklanmadan kullanılmış. Daha basit ifade: \'Mahkemelerin eski resmi kayıt defterlerinde...\'', '"Osmanlı\'nın Balkan topraklarındaki bu davalar, aslında tüm Avrupa\'yı sarsan dev bir dalganın parçasıydı." -> \'Balkanlar\' kelimesi geçiyor ama coğrafi bağlam biraz hızlı geçilmiş.', '"Ancak fetva bununla sınırlı değildi" -> \'Fetva\' kelimesi daha önce açıklandı ama bu cümlede tekrar ederken tanımı verilmeden kullanılmış.'], 'problems_tr': "Metinde geçen 'şer'iyye sicili' gibi Osmanlıca terimler ilk defa duyacaklar için kısaca açıklanabilirdi."}
+[11:37:38] Seslendirme başlıyor (Gemini Charon)...
