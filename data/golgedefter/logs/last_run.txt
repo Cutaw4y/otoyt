@@ -1,3 +1,73 @@
-[08:28:21] Başladı (test modu: False, yayın: scheduled)
-[08:28:22] Ücretli Gemini anahtarı kullanılıyor
-[08:28:22] Kanal doğrulandı: GölgeDefter
+[08:42:52] Başladı (test modu: False, yayın: scheduled)
+[08:42:53] Ücretli Gemini anahtarı kullanılıyor
+[08:42:56] Kanal doğrulandı: GölgeDefter
+[08:42:57] Instagram anahtarı ve hesap kimliği doğrulandı: @golge.defter
+[08:42:57] Analitik: 2 video ölçüldü, sütun puanları: {'Anadolu ve dünya efsaneleri, mitolojik varlıklar, halk inançları': 3.1621411456103647, 'Açıklanamayan gerçek olaylar ve kayıplar (Dyatlov, Mary Celeste, Roanoke, Tunguska)': 1.4532443354501756}
+[08:42:57] Konu (1): Dâbbetü'l-Arz: Yerden Çıkıp İnsanlarla Konuşacak Varlık Neyin Habercisi?  [Kıyamet alametleri ve ahir zaman anlatıları (ayet ve hadis kaynaklarıyla, tarih tahmini yok)]
+[08:44:31] Senaryo kısa (1228/2200 kelime) → genişletiliyor (1)
+[08:45:54] Senaryo kısa (1488/2200 kelime) → genişletiliyor (2)
+[08:47:09] Senaryo uzunluğu: 1488 kelime
+[08:47:09] Senaryo yazıldı: 44 sahne, 1488 kelime
+[08:48:12] Sadeleştirme sahne yapısını bozdu → eski metin kalıyor
+[08:50:28] Doğrulama kaynağı: Google araması
+[08:50:28] Doğrulama turu 1: 15 iddia, 0 yanlış, 0 belirsiz
+[08:50:28] En çok arananlar: dabbetül arz nedir | dabbetül arz nedir cübbeli | dabbetül arz nedir tuncer | dabbetül arz kimdir | dabbetül arz | dabbetül arz kıyamet | dabbetül arz kıyamet fragman | dabbetül arz çıktı mı
+[08:50:43] Başlık seçildi: Dabbetül Arz Nedir: Yeryüzüne Çıkıp Söyleyeceği İlk Söz Ne?  (önceki: Dabbetül Arz Nedir: Yerden Çıkıp Konuşacak Gizemli Varlık) — Tam arama terimiyle başlayıp doğrudan videodaki en vurucu detaya ('ilk söyleyeceği söz') odaklanıyor; hem kanaldaki imza soru formatına uyuyor hem de 
+[08:50:45] Editör (min 5, ort 6.9): {'originality': 6, 'hook': 7, 'clarity': 6, 'simplicity': 5, 'flow': 7, 'value_density': 8, 'audience_fit': 9, 'problems': ["Quote: 'Neml Suresi seksen ikinci ayette' -> Fix: 'Kuran'ın Neml Suresi'ndeki 82. ayette'", "Quote: 'Sahih-i Müslim'de Huzeyfe bin Esîd'den nakledilen meşhur rivayette' -> Fix: 'Hadis kaynaklarında geçen bir rivayette'", "Quote: 'Fahreddin er-Râzî gibi büyük kelam ve mantık âlimleri' -> Fix: 'Büyük İslam âlimleri'", "Quote: 'İsrâiliyyat kaynaklı olduğunu' -> Fix: 'Eski dini metinlerdeki halk efsanelerinden geldiğini'", "Quote: 'Sünen-i Tirmizî ve Sünen-i İbn Mâce'de yer alan' -> Fix: 'Güvenilir hadis kitaplarında yer alan'"], 'problems_tr': 'Metinde geçen bazı özel terimler, ayet ve hadis kaynak isimleri (Neml Suresi, Sahih-i Müslim, Fahreddin er-Râzî, İsrâiliyyat, Sünen-i Tirmizî gibi) hedef kitledeki ortalama bir izleyici için yeterince basitleştirilmeden ve açıklanmadan kullanılmıştır.'}
+[08:53:08] Anlatım sadeleştirildi (1464 → 1110 kelime)
+[08:53:08] Senaryo kısa (1110/2200 kelime) → genişletiliyor (1)
+[08:54:52] Senaryo kısa (1660/2200 kelime) → genişletiliyor (2)
+[08:56:03] Senaryo uzunluğu: 1813 kelime
+[08:57:26] Doğrulama kaynağı: Google araması
+[08:57:26] Doğrulama turu 1: 15 iddia, 2 yanlış, 0 belirsiz
+[08:59:53] Doğrulama kaynağı: Google araması
+[08:59:53] Doğrulama turu 2: 13 iddia, 1 yanlış, 0 belirsiz
+[09:03:30] Doğrulama kaynağı: Google araması
+[09:03:30] Doğrulama turu 3: 15 iddia, 0 yanlış, 1 belirsiz
+[09:03:32] Editör (min 6, ort 7.4): {'originality': 7, 'hook': 7, 'clarity': 8, 'simplicity': 6, 'flow': 7, 'value_density': 8, 'audience_fit': 9, 'problems': ["Quote: 'Müfessirlerin ortak görüşüne göre...' -> Fix: 'Dini metinleri açıklayan uzmanların ortak görüşüne göre...'", "Quote: 'Hadis şarihleri, yani peygamber sözlerini açıklayan büyük uzmanlar...' -> Fix: 'Peygamberin sözlerini açıklayan uzmanlar...'", "Quote: 'İsrâiliyyât kaynaklı olduğunu söyler.' -> Fix: 'İslam öncesi eski kültürlerden aktarılan rivayetlerden kaynaklandığını söyler.'"], 'problems_tr': "Metinde geçen 'müfessir' ve 'İsrâiliyyât' gibi bazı dini terimler kısaca açıklanmış olsa da, cümle yapıları zaman zaman 12 yaşındaki bir çocuğun ilk dinleyişte anlamakta zorlanacağı kadar uzun ve akademik kalmıştır."}
+[09:05:31] Anlatım sadeleştirildi (1831 → 1839 kelime)
+[09:05:31] Senaryo kısa (1839/2200 kelime) → genişletiliyor (1)
+[09:09:44] Doğrulama kaynağı: Google araması
+[09:09:44] Doğrulama turu 1: 15 iddia, 0 yanlış, 1 belirsiz
+[09:11:31] Doğrulama kaynağı: Google araması
+[09:11:31] Doğrulama turu 2: 15 iddia, 0 yanlış, 0 belirsiz
+[09:11:34] Editör (min 6, ort 7.4): {'originality': 7, 'hook': 8, 'clarity': 7, 'simplicity': 6, 'flow': 7, 'value_density': 8, 'audience_fit': 9, 'problems': ["Quote: 'Nekire olarak dâbbeten şeklinde tekil bir varlığı anlatır.' -> Fix: Kelimenin Arapçada belirsiz ve tekil bir varlık anlamına geldiğini sadeleştirerek anlatın.", "Quote: 'Kelam geleneğinde de cansız topraktan konuşan bir canlının çıkması...' -> Fix: İslam felsefesi ve inanç ilminde, topraktan konuşan bir varlığın çıkmasının mucize kabul edildiğini belirtin.", "Quote: 'Sahih-i Müslim'de Huzeyfe bin Esîd'den aktarılan güvenilir peygamber sözünde...' -> Fix: Hadis kaynağının güvenilir olduğunu doğrudan söyleyip karmaşık ravi isimlerini sadeleştirin.", "Quote: 'İbn Hacer el-Askalânî gibi büyük hadis şârihleri...' -> Fix: Hadisleri açıklayan büyük İslam alimleri şeklinde ifade edin.", "Quote: '...çoğunun İsrâiliyyât kaynaklı olduğunu söyler.' -> Fix: İslam öncesi eski dini metinlerden ve efsanelerden sonradan İslam kültürüne karışmış rivayetler olduğunu açıklayın.", "Quote: 'Dördüncü ve en güçlü görüş ise cumhurun, yani İslam âlimlerinin ezici çoğunluğunun benimsediği zahirî görüştür.' -> Fix: İslam âlimlerinin çoğunluğunun bu ayeti mecaz olarak değil, olduğu gibi kabul ettiğini söyleyin."], 'problems_tr': 'Metinde geçen nekire, kelam geleneği, şârih ve İsrâiliyyât gibi bazı Arapça ve dini terimler hedef kitle için yeterince açıklanmadan kullanılmıştır. Bu durum 12 yaşındaki bir dinleyicinin anlamasını zorlaştırabilir.'}
+[09:11:34] Konu kalite barajını geçemedi: Dâbbetü'l-Arz: Yerden Çıkıp İnsanlarla Konuşacak Varlık Neyin Habercisi?
+[09:11:34] Konu (2): Dâbbetü'l-Arz: Yerden Çıkıp İnsanlarla Konuşacak Varlık Neyin Habercisi?  [Kıyamet alametleri ve ahir zaman anlatıları (ayet ve hadis kaynaklarıyla, tarih tahmini yok)]
+[09:13:27] Senaryo kısa (1565/2200 kelime) → genişletiliyor (1)
+[09:14:26] Senaryo kısa (1834/2200 kelime) → genişletiliyor (2)
+[09:15:32] Senaryo uzunluğu: 1890 kelime
+[09:15:32] Senaryo yazıldı: 45 sahne, 1890 kelime
+[09:16:25] Anlatım sadeleştirildi (1890 → 1564 kelime)
+[09:18:22] Doğrulama kaynağı: Google araması
+[09:18:22] Doğrulama turu 1: 15 iddia, 2 yanlış, 0 belirsiz
+[09:21:29] Doğrulama kaynağı: Google araması
+[09:21:29] Doğrulama turu 2: 15 iddia, 1 yanlış, 0 belirsiz
+[09:24:59] Doğrulama kaynağı: Google araması
+[09:24:59] Doğrulama turu 3: 15 iddia, 0 yanlış, 0 belirsiz
+[09:24:59] En çok arananlar: dabbetül arz nedir | dabbetül arz nedir cübbeli | dabbetül arz nedir tuncer | dabbetül arz kimdir | dabbetül arz | dabbetül arz kıyamet | dabbetül arz kıyamet fragman | dabbetül arz çıktı mı
+[09:25:10] Başlık seçildi: Dabbetül Arz Nedir: Yerden Çıkınca Neden Tövbe Kapısı Kapanır?  (önceki: Dabbetül Arz Nedir: Yerden Çıkıp Konuşacak Varlık) — Tam olarak aranan 'dabbetül arz nedir' anahtar kelimesiyle başlar ve videodaki en vurucu, korkutucu teolojik gerçeği ('tövbe kapısının bir daha açılma
+[09:25:12] Editör (min 6, ort 6.9): {'originality': 7, 'hook': 6, 'clarity': 7, 'simplicity': 6, 'flow': 7, 'value_density': 7, 'audience_fit': 8, 'problems': ['"Neml Suresi seksen ikinci ayette bildirilen bu olay, geri dönüşü olmayan son eşiktir." - Ayet numarası ve adı yabancı gelebilir, doğrudan anlamı verilebilir.', '"Sahih-i Müslim\'e göre bu iki olay art arda gelecektir." - Sahih-i Müslim\'in ne olduğu (güvenilir hadis kitabı) sonradan açıklansa da ilkgeçişte biraz hızlı kalmış.', '"Taberi ve İbn Kesir gibi ünlü tarih yazarları bu tarifleri aktarmıştır." - Bu kişilerin İslam tarihindeki yeri kısaca belirtilmeliydi.', '"Fahreddin Razi, bu tür canavar tariflerine çok sert karşı çıkmıştır." - Fahreddin Razi\'nin kim olduğu açıklanmamış.'], 'problems_tr': 'Metinde geçen bazı özel terimler (ayet isimleri ve İslam alimlerinin adları) yeterince açıklanmadan kullanılmış, bu da 12 yaşındaki bir dinleyicinin takılmasına yol açabilir.'}
+[09:27:40] Anlatım sadeleştirildi (1605 → 1588 kelime)
+[09:27:40] Senaryo kısa (1588/2200 kelime) → genişletiliyor (1)
+[09:28:45] Senaryo kısa (1588/2200 kelime) → genişletiliyor (2)
+[09:30:11] Senaryo uzunluğu: 1766 kelime
+[09:31:25] Doğrulama kaynağı: Google araması
+[09:31:25] Doğrulama turu 1: 15 iddia, 3 yanlış, 0 belirsiz
+[09:33:35] Doğrulama kaynağı: Google araması
+[09:33:35] Doğrulama turu 2: 14 iddia, 3 yanlış, 0 belirsiz
+[09:35:55] Doğrulama kaynağı: Google araması
+[09:35:55] Doğrulama turu 3: 15 iddia, 0 yanlış, 0 belirsiz
+[09:35:57] Editör (min 6, ort 6.7): {'originality': 7, 'hook': 6, 'clarity': 7, 'simplicity': 6, 'flow': 7, 'value_density': 6, 'audience_fit': 8, 'problems': ["Quote: 'hadislere ve köklü tefsir yorumlarına göre ise bu zuhurla birlikte...' -> Fix: 'hadislere ve eski dini açıklamalara göre bu olayla birlikte...'", "Quote: 'Sahih-i Müslim'deki rivayete göre...' -> Fix: 'İslam'ın en güvenilir hadis kitaplarından Müslim'deki kayda göre...'", "Quote: 'İsrâiliyyât kaynaklı, yani yabancı efsanelerden karıştığını...' -> Fix: 'İslam dışı eski kültürlerden kitaba sonradan karıştığını...'", "Quote: 'Şaz okunuşla 'tukellimuhum' yerine 'teklimuhum' şeklinde de okunabilmektedir.' -> Fix: 'Arapça okunuş farkından dolayı kelime aynı zamanda...'"], 'problems_tr': "Metinde geçen 'tefsir', 'Sahih-i Müslim', 'İsrâiliyyât' ve 'şaz okunuş' gibi dini terimler hedef kitledeki herkes tarafından bilinmeyebilir, bu nedenle daha sade günlük Türkçe ile açıklanmalıdır."}
+[09:37:56] Anlatım sadeleştirildi (1778 → 1777 kelime)
+[09:37:56] Senaryo kısa (1777/2200 kelime) → genişletiliyor (1)
+[09:40:37] Doğrulama kaynağı: Google araması
+[09:40:37] Doğrulama turu 1: 14 iddia, 1 yanlış, 0 belirsiz
+[09:45:32] Doğrulama kaynağı: Google araması
+[09:45:32] Doğrulama turu 2: 15 iddia, 2 yanlış, 0 belirsiz
+[09:47:30] Doğrulama kaynağı: Google araması
+[09:47:30] Doğrulama turu 3: 15 iddia, 0 yanlış, 0 belirsiz
+[09:47:32] Editör (min 6, ort 7.3): {'originality': 7, 'hook': 6, 'clarity': 8, 'simplicity': 6, 'flow': 7, 'value_density': 8, 'audience_fit': 9, 'problems': ["'İslam eskatologyasında' is a complex academic term used without immediate plain explanation; fix: 'İslam kıyamet inancında ve gelecekle ilgili rivayetlerde'.", "'Neml Suresi seksen ikinci ayette' is specific but could benefit from a simpler contextual intro like 'Kur'an-ı Kerim'in Neml Suresi 82. ayetinde'.", "'İsrailiyat kökenli olduğunu' uses a technical term that needs immediate translation; fix: 'eski İsrailoğulları kültüründen gelen rivayetler'."], 'problems_tr': "Metinde geçen 'eskatoloji', 'Neml Suresi 82. ayet' ve 'İsrailiyat' gibi bazı terimler doğrudan kullanılmış; bunların daha sade bir dille açıklanması 12 yaşındaki bir dinleyicinin anlamasını kolaylaştırabilirdi."}
+[09:47:32] Konu kalite barajını geçemedi: Dâbbetü'l-Arz: Yerden Çıkıp İnsanlarla Konuşacak Varlık Neyin Habercisi?
+[09:47:32] Hiçbir senaryo alt sınırı geçemedi, video üretilmedi.
+[09:47:35] Bitti: video üretilmedi.
