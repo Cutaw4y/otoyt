@@ -2761,7 +2761,8 @@ def add_to_pillar_playlist_by_title(video_id, title):
         log(f"Oynatma listesine eklenemedi: {str(e)[:150]}")
 
 
-def produce_script(history, report, selected_idea=None):
+def produce_script(history, report, selected_idea=None, strict=True):
+    # strict: Telegram'da sahibinin onayladığı konu (kalite tabanı yüksek). Yarım kalan konuyu yeniden yazarken strict=False.
     """Kaliteli senaryo bulana kadar dener: aynı konuda revizyon, olmazsa yeni konu.
     Hiçbiri barajı geçmezse, bilgi hatası olmayan en iyi senaryo alt sınırın üstündeyse kullanılır."""
     best = None  # (skor, fikir, senaryo)
@@ -2813,7 +2814,7 @@ def produce_script(history, report, selected_idea=None):
         log(f"Konu kalite barajını geçemedi: {idea['title']}")
         if best and best[0][0] >= CFG["min_quality_score"] - 1 and not selected_idea:
             break  # Başka konu tüketme; onaylı konudaysa yeni taslakla yeniden dene
-    floor = CFG["min_quality_score"] if selected_idea else CFG.get("min_quality_floor", 0)
+    floor = CFG["min_quality_score"] if (selected_idea and strict) else CFG.get("min_quality_floor", 0)
     if best and best[0][0] >= floor:
         log(f"Baraj geçilemedi; en iyi senaryo kullanılıyor (min {best[0][0]:.0f}, ort {best[0][1]:.1f})")
         notify(f"ℹ️ Senaryo kontrolü: yapay zekâ editörü senaryoya 10 üzerinden en düşük {best[0][0]:.0f}, "
@@ -3089,7 +3090,7 @@ def run_once():
             and word_count(pend["script"]) < CFG["target_words"] * CFG.get("min_length_ratio", 0.85)):
         # yarım kalan senaryo bugünkü hedef uzunluktan kısa (ör. Cuma belgeseli): aynı konuyla uzun senaryo yazılır
         log(f"Aynı konu bugünkü uzunlukta yeniden yazılıyor: {pend['script'].get('title')}")
-        idea, script = produce_script(history, report, pend["idea"])
+        idea, script = produce_script(history, report, pend["idea"], strict=False)
         if script is not None:
             save_json(PENDING_SCRIPT, {"date": datetime.now().isoformat(timespec="minutes"), "idea": idea,
                                        "script": script})

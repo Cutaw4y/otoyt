@@ -271,7 +271,7 @@ min_quality_floor: 0
 weekday_overrides:
   4:
     target_words: 5000            # ~40+ dk (kanal sahibi: Cuma belgeseli en az 40 dk)
-    visual_time_budget_min: 90
+    visual_time_budget_min: 60     # senaryo aşaması uzun sürüyor: 5,5 saat sınırına pay
     max_gemini_scene_images: 55
     max_expand_rounds: 3
     extra_script_rules: >

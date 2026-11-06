@@ -11,3 +11,4 @@
 - 2026-11-06 [Claude] Karar: yalnız ChatGPT Plus'a dahil Codex kod incelemesi kullanılacak; API anahtarlı otomatik ajan kurulmayacak. Eski PR #5 #10 #11 geçersiz (Telegram onayı kapalı / ertelendi), kapatılabilir
 - 2026-11-06 [Claude] Gölgedefter min_lead_hours 1.5→0.75: yayın saatine yetişme payı (uzun belgesel)
 - 2026-11-06 [Claude] Ses: her parça konuşma tanımayla kontrol, tekrar/sürçme/atlama varsa en çok 3 kez yeniden seslendirme (voice.tts_issues); parçalar küçültüldü (GD 2 sahne/800 harf, BQ 3/1000)
+- 2026-11-06 16:30 [Claude] ACİL: yarım konuyu uzun yeniden yazma yolu, onaylı-konu kalite tabanına (7) takılıyordu → strict=False; Cuma görsel bütçesi 60 dk
