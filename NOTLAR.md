@@ -13,3 +13,4 @@
 - 2026-11-06 [Claude] Ses: her parça konuşma tanımayla kontrol, tekrar/sürçme/atlama varsa en çok 3 kez yeniden seslendirme (voice.tts_issues); parçalar küçültüldü (GD 2 sahne/800 harf, BQ 3/1000)
 - 2026-11-06 16:30 [Claude] ACİL: yarım konuyu uzun yeniden yazma yolu, onaylı-konu kalite tabanına (7) takılıyordu → strict=False; Cuma görsel bütçesi 60 dk
 - 2026-11-06 16:40 [Claude] tests/test_regressions.py: bugünkü 4 hatanın kalıcı testleri (kopya video, kalite tabanı, gün/bekçi uyumu, belgesel süre bütçesi); history'ye orig_title/idea_title
+- 2026-11-06 17:15 [Claude] Sistem paketleri (ffmpeg/espeak) actions/cache ile önbellekte; apt kısa zaman aşımı+yeniden deneme (bugün apt 47 dk takıldı)

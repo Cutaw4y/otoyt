@@ -46,10 +46,26 @@ jobs:
           path: ~/.cache/huggingface
           key: kokoro-${{ hashFiles('config.yaml') }}
           restore-keys: kokoro-
+      - name: Sistem paketleri önbelleği (Ubuntu sunucusu yavaşsa beklemesin)
+        if: env.SKIP != '1'
+        uses: actions/cache@v4
+        with:
+          path: ~/apt-debs
+          key: apt-debs-${{ runner.os }}-ffmpeg-espeak-v1
       - name: Bağımlılıklar
         if: env.SKIP != '1'
         run: |
-          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg fonts-dejavu-core espeak-ng
+          # 06.11: apt sunucusu 47 dk takıldı → önce önbellekteki paketler, olmazsa kısa zaman aşımıyla apt
+          if ls ~/apt-debs/*.deb >/dev/null 2>&1 && sudo dpkg -i ~/apt-debs/*.deb >/dev/null 2>&1 \
+             && command -v ffmpeg >/dev/null && command -v espeak-ng >/dev/null; then
+            echo "Sistem paketleri önbellekten kuruldu"
+          else
+            A="-o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20 -o Acquire::Retries=5"
+            sudo apt-get $A update -qq
+            sudo apt-get $A install -y -qq --download-only ffmpeg fonts-dejavu-core espeak-ng
+            mkdir -p ~/apt-debs && cp /var/cache/apt/archives/*.deb ~/apt-debs/ 2>/dev/null || true
+            sudo apt-get $A install -y -qq ffmpeg fonts-dejavu-core espeak-ng
+          fi
           pip install -q torch --index-url https://download.pytorch.org/whl/cpu
           pip install -q -r requirements.txt
       - name: Video üret ve yükle
