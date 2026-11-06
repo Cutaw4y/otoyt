@@ -5,7 +5,8 @@
     "title": "Alkarısı Nedir? Beşiklerin Başındaki Bin Yıllık Korku",
     "pillar": "Anadolu ve dünya efsaneleri, mitolojik varlıklar, halk inançları",
     "video_id": "eJFXozJEZtc",
-    "manual": true
+    "manual": true,
+    "retention_done": true
   },
   {
     "date": "2026-10-31T12:59",
@@ -232,5 +233,15 @@
     "video_id": "18137328706661769",
     "parent": "cIuAjk2XCfY",
     "queue_key": "ig-queue:202611051126-kaf-dagi-kafkasya-olabilir-mi-3.mp4"
+  },
+  {
+    "date": "2026-11-06T18:12",
+    "type": "long",
+    "title": "Osmanlı Hortlak Davaları: Kadı Neden Kalbe Kazık Çaktırdı?",
+    "orig_title": "Osmanlı Hortlak Davaları: Kadı Neden Kalbe Kazık Çaktırdı?",
+    "idea_title": "Mezarı Açılıp Kalbine Kazık Çakılan Ölüler: Osmanlı Mahkemesinin Hortlak Davaları",
+    "pillar": "Anadolu ve dünya efsaneleri, mitolojik varlıklar, halk inançları",
+    "video_id": "D37VtsIELPM",
+    "series_id": null
   }
 ]
