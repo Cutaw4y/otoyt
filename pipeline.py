@@ -3083,7 +3083,9 @@ def run_once():
             # This has not reached the upload boundary. The original ÜRET
             # decision remains valid, so a bounded same-topic retry is safe.
             import telegram_control as editorial
-            editorial.schedule_quality_retry(editorial_job, upload_started=UPLOAD_STARTED)
+            editorial.schedule_quality_retry(
+                editorial_job, upload_started=UPLOAD_STARTED,
+                max_retries=CFG.get("telegram_editorial", {}).get("max_quality_retries", 2))
         return False
     kw = (script.get("core_keyword") or "").strip()  # revizyonlardan sonra da garanti
     if kw and _norm(kw) not in _norm(script.get("description", "")[:120]):
