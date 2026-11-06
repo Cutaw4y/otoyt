@@ -1,5 +1,5 @@
 {
-  "cloud_tl": 13577.48,
+  "cloud_tl": 13398.41,
   "studio_tl": 105.84,
   "usd_tl": 49.0,
   "checked": "2026-11-02 17:48 (Billing sayfalarından)",
@@ -68,6 +68,18 @@
       "date": "2026-11-06T13:24",
       "channel": "Gölgedefter",
       "cloud_tl": 77.23,
+      "studio_tl": 0.0
+    },
+    {
+      "date": "2026-11-06T15:42",
+      "channel": "Gölgedefter",
+      "cloud_tl": 127.46,
+      "studio_tl": 0.0
+    },
+    {
+      "date": "2026-11-06T16:31",
+      "channel": "Gölgedefter",
+      "cloud_tl": 51.61,
       "studio_tl": 0.0
     }
   ]
