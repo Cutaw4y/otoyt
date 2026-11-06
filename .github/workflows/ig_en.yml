@@ -8,7 +8,10 @@ on:
 permissions:
   contents: write               # ig_queue.json / history.json kaydı + Release'teki videolar
 
-concurrency: ig-beyondqaf
+concurrency:
+  group: otoyt-uretim
+  cancel-in-progress: false
+  queue: max
 
 env:
   OTOYT_CONFIG: config.yaml
@@ -34,6 +37,7 @@ jobs:
       - name: Kaydet
         if: always()
         run: |
+          python3 json_guard.py  # bozuk JSON veya Git çakışması asla git'e yazılmasın
           git config user.name "otoyt-bot"
           git config user.email "otoyt@users.noreply.github.com"
           for f in ig_queue.json history.json ig_last_error.txt; do [ -f "$f" ] && git add "$f"; done
