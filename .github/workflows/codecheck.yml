@@ -1,7 +1,7 @@
 name: Kod kontrolü (her değişiklikte)
 on:
   push:
-    paths: ["*.py", "config.yaml", "channels/*.yaml", "tests/**/*.py", ".github/workflows/codecheck.yml"]
+    paths: ["*.py", "config.yaml", "channels/*.yaml", "tests/**/*.py", ".github/workflows/codecheck.yml", "history.json", "ig_queue.json", "data/golgedefter/history.json", "data/golgedefter/ig_queue.json"]
 concurrency:
   group: audit-codecheck-${{ github.ref }}
   cancel-in-progress: true
@@ -25,6 +25,8 @@ jobs:
           done
       - name: Güvenlik ve kurtarma senaryoları (ağ/yayın yapılmaz)
         run: python -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Kayıt ve Git çakışması kontrolü (salt okunur)
+        run: python3 json_guard.py
       - name: Canlı kayıtların salt okunur tutarlılık denetimi
         run: python audit_state.py --json
       - name: Hata varsa Telegram'a haber ver

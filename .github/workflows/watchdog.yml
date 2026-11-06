@@ -22,6 +22,7 @@ jobs:
         run: python watchdog.py
       - name: Kaydet
         run: |
+          python3 json_guard.py  # bozuk JSON veya Git çakışması asla git'e yazılmasın
           git config user.name "otoyt-bot"; git config user.email "otoyt@users.noreply.github.com"
           git add watchdog_state.json 2>/dev/null || true
           git diff --cached --quiet && exit 0

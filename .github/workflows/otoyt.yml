@@ -111,6 +111,7 @@ jobs:
       - name: Geçmişi kaydet
         if: always() && env.SKIP != '1'
         run: |
+          python3 json_guard.py  # bozuk JSON veya Git çakışması asla git'e yazılmasın
           git config user.name "otoyt-bot"
           git config user.email "otoyt@users.noreply.github.com"
           for f in credit_ledger.json playlist_covers.json history.json assets_used.json assets/branding_done.json logs/last_run.txt \
