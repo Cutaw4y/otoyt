@@ -23,3 +23,4 @@
 - 2026-11-06 20:30 [Claude] Telegram: onay sistemi kapalıyken eski ÜRET/1-4 klavyesi bildirimlerle kaldırılır; 0 yorumlu oylamada mesaj atılmaz
 - 2026-11-06 20:45 [Claude] Telegram sadeleştirildi (Furkan isteği): video başına tek ✅ özet (yayın saati+link+maliyet), 🆘, ⛔, 📊, 🖼; ara adımlar/kendi toparlanan aksaklıklar/IG başarı mesajları sessiz (QUIET_PREFIXES); 📭 yalnız yayın saatinde; bekçi 🔁 sessiz
 - 2026-11-06 21:15 [Claude] Görsel tekrarı (Karabasan 3-4 görsel): Vertex 429'da 15 dk soğuma → 75 sn artan (≤5 dk) + yedek model gemini-2.5-flash-image + istekler arası 4 sn; kısa beklemede tekrar kullanmak yerine bekle; zorunlu tekrar en az kullanılan görselden. test_audit_guards 429 testi buna göre güncellendi (≤2 istek, kısa bekleme)
+- 2026-11-06 21:20 [Claude] Furkan isteği: Karabasan (c05dhpIzinA + 3 Short) 3-4 görselle çıktığı için gizlendi, geçmişten çıkarıldı (jinn-2 serisi yeniden üretilecek); kopya ve eski Karabasan Reels'leri IG kuyruğundan çıkarıldı
