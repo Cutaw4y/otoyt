@@ -1675,6 +1675,11 @@ def send_thumb_options(vid, title):
         handles = {f"t{i}": open(f, "rb") for i, f in enumerate(files)}
         requests.post(f"https://api.telegram.org/bot{tok}/sendMediaGroup",
                       data={"chat_id": chat, "media": json.dumps(media_)}, files=handles, timeout=60)
+        hist = load_json(HISTORY, [])
+        for h in hist:  # Studio A/B testi sürerken otomatik küçük resim değişimi testi bozmasın
+            if h.get("video_id") == vid:
+                h["ab_offered"] = True
+        save_json(HISTORY, hist)
     except Exception as e:
         log(f"Küçük resim seçenekleri Telegram'a gönderilemedi: {str(e)[:150]}")
 
@@ -1699,7 +1704,7 @@ def maybe_swap_thumbnails(history):
     vpd = {v: stats[v]["views"] / max(a, 1) for v, a in age.items() if v in stats and a >= 3}
     for h in longs:
         v, alt = h["video_id"], THUMB_ALT / f"{h['video_id']}.jpg"
-        if h.get("thumb_swapped") or not alt.exists() or not (3 <= age[v] <= 10) or v not in vpd:
+        if h.get("thumb_swapped") or h.get("ab_offered") or not alt.exists() or not (3 <= age[v] <= 10) or v not in vpd:
             continue
         others = sorted(x for k, x in vpd.items() if k != v)
         if len(others) < 3:
@@ -2847,6 +2852,9 @@ def retention_review(history, max_n=2):
                 h["retention_done"] = True  # veri hiç oluşmadı; tekrar tekrar sorma
             continue
         st = retention_stats(data["curve"], data["duration"], _chapters(data["description"]))
+        rc = publish.reach_ctr([h["video_id"]]).get(h["video_id"])
+        if rc and rc["impr"] >= 100:
+            st["impr"], st["ctr"] = rc["impr"], round(rc["ctr"], 4)
         try:
             r = llm_json(
                 "You are a YouTube retention analyst for a documentary channel. Be concrete and brief.",
@@ -2854,6 +2862,9 @@ def retention_review(history, max_n=2):
                 f"Length: {data['duration'] // 60} min. Views: {data['views']}.\n"
                 f"Still watching at 0:30: {st['r30']:.0%}. Average share watched: {st['avg']:.0%}.\n"
                 f"Biggest drop points: {st['drops']}\n"
+                + (f"Thumbnail impressions: {st['impr']}, click-through rate: {st['ctr']:.1%} "
+                   "(YouTube typical 2-10%). If CTR is low, one lesson must be about title/thumbnail promise.\n"
+                   if st.get("ctr") is not None else "") +
                 "Write 3 short, concrete, reusable rules for FUTURE scripts of this channel based on this data "
                 "(e.g. how to open, what to cut, where to add a hook). English, imperative, max 25 words each. "
                 "Also a 3-sentence plain Turkish summary for the channel owner (no jargon). "
@@ -2870,7 +2881,9 @@ def retention_review(history, max_n=2):
         save_json(HISTORY, history)
         done += 1
         notify(f"📊 İzleyici analizi: {h.get('title')}\n"
-               f"İlk 30 saniyede kalan: %{st['r30'] * 100:.0f} · ortalama izlenen: %{st['avg'] * 100:.0f}\n"
+               + (f"Küçük resim {st['impr']} kez gösterildi, tıklanma oranı: %{st['ctr'] * 100:.1f}\n"
+                  if st.get("ctr") is not None else "")
+               + f"İlk 30 saniyede kalan: %{st['r30'] * 100:.0f} · ortalama izlenen: %{st['avg'] * 100:.0f}\n"
                f"{r['summary_tr']}\nBu dersler sonraki videoların senaryosuna otomatik eklendi.")
 
 
@@ -3713,6 +3726,7 @@ if __name__ == "__main__":
         post_due_comments()
         ensure_playlist_covers()
         try:
+            publish.reach_ctr(["_"])  # tıklanma oranı rapor işi yoksa oluşturur (veri birikmeye başlasın)
             retention_review(load_json(HISTORY, []))
         except Exception as e:
             log(f"İzleyici analizi yapılamadı: {str(e)[:200]}")

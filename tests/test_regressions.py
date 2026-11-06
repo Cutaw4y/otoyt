@@ -134,6 +134,14 @@ class RetentionLearning(unittest.TestCase):
                 self.assertIn("Open with the strongest fact.", pipeline.lessons_text())
 
 
+class ThumbnailABSafety(unittest.TestCase):
+    """ChatGPT notu: Studio A/B testi sunulan videoda otomatik küçük resim değişimi testi bozmasın."""
+
+    def test_auto_swap_skips_ab_videos(self):
+        src = (ROOT / "pipeline.py").read_text(encoding="utf-8")
+        self.assertIn('h.get("ab_offered")', src[src.index("def maybe_swap_thumbnails"):][:2500])
+
+
 class LongDocumentaryFitsTimeLimit(unittest.TestCase):
     """Hata 4: uzun belgesel 5,5 saatlik iş sınırını aşmasın (kaba bütçe kontrolü)."""
 

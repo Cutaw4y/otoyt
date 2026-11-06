@@ -407,6 +407,45 @@ def retention(video_id, published):
         return None
 
 
+def reach_ctr(video_ids):
+    """Küçük resim gösterimi ve tıklanma oranı (YouTube Reporting API, channel_reach_basic_a1; 01.2026'dan beri).
+    İlk çağrıda rapor işi oluşturulur; YouTube ilk raporları 1-2 gün içinde üretir. Dönüş: {video_id: {'impr','ctr'}}."""
+    ids = {v for v in video_ids if v}
+    if not ids or not os.getenv("YT_REFRESH_TOKEN"):
+        return {}
+    try:
+        import csv
+        import io
+        from google.auth.transport.requests import AuthorizedSession
+        from googleapiclient.discovery import build
+        creds = _creds()
+        yr = build("youtubereporting", "v1", credentials=creds, cache_discovery=False)
+        jobs = yr.jobs().list().execute().get("jobs", [])
+        job = next((j for j in jobs if j.get("reportTypeId") == "channel_reach_basic_a1"), None)
+        if not job:
+            job = yr.jobs().create(body={"reportTypeId": "channel_reach_basic_a1", "name": "otoyt-reach"}).execute()
+            print("Tıklanma oranı rapor işi oluşturuldu; ilk veriler 1-2 gün içinde gelir")
+            return {}
+        reports = yr.jobs().reports().list(jobId=job["id"]).execute().get("reports", [])
+        sess, agg = AuthorizedSession(creds), {}
+        for rep in reports[:45]:  # son ~45 günlük rapor
+            r = sess.get(rep["downloadUrl"], timeout=60)
+            if not r.ok:
+                continue
+            for row in csv.DictReader(io.StringIO(r.text)):
+                v = row.get("video_id")
+                if v in ids:
+                    imp = float(row.get("video_thumbnail_impressions") or 0)
+                    ctr = float(row.get("video_thumbnail_impressions_ctr") or 0)
+                    a = agg.setdefault(v, [0.0, 0.0])
+                    a[0] += imp
+                    a[1] += imp * ctr
+        return {v: {"impr": int(a[0]), "ctr": (a[1] / a[0]) if a[0] else 0.0} for v, a in agg.items()}
+    except Exception as e:
+        print(f"Tıklanma oranı okunamadı: {str(e)[:200]}")
+        return {}
+
+
 def score(stat):
     """İzlenme (log) × izleyici tutma. Tutma, algoritmanın en çok önemsediği sinyal."""
     return math.log1p(stat["views"]) * (0.5 + stat["avg_pct"] / 100)
