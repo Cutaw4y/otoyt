@@ -1,0 +1,60 @@
+[
+  {
+    "video_id": "ayKbYxbFMK8",
+    "title": "Deccal Şu An Nerede? Hadiste Anlatılan Esrarengiz Ada",
+    "date": "2026-11-06",
+    "r30": 0.715,
+    "avg": 0.41,
+    "drops": [
+      {
+        "at": "0:30",
+        "lost": 0.048,
+        "chapter": "Fırtınada Kaybolan Otuz Denizci"
+      },
+      {
+        "at": "0:38",
+        "lost": 0.097,
+        "chapter": "Fırtınada Kaybolan Otuz Denizci"
+      },
+      {
+        "at": "1:24",
+        "lost": 0.081,
+        "chapter": "Fırtınada Kaybolan Otuz Denizci"
+      }
+    ],
+    "lessons": [
+      "Eliminate preamble entirely and start the main narrative hook within the first 5 seconds to prevent early viewer drop-off.",
+      "Cut repetitive background descriptions during the first minute to maintain high momentum and avoid frustrating viewers.",
+      "Insert a secondary mini-hook or visual shift at the 1:20 mark to re-engage viewers before the initial tension fades."
+    ]
+  },
+  {
+    "video_id": "CkDN0qL3gr4",
+    "title": "Ahit Sandığı Nerede: Kuruyan Gölün Dibinde Ne Bulundu?",
+    "date": "2026-11-06",
+    "r30": 0.664,
+    "avg": 0.307,
+    "drops": [
+      {
+        "at": "0:34",
+        "lost": 0.123,
+        "chapter": "Ahit Sandığı Nerede"
+      },
+      {
+        "at": "0:51",
+        "lost": 0.031,
+        "chapter": "Ahit Sandığı Nerede"
+      },
+      {
+        "at": "3:34",
+        "lost": 0.031,
+        "chapter": "Kutsal Emanetin Yapısı ve Tarihi"
+      }
+    ],
+    "lessons": [
+      "Start the video immediately with the core mystery at 0:00 without delay to prevent the steep 12 percent drop at 0:34.",
+      "Eliminate slow historical descriptions around 3:34 by merging background details with active narrative stakes to retain viewers.",
+      "Keep the intro under 30 seconds since 34 percent of the audience leaves before the main title segment begins."
+    ]
+  }
+]
