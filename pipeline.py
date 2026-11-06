@@ -3616,7 +3616,8 @@ def publish_rendered(script, idea, shorts, thumb, thumb_alt, en_srt, tr_srt,
         _cost = ""
     notify(f"✅ {tr_title(tr_meta, script['title'])}\n"
            + (f"🕒 Yayın: {fmt_local(main_t)}" if sched else "Şimdilik gizli (private)")
-           + f" · {len(shorts)} Short sonraki günlerde\nhttps://youtu.be/{vid}{_cost}")
+           + f" · {len(shorts)} Short sonraki günlerde\nhttps://youtu.be/{vid}{_cost}"
+           + f" · gerçek görüntü: {VIS_STATS.get('real', 0)}")
 
     for k, sh_ in enumerate(shorts):
         try:

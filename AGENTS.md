@@ -34,7 +34,10 @@ Birbirimizle doğrudan konuşamadığımız için köprü bu dosya ve `NOTLAR.md
 - **Yüklenmiş bir videonun senaryosu tekrar kullanılmaz** (`pending_script.json` başlığı geçmişte varsa silinir).
 - **Instagram atlanmaz:** her uzun videonun Reels'leri sıraya alınır, bekçi paylaşılmadıysa tekrar dener.
 - **Telegram:** yalnız önemli durumlar; müdahale gerekiyorsa mesaj `🆘 CLAUDE'A YAZ` ile başlar.
-- **Görseller:** önce gerçek ve doğrulanmış foto/video, alakasız görsel yok (`strict_visuals: true`).
+- **Görseller (Furkan kuralı, 06.11):** anlatılan şeyin önce GERÇEK görüntüsü kullanılır, üretilmez:
+  1) serbest lisanslı gerçek arşiv videosu (Wikimedia Commons, Internet Archive), 2) gerçek fotoğraf (Commons/Openverse),
+  3) stok video (Pixabay/Pexels), 4) en son yapay zekâ görseli. Aramalar İngilizce yapılır; her aday yapay zekâyla
+  alaka kontrolünden geçer (`strict_visuals: true`), kaynaklar açıklamaya yazılır. Aynı görsel videoyu dolduramaz.
 - **Gizli bilgiler** yalnız GitHub Secrets'ta; depo herkese açık — günlüklere anahtar, kimlik, kişisel veri yazma.
 - `tests/test_regressions.py` geçmeden hiçbir değişiklik gönderilmez; bir test başarısızsa testi değil kodu düzelt
   (testi değiştirmek gerekiyorsa sebebini NOTLAR.md'ye yaz).
