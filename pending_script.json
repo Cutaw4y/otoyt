@@ -1,0 +1,346 @@
+{
+  "date": "2026-11-06T10:21",
+  "idea": {
+    "title": "Karabasan: The Jinn Encounters Millions of Turks Report",
+    "angle": "Part 2 of our Jinn series (remind viewers of part 1 in one sentence). The most commonly reported jinn experiences in Turkey, centered on \"karabasan\" (the night-time pressing presence) and other widely reported patterns; use only documented, publicly reported accounts (news reports, published research, folklore archives), never invent names or cases. What witnesses describe, what the tradition says, and what sleep researchers say about sleep paralysis, without ruling on the faith. End by promising part 3 (similar encounters around the world).\n",
+    "pillar": "Reported jinn encounters and places people avoid, from documented accounts",
+    "search_query": "jinn encounters turkey karabasan",
+    "series_id": "jinn-2"
+  },
+  "script": {
+    "core_keyword": "karabasan sleep paralysis",
+    "title": "Karabasan Sleep Paralysis: What Crushes Sleepers at Night?",
+    "description": "Karabasan sleep paralysis freezes sleepers in terror, but is this suffocating shadow a glitch of REM sleep or a real jinn encounter? We investigate medical surveys, documented Ottoman village folklore archives, and classical Islamic texts.\n\nDiscover what happens when a sleeper wakes up completely frozen in the dark, unable to move while an icy weight crushes their chest bone. We examine how eleventh-century physician Ibn Sina explained the condition in his medical canon, what authentic hadith records say about nighttime disturbances, and how modern neuroscientists explain rapid eye movement muscle shutdown. Explore the journey from rural felt-hatted shadow reports to modern sleep laboratory monitors.\n\n#karabasansleepparalysis #karabasan #sleepparalysis #jinn #islamichistory #anatolianfolklore #ibnsina #sleepscience #beyondqaf #unseenrecords #ottomanfolklore #middleeasternhistory",
+    "tags": [
+      "karabasan sleep paralysis",
+      "karabasan",
+      "karabasan jinn",
+      "sleep paralysis jinn",
+      "what is karabasan",
+      "jinn in islam",
+      "turkey jinn stories",
+      "islamic sleep paralysis",
+      "karabasan nedir",
+      "al kabus",
+      "ibn sina sleep paralysis",
+      "night hag islamic",
+      "anatolian folklore",
+      "jinn pressing chest"
+    ],
+    "pinned_comment": "When people experience the terrifying weight of Karabasan, what do you believe is the primary cause?\n1) Purely a brain glitch during REM sleep\n2) A genuine interaction with the unseen jinn\nReply with just 1 or 2 and one word why.",
+    "vote_options": [
+      "REM sleep glitch",
+      "Unseen jinn entity"
+    ],
+    "thumbnail_concepts": [
+      {
+        "image_prompt": "A cinematic dark bedroom at night, viewed from the sleeper's low perspective. On the right side, an imposing humanoid silhouette composed of cold blue-white smokeless fire and pitch-black smoke looms directly over the foot of an old wooden bed. The left side is an empty expanse of deep navy darkness. Ultra high contrast, subtle rim lighting, photorealistic atmosphere.",
+        "text": "FROZEN IN BED"
+      },
+      {
+        "image_prompt": "Extreme macro close-up of a human eye wide open in terror, reflecting a faint glowing blue-white shadowy figure leaning over them. The pupil is intensely dilated. Cinematic cool blue and charcoal black tones, sharp focus on the right side, deep dark empty space on the left side.",
+        "text": "WIDE AWAKE"
+      },
+      {
+        "image_prompt": "A dramatic cutaway diagram of a human chest lying flat, with an ancient heavy black iron anvil resting on the ribcage, outlined in faint cold blue-white glowing energy. High contrast, dark textured stone background on the left, dramatic rim lighting on the right.",
+        "text": "THE PRESSER"
+      }
+    ],
+    "short_title": "The Terrifying Night Presser of Turkey",
+    "shorts": [
+      {
+        "start_scene": 0,
+        "end_scene": 2,
+        "title": "Millions Experience Karabasan in Their Sleep",
+        "hook": "Reveals the documented reports of people waking up paralyzed by an invisible entity.",
+        "ig_caption": "Millions of people wake up completely paralyzed by an invisible presence known as Karabasan. While roughly eight percent of people worldwide report it, surveys across Turkish universities and clinics report rates reaching up to forty percent in specific groups. Watch our full deep dive on YouTube, link in bio!\n#sleepparalysis #karabasan #jinn #unseenhistory #beyondqaf"
+      },
+      {
+        "start_scene": 11,
+        "end_scene": 13,
+        "title": "The Dark Entity with the Felt Hat",
+        "hook": "Uncovers the bizarre village folklore where stealing the night presser's hat traps the spirit.",
+        "ig_caption": "In traditional Anatolian folklore, the night presser is not just a shadow, but wears a heavy wool felt hat called a börk. Village records claimed that if a paralyzed sleeper managed to snatch this hat, the spirit was bound to grant them fortune. Discover the documented accounts on YouTube, link in bio!\n#folklore #karabasan #anatolianlegends #urbanlegends #beyondqaf"
+      },
+      {
+        "start_scene": 23,
+        "end_scene": 25,
+        "title": "Why Your Brain Locks Your Body at Night",
+        "hook": "Explains the exact biological switch that paralyzes your muscles while your mind is awake.",
+        "ig_caption": "Why does your body freeze completely when you wake up inside a nightmare? Modern neuroscience shows that two specific chemicals lock down your spine every single night to stop you from acting out your dreams. See how sleep science matches ancient records on YouTube, link in bio!\n#neuroscience #sleepparalysisfacts #karabasan #sleepscience #beyondqaf"
+      }
+    ],
+    "ig_caption": "Millions of people wake up completely paralyzed by an invisible presence known as Karabasan. While roughly eight percent of people worldwide experience it, surveys across Turkish universities and clinics report rates reaching up to forty percent in specific student groups. Have you ever felt pinned to your bed in the dark? Watch our full deep dive on YouTube, link in bio!\n#sleepparalysis #karabasan #jinn #unseenhistory #beyondqaf",
+    "ig_hashtags_note": "IG rules: first line hook with searchable terms; 1-2 lines with facts; question/invite; full video CTA link in bio; exactly 5 hashtags.",
+    "scenes": [
+      {
+        "narration": "In Turkish university studies, up to forty out of every one hundred students report waking up pinned flat under an invisible, crushing weight. This terrifying bedroom freeze is called karabasan sleep paralysis. Modern neurologists and village elders still argue over what is actually pinning these sleepers down.",
+        "visual": "diagram",
+        "broll_query": "sleep paralysis survey chart",
+        "image_prompt": "A dark, high-contrast infographic diagram showing a human silhouette pinned flat on a bed, with clinical survey data showing up to forty percent highlighted in glowing cold blue text beside anatomical force arrows pressing into the chest.",
+        "chapter": "The Midnight Presser",
+        "callout": "Up to 40% in Surveys"
+      },
+      {
+        "narration": "In Islamic tradition, the jinn are beings made of smokeless fire who live in an unseen world right next to ours. Sleepers who experience this attack say that unseen world steps straight into their bedroom. Their mind snaps wide awake, but a freezing weight locks their chest so they cannot breathe.",
+        "visual": "diagram",
+        "broll_query": "human brain sleep state diagram",
+        "image_prompt": "A split digital diagram: on the left side, an antique Ottoman manuscript illustration of an unseen spiritual threshold with cold blue smokeless flame; on the right side, an illuminated human brain graphic showing nerve pathways glowing in cool blue against a dark background.",
+        "chapter": "",
+        "callout": "The Unseen Threshold"
+      },
+      {
+        "narration": "This pressure is not gentle at all. Victims say it feels like a heavy iron weight, about two hundred pounds, as heavy as a grown man standing right on their ribs. Their eyes can look around the dark room, but their arms and legs feel completely glued to the mattress.",
+        "visual": "footage",
+        "broll_query": "person paralyzed in dark bedroom",
+        "image_prompt": "A cinematic shot of a dark bedroom at night, with moonlight cutting across wooden floorboards. A person lies motionless beneath a blanket, eyes wide open, staring at the dark ceiling in quiet panic.",
+        "chapter": "",
+        "callout": "200-Pound Pressure"
+      },
+      {
+        "narration": "Because they cannot move an inch, terror takes over fast. People often hear slow footsteps creaking across the floor, walking from the hallway right up to their pillow. Many even hear rough, raspy breathing right against their ear, like someone whispering in the dark.",
+        "visual": "footage",
+        "broll_query": "dark hallway footsteps bedroom shadows",
+        "image_prompt": "A low-angle view of bedroom floorboards at night, where an unnatural elongated shadow moves past the open door frame toward a wooden bed.",
+        "chapter": "",
+        "callout": ""
+      },
+      {
+        "narration": "When they try to scream for help, their vocal cords stay locked tight. They can only make a tiny whimper. After a minute or two, the crushing weight suddenly disappears, and they can finally gasp for air. So what does this strange name mean, and why has it terrified families for centuries?",
+        "visual": "diagram",
+        "broll_query": "human vocal cords anatomy diagram",
+        "image_prompt": "A technical anatomical diagram of the human throat and vocal cords, illuminated with cold blue indicators showing locked motor nerves, set against a dark slate background.",
+        "chapter": "",
+        "callout": "Vocal Paralysis"
+      },
+      {
+        "narration": "To understand this fear, we must look at the name itself. In Turkish, kara means dark or black, and basan means the crusher or the presser. For hundreds of years, people did not think of this as just a bad dream, but as a real shadow creature hunting people in bed.",
+        "visual": "footage",
+        "broll_query": "ancient Turkish stone house night",
+        "image_prompt": "An ancient stone house in rural central Anatolia beneath a vast starry night sky, with historical architecture and deep moody shadows.",
+        "chapter": "What the Tradition Says",
+        "callout": "Kara Basan: The Presser"
+      },
+      {
+        "narration": "In Turkish village folklore, elders believe the Karabasan is a harmful jinn that targets people sleeping alone. Old tales warn that these shadow spirits roam after dark, looking for anyone lying flat on their back. Once you fall asleep, the creature climbs onto your chest to steal your breath.",
+        "visual": "diagram",
+        "broll_query": "folklore spirit entity night diagram",
+        "image_prompt": "An artistic concept diagram illustrating an ancient Anatolian bedroom, showing an outlined shadowy form descending upon a sleeping figure, labeled with traditional folklore symbols.",
+        "chapter": "",
+        "callout": ""
+      },
+      {
+        "narration": "So what do authentic Islamic writings say about these night terrors? The Quran does not use the Turkish word Karabasan, but it includes Surah Al-Baqarah, verse two hundred fifty-five, known as the Throne Verse. This is a special protective verse from the Quran that believers recite to shield themselves from spiritual harm while they sleep.",
+        "visual": "footage",
+        "broll_query": "ancient manuscript candlelight desk",
+        "image_prompt": "A leather-bound historic manuscript resting on a dark wooden study desk beside a single flickering candle, soft golden glow illuminating antique paper.",
+        "chapter": "",
+        "callout": "Surah Al-Baqarah 2:255"
+      },
+      {
+        "narration": "A famous early account in Sahih al-Bukhari, which is an authoritative collection of the Prophet Muhammad's verified teachings and sayings, explains this exact protection. In this record, a companion named Abu Huraira caught a nighttime intruder who confessed that reciting the Throne Verse before sleep places an angel over you until morning.",
+        "visual": "footage",
+        "broll_query": "historic middle eastern archival library",
+        "image_prompt": "A quiet historical library lined with antique leather books and stone arches, dimly lit by warm brass lamps.",
+        "chapter": "",
+        "callout": "Sahih al-Bukhari Record"
+      },
+      {
+        "narration": "Early Islamic teachings also talk about scary nighttime disturbances caused by harmful spirits, which they call a hulm, meaning a nightmare or bad dream. The Prophet taught that if you wake up shaken from a hulm, you should dryly spit to your left three times and ask God for safety.",
+        "visual": "diagram",
+        "broll_query": "classical islamic dream interpretation diagram",
+        "image_prompt": "A clean visual diagram mapping the classical classification of dreams: three paths labeled Truthful Dreams, Inner Thoughts, and Hulm or Night Disturbance, set on an aged parchment background.",
+        "chapter": "",
+        "callout": "Hulm: Night Disturbance"
+      },
+      {
+        "narration": "Over time, Turkish villagers mixed these religious prayers with old folk traditions. Grandmothers told people to hide an iron needle or iron scissors under their pillow, believing spirits fear metal. Others hung blue glass evil-eye beads above the bedpost. But what happened when researchers actually traveled into remote mountain towns to interview witnesses?",
+        "visual": "footage",
+        "broll_query": "iron needle antique wooden table",
+        "image_prompt": "A detailed close-up of an antique forged iron needle and an old pair of iron scissors resting upon a rustic wooden bedside table next to a coarse linen pillow, lit by soft moonlight.",
+        "chapter": "",
+        "callout": ""
+      },
+      {
+        "narration": "In the mid-nineteen hundreds, scholars went into quiet farming villages across Turkey to write down real witness accounts. Pertev Boratav, a prominent Turkish folklorist who spent his life collecting village stories, interviewed hundreds of ordinary people. To his surprise, families living hundreds of miles apart described the exact same strange creature.",
+        "visual": "footage",
+        "broll_query": "historical village central anatolia landscape",
+        "image_prompt": "A wide view of a quiet Anatolian village nestled in rolling hills at twilight, with stone chimneys gently smoking into a cool blue-grey sky.",
+        "chapter": "Documented Field Reports",
+        "callout": "Folkloric Archives"
+      },
+      {
+        "narration": "Many villagers reported that the Karabasan looks like a short, heavy man wearing a tall, pointed wool cap called a börk. Others said it had hands with sharp claws or feet shaped like goat hooves, just like ancient folk tales describe jinn. Even though it seemed small, it pressed down like a giant boulder.",
+        "visual": "diagram",
+        "broll_query": "anatolian traditional felt hat illustration",
+        "image_prompt": "A detailed diagram illustrating the traditional Anatolian wool felt hat, known as a börk, showing its pointed shape and textured wool fabric, displayed beside historical field notes.",
+        "chapter": "",
+        "callout": "The Felt Börk"
+      },
+      {
+        "narration": "This created a famous village legend about the creature's wool hat. People said if a frozen sleeper could break the spell and snatch the hat off its head, the spirit would lose all its power. The trapped spirit would then have to reveal hidden gold coins to get the hat back, though almost nobody could move a finger to try.",
+        "visual": "footage",
+        "broll_query": "antique gold coins pottery jar",
+        "image_prompt": "An old earthenware jar unearthed in dark soil, revealing ancient gold coins catching a sliver of moonlight.",
+        "chapter": "",
+        "callout": ""
+      },
+      {
+        "narration": "So what happened when modern doctors started testing people in big cities like Istanbul? They found this night terror is surprisingly common. While roughly eight percent of people worldwide report sleep paralysis, surveys of Turkish college students and nurses found rates between twenty and roughly forty percent.",
+        "visual": "diagram",
+        "broll_query": "medical research data survey chart",
+        "image_prompt": "A clean visual comparison bar chart: the worldwide baseline at roughly eight percent compared against Turkish student and clinical survey cohorts showing rates between twenty and roughly forty percent, rendered in dark technical aesthetics.",
+        "chapter": "",
+        "callout": "20% to 40% in Cohorts"
+      },
+      {
+        "narration": "These educated hospital workers described the exact same horror as rural villagers: an intruder in the room, choked lungs, and pure panic. Even medical students who understood biology admitted that when it happened, they felt true supernatural terror. In the dark, medical facts fly out the window.",
+        "visual": "footage",
+        "broll_query": "stressed university student bedroom night",
+        "image_prompt": "A young university student sitting on the edge of a bed in a dimly lit dormitory room at night, head resting in hands, visibly shaken after waking from a nightmare.",
+        "chapter": "",
+        "callout": ""
+      },
+      {
+        "narration": "Doctors also found clear physical habits that trigger these attacks. Lying flat on your back, which doctors call the supine position, raises your risk of an attack compared to sleeping on your side. Skipping sleep, working late night shifts, and high stress also make it happen far more often.",
+        "visual": "diagram",
+        "broll_query": "sleeping posture spine diagram medical",
+        "image_prompt": "A clean medical illustration comparing two sleeping postures: side sleeping versus lying flat on your back in the supine position, with a highlighted warning indicator showing airway restriction on the back position.",
+        "chapter": "",
+        "callout": "Lying Flat on Your Back"
+      },
+      {
+        "narration": "Researchers found another major trigger called social priming, which means hearing scary stories makes your brain expect them. In homes where grandparents talked about the Karabasan at dinner, young adults had attacks much more often. When their body locked up, their brain remembered those stories and painted a shadow into the bedroom.",
+        "visual": "footage",
+        "broll_query": "traditional family dinner conversation interior",
+        "image_prompt": "A warm, dimly lit dining room in an older home, where family members sit around a table talking under a hanging lamp, with deep evening shadows gathered in the corners.",
+        "chapter": "",
+        "callout": "Social Priming"
+      },
+      {
+        "narration": "Before we look at the brain science, we need to clear up a common mistake made in Western books. Many writers confuse the Karabasan with European medieval demons called incubi, which were said to seduce sleepers. But in Turkish and Middle Eastern folklore, that sexual idea never existed.",
+        "visual": "footage",
+        "broll_query": "medieval european woodcut engraving demon",
+        "image_prompt": "An authentic high-resolution scan of a medieval European woodcut engraving depicting night demons, with stark black lines on aged parchment.",
+        "chapter": "What People Get Wrong",
+        "callout": "The Incubus Myth"
+      },
+      {
+        "narration": "In Turkish culture, the Karabasan is only about crushing weight and suffocating dread. Also, Islamic scholars make clear these shadows are never human ghosts. In Islam, when a person dies, their soul enters the Barzakh, which is the waiting realm between death and Judgment Day where souls cannot return to visit living bedrooms.",
+        "visual": "diagram",
+        "broll_query": "theology barzakh soul realm diagram",
+        "image_prompt": "A theological concept diagram illustrating the physical world, the Barzakh resting barrier between death and judgment, and the unseen realm, showing clear boundary lines between them in elegant graphic form.",
+        "chapter": "",
+        "callout": "Barzakh: The Barrier"
+      },
+      {
+        "narration": "So did ancient doctors only blame unseen spirits, or did they find real medical clues a thousand years ago? Muslim doctors studied this exact sleep problem nearly ten centuries ago. They realized the human body has physical switches that can misfire when waking up.",
+        "visual": "footage",
+        "broll_query": "historic middle eastern astronomy medical tools",
+        "image_prompt": "Antique brass medical instruments and an astrolabe resting on a dark wooden study desk beside classical Arabic medical manuscripts, lit by soft warm light.",
+        "chapter": "",
+        "callout": ""
+      },
+      {
+        "narration": "The famous Persian physician Ibn Sina, known in Europe as Avicenna, wrote a whole medical chapter on this in his famous book, The Canon of Medicine. Avicenna called the condition al-Kabus, an Arabic word that translates directly to the crusher or the presser. He treated it as a physical bodily illness, not a magical curse.",
+        "visual": "footage",
+        "broll_query": "canon of medicine avicenna manuscript",
+        "image_prompt": "A historically accurate display of an eleventh-century page from The Canon of Medicine, showing anatomical sketches and classical Arabic medical script, dramatically lit.",
+        "chapter": "",
+        "callout": "Al-Kabus: The Crusher"
+      },
+      {
+        "narration": "Avicenna believed thick bodily vapors rose toward the head during deep sleep, blocking the brain's nerve paths. He warned that frequent attacks could be early signs of nerve trouble like seizures or strokes. His writings prove that ancient doctors looked for physical causes inside the body. So what actually happens in our brain to freeze our muscles at night?",
+        "visual": "diagram",
+        "broll_query": "ancient human brain circulation diagram",
+        "image_prompt": "A historical medical diagram illustrating Avicenna's classical model of bodily vapors rising to the brain stem, rendered with clear explanatory anatomical labels on aged paper.",
+        "chapter": "",
+        "callout": ""
+      },
+      {
+        "narration": "Today, sleep doctors have mapped the exact biological cause, calling it sleep paralysis. The process starts in your brain stem, the control stalk at the bottom of your skull. It happens during REM sleep, or rapid eye movement sleep, which is the active dream stage when your eyes dart around under your closed eyelids.",
+        "visual": "diagram",
+        "broll_query": "brain stem pons rem sleep diagram",
+        "image_prompt": "A detailed 3D scientific cutaway diagram of the human brain, focusing on the brain stem and the pons region, glowing with electrical activity against a dark slate background.",
+        "chapter": "What Sleep Researchers Say",
+        "callout": "Sleep Paralysis"
+      },
+      {
+        "narration": "During dream sleep, your brain turns on a safety switch called muscle atonia, which means temporary muscle shutdown. Two small hubs in your brain stem release calming chemicals down your spine. These chemicals act like an emergency brake, switching off the nerves that move your arms and legs.",
+        "visual": "diagram",
+        "broll_query": "synapse neurotransmitter chemical signals diagram",
+        "image_prompt": "A high-magnification diagram of a nerve synapse, showing chemical molecules binding to receptor sites, blocking electrical signals down the motor nerve.",
+        "chapter": "",
+        "callout": "Muscle Shutdown Switch"
+      },
+      {
+        "narration": "This chemical lock is an amazing feature that keeps you safe. Without it, if you dreamed of running from danger, your real legs would kick wildly in bed, throwing you onto the floor. On normal nights, your brain releases this chemical brake a few seconds before you open your eyes.",
+        "visual": "footage",
+        "broll_query": "person sleeping peacefully in dark room",
+        "image_prompt": "A peaceful cinematic shot of a person sleeping quietly in bed in a dark room, with blue moonlight casting a calm glow across the bed, showing complete physical rest.",
+        "chapter": "",
+        "callout": ""
+      },
+      {
+        "narration": "In sleep paralysis, however, a timing glitch happens between your mind and your body. Your thinking brain wakes up early, leaving you fully conscious in your dark bedroom, but your brain stem stays stuck in dream mode. Your mind is wide awake, but your body is still chemically locked down.",
+        "visual": "diagram",
+        "broll_query": "brain awake body asleep split diagram",
+        "image_prompt": "A dual-state neurological diagram of a human silhouette: the head and brain cortex glow brightly in yellow to show wakefulness, while the spine and limbs are locked in frozen blue ice.",
+        "chapter": "",
+        "callout": "Desynchronized Waking"
+      },
+      {
+        "narration": "When this mismatch happens, your brain thinks there is an emergency. You try to take a deep breath, but your rib muscles are still locked, leaving only your belly to pull in air. Sensing tight breathing and zero movement, the brain's fear alarm center, a tiny almond-shaped area called the amygdala, fires at full blast.",
+        "visual": "diagram",
+        "broll_query": "amygdala fear response brain scan diagram",
+        "image_prompt": "A medical scan visualization of the human brain, showing the amygdala fear alarm center glowing intensely in fiery red and orange, signaling an acute panic response.",
+        "chapter": "",
+        "callout": "Brain's Fear Alarm"
+      },
+      {
+        "narration": "Because your brain is still dreaming, it invents a story to explain why you cannot move. If your chest feels heavy and your bedroom is dark, your terrified brain projects a dark shadow sitting on your bed. In short, your mind invents a monster to explain the choking feeling it cannot understand.",
+        "visual": "footage",
+        "broll_query": "shadow figure standing beside bed",
+        "image_prompt": "A dark perspective from a bed looking toward an indistinct shadowy humanoid figure standing silently at the bedside, illuminated only by cold window light.",
+        "chapter": "",
+        "callout": ""
+      },
+      {
+        "narration": "This brain glitch also explains why people in different countries see totally different creatures. In Turkey, sleepers report the Karabasan, while in Canada, people report the Old Hag, and in Japan, they see a spirit called Kanashibari. In America, people caught in this exact freeze often report seeing alien abductions with grey creatures hovering over the bed.",
+        "visual": "diagram",
+        "broll_query": "global sleep paralysis folklore world map",
+        "image_prompt": "A stylized world map infographic with icons highlighting global sleep paralysis traditions: Karabasan in Turkey, Kanashibari in Japan, the Old Hag in Canada, and Grey Aliens in the United States.",
+        "chapter": "What the Record Leaves Us With",
+        "callout": "Global Archetypes"
+      },
+      {
+        "narration": "Brain science clearly proves the physical engine that locks our spine and creates scary visions in the dark. Yet for many believers, this biological engine does not rule out the spiritual world. Some scholars argue that when a human is trapped in pure terror, that helpless moment might be when an unseen jinn chooses to disturb them.",
+        "visual": "footage",
+        "broll_query": "archivist examining old manuscripts candles",
+        "image_prompt": "An archivist seated at a heavy dark oak table, reading an ancient handwritten journal beside candlelight, with warm and cold shadows balancing the scene.",
+        "chapter": "",
+        "callout": "Biology vs Spirit"
+      },
+      {
+        "narration": "This brings us to a fascinating crossroads between medical science and ancient folklore, right at the edge of human sleep. In our next investigation, we will track night pressers across East Asia, Scandinavia, and American bayous, comparing ancient demon trials with modern hospital sleep monitors.",
+        "visual": "footage",
+        "broll_query": "misty landscape nocturnal forest fog",
+        "image_prompt": "A vast landscape at night with rolling fog covering ancient stone ruins beneath a pale moon, creating an expansive, mysterious global setting.",
+        "chapter": "",
+        "callout": ""
+      },
+      {
+        "narration": "Now you have the evidence to decide for yourself. When millions of people wake up frozen under a suffocating weight, what is the real cause? Is it just a timing glitch of brain chemicals during dream sleep, or is it a genuine encounter with the unseen jinn? Cast your vote in the comments right now by typing one for a brain glitch, or two for the jinn.",
+        "visual": "diagram",
+        "broll_query": "voting choice balance scale diagram",
+        "image_prompt": "A split-screen visual diagram: on the left side, a glowing blue neural brain network; on the right side, a shadowy wisp of cold blue smokeless flame representing the unseen realm, set against a dark background.",
+        "chapter": "",
+        "callout": "Cast Your Vote: 1 or 2"
+      }
+    ],
+    "_score": [
+      7.0,
+      8.0
+    ]
+  }
+}
