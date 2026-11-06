@@ -1,238 +1,46 @@
-[05:29:59] Başladı (test modu: False, yayın: scheduled)
-[05:30:02] Kanal doğrulandı: Beyond Qaf
-[05:30:03] Instagram anahtarı ve hesap kimliği doğrulandı: @beyondqaf
-[05:30:04] Analitik: 1 video ölçüldü, sütun puanları: {"How it's made and what it really costs (steel, glass, chips, paper, concrete)": 1.518587076263208}
-[05:30:05] Yarıda kalan videonun senaryosu kullanılıyor: Mount Qaf: The Emerald Wall Where the Jinn Live
-[05:30:24] Seslendirme başlıyor (Gemini Charon)...
-[05:37:18] Seslendirme: 1033 sn
-[05:37:52] Thumbnail sıralaması: [1, 3, 2] - Thumbnail #1 is the strongest because it features a massive, highly striking glowing emerald mountain that pops immediately at phone size, paired with a powerful curiosity-inducing text ('NEVER IN THE QURAN') that avoids repeating the title. Thumbnail #3 has strong cinematic atmosphere and a human scale figure creating tension, though the text is a bit generic. Thumbnail #2 feels too cluttered and map-like, reducing its impact in a fast-scrolling phone feed.
-[05:39:57] Cümle cümle görsel planı: 33/33 sahne
-[05:39:57] Sahne 1 (diagram, 24.6 sn, 5 çekim, cümleye bağlı)
-[05:39:59]    ilgisiz görüntü elendi: mountains above a cloud layer
-[05:40:17]    ilgisiz görüntü elendi: boat wake in open ocean
-[05:40:30]    alakasız görsel yeniden çizilecek: text visible in image corners
-[05:40:43]    ilgisiz görüntü elendi: aerial view of ocean beach
-[05:40:46]    ilgisiz görüntü elendi: close up of ocean waves
-[05:40:48] Sahne 2 (diagram, 26.5 sn, 6 çekim, cümleye bağlı)
-[05:40:50]    ilgisiz görüntü elendi: black and white train interior
-[05:40:52] Vertex görsel kotası 429: 15 dakika bekleme moduna geçildi; yedek görseller kullanılacak
-[05:40:52] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
-  "error": {
-    "code": 429,
-    "message": "Resource has been exhausted (e.g. check qu
-[05:40:52] Cloudflare günlük ücretsiz kota doldu: {"errors":[{"message":"AiError: AiError: you have used up your daily free allocation of 10,000 neurons, please upgrade to Cloudflare's Workers Paid plan if you would like to continue usage. (5161b154- → bu video için Pexels fotoğraflarına geçiliyor
-[05:40:55]    ilgisiz görüntü elendi: stream flowing through rocky forest
-[05:40:59]    ilgisiz görüntü elendi: peaceful city skyline at night
-[05:41:04]    ilgisiz görüntü elendi: nighttime city skyline with bridge
-[05:41:07]    ilgisiz görüntü elendi: white clouds in blue sky
-[05:41:13]    ilgisiz görüntü elendi: aerial view of a waterfall
-[05:41:14] Sahne 3 (footage, 27.9 sn, 6 çekim, cümleye bağlı)
-[05:41:17]    ilgisiz görüntü elendi: snowy river with pine trees
-[05:41:22]    ilgisiz görüntü elendi: Snowy coast with a tower
-[05:41:25]    ilgisiz görüntü elendi: small flame in a bowl
-[05:41:30]    ilgisiz görüntü elendi: bright orange flames burning wood
-[05:41:35]    ilgisiz görüntü elendi: aerial view of modern city
-[05:41:40]    ilgisiz görüntü elendi: aerial view of ancient ruins
-[05:41:41] Sahne 4 (footage, 29.0 sn, 6 çekim, cümleye bağlı)
-[05:41:43]    ilgisiz görüntü elendi: people in a modern barbershop
-[05:41:54]    ilgisiz görüntü elendi: a stork flying against blue
-[05:42:10]    ilgisiz görüntü elendi: small bird on mossy ground
-[05:42:13]    ilgisiz görüntü elendi: aerial view of green mountain
-[05:42:15] Sahne 5 (diagram, 29.1 sn, 7 çekim, cümleye bağlı)
-[05:42:29]    ilgisiz görüntü elendi: a small campfire burning brightly
-[05:42:34]    ilgisiz görüntü elendi: aerial view of old European town
-[05:42:39]    ilgisiz görüntü elendi: aerial view of european city
-[05:42:43]    ilgisiz görüntü elendi: aerial view of city buildings
-[05:42:59]    ilgisiz görüntü elendi: aerial view of a beach
-[05:43:01] Sahne 6 (footage, 29.1 sn, 6 çekim, cümleye bağlı)
-[05:43:03]    ilgisiz görüntü elendi: sunset over the open sea
-[05:43:10]    ilgisiz görüntü elendi: ocean view with rocky cliffs
-[05:43:13]    ilgisiz görüntü elendi: Busy East Asian street food stall
-[05:43:19]    ilgisiz görüntü elendi: river landscape with blooming trees
-[05:43:22]    ilgisiz görüntü elendi: ocean waves crashing against rocks
-[05:43:27]    ilgisiz görüntü elendi: man praying inside a mosque
-[05:43:29] Sahne 7 (diagram, 31.4 sn, 6 çekim, cümleye bağlı)
-[05:43:31]    ilgisiz görüntü elendi: A water tap dripping outside
-[05:43:39]    ilgisiz görüntü elendi: ocean view with white cliffs
-[05:43:56]    ilgisiz görüntü elendi: person erasing writing on paper
-[05:44:01]    ilgisiz görüntü elendi: aerial view of old ruins
-[05:44:20]    ilgisiz görüntü elendi: stained glass window in church
-[05:44:22] Sahne 8 (diagram, 26.8 sn, 5 çekim, cümleye bağlı)
-[05:44:35]    ilgisiz görüntü elendi: exterior view of white mosque
-[05:44:39]    ilgisiz görüntü elendi: Close up of a stork
-[05:44:45]    ilgisiz görüntü elendi: Woman browsing records in store
-[05:44:51]    ilgisiz görüntü elendi: modern student studying in library
-[05:44:52] Sahne 9 (diagram, 22.5 sn, 6 çekim, cümleye bağlı)
-[05:44:59]    ilgisiz görüntü elendi: aerial view of ancient ruins
-[05:45:02]    ilgisiz görüntü elendi: modern city skyline and highways
-[05:45:07]    ilgisiz görüntü elendi: modern airport terminal with palm trees
-[05:45:10]    ilgisiz görüntü elendi: close up of sliced figs
-[05:45:15]    ilgisiz görüntü elendi: Woman in niqab and horse
-[05:45:16] Sahne 10 (footage, 26.1 sn, 5 çekim, cümleye bağlı)
-[05:45:18]    ilgisiz görüntü elendi: aerial view of european castle
-[05:45:25]    ilgisiz görüntü elendi: aerial view of ancient fortress
-[05:45:30]    ilgisiz görüntü elendi: an illuminated castle by water
-[05:45:34]    ilgisiz görüntü elendi: full moon in dark sky
-[05:45:40]    ilgisiz görüntü elendi: aerial view of dry riverbed
-[05:45:41] Sahne 11 (footage, 31.3 sn, 6 çekim, cümleye bağlı)
-[05:45:50]    ilgisiz görüntü elendi: russian orthodox church building exterior
-[05:45:54]    ilgisiz görüntü elendi: close up of reeds blowing
-[05:46:00]    ilgisiz görüntü elendi: tall green grass in field
-[05:46:04]    ilgisiz görüntü elendi: A high stack of books.
-[05:46:12]    ilgisiz görüntü elendi: an open reference book pages
-[05:46:13] Sahne 12 (diagram, 40.2 sn, 8 çekim, cümleye bağlı)
-[05:46:23]    ilgisiz görüntü elendi: large white mosque with minarets
-[05:46:28]    ilgisiz görüntü elendi: white mosque against blue sky
-[05:46:36]    ilgisiz görüntü elendi: A small yellow toy jeep
-[05:46:40]    ilgisiz görüntü elendi: pot on a camping stove
-[05:46:46]    ilgisiz görüntü elendi: person building toy airplane model
-[05:46:48] Sahne 13 (footage, 26.8 sn, 6 çekim, cümleye bağlı)
-[05:46:50]    ilgisiz görüntü elendi: aerial view of sprawling city
-[05:46:58]    ilgisiz görüntü elendi: hand editing a typed paper
-[05:47:14]    ilgisiz görüntü elendi: Woman in traditional black niqab
-[05:47:20]    ilgisiz görüntü elendi: aerial view of forested mountains
-[05:47:25]    ilgisiz görüntü elendi: dramatic black and white clouds
-[05:47:27] Sahne 14 (diagram, 29.2 sn, 6 çekim, cümleye bağlı)
-[05:47:29]    ilgisiz görüntü elendi: lighting a cigar with torch
-[05:47:43]    ilgisiz görüntü elendi: foggy cemetery with old graves
-[05:47:48]    ilgisiz görüntü elendi: red rock desert landscape sunset
-[05:47:53]    ilgisiz görüntü elendi: mountains under a night sky
-[05:47:59]    ilgisiz görüntü elendi: full moon in the night sky
-[05:48:01] Sahne 15 (footage, 29.7 sn, 5 çekim, cümleye bağlı)
-[05:48:04]    ilgisiz görüntü elendi: a mushroom in the grass
-[05:48:10]    ilgisiz görüntü elendi: many ants on tiled floor
-[05:48:24]    ilgisiz görüntü elendi: aerial view of crashing waves
-[05:48:29]    ilgisiz görüntü elendi: overcast sky over coastal water
-[05:48:33] Sahne 16 (footage, 31.7 sn, 6 çekim, cümleye bağlı)
-[05:48:35]    ilgisiz görüntü elendi: stone statue of man eating child
-[05:48:40]    ilgisiz görüntü elendi: graffiti on a ruined building
-[05:48:44]    ilgisiz görüntü elendi: aerial view of mountain canyon
-[05:49:00]    ilgisiz görüntü elendi: aerial view of sandy beach
-[05:49:07]    ilgisiz görüntü elendi: close up of white camels
-[05:49:09] Sahne 17 (diagram, 35.3 sn, 7 çekim, cümleye bağlı)
-[05:49:11]    ilgisiz görüntü elendi: dark old geographic map closeup
-[05:49:17]    ilgisiz görüntü elendi: aerial view of desert cemetery
-[05:49:21]    ilgisiz görüntü elendi: ruined castle on a cliff
-[05:49:26]    ilgisiz görüntü elendi: stone relief sculpture of figures
-[05:49:29]    ilgisiz görüntü elendi: homemade christmas photo booth stage
-[05:49:36]    ilgisiz görüntü elendi: tropical beach and clear water
-[05:49:43]    ilgisiz görüntü elendi: green water through tree trunks
-[05:49:45] Sahne 18 (footage, 32.1 sn, 7 çekim, cümleye bağlı)
-[05:49:47]    ilgisiz görüntü elendi: aerial view of a pyramid
-[05:49:52]    ilgisiz görüntü elendi: modern city skyline at sunset
-[05:49:55]    ilgisiz görüntü elendi: modern city skyline at night
-[05:50:13]    ilgisiz görüntü elendi: forest landscape under bright sky
-[05:50:18]    ilgisiz görüntü elendi: Woman doing yoga on mountain
-[05:50:24]    ilgisiz görüntü elendi: aerial view of coastal city
-[05:50:26] Sahne 19 (diagram, 28.0 sn, 6 çekim, cümleye bağlı)
-[05:50:34]    ilgisiz görüntü elendi: modern hair salon interior view
-[05:50:40]    ilgisiz görüntü elendi: small bird on tree branch
-[05:50:46]    ilgisiz görüntü elendi: small blue bird on branch
-[05:50:50]    ilgisiz görüntü elendi: orange butterfly on purple flowers
-[05:51:04] Sahne 20 (footage, 32.9 sn, 6 çekim, cümleye bağlı)
-[05:51:19]    ilgisiz görüntü elendi: blurry out of focus lights
-[05:51:23]    ilgisiz görüntü elendi: man feeding toddler indoors indoor
-[05:51:29]    ilgisiz görüntü elendi: monkey holding its baby outdoors
-[05:51:34]    ilgisiz görüntü elendi: an airport runway amidst mountains
-[05:51:39]    ilgisiz görüntü elendi: misty mountains above clouds landscape
-[05:51:42] Sahne 21 (diagram, 31.6 sn, 6 çekim, cümleye bağlı)
-[05:51:48]    ilgisiz görüntü elendi: a campfire burning at night
-[05:52:04]    ilgisiz görüntü elendi: completely black blank video screen
-[05:52:20]    ilgisiz görüntü elendi: close up of burning fire
-[05:52:24] Sahne 22 (diagram, 35.4 sn, 8 çekim, cümleye bağlı)
-[05:52:27]    ilgisiz görüntü elendi: many fish swimming in aquarium
-[05:52:31]    ilgisiz görüntü elendi: close up of old map
-[05:52:35]    ilgisiz görüntü elendi: aerial view of ocean waves
-[05:52:40]    ilgisiz görüntü elendi: stone statue of ancient figure
-[05:52:44]    ilgisiz görüntü elendi: aerial view of green valley
-[05:52:58]    ilgisiz görüntü elendi: close up of a cobra
-[05:53:01]    ilgisiz görüntü elendi: close up of brown snake
-[05:53:03] Sahne 23 (diagram, 34.6 sn, 6 çekim, cümleye bağlı)
-[05:53:13]    ilgisiz görüntü elendi: Mount Fuji with train bridge
-[05:53:17]    ilgisiz görüntü elendi: lit lantern hanging near wood
-[05:53:27]    ilgisiz görüntü elendi: cityscape view across water
-[05:53:30]    ilgisiz görüntü elendi: full moon in dark sky
-[05:53:36]    ilgisiz görüntü elendi: curved planet Earth from space
-[05:53:38] Sahne 24 (footage, 39.9 sn, 8 çekim, cümleye bağlı)
-[05:53:40]    ilgisiz görüntü elendi: globe with red heartbeat line
-[05:53:47]    ilgisiz görüntü elendi: aerial view of wooden pier
-[05:53:50]    ilgisiz görüntü elendi: aerial view of barren desert
-[05:53:56]    ilgisiz görüntü elendi: car driving on desert highway
-[05:54:02]    ilgisiz görüntü elendi: waterfall framed by green leaves
-[05:54:06]    ilgisiz görüntü elendi: birds flying over the ocean
-[05:54:18]    ilgisiz görüntü elendi: an open book with flowers
-[05:54:22] Sahne 25 (diagram, 28.4 sn, 6 çekim, cümleye bağlı)
-[05:54:24]    ilgisiz görüntü elendi: view through open stone archway
-[05:54:33]    ilgisiz görüntü elendi: aerial view of ancient pyramid
-[05:54:38]    ilgisiz görüntü elendi: close up of old map
-[05:54:44]    ilgisiz görüntü elendi: aerial view of european town
-[05:54:47]    ilgisiz görüntü elendi: young man reading in library
-[05:54:52]    ilgisiz görüntü elendi: people walking outside mosque exterior
-[05:54:54] Sahne 26 (diagram, 34.5 sn, 7 çekim, cümleye bağlı)
-[05:54:55]    ilgisiz görüntü elendi: modern open book with tea
-[05:55:14]    ilgisiz görüntü elendi: Close up of a toucan
-[05:55:23]    ilgisiz görüntü elendi: bird on rocks near ocean
-[05:55:27]    ilgisiz görüntü elendi: ancient stone ruins and columns
-[05:55:32]    ilgisiz görüntü elendi: hand near book and compass
-[05:55:34] Sahne 27 (footage, 38.8 sn, 7 çekim, cümleye bağlı)
-[05:55:52]    ilgisiz görüntü elendi: snowy waterfall flowing into ocean
-[05:55:59]    ilgisiz görüntü elendi: winding road on green mountain
-[05:56:03]    ilgisiz görüntü elendi: night city aerial view cars
-[05:56:19]    ilgisiz görüntü elendi: aerial view of mountain road
-[05:56:21] Sahne 28 (footage, 32.3 sn, 6 çekim, cümleye bağlı)
-[05:56:28]    ilgisiz görüntü elendi: hikers walking on mountain trail
-[05:56:37]    ilgisiz görüntü elendi: Los Angeles license plate on beach
-[05:57:01] Sahne 29 (footage, 35.9 sn, 8 çekim, cümleye bağlı)
-[05:57:21]    alakasız görsel yeniden çizilecek: vintage book with text inside
-[05:57:35]    ilgisiz görüntü elendi: aerial view of city sunset
-[05:57:39]    ilgisiz görüntü elendi: holding a camera lens
-[05:57:41] Vertex görsel kotası 429: 15 dakika bekleme moduna geçildi; yedek görseller kullanılacak
-[05:57:41] Gemini sahne görseli üretilemedi, Cloudflare denenecek: Gemini görsel üretemedi: vertex gemini-3.1-flash-image: 429 {
-  "error": {
-    "code": 429,
-    "message": "Resource has been exhausted (e.g. check qu
-[05:57:45]    ilgisiz görüntü elendi: stone ruins under blue sky
-[05:57:49]    ilgisiz görüntü elendi: green alarm clock on books
-[05:57:54]    ilgisiz görüntü elendi: aerial view of town rooftops
-[05:57:57]    ilgisiz görüntü elendi: illuminated skyscraper and crescent moon
-[05:58:07] Sahne 30 (diagram, 26.9 sn, 6 çekim, cümleye bağlı)
-[05:58:10]    ilgisiz görüntü elendi: drone shot of forest path
-[05:58:18]    ilgisiz görüntü elendi: curved horizon of the earth
-[05:58:27]    ilgisiz görüntü elendi: waterfall in green jungle landscape
-[05:58:32]    ilgisiz görüntü elendi: windsurfer on the ocean water
-[05:58:36]    ilgisiz görüntü elendi: old map focusing on Australia
-[05:58:38] Sahne 31 (footage, 28.0 sn, 6 çekim, cümleye bağlı)
-[05:58:41]    ilgisiz görüntü elendi: brick archway and prayer rugs
-[05:58:46]    ilgisiz görüntü elendi: person reading a book indoors
-[05:58:50]    ilgisiz görüntü elendi: mountain peak with grass foreground
-[05:59:03]    ilgisiz görüntü elendi: cars on a winding road
-[05:59:08]    ilgisiz görüntü elendi: aerial view of mountain road
-[05:59:10] Sahne 32 (footage, 45.2 sn, 8 çekim, cümleye bağlı)
-[05:59:12]    ilgisiz görüntü elendi: dark night sky with clouds
-[05:59:17]    ilgisiz görüntü elendi: man playing guitar under bridge
-[05:59:23]    ilgisiz görüntü elendi: aerial view of desert road
-[05:59:27]    ilgisiz görüntü elendi: people walking under lit trees
-[05:59:32]    ilgisiz görüntü elendi: river flowing through green forest
-[05:59:37]    ilgisiz görüntü elendi: frozen soap bubble on snow
-[05:59:42]    ilgisiz görüntü elendi: sunset over ocean and beach
-[05:59:56] Sahne 33 (diagram, 31.6 sn, 7 çekim, cümleye bağlı)
-[06:00:03]    ilgisiz görüntü elendi: aerial view of Istanbul mosque
-[06:00:06]    ilgisiz görüntü elendi: butterfly on yellow flowers
-[06:00:11]    ilgisiz görüntü elendi: silhouetted animals against red sunset
-[06:00:14]    ilgisiz görüntü elendi: close up of vintage map
-[06:00:17]    ilgisiz görüntü elendi: hand picking up ballpoint pen
-[06:00:22]    ilgisiz görüntü elendi: reeds blowing in the wind
-[06:10:36] Ana video: 1079 sn
-[06:11:10] Short 1: sahne 0-2, 51 sn — The Secret Legend of Mount Qaf
-[06:11:27] Short 2: sahne 6-8, 31 sn — Does the Quran Mention Mount Qaf?
-[06:11:46] Short 3: sahne 18-20, 28 sn — The Giant Bird of Mount Qaf
-[06:11:46] Altyazı çevirisi: Turkish (317 satır)
-[06:12:04] Çeviri parçası eksik geldi (240-270), tekrar deneniyor
-[06:12:51] Altyazı eklendi: English
-[06:12:53] Altyazı eklendi: Türkçe
-[06:12:53] Oynatma listesine eklendi: Legends of the Ancient East
-[06:13:07] Instagram sırasına eklendi: The Secret Legend of Mount Qaf
-[06:13:09] Instagram sırasına eklendi: Does the Quran Mention Mount Qaf?
-[06:13:11] Instagram sırasına eklendi: The Giant Bird of Mount Qaf
-[06:32:10] Bitti: https://youtu.be/XGbn1i8ALlA
-[06:32:11] Başarıyla bitti.
+[06:35:23] Başladı (test modu: False, yayın: scheduled)
+[06:35:24] HATA:
+Traceback (most recent call last):
+  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 3550, in <module>
+    res = run_once()
+          ^^^^^^^^^^
+  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 3034, in run_once
+    for h in (load_json(HISTORY, []) if HISTORY.exists() else [])):
+              ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 127, in load_json
+    return json.loads(path.read_text(encoding="utf-8")) if path.exists() else default
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/json/decoder.py", line 338, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/json/decoder.py", line 354, in raw_decode
+    obj, end = self.scan_once(s, idx)
+               ^^^^^^^^^^^^^^^^^^^^^^
+json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes: line 149 column 1 (char 4982)
+
+[06:45:26] Başladı (test modu: False, yayın: scheduled)
+[06:45:27] HATA:
+Traceback (most recent call last):
+  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 3550, in <module>
+    res = run_once()
+          ^^^^^^^^^^
+  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 3034, in run_once
+    for h in (load_json(HISTORY, []) if HISTORY.exists() else [])):
+              ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 127, in load_json
+    return json.loads(path.read_text(encoding="utf-8")) if path.exists() else default
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/json/decoder.py", line 338, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/json/decoder.py", line 354, in raw_decode
+    obj, end = self.scan_once(s, idx)
+               ^^^^^^^^^^^^^^^^^^^^^^
+json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes: line 149 column 1 (char 4982)
+

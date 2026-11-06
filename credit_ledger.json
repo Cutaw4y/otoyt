@@ -39,6 +39,18 @@
       "channel": "Beyond Qaf",
       "cloud_tl": 45.09,
       "studio_tl": 0.0
+    },
+    {
+      "date": "2026-11-06T06:35",
+      "channel": "Beyond Qaf",
+      "cloud_tl": 0.0,
+      "studio_tl": 0.0
+    },
+    {
+      "date": "2026-11-06T06:45",
+      "channel": "Beyond Qaf",
+      "cloud_tl": 0.0,
+      "studio_tl": 0.0
     }
   ]
 }
