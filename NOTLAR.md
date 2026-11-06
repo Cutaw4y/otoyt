@@ -9,3 +9,4 @@
 - 2026-11-06 [Claude] AGENTS.md + NOTLAR.md: iki asistan arasında ortak kurallar ve günlük
 - 2026-11-06 [Claude] Görev dağılımı: Claude ana geliştirici (PR + @codex review), ChatGPT/Codex inceleyici (AGENTS.md)
 - 2026-11-06 [Claude] Karar: yalnız ChatGPT Plus'a dahil Codex kod incelemesi kullanılacak; API anahtarlı otomatik ajan kurulmayacak. Eski PR #5 #10 #11 geçersiz (Telegram onayı kapalı / ertelendi), kapatılabilir
+- 2026-11-06 [Claude] Gölgedefter min_lead_hours 1.5→0.75: yayın saatine yetişme payı (uzun belgesel)

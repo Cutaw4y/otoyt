@@ -316,7 +316,7 @@ publish_delay_hours: 6
 # Türkiye izleyicisi: hafta içi 19:00, hafta sonu 16:00 (kanal sahibi isteği, 06.11)
 publish_slots: {tz: "Europe/Istanbul", times: {default: "19:00", sat: "16:00", sun: "16:00"}}
 shorts_slots: {tz: "Europe/Istanbul", times: {default: "20:30"}}
-min_lead_hours: 1.5
+min_lead_hours: 0.75             # yükleme ile yayın arası en az 45 dk (HD işleme); 19:00 için en geç 18:15 yüklenmeli
 post_comment: true
 ascii_tag_variants: true       # "gerçek hikayesi" + "gercek hikayesi"
 # Başlık/açıklama yalnızca Türkçe (çeviri başlık eklenmez). Altyazı: Türkçe + İngilizce çeviri izi (CC'den açılır)
