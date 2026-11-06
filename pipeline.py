@@ -3073,6 +3073,11 @@ def run_once():
         maybe_swap_thumbnails(history)
     PENDING_SCRIPT = DATA / "pending_script.json"
     pend = load_json(PENDING_SCRIPT, None) if PENDING_SCRIPT.exists() else None
+    if pend and pend.get("script") and any(h.get("type", "long") == "long" and h.get("title") == pend["script"].get("title")
+                                           for h in history):
+        log(f"Yarım kalan senaryo kaydı zaten yüklenmiş bir videoya ait, atlanıyor: {pend['script'].get('title')}")
+        PENDING_SCRIPT.unlink(missing_ok=True)
+        pend = None
     if not editorial_job and pend and pend.get("script") and (datetime.now() - datetime.fromisoformat(pend["date"])).days <= 7:
         # önceki çalışma hata/zaman aşımıyla yarıda kaldı: hazır (kalite ve bilgi kontrolünden geçmiş) senaryo çöpe gitmesin
         idea, script = pend["idea"], pend["script"]
