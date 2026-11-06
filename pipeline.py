@@ -3536,6 +3536,15 @@ def publish_rendered(script, idea, shorts, thumb, thumb_alt, en_srt, tr_srt,
     sub_lang = CFG.get("subtitle_translation") or {}
     now = datetime.now(timezone.utc)
     sched = CFG["publish_mode"] == "scheduled"
+    # 06.11 Furkan: "bir daha böyle bir şey olmasını istemiyorum" → görsel tekrar kapısı.
+    # Aynı görselin yedek olarak tekrar kullanıldığı çekim oranı sınırı aşarsa video HERKESE AÇIK PLANLANMAZ:
+    # gizli yüklenir ve 🆘 ile haber verilir (izleyici kalitesiz videoyu asla görmez).
+    reused = sum(_REUSE.values())
+    shots = max(len(list(Path(w).glob("shot_*.mp4"))), 1)
+    if reused > max(6, CFG.get("max_reuse_ratio", 0.08) * shots):
+        sched = False
+        notify(f"🆘 CLAUDE'A YAZ — Görsel kalitesi düşük çıktı: {shots} çekimin {reused} tanesinde aynı görseller tekrar "
+               "kullanıldı. Video herkese açık PLANLANMADI, gizli yüklendi. Claude'a 'görsel kontrol' yazman yeterli.")
     if editorial_job:
         from zoneinfo import ZoneInfo
         target = datetime.fromisoformat(editorial_job["target_date"]).replace(tzinfo=ZoneInfo("Europe/Istanbul"))

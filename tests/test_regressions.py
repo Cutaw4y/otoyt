@@ -183,6 +183,16 @@ class CleanTelegram(unittest.TestCase):
             self.assertTrue(self.sent(t), t)
 
 
+class VisualRepeatGate(unittest.TestCase):
+    """06.11: Karabasan ve vampir videolarında aynı görseller tekrarlandı → böyle video herkese açık planlanmaz."""
+
+    def test_gate_exists_before_scheduling(self):
+        src = (ROOT / "pipeline.py").read_text(encoding="utf-8")
+        body = src[src.index("def publish_rendered"):][:2500]
+        self.assertIn("sum(_REUSE.values())", body)
+        self.assertIn("sched = False", body)
+
+
 class LongDocumentaryFitsTimeLimit(unittest.TestCase):
     """Hata 4: uzun belgesel 5,5 saatlik iş sınırını aşmasın (kaba bütçe kontrolü)."""
 
