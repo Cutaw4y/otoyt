@@ -169,7 +169,7 @@ thumbnail_style: "bold, high contrast, dramatic lighting, one clear object, cine
 
 # Kanal sayfası (ilk gerçek çalışmada bir kez otomatik ayarlanır)
 branding:
-  version: 7                   # afiş/açıklama değişince artır → bir sonraki çalışmada kanala yeniden uygulanır
+  version: 8                   # afiş/açıklama değişince artır → bir sonraki çalışmada kanala yeniden uygulanır
   banner: "assets/beyondqaf/beyondqaf_banner.jpg"
   country: "TR"
   keywords: "jinn djinn jinn in islam what are jinn qareen the unseen islamic folklore middle eastern legends paranormal documentary beyond qaf mount qaf"
@@ -178,7 +178,7 @@ branding:
     In the old stories, the jinn live beyond Mount Qaf, the mountain at the edge of the world.
     The Quran says the jinn were created from smokeless fire, long before humans. Here we cross over: what the Quran and authentic hadith actually say, what classical scholars wrote, the encounters people report, and the legends of the ancient East.
     📜 Every verse and source cited. Respectful to every faith. No fear-mongering, no fake stories.
-    📅 New stories every Monday, Wednesday and Friday.
+    📅 New stories every Monday, Wednesday and Thursday.
     💬 Vote on every record in the comments and tell us what we should explore next.
 
 subscribe_text: "🔔 Subscribe for new stories every week:"

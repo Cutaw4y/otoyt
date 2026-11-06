@@ -55,7 +55,7 @@ def make_outro_card(out):
     bw = d.textlength("SUBSCRIBE", font=bf) + 110
     d.rounded_rectangle([(W - bw) / 2, 710, (W + bw) / 2, 795], 42, fill=(196, 30, 30))
     center("SUBSCRIBE", bf, 726, (250, 244, 236))
-    center("New stories every Monday, Wednesday and Friday", g.font(g.INTER + "InterDisplay-Medium.otf", 34),
+    center("New stories every Monday, Wednesday and Thursday", g.font(g.INTER + "InterDisplay-Medium.otf", 34),
            845, g.SMOKE)
     im.save(out, quality=95)
     return out
@@ -76,7 +76,7 @@ def make_banner(out):
     g.spaced(d, (962, 560), "BEYOND", g.font(g.SERIF, 64), g.AMBER, track=0.32)
     g.spaced(d, (958, 625), "QAF", g.font(g.SERIF, 170), g.PARCH, track=0.10)
     d.text((966, 815), g.TAG, font=g.font(g.INTER + "InterDisplay-Medium.otf", 50), fill=g.PARCH_D)
-    d.text((966, 892), "NEW STORIES  ·  MON  ·  WED  ·  FRI",
+    d.text((966, 892), "NEW STORIES  ·  MON  ·  WED  ·  THU",
            font=g.font(g.INTER + "InterDisplay-Bold.otf", 34), fill=g.SMOKE)
     im.save(out, quality=92)
     return out

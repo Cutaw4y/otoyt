@@ -2,9 +2,9 @@ name: OtoYT (Cutaway)
 
 on:
   schedule:
-    - cron: "31 4 * * 1,3,5"   # Pzt/Çar/Cum 04:31 UTC (07:31 TR)
-    - cron: "3 5 * * 1,3,5"    # yedek: GitHub zamanlayıcısı bazen atlıyor/geciktiriyor (bugün video çıktıysa 1 dk'da kapanır)
-    - cron: "37 5 * * 1,3,5"   # ikinci yedek
+    - cron: "31 4 * * 1,3,4"   # Pzt/Çar/Per 04:31 UTC (07:31 TR)
+    - cron: "3 5 * * 1,3,4"    # yedek: GitHub zamanlayıcısı bazen atlıyor/geciktiriyor (bugün video çıktıysa 1 dk'da kapanır)
+    - cron: "37 5 * * 1,3,4"   # ikinci yedek
   workflow_dispatch:            # "Run workflow" butonu = senin "Çalıştır" tuşun
     inputs:
       dry_run:
