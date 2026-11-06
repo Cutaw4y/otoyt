@@ -29,3 +29,4 @@
 - 2026-11-06 22:00 [Claude] Maliyet: aynı iş içindeki 2. denemede seslendirme önbellekten (out/tts_cache, yeniden ödeme yok); max_rewrites 2→1 iki kanalda. Bugünkü GD maliyeti ~427 TL'nin ~340 TL'si başarısız denemelerdi
 - 2026-11-06 22:20 [Claude] İzleyici şikâyeti (fok, basketbol potası, Japon yaya geçidi): kök neden kota dolunca gen_image'in stok fotoğrafı KONTROLSÜZ ve genel 'fallback_broll' aramasıyla alması. Katı modda: genel arama yok, stok foto image_matches şart; video kontrolü 3 kare + konu bağlamı + 'hayvan/spor/trafik = hayır'; kontrol hakkı 600
 - 2026-11-07 01:50 [Claude] Yedek görsel kaynağı: OpenAI görsel API (gpt-image-1-mini → gpt-image-1), yalnız OPENAI_API_KEY secret eklenirse çalışır; Google kotası dolunca Cloudflare/stoktan önce. Furkan önerisi
+- 2026-11-07 02:00 [Claude] otoyt_tr.yml'e tek seferlik girişler: publish_at (yayın anı) ve topic (konu); normal çalışmayı etkilemez

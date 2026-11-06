@@ -2058,7 +2058,10 @@ def next_slot(after, slots):
 
 def plan_times(now, n_shorts):
     """Ana video + Shorts yayın anları (UTC). Config'te yayın saatleri yoksa eski gecikme kuralı."""
-    if CFG.get("publish_slots"):
+    if os.getenv("OTOYT_PUBLISH_AT"):  # tek seferlik yayın anı (kanal sahibinin isteği)
+        main = max(datetime.fromisoformat(os.environ["OTOYT_PUBLISH_AT"]).astimezone(timezone.utc),
+                   now + timedelta(hours=CFG.get("min_lead_hours", 1.5)))
+    elif CFG.get("publish_slots"):
         early = now + timedelta(hours=CFG.get("min_lead_hours", 1.5))
         main = next_slot(early, CFG["publish_slots"])
         # bugünün yayın saati kaçtıysa yarına atma: aynı gece, mümkün olan ilk anda yayınla (gece yarısından önce)
@@ -3418,7 +3421,14 @@ def run_once():
         log(f"Yarıda kalan videonun senaryosu kullanılıyor: {script['title']}")
         notify(f"♻️ Önceki denemede yarıda kalan konu yeniden yapılıyor: {script['title']}{tr_note(script['title'])}")
     else:
-        idea, script = produce_script(history, report, editorial_job["idea"] if editorial_job else None)
+        forced = None
+        if os.getenv("OTOYT_TOPIC") and not editorial_job:  # tek seferlik konu (kanal sahibinin seçtiği)
+            forced = {"title": os.environ["OTOYT_TOPIC"], "angle": os.environ["OTOYT_TOPIC"],
+                      "search_query": os.environ["OTOYT_TOPIC"],
+                      "pillar": next((p for p in CFG["content_pillars"] if "Kıyamet" in p or "efsane" in p.lower()),
+                                     CFG["content_pillars"][0])}
+        idea, script = produce_script(history, report, editorial_job["idea"] if editorial_job else forced,
+                                      strict=bool(editorial_job))
         if script is not None and not editorial_job:
             save_json(PENDING_SCRIPT, {"date": datetime.now().isoformat(timespec="minutes"), "idea": idea,
                                        "script": script, "target_words": CFG["target_words"]})
