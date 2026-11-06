@@ -26,3 +26,4 @@
 - 2026-11-06 21:20 [Claude] Furkan isteği: Karabasan (c05dhpIzinA + 3 Short) 3-4 görselle çıktığı için gizlendi, geçmişten çıkarıldı (jinn-2 serisi yeniden üretilecek); kopya ve eski Karabasan Reels'leri IG kuyruğundan çıkarıldı
 - 2026-11-06 21:40 [Claude] Furkan kuralı: önce gerçek arşiv videosu (Commons/Internet Archive, serbest lisans) → gerçek foto → stok → AI; plan_beats 'archive' araması; ✅ mesajında gerçek görüntü sayısı; AGENTS.md görsel kuralı güncellendi. archive_probe.py erişim testi (runner'dan erişilebilir)
 - 2026-11-06 21:35 [Claude] Görsel tekrar kapısı: yedek görsel tekrarı çekimlerin %8'ini (en az 6) aşarsa video planlanmaz, gizli kalır + 🆘 (Furkan: bir daha olmasın)
+- 2026-11-06 22:00 [Claude] Maliyet: aynı iş içindeki 2. denemede seslendirme önbellekten (out/tts_cache, yeniden ödeme yok); max_rewrites 2→1 iki kanalda. Bugünkü GD maliyeti ~427 TL'nin ~340 TL'si başarısız denemelerdi

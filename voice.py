@@ -4,6 +4,7 @@ Cümle cümle seslendirir; böylece altyazı zamanlaması da ayrı bir servise g
 """
 import difflib
 import os
+import hashlib
 import re
 import wave
 from pathlib import Path
@@ -301,6 +302,7 @@ def align_sentences(a, sentences, lang="tr", sr=SR):
         return None
 
 
+TTS_CACHE = Path(__file__).parent / "out" / "tts_cache"  # iş içi ses önbelleği (tekrar denemede yeniden ödeme yok)
 LAST_HYP = None  # son konuşma tanıma sonucu (ses kontrolü için)
 
 
@@ -391,8 +393,13 @@ def _narrate_gemini_one(scenes, workdir, voice="Charon", style=None, models=None
         flat = [x for ss in sents for x in ss]
         best = None
         for attempt in range(3):  # tekrar/sürçme/atlama varsa aynı parçayı yeniden seslendir, en temizini al
-            a = _level(_trim(ai.gemini_tts(" ".join(scenes[i]["narration"] for i in grp), voice=voice, style=style,
-                                           models=models or ("gemini-3.1-flash-tts-preview",))))
+            text_ = " ".join(scenes[i]["narration"] for i in grp)
+            ck = TTS_CACHE / (hashlib.sha1(f"{voice}|{style}|{text_}".encode()).hexdigest() + ".npy")
+            if attempt == 0 and ck.exists():  # aynı iş içinde 2. deneme: ses parası tekrar ödenmez
+                a = np.load(ck)
+            else:
+                a = _level(_trim(ai.gemini_tts(text_, voice=voice, style=style,
+                                               models=models or ("gemini-3.1-flash-tts-preview",))))
             global LAST_HYP
             LAST_HYP = None
             al = align_sentences(a, flat, lang) if len(flat) > 0 else None
@@ -403,6 +410,12 @@ def _narrate_gemini_one(scenes, workdir, voice="Charon", style=None, models=None
                 break
             print(f"seslendirme kontrolü: {bad} kelimelik tekrar/sürçme/atlama bulundu → yeniden ({attempt + 1})")
         a, al, bad = best
+        try:
+            TTS_CACHE.mkdir(parents=True, exist_ok=True)
+            np.save(TTS_CACHE / (hashlib.sha1(f"{voice}|{style}|{' '.join(scenes[i]['narration'] for i in grp)}"
+                                              .encode()).hexdigest() + ".npy"), a)
+        except Exception:
+            pass
         if bad:
             print(f"seslendirme kontrolü: en temiz deneme kullanıldı ({bad} kelime şüpheli)")
         ALIGN_STATS["total"] += len(flat)

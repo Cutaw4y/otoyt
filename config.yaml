@@ -249,7 +249,7 @@ min_diagram_ratio: 0.4         # sahnelerin en az %40'ı AI diyagram olsun
 min_quality_score: 7           # 5 editör kriterinin hepsi en az bu puan (hedef)
 min_quality_floor: 5            # 06.11 (Claude+ChatGPT): editör bir başlıkta 5'in altı verirse yayınlanmaz, yeni konu denenir
 max_topic_attempts: 2          # fiyat/performans: en fazla 2 konu denenir, en iyi senaryo yayınlanır
-max_rewrites: 2
+max_rewrites: 1                 # 06.11 maliyet: tek düzeltme turu (puan zaten 7-8)
 # ABD izleyicisi: önce ABD birimleri + herkesin gözünde canlanan karşılaştırma
 units_rule: >
   The audience is American: use Fahrenheit, feet, miles, pounds and gallons first (you may add the metric

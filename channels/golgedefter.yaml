@@ -293,7 +293,7 @@ weekday_overrides:
       izleyiciye tek bir tartışma sorusu. Uydurma kişi, alıntı, tarih veya belge YOK.
 max_topic_attempts: 2          # fiyat/performans: en fazla 2 konu denenir, en iyi senaryo yayınlanır
 selected_topic_attempts: 2      # ÜRET ile seçilen AYNI konu için 2 bağımsız senaryo denemesi; konu değiştirilmez
-max_rewrites: 2
+max_rewrites: 1                 # 06.11 maliyet: tek düzeltme turu (puan zaten 7-8)
 units_rule: >
   Metrik birimler kullan (metre, kilometre, kilogram, derece). Her sayıyı göz önünde canlanan bir
   karşılaştırmayla ver ("yaklaşık kırk metre, on katlı bir apartman kadar").
