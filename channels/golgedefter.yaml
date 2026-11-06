@@ -187,7 +187,7 @@ caption_theme:            # bölüm kartı ve bilgi etiketleri: kehribar rengi (
   callout_text: "&H000F0B0D"
 
 branding:
-  version: 3
+  version: 4
   banner: "assets/golgedefter/golgedefter_banner.jpg"
   country: "TR"
   keywords: "gizem belgesel kayıp medeniyetler antik gizemler islam tarihi kıyamet alametleri efsaneler açıklanamayan olaylar gölgedefter"
@@ -196,7 +196,7 @@ branding:
     🏺 Göbeklitepe'den Sümerlere, İrem şehrinden Zülkarneyn'in seddine; antik uygarlıklar, arkeolojik keşifler ve dünyanın en esrarengiz olayları.
     📖 Ayetler, hadis kaynakları, tarihî belgeler ve akademik araştırmalar ışığında: ne anlatılıyor, kayıtlar ne diyor, bilim ne açıklıyor, hâlâ ne bilinmiyor.
     🔎 Amacımız spekülasyon üretmek değil; bilgiye dayalı, düşündüren ve merak uyandıran sayfalar açmak.
-    🕯 Yeni sayfalar her Salı, Perşembe, Cuma, Cumartesi ve Pazar. Kaçırmamak için abone olmayı unutmayın.
+    🕯 Yeni sayfalar Salı, Perşembe ve Cuma 19:00'da; Cumartesi ve Pazar 16:00'da. Kaçırmamak için abone olmayı unutmayın.
 
 subscribe_text: "🔔 Yeni sayfaları kaçırmamak için abone ol:"
 made_for_kids: false
@@ -289,8 +289,8 @@ uploader: "youtube"
 category_id: "27"
 publish_mode: "scheduled"     # 2.11.2026: YouTube API denetimi onaylandı → sistem kendisi yükler ve planlar
 publish_delay_hours: 6
-# Türkiye izleyicisi: hafta içi 19:00, hafta sonu 14:00; Shorts her akşam 20:30 (TR saati)
-publish_slots: {tz: "Europe/Istanbul", times: {default: "19:00", sat: "20:00", sun: "20:00"}}   # hafta sonu akşam (TR en yoğun saat; paket ~13:00 hazır)
+# Türkiye izleyicisi: hafta içi 19:00, hafta sonu 16:00 (kanal sahibi isteği, 06.11)
+publish_slots: {tz: "Europe/Istanbul", times: {default: "19:00", sat: "16:00", sun: "16:00"}}
 shorts_slots: {tz: "Europe/Istanbul", times: {default: "20:30"}}
 min_lead_hours: 1.5
 post_comment: true
