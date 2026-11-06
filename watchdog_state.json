@@ -3,8 +3,5 @@
  "ig_tr.yml:2026-11-03:ig": 1,
  "ig_en.yml:2026-11-04:ig": 2,
  "ig_tr.yml:2026-11-05:ig": 1,
- "ig_en.yml:2026-11-06:ig": 1,
- "otoyt_tr.yml:2026-11-06:tries": 2,
- "otoyt_tr.yml:2026-11-06:gave_up": true,
- "otoyt_tr.yml:2026-11-06:late_alert": true
+ "ig_en.yml:2026-11-06:ig": 1
 }
