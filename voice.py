@@ -293,10 +293,33 @@ def align_sentences(a, sentences, lang="tr", sr=SR):
         segs, _ = _whisper().transcribe(x, language=lang, word_timestamps=True, beam_size=1,
                                         condition_on_previous_text=False, vad_filter=False)
         hyp = [(w.word, w.start, w.end) for sg in segs for w in (sg.words or [])]
+        global LAST_HYP
+        LAST_HYP = hyp
         return align_from_hyp(sentences, hyp, a.size / sr)
     except Exception as e:
         print(f"kelime hizalama yapılamadı: {str(e)[:200]}")
         return None
+
+
+LAST_HYP = None  # son konuşma tanıma sonucu (ses kontrolü için)
+
+
+def tts_issues(sentences, hyp, run=4):
+    """Seslendirme hatası: senaryoda olmayan ≥run kelimelik ek (tekrar/sürçme) ya da atlanan ≥run kelime.
+    Dönüş: sorunlu kelime sayısı (0 = temiz). Konuşma tanıma yoksa 0."""
+    if not hyp:
+        return 0
+    st = [_tok(w) for s in sentences for w in s.split()]
+    ht = [_tok(w) for w, _, _ in hyp if _tok(w)]
+    bad = 0
+    for tag, i1, i2, j1, j2 in difflib.SequenceMatcher(None, st, ht, autojunk=False).get_opcodes():
+        if tag == "insert" and j2 - j1 >= run:
+            bad += j2 - j1
+        elif tag == "delete" and i2 - i1 >= run:
+            bad += i2 - i1
+        elif tag == "replace" and (j2 - j1) - (i2 - i1) >= run:
+            bad += (j2 - j1) - (i2 - i1)
+    return bad
 
 
 def bounds_from_alignment(al, total):
@@ -366,9 +389,22 @@ def _narrate_gemini_one(scenes, workdir, voice="Charon", style=None, models=None
     for grp in _groups(scenes, max(1, scenes_per_request), max_chars):
         sents = [split_sentences(scenes[i]["narration"]) for i in grp]
         flat = [x for ss in sents for x in ss]
-        a = _level(_trim(ai.gemini_tts(" ".join(scenes[i]["narration"] for i in grp), voice=voice, style=style,
-                                       models=models or ("gemini-3.1-flash-tts-preview",))))
-        al = align_sentences(a, flat, lang) if len(flat) > 0 else None
+        best = None
+        for attempt in range(3):  # tekrar/sürçme/atlama varsa aynı parçayı yeniden seslendir, en temizini al
+            a = _level(_trim(ai.gemini_tts(" ".join(scenes[i]["narration"] for i in grp), voice=voice, style=style,
+                                           models=models or ("gemini-3.1-flash-tts-preview",))))
+            global LAST_HYP
+            LAST_HYP = None
+            al = align_sentences(a, flat, lang) if len(flat) > 0 else None
+            bad = tts_issues(flat, LAST_HYP)
+            if best is None or bad < best[2]:
+                best = (a, al, bad)
+            if bad == 0:
+                break
+            print(f"seslendirme kontrolü: {bad} kelimelik tekrar/sürçme/atlama bulundu → yeniden ({attempt + 1})")
+        a, al, bad = best
+        if bad:
+            print(f"seslendirme kontrolü: en temiz deneme kullanıldı ({bad} kelime şüpheli)")
         ALIGN_STATS["total"] += len(flat)
         ALIGN_STATS["ok"] += len(flat) if al else 0
         rels = [None] * len(flat)
