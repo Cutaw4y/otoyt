@@ -712,6 +712,110 @@ def fetch_pixabay_photo(query, out, ledger):
         return None
 
 
+_ARCHIVE_USED = set()
+
+
+def _trim_video(src, out, length=20.0):
+    """Uzun arşiv videosundan ortalardan rastgele bir parça (sessiz, 1920 genişlik) keser."""
+    d = media.duration(src)
+    if d < 4:
+        return None
+    st = random.uniform(d * 0.1, max(d * 0.1, d * 0.85 - length)) if d > length + 4 else 0.0
+    media.sh(["ffmpeg", "-y", "-ss", f"{st:.2f}", "-i", str(src), "-t", f"{min(length, d):.2f}", "-an",
+              "-vf", "scale=1920:-2:flags=lanczos,fps=30", "-c:v", "libx264", "-preset", "veryfast", "-crf", "20",
+              str(out)])
+    return out if Path(out).exists() and Path(out).stat().st_size > 50000 else None
+
+
+def fetch_commons_video(query, out, ledger=None):
+    """Wikimedia Commons'taki serbest lisanslı GERÇEK videolar (belgesel/arşiv çekimleri). Kaynak açıklamaya yazılır."""
+    if not query or not CFG.get("archive_footage", True):
+        return None
+    try:
+        r = requests.get("https://commons.wikimedia.org/w/api.php", headers=WIKI_HEADERS, timeout=30, params={
+            "action": "query", "format": "json", "generator": "search", "gsrsearch": f"{query} filetype:video",
+            "gsrnamespace": 6, "gsrlimit": 10, "prop": "imageinfo", "iiprop": "url|size|mime|extmetadata"})
+        pages = sorted((r.json().get("query") or {}).get("pages", {}).values(), key=lambda x: x.get("index", 99))
+    except Exception as e:
+        log(f"Commons video aranamadı ({query}): {str(e)[:100]}")
+        return None
+    import html as _h
+    for pg in pages[:4]:
+        ii = (pg.get("imageinfo") or [{}])[0]
+        title = pg.get("title", "")
+        md = ii.get("extmetadata") or {}
+        lic = (md.get("LicenseShortName", {}).get("value") or "").lower()
+        if (title in _ARCHIVE_USED or not str(ii.get("mime", "")).startswith("video/") or ii.get("size", 0) > 80e6
+                or not any(k in lic for k in _OK_LIC) or "-nc" in lic or "-nd" in lic):
+            continue
+        raw = Path(out).with_suffix(".src")
+        try:
+            with requests.get(ii["url"], headers=WIKI_HEADERS, stream=True, timeout=300) as d:
+                d.raise_for_status()
+                with open(raw, "wb") as fh:
+                    for c in d.iter_content(1 << 20):
+                        fh.write(c)
+            got = _trim_video(raw, out)
+        except Exception as e:
+            log(f"Commons video indirilemedi: {str(e)[:100]}")
+            got = None
+        finally:
+            raw.unlink(missing_ok=True)
+        if got:
+            _ARCHIVE_USED.add(title)
+            artist = re.sub(r"<[^>]+>", "", _h.unescape(md.get("Artist", {}).get("value", "") or "")).strip()[:50]
+            REAL_CREDITS.append(f"{title.replace('File:', '')[:70]} — {artist or 'Wikimedia Commons'}, "
+                                f"{md.get('LicenseShortName', {}).get('value', '')} (Wikimedia Commons, video)")
+            VIS_STATS["real"] += 1
+            return got
+    return None
+
+
+def fetch_archive_video(query, out, ledger=None):
+    """Internet Archive (archive.org) kamu malı/serbest lisanslı film arşivi: eski haber, belgesel, arşiv çekimleri."""
+    if not query or not CFG.get("archive_footage", True):
+        return None
+    try:
+        r = requests.get("https://archive.org/advancedsearch.php", timeout=30, params={
+            "q": f'({query}) AND mediatype:(movies) AND (licenseurl:*publicdomain* OR licenseurl:*creativecommons.org/licenses/by/* '
+                 'OR collection:(prelinger) OR collection:(publicdomainmovies))',
+            "fl[]": ["identifier", "title", "licenseurl"], "rows": 8, "output": "json", "sort[]": "downloads desc"})
+        docs = r.json().get("response", {}).get("docs", [])
+    except Exception as e:
+        log(f"Arşiv video aranamadı ({query}): {str(e)[:100]}")
+        return None
+    for doc in docs[:3]:
+        ident = doc.get("identifier")
+        lic = str(doc.get("licenseurl") or "")
+        if not ident or ident in _ARCHIVE_USED or ("-nc" in lic or "-nd" in lic):
+            continue
+        try:
+            files = requests.get(f"https://archive.org/metadata/{ident}/files", timeout=30).json().get("result", [])
+            mp4 = sorted((f for f in files if str(f.get("name", "")).endswith(".mp4")
+                          and 2e6 < int(f.get("size", 0) or 0) < 80e6), key=lambda f: int(f.get("size", 0)))
+            if not mp4:
+                continue
+            f = mp4[-1]  # 80 MB altındaki en kaliteli sürüm (indirme kısa sürsün)
+            raw = Path(out).with_suffix(".src")
+            with requests.get(f"https://archive.org/download/{ident}/{f['name']}", stream=True, timeout=300) as d:
+                d.raise_for_status()
+                with open(raw, "wb") as fh:
+                    for c in d.iter_content(1 << 20):
+                        fh.write(c)
+            got = _trim_video(raw, out)
+            raw.unlink(missing_ok=True)
+        except Exception as e:
+            log(f"Arşiv video indirilemedi: {str(e)[:100]}")
+            continue
+        if got:
+            _ARCHIVE_USED.add(ident)
+            REAL_CREDITS.append(f"{str(doc.get('title') or ident)[:70]} — Internet Archive "
+                                f"({'kamu malı' if 'publicdomain' in lic or not lic else lic})")
+            VIS_STATS["real"] += 1
+            return got
+    return None
+
+
 def fetch_stock(query, out, ledger):
     """Stok video: önce Pixabay, sonra Pexels (hangisinin anahtarı varsa)."""
     for fn in (fetch_pixabay, fetch_pexels):
@@ -1069,8 +1173,12 @@ def plan_beats(script):
                 "figures, no gore. real = if the sentence is about a SPECIFIC real, named place, structure, object, "
                 "document, ship, machine or event that real photos of exist, its exact name for a Wikimedia Commons "
                 "search (e.g. 'Dyatlov Pass', 'Göbekli Tepe', 'Hoover Dam spillway', 'Tacoma Narrows Bridge collapse'), "
-                "otherwise empty string. "
-                'JSON: {"beats":[{"id":"3.2","query":"...","image":"...","real":"..."}]}', required=("beats",))
+                "otherwise empty string. archive = if REAL archival/documentary FILM footage of this could exist "
+                "(newsreel, old film, documentary footage of the named place, event, ritual, era or phenomenon), "
+                "a 2-5 word ENGLISH search for free film archives (e.g. 'Ottoman Istanbul 1910 film', "
+                "'sleep laboratory EEG', 'Balkan village 1930s'), otherwise empty string. "
+                'JSON: {"beats":[{"id":"3.2","query":"...","image":"...","real":"...","archive":"..."}]}',
+                required=("beats",))
         except Exception as e:
             log(f"Cümle görselleri planlanamadı (sahne {i + 1}-{chunk[-1] + 1}): {str(e)[:150]}")
             continue
@@ -1080,7 +1188,8 @@ def plan_beats(script):
             bs = [got.get(f"{si}.{k}") for k in range(len(sents))]
             if all(b and b.get("query") and b.get("image") for b in bs):
                 scenes[si]["beat_plan"] = [{"text": t, "query": b["query"], "image": b["image"],
-                                            "real": str(b.get("real") or "").strip()}
+                                            "real": str(b.get("real") or "").strip(),
+                                            "archive": str(b.get("archive") or "").strip()}
                                            for t, b in zip(sents, bs)]
     n = sum(1 for sc in scenes if sc.get("beat_plan"))
     log(f"Cümle cümle görsel planı: {n}/{len(scenes)} sahne")
@@ -1255,11 +1364,17 @@ def build_beat_scene(sc, i, bshots, workdir, ledger, style, hook, img_budget):
             want_still = bool(b.get("real") and part == 0) or vis_hurry()
         clip = None
         if not want_still:
-            for t in range(1 if CFG.get("strict_visuals") else 3):
-                clip = fetch_stock(b["query"], workdir / f"raw_{i:02d}_{k:02d}_{t}.mp4", ledger)
-                if not clip or clip_matches(clip, {"narration": b["text"], "broll_query": b["query"]}, workdir):
+            # 06.11 Furkan: "anlatılan şeyin videosunu oluşturmak yerine bulabiliyorsak bulup kullanalım" →
+            # önce serbest lisanslı GERÇEK arşiv videosu (Commons, Internet Archive), sonra stok video
+            subj = b.get("archive") or b.get("real") or b["query"]
+            tries = ([lambda o: fetch_commons_video(subj, o), lambda o: fetch_archive_video(subj, o)]
+                     if not vis_hurry() else []) + [lambda o: fetch_stock(b["query"], o, ledger)]
+            for t, fn in enumerate(tries if CFG.get("strict_visuals") else tries * 1):
+                clip = fn(workdir / f"raw_{i:02d}_{k:02d}_{t}.mp4")
+                if clip and clip_matches(clip, {"narration": b["text"], "broll_query": subj}, workdir):
                     break
-                Path(clip).unlink(missing_ok=True)  # elenen video diski doldurmasın
+                if clip:
+                    Path(clip).unlink(missing_ok=True)  # elenen video diski doldurmasın
                 clip = None
         host = CFG.get("host_image")
         if host and k == 0 and (i == 0 or sc.get("chapter")) and (ASSETS / host).exists():
