@@ -31,7 +31,12 @@ full_video_text: "Videonun tamamı:"
 wiki_langs: ["tr", "en"]
 
 idea_rules: >
-  GÜNCEL TERCİH: Gerçek ve araştırılabilir malzemeden doğan ama hayal gücünü
+  EN GÜNCEL TERCİH (06.11, kanal sahibi): İzleyiciler en çok Deccal ve Alkarısı gibi DOĞAÜSTÜ, ürpertici,
+  "bilinmezlik" içeren konuları sevdi. Dört adayın en az ikisi doğaüstü olsun: kıyamet alametleri ve ahir zaman
+  varlıkları (Ye'cüc Me'cüc, Dâbbetü'l-Arz, Mehdi rivayetleri), cinler ve cin musallatı inançları, Anadolu ve
+  dünya folklorundaki korkutucu varlıklar (karabasan, gulyabani, hortlak, ifrit), lanetli/perili yerler,
+  belgelenmiş açıklanamayan karşılaşmalar. Kalan adaylar kayıp medeniyet/antik gizem olabilir.
+  ÖNCEKİ TERCİH: Gerçek ve araştırılabilir malzemeden doğan ama hayal gücünü
   zorlayan, ütopik/akıl almaz gizemler. Mu Kıtası, Peru'daki Hayu Marca kaya
   kapısı çevresindeki portal efsanesi, Atlantis, antik makineler, yeraltı
   şehirleri, gizemli haritalar ve yıldız kapısı teorileri gibi.
@@ -149,7 +154,7 @@ content_pillars:   # izlenme verisine göre sistem en çok tutanlara ağırlık 
   - "Anadolu ve dünya efsaneleri, mitolojik varlıklar, halk inançları"
   - "Çözülemeyen şifreler, yasak bilgi ve antik astronot iddiaları (bilimin cevabıyla birlikte)"
 
-pillar_weights: [5, 2, 3, 2, 4, 5]
+pillar_weights: [3, 2, 5, 4, 5, 3]
 
 playlists:
   "Kayıp medeniyetler ve antik gizemler (Göbeklitepe, Sümerler, Nazca, Atlantis efsanesi, Mohenjo-daro)": "Kayıp Medeniyetler ve Antik Gizemler"
@@ -345,7 +350,7 @@ telegram_editorial:
   offer_hour: 20  # Europe/Istanbul; next scheduled day's topic
   publish_days: [1, 3, 5, 6]  # Salı, Perşembe, Cumartesi, Pazar
   trial_days: 0  # Haftada dört video; kendiliğinden bir hafta sonra durmaz
-  focus_pillars: [0, 4, 5]  # Mu/kayıp uygarlıklar, efsane ve antik teknoloji iddiaları
+  focus_pillars: [2, 4, 3, 0]  # kıyamet/doğaüstü varlıklar, efsane, açıklanamayan olaylar, kayıp uygarlıklar
   min_focus_topics: 3
   excluded_topics: ["Kaf Dağı", "Kaf Dagi", "Kafdagi"]
   topic_inspiration:
