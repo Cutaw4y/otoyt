@@ -1664,7 +1664,7 @@ def maybe_swap_thumbnails(history):
         return
     now = datetime.now()
     longs = [h for h in history if h.get("type") == "long" and h.get("video_id")]
-    age = {h["video_id"]: (now - datetime.fromisoformat(h["date"])).days for h in longs}
+    age = {h["video_id"]: (now - publish.hist_dt(h["date"])).days for h in longs}
     for f in THUMB_ALT.glob("*.jpg"):  # süresi geçen yedekleri temizle
         if age.get(f.stem, 99) > 14:
             f.unlink()
@@ -3289,7 +3289,7 @@ def publish_rendered(script, idea, shorts, thumb, thumb_alt, en_srt, tr_srt,
     # Video kimliğini derhal kalıcı kaydet: sonradan altyazı/Short/Instagram kesilirse
     # yeniden başlatılan iş bu uzun videoyu ikinci kez üretmesin.
     if not any(h.get("video_id") == vid for h in history):
-        history.append({"date": datetime.now(timezone.utc).isoformat(timespec="minutes"),
+        history.append({"date": datetime.now(timezone.utc).replace(tzinfo=None).isoformat(timespec="minutes"),
                         "type": "long", "title": script["title"], "orig_title": script["title"],
                         "idea_title": idea.get("title"), "pillar": idea["pillar"],
                         "video_id": vid, "series_id": idea.get("series_id")})

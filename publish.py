@@ -389,11 +389,18 @@ def score(stat):
     return math.log1p(stat["views"]) * (0.5 + stat["avg_pct"] / 100)
 
 
+def hist_dt(s):
+    """Kayıt tarihini saat dilimsiz UTC'ye çevirir (eski kayıtlar dilimsiz, bazıları '+00:00' ile yazılmış)."""
+    from datetime import timezone as _tz
+    d = datetime.fromisoformat(str(s))
+    return d.astimezone(_tz.utc).replace(tzinfo=None) if d.tzinfo else d
+
+
 def performance_report(history, min_age_days=4):
     """Konu sütunlarının ağırlıkları + en iyi/kötü başlıklar (fikir üreticiye geri beslenir)."""
     cutoff = datetime.now() - timedelta(days=min_age_days)
     old = [h for h in history if h.get("type", "long") == "long" and h.get("video_id")
-           and datetime.fromisoformat(h["date"]) < cutoff]
+           and hist_dt(h["date"]) < cutoff]
     stats = video_stats([h["video_id"] for h in old])
     rows = []
     for h in old:

@@ -14,3 +14,4 @@
 - 2026-11-06 16:30 [Claude] ACİL: yarım konuyu uzun yeniden yazma yolu, onaylı-konu kalite tabanına (7) takılıyordu → strict=False; Cuma görsel bütçesi 60 dk
 - 2026-11-06 16:40 [Claude] tests/test_regressions.py: bugünkü 4 hatanın kalıcı testleri (kopya video, kalite tabanı, gün/bekçi uyumu, belgesel süre bütçesi); history'ye orig_title/idea_title
 - 2026-11-06 17:15 [Claude] Sistem paketleri (ffmpeg/espeak) actions/cache ile önbellekte; apt kısa zaman aşımı+yeniden deneme (bugün apt 47 dk takıldı)
+- 2026-11-06 18:25 [Claude] ACİL: '+00:00' tarihli kayıt dilimsiz tarihlerle karşılaştırılınca (performance_report, thumbnail değişimi) üretim çökecekti → publish.hist_dt, kayıt düzeltildi, test eklendi

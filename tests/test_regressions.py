@@ -101,6 +101,20 @@ class Schedule(unittest.TestCase):
             self.assertRegex(text, r"actions/checkout@v4\s*\n\s*with: \{ref: main\}")
 
 
+class MixedDateFormats(unittest.TestCase):
+    """Hata 5: '+00:00' ile yazılmış kayıt tarihi, dilimsiz tarihlerle karşılaştırılınca üretim çöküyordu."""
+
+    def test_history_dates_are_comparable(self):
+        import publish
+        from datetime import datetime
+        for s in ("2026-11-06T10:58", "2026-11-06T10:58+00:00", "2026-11-06T13:58+03:00"):
+            self.assertEqual(publish.hist_dt(s), datetime(2026, 11, 6, 10, 58))
+        hist = [{"type": "long", "video_id": "a", "date": "2026-11-01T10:00+00:00"},
+                {"type": "long", "video_id": "b", "date": "2026-11-01T10:00"}]
+        with mock.patch.object(publish, "video_stats", return_value={}):
+            publish.performance_report(hist)  # hata vermemeli
+
+
 class LongDocumentaryFitsTimeLimit(unittest.TestCase):
     """Hata 4: uzun belgesel 5,5 saatlik iş sınırını aşmasın (kaba bütçe kontrolü)."""
 
