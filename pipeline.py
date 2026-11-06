@@ -110,6 +110,8 @@ def notify(text, code=None):
             body = ({"chat_id": chat, "parse_mode": "HTML",
                      "text": f"{_h.escape(text)}\n<code>{_h.escape(code)}</code>"[:4000]} if code else
                     {"chat_id": chat, "text": text[:4000]})
+            if not CFG.get("telegram_editorial", {}).get("enabled"):
+                body["reply_markup"] = {"remove_keyboard": True}  # kapalı onay sisteminin ÜRET/1-4 düğmeleri kalkar
             requests.post(f"https://api.telegram.org/bot{tok}/sendMessage", json=body, timeout=20)
         except Exception:
             pass
@@ -2008,7 +2010,8 @@ def tally_votes(min_days=3):
         v.update(counted=now.isoformat(timespec="minutes"), counts=counts, comments=seen)
         changed = True
         if n == 0:
-            notify(f"🗳️ Oylama sonucu: \"{v['title']}\" videosuna 3 günde {seen} yorum geldi ama oy veren olmadı.")
+            if seen:
+                notify(f"🗳️ Oylama sonucu: \"{v['title']}\" videosuna 3 günde {seen} yorum geldi ama oy veren olmadı.")
             continue
         pa = round(100 * counts[0] / n)
         tr = CFG.get("language_code", "en").startswith("tr")

@@ -20,3 +20,4 @@
 - 2026-11-06 19:05 [Claude] ChatGPT önerileri uygulandı: Reporting API channel_reach_basic_a1 ile küçük resim gösterim+CTR (publish.reach_ctr) izleyici analizine eklendi; A/B sunulan videoda otomatik thumbnail değişimi kapalı (ab_offered); analiz yalnız ≥3 gün, ≥30 izlenme, ≥10 eğri noktasıyla
 - 2026-11-06 19:05 [Claude] Hata ayrıntısı iş sürerken depoya yazılır (data/.../logs/last_error.txt); 2. denemede 'başladı/kredi' mesajları tekrarlanmaz; devam eden konuda doğru mesaj
 - 2026-11-06 19:45 [Claude] ACİL: (a) görsel kaynakları tükenince çökme → önceki sahne görseli yeniden kullanılır; (b) iyi uzun senaryo yeniden yazılıp doğrulamada düşüyordu → yalnız daha küçük hedefle kaydedilmişse yeniden yaz (pending'e target_words); Cuma hedefi 3600 kelime (ölçüm: 3400 kelime=40 dk); late_publish_until 24
+- 2026-11-06 20:30 [Claude] Telegram: onay sistemi kapalıyken eski ÜRET/1-4 klavyesi bildirimlerle kaldırılır; 0 yorumlu oylamada mesaj atılmaz
