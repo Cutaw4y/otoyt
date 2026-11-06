@@ -30,3 +30,4 @@
 - 2026-11-06 22:20 [Claude] İzleyici şikâyeti (fok, basketbol potası, Japon yaya geçidi): kök neden kota dolunca gen_image'in stok fotoğrafı KONTROLSÜZ ve genel 'fallback_broll' aramasıyla alması. Katı modda: genel arama yok, stok foto image_matches şart; video kontrolü 3 kare + konu bağlamı + 'hayvan/spor/trafik = hayır'; kontrol hakkı 600
 - 2026-11-07 01:50 [Claude] Yedek görsel kaynağı: OpenAI görsel API (gpt-image-1-mini → gpt-image-1), yalnız OPENAI_API_KEY secret eklenirse çalışır; Google kotası dolunca Cloudflare/stoktan önce. Furkan önerisi
 - 2026-11-07 02:00 [Claude] otoyt_tr.yml'e tek seferlik girişler: publish_at (yayın anı) ve topic (konu); normal çalışmayı etkilemez
+- 2026-11-07 02:15 [Claude] Furkan ana kuralı: dramatik/sıra dışı anlatım, ilk 15 sn, somut yer; başlık kuralı (title_rules → title_pass), küçük resim şok cümle formülü; izleyici geri bildirimleri AGENTS.md'de kalıcı

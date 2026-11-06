@@ -658,3 +658,6 @@ json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes:
 [01:42:24] Bugünün uzun videosu zaten kaydedilmiş; yeni üretim atlandı (tekrar yükleme engellendi).
 [01:42:24] Bugünün uzun videosu zaten kaydedilmiş; yeni üretim atlandı (tekrar yükleme engellendi).
 [01:42:25] Telegram onayı yok; üretim ve yayın bekliyor.
+[02:06:01] Bugünün uzun videosu zaten kaydedilmiş; yeni üretim atlandı (tekrar yükleme engellendi).
+[02:06:01] Bugünün uzun videosu zaten kaydedilmiş; yeni üretim atlandı (tekrar yükleme engellendi).
+[02:06:01] Telegram onayı yok; üretim ve yayın bekliyor.

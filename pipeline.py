@@ -1970,6 +1970,7 @@ def title_pass(script):
               "Bir Adada Zincirli mi? 30 Denizcinin Gördüğü Şey'. "
             + (f"The channel owner LOVES this style, follow its pattern (topic: concrete people/number + what they "
                f"did + the unanswered question): {CFG['title_examples']} " if CFG.get("title_examples") else "")
+            + (f"CHANNEL OWNER'S TITLE RULE (most important): {CFG['title_rules']} " if CFG.get("title_rules") else "")
             + "Then pick the one with the highest expected click-through rate on a phone feed. "
             'JSON: {"titles":["..."],"best_index":0,"why":"..."}',
             required=("titles", "best_index"), judge=False)

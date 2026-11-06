@@ -20,6 +20,14 @@ Birbirimizle doğrudan konuşamadığımız için köprü bu dosya ve `NOTLAR.md
 - Görüş ayrılığında iki taraf gerekçesini PR'a yazar; son karar Furkan'ındır.
 - Acil üretim hatası (video bugün çıkmayacaksa) doğrudan main'e düzeltilebilir; NOTLAR.md'ye `ACİL` diye yazılır.
 
+## İçerik ana kuralı (Furkan, 07.11.2026)
+- İzleyici abartıyı, sıra dışını, doğaüstü bilinmezliği sever: anlatım sinematik/dramatik, her bölümde yeni şaşırtıcı
+  ayrıntı + cevabı saklanan soru; ilk 15 sn en ürpertici anla başlar. Abartı yalnız anlatımda — uydurma bilgi yok.
+- Başlık + küçük resim EN önemli parça: gerçek yer/nesne + yasak/ölümcül/açıklanamayan iddia + cevapsız soru;
+  küçük resimde 2-4 kelimelik şok cümle (ör. "İÇİNE GİREN ÖLÜYOR").
+- İzleyici geri bildirimleri (06.11) kalıcı kural: alakasız görsel yok (fok/basketbol/trafik), aynı görsel tekrarı yok,
+  seste tekrar/sürçme yok, yavaş giriş yok. Bunları bozan değişiklik testlerden geçemez.
+
 ## Bozulmaması gerekenler (kanal sahibinin kararları, 06.11.2026)
 - **Tamamen otomatik.** Gölgedefter'de Telegram onayı KAPALI (`telegram_editorial.enabled: false`).
   Konuyu sistem seçer; Furkan'dan onay beklenmez.

@@ -56,6 +56,15 @@ idea_rules: >
   YouTube örneklerinden yalnız yöntem öğren; başlık, senaryo ve metin KOPYALAMA.
 
 script_rules: >
+  ANA KURAL (07.11, kanal sahibi + izleyici geri bildirimi — her videoda uygula):
+  İnsanlar abartıyı, sıra dışını ve doğaüstü bilinmezliği dinlemeyi sever. Anlatım SİNEMATİK ve DRAMATİK olsun:
+  rivayetleri ve tanık anlatımlarını canlı sahneler, sesler, ışık, gerilimle anlat; her bölümde yeni bir
+  şaşırtıcı ayrıntı ve cevabı sonraya saklanan bir soru olsun; "kimse bilmiyor", "hâlâ açıklanamadı" duygusunu
+  koru. İLK 15 SANİYE: en ürpertici, en sıra dışı anla başla (izleyici verisi: yavaş girişte izleyicinin yarısı
+  ilk 30 saniyede kaçıyor) — selam, tanım, arka plan YOK. Abartı yalnız ANLATIMDA olur: uydurma kaynak, kişi,
+  tarih, sayı veya alıntı ASLA yok; rivayet/zayıf olanı "rivayete göre", "anlatılana göre" diye söyle.
+  Somut bir YER ya da nesne merkezde olsun (haritada gösterilebilen kuyu, mağara, şehir, harabe) —
+  izleyici onun gerçek görüntüsünü görmek ister.
   GÜNCEL İZLEYİCİ YÖNÜ: Mu Kıtası, yıldız kapıları, antik yapılar,
   kayıp medeniyetler ve açıklanamayan olaylar gibi gerçek araştırma izleri
   taşıyan şaşırtıcı iddialar. Deccal ve Alkarısı'nın merak/gerilim gücünü
@@ -117,7 +126,10 @@ script_rules: >
   arasında seçim yaptıran tek soru (sabit yorumla aynı tartışma).
   Bölüm başlıkları bu yapıyı izlesin ("Çadırın Bulunduğu Sabah", "Kesin Bilinenler", "Yanlış
   Bilinen Ayrıntı", "Teoriler", "Kanıtlar Ne Diyor", "Hâlâ Bilinmeyen").
+title_rules: "Gerçek, somut bir YER veya nesne + yasak/ölümcül/açıklanamayan bir iddia + cevapsız soru. Sıra dışı, gizemli, ürpertici; en çok aranan kelimeyle başla. Abartılı ama video karşılıyor olmalı (07.11 kanal sahibi)."
 title_examples: >   # somut dayanak + sıra dışı ihtimal + sorgulama
+  "Deccal Şu An Nerede? Hadiste Anlatılan Esrarengiz Ada" ·
+  "Osmanlı'da Gerçek Vampir Vakaları: Kadı Mezarları Neden Açtırdı?" ·
   "Mu Kıtası: Pasifik'te Kaybolduğu Söylenen Uygarlık Nereden Çıktı?" ·
   "Peru'daki Kaya Kapısı: Hayu Marca'ya Neden Yıldız Kapısı Deniyor?" ·
   "Antikythera Mekanizması: Antik Çağda Gökyüzünü Hesaplayan Aygıt Nasıl Yapıldı?" ·
@@ -171,6 +183,10 @@ visual_style: >
   figures, no text or letters, 16:9
 watch_next_text: "▶ Sıradaki sayfa:"
 thumbnail_rules: >
+  ANA KURAL (07.11): Küçük resim ve başlık videonun EN önemli parçası. Formül (bu nişte 2,2 milyon aboneli
+  kanalın en çok izlenenleri): gerçek YER/nesnenin çarpıcı görüntüsü + 2-4 kelimelik ŞOK cümle, kalın, kırmızı/
+  sarı vurgulu (ör. "İÇİNE GİREN ÖLÜYOR", "İÇİNDE İKİ MELEK VAR", "BUNU CİNLER Mİ YAPTI?"); yasak/ölümcül/
+  açıklanamayan bir iddia; tek odak noktası; gizemli karanlık ama net. Sıradan, soyut, tarif eden yazı yok.
   (05.11 rakip analizi: bu nişte en çok tıklanan Türkçe kanalın küçük resimleri parlak, sıcak ışıklı, kalabalık/insan
   içeren sinematik sahneler + 2-3 kelimelik dev, kalın yazı.) Gölgedefter look: ONE dramatic, vivid, cinematic scene of
   the story's key moment (a ship in a storm, a ruined city, a chained giant in shadow, a flood, a desert caravan),
