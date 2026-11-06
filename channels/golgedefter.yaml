@@ -187,7 +187,7 @@ caption_theme:            # bölüm kartı ve bilgi etiketleri: kehribar rengi (
   callout_text: "&H000F0B0D"
 
 branding:
-  version: 4
+  version: 5
   banner: "assets/golgedefter/golgedefter_banner.jpg"
   country: "TR"
   keywords: "gizem belgesel kayıp medeniyetler antik gizemler islam tarihi kıyamet alametleri efsaneler açıklanamayan olaylar gölgedefter"
@@ -196,7 +196,7 @@ branding:
     🏺 Göbeklitepe'den Sümerlere, İrem şehrinden Zülkarneyn'in seddine; antik uygarlıklar, arkeolojik keşifler ve dünyanın en esrarengiz olayları.
     📖 Ayetler, hadis kaynakları, tarihî belgeler ve akademik araştırmalar ışığında: ne anlatılıyor, kayıtlar ne diyor, bilim ne açıklıyor, hâlâ ne bilinmiyor.
     🔎 Amacımız spekülasyon üretmek değil; bilgiye dayalı, düşündüren ve merak uyandıran sayfalar açmak.
-    🕯 Yeni sayfalar Salı, Perşembe ve Cuma 19:00'da; Cumartesi ve Pazar 16:00'da. Kaçırmamak için abone olmayı unutmayın.
+    🕯 Yeni sayfalar Salı ve Perşembe 19:00'da; Cumartesi ve Pazar 16:00'da. Kaçırmamak için abone olmayı unutmayın.
 
 subscribe_text: "🔔 Yeni sayfaları kaçırmamak için abone ol:"
 made_for_kids: false
@@ -348,7 +348,7 @@ channel_id: "UC17T58dqlAqBoQZjactX5rg"
 telegram_editorial:
   enabled: true
   offer_hour: 20  # Europe/Istanbul; next scheduled day's topic
-  publish_days: [1, 3, 4, 5, 6]  # Salı, Perşembe, Cuma, Cumartesi, Pazar
+  publish_days: [1, 3, 5, 6]  # Salı, Perşembe, Cumartesi, Pazar (Pzt/Çar/Cuma Beyond Qaf: aynı gün iki üretim olmasın)
   auto_choose_hour: 23  # bu saate (TR, önceki akşam) kadar seçim yoksa 1. konu otomatik onaylanır
   trial_days: 0  # Haftada dört video; kendiliğinden bir hafta sonra durmaz
   focus_pillars: [2, 4, 3, 0]  # kıyamet/doğaüstü varlıklar, efsane, açıklanamayan olaylar, kayıp uygarlıklar
