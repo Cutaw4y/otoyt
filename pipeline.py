@@ -816,6 +816,16 @@ def gen_image(prompt, out, fallback_query=None, ledger=None):
             return ai.gemini_image(prompt + ". Cinematic, wide 16:9, no text.", out, models=())
         except Exception as e:
             log(f"Son çare Gemini görseli de olmadı: {str(e)[:120]}")
+    # 06.11: tüm kaynaklar tükendi diye video çökmesin → bu videoda daha önce üretilmiş bir sahne görseli kullanılır
+    prev = sorted((f for f in out.parent.glob("img_*.jpg") if f != out and f.stat().st_size > 10000),
+                  key=lambda f: f.stat().st_mtime)
+    if _LAST_IMG and Path(_LAST_IMG).exists():
+        prev.append(Path(_LAST_IMG))
+    if prev:
+        pick = prev[-1 - (abs(hash(prompt)) % min(len(prev), 6))]  # son 6'dan biri: art arda aynı kare olmasın
+        shutil.copyfile(pick, out)
+        log("Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı")
+        return out
     raise RuntimeError("Ne AI görsel ne yedek fotoğraf bulunabildi")
 
 
@@ -3236,13 +3246,15 @@ def run_once():
         PENDING_SCRIPT.unlink(missing_ok=True)
         pend = None
     if (pend and pend.get("script") and pend.get("idea") and not editorial_job
-            and word_count(pend["script"]) < CFG["target_words"] * CFG.get("min_length_ratio", 0.85)):
+            and pend.get("target_words") and pend["target_words"] < CFG["target_words"] * 0.85):
+        # 06.11 hatası: bugünün hedefiyle yazılmış iyi senaryo "kısa" sayılıp çöpe atılıyordu → yalnız daha küçük
+        # hedefle (ör. Cuma'dan önceki günün normal videosu) kaydedilmiş senaryo uzun yeniden yazılır
         # yarım kalan senaryo bugünkü hedef uzunluktan kısa (ör. Cuma belgeseli): aynı konuyla uzun senaryo yazılır
         log(f"Aynı konu bugünkü uzunlukta yeniden yazılıyor: {pend['script'].get('title')}")
         idea, script = produce_script(history, report, pend["idea"], strict=False)
         if script is not None:
             save_json(PENDING_SCRIPT, {"date": datetime.now().isoformat(timespec="minutes"), "idea": idea,
-                                       "script": script})
+                                       "script": script, "target_words": CFG["target_words"]})
             push_now(PENDING_SCRIPT, "yarım kalırsa diye senaryo kaydı")
     elif not editorial_job and pend and pend.get("script") and (datetime.now() - datetime.fromisoformat(pend["date"])).days <= 7:
         # önceki çalışma hata/zaman aşımıyla yarıda kaldı: hazır (kalite ve bilgi kontrolünden geçmiş) senaryo çöpe gitmesin
@@ -3253,7 +3265,7 @@ def run_once():
         idea, script = produce_script(history, report, editorial_job["idea"] if editorial_job else None)
         if script is not None and not editorial_job:
             save_json(PENDING_SCRIPT, {"date": datetime.now().isoformat(timespec="minutes"), "idea": idea,
-                                       "script": script})
+                                       "script": script, "target_words": CFG["target_words"]})
             push_now(PENDING_SCRIPT, "yarım kalırsa diye senaryo kaydı")
     if script is None:
         if editorial_job:

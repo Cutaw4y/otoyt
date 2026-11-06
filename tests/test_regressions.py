@@ -142,6 +142,28 @@ class ThumbnailABSafety(unittest.TestCase):
         self.assertIn('h.get("ab_offered")', src[src.index("def maybe_swap_thumbnails"):][:2500])
 
 
+class FridayDocumentaryFailures(unittest.TestCase):
+    """06.11 akşamı: (a) görsel kaynakları tükenince video çöktü, (b) iyi uzun senaryo 'kısa' sayılıp çöpe atıldı."""
+
+    def test_image_fallback_reuses_previous_scene_image(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as d:
+            prev = Path(d) / "img_01_b00.jpg"
+            prev.write_bytes(b"x" * 20000)
+            env = {"CLOUDFLARE_API_TOKEN": "", "CLOUDFLARE_ACCOUNT_ID": ""}
+            with mock.patch.dict(os.environ, env), \
+                    mock.patch.object(pipeline.ai, "vertex_image_on", return_value=False), \
+                    mock.patch.object(pipeline.ai, "vertex_on", return_value=False), \
+                    mock.patch.object(pipeline, "log", lambda *a, **k: None):
+                out = pipeline.gen_image("a scene", Path(d) / "img_05_b00.jpg", None, None)
+            self.assertTrue(Path(out).exists())
+
+    def test_pending_rewrite_only_when_saved_with_smaller_target(self):
+        src = (ROOT / "pipeline.py").read_text(encoding="utf-8")
+        self.assertIn('pend.get("target_words") and pend["target_words"] < CFG["target_words"] * 0.85', src)
+        self.assertIn('"target_words": CFG["target_words"]', src)
+
+
 class LongDocumentaryFitsTimeLimit(unittest.TestCase):
     """Hata 4: uzun belgesel 5,5 saatlik iş sınırını aşmasın (kaba bütçe kontrolü)."""
 

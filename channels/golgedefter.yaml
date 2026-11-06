@@ -270,7 +270,7 @@ min_quality_floor: 5            # 06.11 (Claude+ChatGPT): editör bir başlıkta
 # CUMA = uzun belgesel (kanal sahibi isteği 06.11): ~30-35 dk, daha çok görsel ve süre payı
 weekday_overrides:
   4:
-    target_words: 5000            # ~40+ dk (kanal sahibi: Cuma belgeseli en az 40 dk)
+    target_words: 3600            # ölçüldü: 3400 kelime = 40 dk ses (06.11) → Cuma belgeseli ≥40 dk
     visual_time_budget_min: 60     # senaryo aşaması uzun sürüyor: 5,5 saat sınırına pay
     max_gemini_scene_images: 55
     max_expand_rounds: 3
@@ -316,6 +316,7 @@ publish_delay_hours: 6
 # Türkiye izleyicisi: hafta içi 19:00, hafta sonu 16:00 (kanal sahibi isteği, 06.11)
 publish_slots: {tz: "Europe/Istanbul", times: {default: "19:00", sat: "16:00", sun: "16:00"}}
 shorts_slots: {tz: "Europe/Istanbul", times: {default: "20:30"}}
+late_publish_until: 24          # yayın saati kaçarsa gece yarısına kadar aynı gün yayınla
 min_lead_hours: 0.75             # yükleme ile yayın arası en az 45 dk (HD işleme); 19:00 için en geç 18:15 yüklenmeli
 post_comment: true
 ascii_tag_variants: true       # "gerçek hikayesi" + "gercek hikayesi"
