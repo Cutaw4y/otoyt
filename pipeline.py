@@ -3163,9 +3163,17 @@ def run_once():
             return
 
         if editorial_job:
-            return auto_publish_editorial(editorial_job, script, idea, shorts, thumb, thumb_alt,
-                                          en_srt, tr_srt, tr_meta, tr_blocks, final, w,
-                                          history, ledger)
+            # This mode is explicitly enabled for Gölgedefter, not other channels.
+            if CFG.get("telegram_editorial", {}).get("no_second_publish_approval", False):
+                return auto_publish_editorial(editorial_job, script, idea, shorts, thumb, thumb_alt,
+                                              en_srt, tr_srt, tr_meta, tr_blocks, final, w,
+                                              history, ledger)
+            # Older two-step mode stays available only when explicitly configured.
+            import telegram_control as editorial
+            editorial.stage(editorial_job, script, idea, shorts, thumb, thumb_alt, en_srt,
+                            tr_srt, tr_meta, tr_blocks, final, REAL_CREDITS)
+            ledger.save()
+            return True
         publish_rendered(script, idea, shorts, thumb, thumb_alt, en_srt, tr_srt,
                          tr_meta, tr_blocks, final, w, history, ledger)
 
