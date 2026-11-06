@@ -3204,8 +3204,10 @@ def run_once():
             return True
     check_channel()
     preflight()
-    if not DRY_RUN:
-        notify("🎬 Yeni video yapımı başladı: önce konu seçilecek ve senaryo yazılacak.")
+    if not DRY_RUN and os.getenv("OTOYT_ATTEMPT", "1") == "1":  # 2. denemede tekrar "başladı" demeyelim
+        _p = DATA / "pending_script.json"
+        notify("🎬 Yeni video yapımı başladı: " + ("yarıda kalan konuyla devam ediliyor." if _p.exists()
+                                                   else "önce konu seçilecek ve senaryo yazılacak."))
     if not editorial_job:
         ensure_branding()
         clear_old_localizations()
@@ -3744,7 +3746,8 @@ if __name__ == "__main__":
         log(f"Kurulum eksik, çalışma atlandı: {', '.join(missing)}")
         notify(f"⏸ Kurulum tamamlanmadığı için bugün video üretilmedi (eksik: {', '.join(missing)}).")
         sys.exit(0)
-    credit_report("start")
+    if os.getenv("OTOYT_ATTEMPT", "1") == "1":
+        credit_report("start")
     try:
         res = run_once()
         credit_report("end")
@@ -3767,6 +3770,14 @@ if __name__ == "__main__":
     except Exception:
         err = redact(traceback.format_exc())
         log("HATA:\n" + err)
+        try:  # hata ayrıntısı iş bitmeden depoda görünsün (Claude hemen okuyabilsin)
+            (DATA / "logs").mkdir(parents=True, exist_ok=True)
+            (DATA / "logs" / "last_error.txt").write_text(
+                f"{datetime.utcnow().isoformat(timespec='seconds')} deneme {os.getenv('OTOYT_ATTEMPT', '1')}\n"
+                + err[-6000:], encoding="utf-8")
+            push_now(DATA / "logs" / "last_error.txt", "hata ayrıntısı")
+        except Exception:
+            pass
         print("::error title=HATA ayrıntısı::" + err[-3000:].replace("%", "%25").replace("\r", "").replace("\n", "%0A"))
         last = [l for l in err.strip().splitlines() if l.strip()][-1][:300]
         retry = (not UPLOAD_STARTED) and os.getenv("OTOYT_ATTEMPT", "1") == "1"
