@@ -649,3 +649,6 @@ json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes:
 [19:30:30] Instagram sırasına eklendi: The Brain Glitch That Feels Like a Demon
 [19:31:04] Bitti: https://youtu.be/e__IHqcFCiI
 [19:31:04] Başarıyla bitti.
+[01:41:29] Bugünün uzun videosu zaten kaydedilmiş; yeni üretim atlandı (tekrar yükleme engellendi).
+[01:41:29] Bugünün uzun videosu zaten kaydedilmiş; yeni üretim atlandı (tekrar yükleme engellendi).
+[01:41:30] Telegram onayı yok; üretim ve yayın bekliyor.

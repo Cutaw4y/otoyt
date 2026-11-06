@@ -74,6 +74,7 @@ jobs:
           DRY_RUN: ${{ inputs.dry_run && '1' || '' }}
           FORCE_NEW_VIDEO: ${{ inputs.force_new_video && '1' || '' }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}   # isteğe bağlı: yedek sahne görselleri (ChatGPT görsel modeli)
           GEMINI_PAID_API_KEY: ${{ secrets.GEMINI_PAID_API_KEY }}
           GEMINI_TTS_EXTRA_KEYS: ${{ secrets.GEMINI_TTS_EXTRA_KEYS }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

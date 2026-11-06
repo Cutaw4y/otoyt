@@ -912,6 +912,14 @@ def gen_image(prompt, out, fallback_query=None, ledger=None):
             return got
         except Exception as e:
             log(f"Gemini sahne görseli üretilemedi, Cloudflare denenecek: {str(e)[:150]}")
+    if os.getenv("OPENAI_API_KEY") and _gem_imgs < CFG.get("max_gemini_scene_images", 45) + CFG.get("max_openai_images", 40):
+        try:  # 07.11 Furkan: "ChatGPT'ye de çizdirebiliriz" → Google kotası dolunca ChatGPT'nin görsel modeli
+            got = ai.openai_image(prompt + ". Cinematic documentary still, photographic, wide 16:9 composition, "
+                                  "no text, no letters, no watermark.", out)
+            _gem_imgs += 1
+            return got
+        except Exception as e:
+            log(f"OpenAI sahne görseli üretilemedi: {str(e)[:150]}")
     if not os.getenv("CLOUDFLARE_API_TOKEN") or not os.getenv("CLOUDFLARE_ACCOUNT_ID"):
         _quota_hit = True  # Cloudflare kurulmamış → doğrudan Pexels fotoğrafı
     if not _quota_hit:

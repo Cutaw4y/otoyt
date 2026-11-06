@@ -48,6 +48,37 @@ _img_last = [0.0]
 _img_429 = [0]
 
 
+_oa_off = [False]
+
+
+def openai_image(prompt, out, size="1536x1024"):
+    """Yedek sahne görseli: OpenAI görsel API'si (ChatGPT'nin çizim modeli). Yalnız OPENAI_API_KEY varsa.
+    Google kotası (429) dolduğunda devreye girer; ayrı kota olduğu için görsel tekrarı ve stok ihtiyacını azaltır.
+    Not: ChatGPT Plus aboneliği API'yi kapsamaz; anahtar platform.openai.com'dan, kullandıkça ödemeli."""
+    key = os.environ.get("OPENAI_API_KEY", "")
+    if not key or _oa_off[0]:
+        raise RuntimeError("OpenAI görsel anahtarı yok")
+    import base64
+    last = None
+    for model in ("gpt-image-1-mini", "gpt-image-1"):
+        r = requests.post("https://api.openai.com/v1/images/generations", timeout=180,
+                          headers={"Authorization": f"Bearer {key}"},
+                          json={"model": model, "prompt": prompt[:3800], "size": size, "quality": "medium", "n": 1})
+        if r.status_code == 200:
+            d = r.json()["data"][0]
+            raw = base64.b64decode(d["b64_json"]) if d.get("b64_json") else requests.get(d["url"], timeout=60).content
+            from PIL import Image
+            import io
+            Image.open(io.BytesIO(raw)).convert("RGB").save(out, quality=92)
+            USAGE["oa_images"] = USAGE.get("oa_images", 0) + 1
+            return out
+        last = f"{r.status_code} {r.text[:200]}"
+        if r.status_code in (401, 403):  # anahtar/fatura sorunu: bu video boyunca bir daha deneme
+            _oa_off[0] = True
+            break
+    raise RuntimeError(f"OpenAI görsel: {last}")
+
+
 def vertex_image_wait_s():
     """Görsel kota beklemesinin bitmesine kalan saniye (0 = hazır)."""
     return max(0.0, _vx_image_pause_until - time.monotonic())
