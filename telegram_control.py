@@ -176,7 +176,8 @@ def transition(state, update, owner):
                 job.update(status="confirm", selected=i)
                 return "confirm"
         if status == "confirm" and text.upper() == "ÜRET":
-            job.update(status="approved", idea=job["ideas"][job["selected"]])
+            job.update(status="approved", idea=job["ideas"][job["selected"]],
+                       publish_authorized=True)
             return "approved"
         if status in {"topic", "confirm", "review"} and text.upper() == "İPTAL":
             job["status"] = "cancelled"
@@ -207,7 +208,8 @@ def transition(state, update, owner):
         # Bind confirmation to its selected option, so an old confirm button is harmless.
         if action != f"produce-{job['selected']}":
             return None
-        job.update(status="approved", idea=job["ideas"][job["selected"]])
+        job.update(status="approved", idea=job["ideas"][job["selected"]],
+                   publish_authorized=True)
         return "approved"
     if action == "publish" and status == "review":
         job["status"] = "publish_approved"
@@ -217,7 +219,8 @@ def transition(state, update, owner):
             return "need_note"
         idea = dict(job["idea"])
         idea["angle"] += "\nOwner revision: " + job.pop("revision_note")
-        job.update(id=uuid.uuid4().hex[:12], status="approved", idea=idea)
+        job.update(id=uuid.uuid4().hex[:12], status="approved", idea=idea,
+                   publish_authorized=True)
         job.pop("bundle", None)
         return "approved"
     if action == "cancel" and status in {"topic", "confirm", "review", "failed", "dispatch_uncertain"}:
@@ -232,9 +235,15 @@ def generate_ideas(cfg, history):
         if os.getenv(source):
             os.environ[target] = os.environ[source]
     past = [h.get("title", "") for h in history if h.get("type", "long") == "long"][-100:]
+    editorial = cfg.get("telegram_editorial", {})
     result = ai.gemini_json(
         f"You plan Turkish documentaries for {cfg['channel_name']}. {cfg['channel_brief']}\n"
-        f"Rules: {cfg.get('idea_rules', '')}",
+        f"Rules: {cfg.get('idea_rules', '')}\n"
+        "Subject inspiration (examples to vary, not repeat mechanically): "
+        + json.dumps(editorial.get("topic_inspiration", []), ensure_ascii=False)
+        + "\nNarrative techniques seen in other mystery channels; learn the method, "
+          "never copy titles, text, scripts or unverified conclusions: "
+        + json.dumps(editorial.get("inspiration_method", []), ensure_ascii=False),
         "Propose exactly 4 distinct topics. Do not repeat or closely paraphrase these published titles:\n"
         + json.dumps(past, ensure_ascii=False) + "\nChoose pillars only from: "
         + json.dumps(cfg["content_pillars"], ensure_ascii=False)
@@ -313,8 +322,9 @@ def deliver(state):
         # Confirm message delivery is durable: if Telegram fails after we persist
         # the click/offset, the next scheduled poll retries this same message.
         idea = job["ideas"][job["selected"]]
-        send(f"Seçtin: {idea['title']}\nÜretime başlansın mı? "
-             "Onaylamak için ÜRET'e dokun. Ayrı yayın onayı da gerekecek.",
+        send(f"Seçtin: {idea['title']}\nÜretim ve planlı yayına onay veriyor musun? "
+             "ÜRET'e dokunursan video hazırlanıp uygun yayın saatine planlanır. "
+             "Ayrıca Yayınla onayı istenmez.",
              text_choices=["ÜRET", "İPTAL"])
     elif status == "review":
         send(review_message(job), review_buttons(job))
@@ -331,6 +341,10 @@ def deliver(state):
 def dispatch(state):
     job = state.get("job", {})
     if job.get("status") not in {"approved", "publish_approved"}:
+        return
+    # New production auto-publishes. Refuse legacy approvals that were granted
+    # before this contract existed, rather than silently expanding their scope.
+    if job["status"] == "approved" and job.get("publish_authorized") is not True:
         return
     mode = "produce" if job["status"] == "approved" else "publish"
     job["status"] = mode + "_queued"
@@ -383,11 +397,31 @@ def claim(cfg, job_id, mode):
     job = state.get("job", {})
     required = {"produce": "produce_queued", "publish": "publish_queued"}
     if (not enabled(cfg) or mode not in required or not job_id or
-            job.get("id") != job_id or job.get("status") != required[mode]):
+            job.get("id") != job_id or job.get("status") != required[mode] or
+            (mode == "produce" and job.get("publish_authorized") is not True)):
         return None
     job["status"] = "producing" if mode == "produce" else "publishing"
     persist(state)
     return job
+
+
+def complete_auto_publish(job):
+    """Mark video done only after scheduled YouTube/Shorts/Reels upload path returns."""
+    state = load()
+    current = state.get("job", {})
+    if (current.get("id") != job.get("id") or
+            current.get("status") != "producing" or
+            current.get("publish_authorized") is not True):
+        raise RuntimeError("Gölgedefter auto-publication state or approval mismatch")
+    current["status"] = "done"
+    current["completed_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    persist(state)
+    try:
+        send("✅ Gölgedefter: ÜRET onayınla video ve Shorts yükleme/planlama akışı tamamlandı.")
+    except RuntimeError:
+        # Video was already uploaded; Telegram outage must not turn it into an
+        # apparently failed job that risks a second upload.
+        pass
 
 
 def digest(path):
@@ -480,7 +514,7 @@ def main():
         elif event == "need_note":
             send("Önce neyi değiştireceğimizi mesaj olarak yaz, sonra Düzelt'e dokun.", review_buttons(job))
         elif event in {"approved", "publish_approved", "cancelled"}:
-            send({"approved": "🎬 Üretim onayın kaydedildi.",
+            send({"approved": "🎬 Üretim ve planlı yayın onayın kaydedildi.",
                   "publish_approved": "✅ Yayın onayın kaydedildi.",
                   "cancelled": "⏸ İptal edildi; video silinmedi."}[event])
         cb = update.get("callback_query", {})

@@ -1,63 +1,37 @@
-# Gölgedefter: Telegram üzerinden konu ve yayın onayı
+# Gölgedefter — Telegram'dan konu seç, ÜRET ile planlı yayına al
 
-Gölgedefter için haftada dört video: salı, perşembe, cumartesi ve pazar. Beyond Qaf'ın yayın sıklığı ve
-ayarları değişmez. Eski videoların tarihleri bu akış tarafından değiştirilmez.
+Gölgedefter'in hedefi haftada dört uzun video: **Salı, Perşembe, Cumartesi ve Pazar**. Beyond Qaf'ın otomasyonu değişmez.
 
-1. Yayın günlerinden bir önceki akşam Türkiye saatiyle 20:00 sonrasındaki ilk kontrolde, ertesi gün için
-   dört konu, kısa özet ve ilgi çekme gerekçesi gönderilir. Doğaüstü varlıklar ve kıyamet anlatıları önceliklidir; Kaf Dağı önerilmez.
-2. Bir konu seçilir, ardından **Üretime başla** onayı verilir. Seçim yapılmazsa
-   üretim başlamaz. Önceki iş tamamlanmadan ikinci bir iş açılmaz.
-3. Yalnız seçilen konu kaynak ve kalite kontrolünden geçirilir; başarısız konu
-   otomatik başka konuyla değiştirilmez. Eski yarım senaryo kullanılmaz.
-4. Tam video, Shorts ve dosya özeti GitHub **draft release** içinde tutulur.
-   Telegram'a tam ön izleme bağlantısı ve **Yayınla / Düzelt / İptal** gelir.
-   GitHub'da depo sahibinin oturum açması gerekir. Draft hiçbir zaman yayımlanmaz.
-5. Yayınla onayı uzun videoyu ve Shorts'u YouTube'a yükler/planlar; mevcut Reels
-   akışını başlatır. Geç kalınan onayda yeni videolar için uygun saat yeniden
-   hesaplanır. İptal dosya/video silmez. Düzeltme notu Telegram'a yazılıp Düzelt
-   seçilirse aynı konu yeniden üretilir ve tekrar son onay istenir.
+## Kullanıcının yaptığı iki işlem
 
-## Çalışma sınırları
+1. Yayın gününden önce bot dört farklı konu önerir. Üzerinde **1, 2, 3 veya 4** yazan Telegram cevap klavyesi (ya da aynı rakamı normal mesaj olarak yazmak) yalnızca konuyu seçer. Seçilmediyse video üretilmez.
+2. Bot seçilen konuyu tekrar gösterir. Kullanıcı **ÜRET** gönderirse **aynı onay hem üretimi hem YouTube'da planlı yayını kapsar**. Ek bir **Yayınla** sorusu çıkmaz. Uzun video + Shorts mevcut yayın takvimine göre yüklenir/planlanır; mevcut Instagram Reels yolu çalışır.
 
-- Bot mevcut `TELEGRAM_BOT_TOKEN` ve `TELEGRAM_CHAT_ID` kullanır. Chat ID pozitif
-  bir özel sohbet olmalı; yalnız o sohbetin sahibi karar verebilir.
-- Mevcut webhook varsa kaldırılmaz; kurulum hata verip bekler. Aynı botun başka
-  bir getUpdates tüketicisiyle aynı anda çalıştırılmaması gerekir.
-- Kontrol gece dahil 24 saat, yaklaşık her 5 dakikada bir çalışır. GitHub Actions zamanlayıcısı gecikebilir; düğme anlık değildir. Konu seçimi için **1, 2, 3 veya 4** yazılı Telegram cevap klavyesi kullanılır; bu, dönen callback işareti yerine normal mesaj gönderir. İstersen aynı rakamı bota metin olarak da yazabilirsin. Bir seçimden sonra Telegram'da **Seçtin / Üretime başlansın mı?** mesajı gelir; yalnızca **ÜRET** mesajı ikinci onay sayılır. Üretim ikinci onay olmadan başlamaz. Eski inline düğmelerin gecikmeli spinner davranışı görülebilir.
-  GitHub cron gecikebilir; üretim ve kontrol ortak sırayı kullandığından video
-  üretimi sırasında karar işleme birkaç saat gecikebilir.
-- GitHub Actions, Telegram ve Gemini bağlantıları canlı kontrol gerektirir.
-  Çevrimdışı testler servis yetkisini veya gerçek render kalitesini kanıtlamaz.
-- Haftada dört üretim AI kullanımını artırır. Kontrol işi günde en çok 32 hafif çalışma
-  ekler; üretim yalnız sahibin onayından sonra ücretli API kullanır.
-- Haftada dört yayın düzeni süresizdir; `trial_days: 0`. Tercihen ilk hafta sonunda
-  maliyet ve performans birlikte değerlendirilir.
+**ÜRET demeden üretim, yükleme veya harcama başlamaz.** Kanaldaki hedef gün ve saatler geçerli kalır: ÜRET, o anda YouTube'da herkese açık olma sözü değildir; planlı yükleme/yayın iznidir.
 
-## Kalıcılık ve hata davranışı
+Üretim sırasında tutarsızlık, model kotası veya upload hatası olursa otomasyon **ikinci kez kör yükleme yapmaz**. İş güvenle durur ve hata kontrol edilir. Daha önce başlayan eski bir özel ön izleme görevi varsa yalnız onun mevcut eski onay biçimi korunabilir; yeni işler ayrı yayın onayı istemez.
 
-Kararlar, güncelleme konumu ve düzeltme notları herkese açık git ağacına yazılmaz.
-`gd-editorial-state` adlı özel draft release'e yeni, değişmez JSON varlıkları
-olarak eklenir. Ön izleme paketleri de ayrı özel draft release'lerdir. Draft'ları
-**Publish release** ile herkese açmayın. Karar/ön izleme dosyaları otomatik silinmez.
+## Yeni konu çizgisi
 
-Tüm editorial işlemler `otoyt-uretim` grubunda sırayla çalışır. Her iş kimliği ve
-durumu doğrulanır; eski düğme ve çift tıklama yeni üretim/yayın başlatamaz. Masraflı
-işlemden önce durumun kalıcı kaydı zorunludur. Yayın onayından sonra indirilen
-manifest ve tüm videoların SHA-256 özeti ön izlemeyle karşılaştırılır.
+Konu seçiminde öncelik: **somut araştırma izi + akıl almaz ihtimal**. Mu Kıtası efsanesi, yıldız kapısı anlatıları, Hayu Marca kaya yapısı, Antikythera mekanizması, Atlantis, Derinkuyu, Yonaguni ve Piri Reis haritasına yüklenen olağanüstü iddialar gibi konuların farklı yönleri araştırılır.
 
-Hiç başlamamış, kuyrukta iptal olmuş bir iş güvenle tekrar sıraya alınabilir.
-Başlamış üretim/yayın kesilirse otomatik tekrar durur; kısmi yüklemenin ikinci
-kopyası üretilmez. İş kapanabilir veya kayıtlar incelenerek devam ettirilebilir.
+Dört önerinin en az üçü kayıp medeniyetler, efsaneler veya antik teknoloji/astronot iddiaları kategorisinden seçilir. Kaf Dağı gibi yalnız fantastik coğrafyayı anlatan konular önerilmez. Daha önce üretilmiş Deccal/Alkarısı videoları tekrarlanmaz. Yeni konular rakip kanalların metinlerinden değil **özgün senaryo ve kaynak incelemesinden** doğar.
 
-Mevcut yükleme yolu korunur: kanal kimliği kontrolü, altyazılar, oynatma listesi,
-Shorts'un uzun video hedef kaydı ve Instagram kuyruğu. YouTube Studio'daki
-**İlgili video** kilidini bu değişiklik açmaz; kanal doğrulaması yine gereklidir.
+Mu Kıtası'nın tarihsel varlığı kanıtlanmış değildir. Yıldız kapısı bulunduğu iddiası, bir kaya yapısının varlığıyla kanıtlanmış sayılmaz. Belgeselde efsane, metin, fiziksel bulgu ve bilimsel/tarihî açıklama açıkça ayrılır.
 
-## Doğrulama
+İlham veren YouTube formatları ve kaynak değerlendirmesi: [Gölgedefter içerik araştırması](golgedefter_topic_research.md).
 
-`python -m unittest discover -s tests -v`
+## Güvenlik ve çalışma sınırları
 
-Testler ağ, canlı Telegram mesajı, ücretli üretim veya gerçek yayın yapmaz.
-Aktivasyondan sonra önce Telegram kontrol işi çalıştırılarak özel sohbet ve
-webhook uygunluğu görülmeli; ilk gerçek üretim ve yayın kullanıcı düğmelerinden
-ayrı ayrı onaylanmalıdır.
+- `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` ile yalnızca belirtilen özel sohbet sahibi onay verebilir. Başka kullanıcı/sohbet, eski yanlış düğme ve ikinci tıklama yeni üretim başlatamaz.
+- Telegram kararları, iş durumu ve notlar herkese açık git ağacına yazılmaz; GitHub'ın özel draft release kayıtlarında saklanır.
+- Bot mesajları GitHub Actions zamanlayıcısı tarafından 24 saat yaklaşık her 5 dakikada bir kontrol edilir; bu gerçek zamanlı webhook değildir, GitHub gecikmeleri olabilir.
+- ÜRET onayı yeni durum kaydında `publish_authorized=true` ile kalıcı tutulur. Eskiden verilmiş ve **bu açık izni taşımayan** yalnızca üretim onayı yeni otomatik yayına dönüştürülemez.
+- Üretim başladıktan sonra yayın tamamlanmadan zaman aşımı/hata yaşanırsa yeniden yükleme için otomatik tekrar yoktur.
+- Mevcut kanal-kimlik doğrulaması, altyazı, yayın saatleri, Shorts hedef kayıtları ve Instagram sırası korunur.
+- Shorts'taki gerçek **İlgili video** ayarı bu otomasyonla YouTube Studio'ya yazılamaz. Hazırlanan Studio eşleştirme listesi ayrıdır.
+- Google Drive kurtarma PR #5 **ertelenmiştir**. Yeni ücretli API, Drive bağlantısı veya ek kullanıcı hesabı istenmez.
+
+## Testler
+
+GitHub Actions `Kod kontrolü` iki kanalın import/derleme testlerini, tüm ağsız regresyon testlerini ve kayıt denetimini çalıştırır. Test başarıları gerçek üretim/yayını kanıtlamaz; ilk gerçek onaylı üretimden sonra YouTube ve Telegram durumu ayrıca doğrulanmalıdır.

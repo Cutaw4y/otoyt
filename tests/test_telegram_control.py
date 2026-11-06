@@ -38,6 +38,7 @@ class OwnerDecisions(unittest.TestCase):
                                 "from": {"id": OWNER}, "text": "ÜRET"}}
         self.assertEqual("approved", tc.transition(s, approved, OWNER))
         self.assertEqual("B", s["job"]["idea"]["title"])
+        self.assertTrue(s["job"]["publish_authorized"])
 
     def test_reply_keyboard_does_not_honor_wrong_sender_or_invalid_selection(self):
         for from_id, chat_id, msg in [(456, OWNER, "1"), (OWNER, 456, "1"),
@@ -69,15 +70,16 @@ class OwnerDecisions(unittest.TestCase):
             self.assertIn("text_choices", send.call_args.kwargs)
             self.assertEqual("reply-keyboard-v2:abc:topic:", s["job"]["delivered"])
 
-    def test_two_distinct_approvals_required(self):
+    def test_explicit_uret_authorizes_both_production_and_scheduled_publication(self):
         s = state()
         self.assertIsNone(tc.transition(s, click("produce-0"), OWNER))
         self.assertEqual("confirm", tc.transition(s, click("choose-0"), OWNER))
         self.assertEqual("confirm", s["job"]["status"])
+        self.assertNotIn("publish_authorized", s["job"])
         self.assertEqual("approved", tc.transition(s, click("produce-0"), OWNER))
+        self.assertTrue(s["job"]["publish_authorized"])
         self.assertIsNone(tc.transition(s, click("publish"), OWNER))
-        s["job"]["status"] = "review"
-        self.assertEqual("publish_approved", tc.transition(s, click("publish"), OWNER))
+        self.assertEqual("approved", s["job"]["status"])
 
     def test_wrong_user_chat_and_old_job_do_nothing(self):
         for update in [click("choose-0", owner=456), click("choose-0", chat=456),
@@ -207,11 +209,20 @@ class DurableGuards(unittest.TestCase):
                 post.assert_not_called()
 
     def test_cannot_dispatch_until_state_is_durable(self):
+        s = state("approved")
+        s["job"]["publish_authorized"] = True
         with mock.patch.object(tc, "persist", side_effect=RuntimeError("push failed")), \
              mock.patch.object(tc.requests, "post") as post:
             with self.assertRaises(RuntimeError):
-                tc.dispatch(state("approved"))
+                tc.dispatch(s)
             post.assert_not_called()
+
+    def test_no_legacy_approval_can_expand_into_auto_publish(self):
+        s = state("approved")  # Approval made before the one-step contract.
+        with mock.patch.object(tc.requests, "post") as post, mock.patch.object(tc, "persist"):
+            tc.dispatch(s)
+            post.assert_not_called()
+            self.assertEqual("approved", s["job"]["status"])
 
     def test_claim_requires_exact_channel_job_and_phase(self):
         cfg = {"data_dir": "data/golgedefter", "channel_id": tc.CHANNEL_ID,
@@ -220,10 +231,56 @@ class DurableGuards(unittest.TestCase):
         with mock.patch.object(tc, "load", return_value=s), mock.patch.object(tc, "persist"):
             self.assertIsNone(tc.claim(cfg, "old", "produce"))
             self.assertIsNone(tc.claim(cfg, "abc", "publish"))
+            self.assertIsNone(tc.claim(cfg, "abc", "produce"))  # Pre-change approvals cannot upload.
+            s["job"]["publish_authorized"] = True
             self.assertEqual("producing", tc.claim(cfg, "abc", "produce")["status"])
             self.assertIsNone(tc.claim(cfg, "abc", "produce"))
         with self.assertRaises(RuntimeError):
             tc.claim({**cfg, "channel_id": "other"}, "abc", "produce")
+
+    def test_complete_upload_requires_matching_authorized_producing_job(self):
+        job = state("producing")["job"]
+        with mock.patch.object(tc, "load", return_value={"job": job}), \
+             mock.patch.object(tc, "persist") as persist, \
+             mock.patch.object(tc, "send") as send:
+            with self.assertRaisesRegex(RuntimeError, "approval mismatch"):
+                tc.complete_auto_publish(job)
+            persist.assert_not_called()
+            send.assert_not_called()
+            job["publish_authorized"] = True
+            tc.complete_auto_publish(job)
+            self.assertEqual("done", job["status"])
+            self.assertTrue(job["completed_at"])
+            persist.assert_called_once()
+            send.assert_called_once()
+
+    def test_telegram_notification_failure_after_upload_does_not_unpublish(self):
+        job = state("producing")["job"]
+        job["publish_authorized"] = True
+        with mock.patch.object(tc, "load", return_value={"job": job}), \
+             mock.patch.object(tc, "persist") as persist, \
+             mock.patch.object(tc, "send", side_effect=RuntimeError("Telegram unavailable")):
+            tc.complete_auto_publish(job)
+        self.assertEqual("done", job["status"])
+        persist.assert_called_once()
+
+    def test_topic_generation_uses_researched_mystery_angles_not_copied_titles(self):
+        import ai
+        cfg = {"channel_name": "Gölgedefter", "channel_brief": "Research mysteries",
+               "idea_rules": "Distinguish theories from facts", "text_models": ["mock"],
+               "content_pillars": ["Lost civilisations", "Supernatural"],
+               "telegram_editorial": {"focus_pillars": [0], "min_focus_topics": 3,
+                                      "topic_inspiration": ["Mu Kıtası", "Yıldız kapıları"],
+                                      "inspiration_method": ["The Why Files: evidence vs claims"]}}
+        ideas = [{"title": f"Original {i}", "angle": "A verified site and a disputed claim",
+                  "why": "Interesting historical mystery", "pillar": "Lost civilisations",
+                  "search_query": "ancient mystery"} for i in range(4)]
+        with mock.patch.object(ai, "gemini_json", return_value={"ideas": ideas}) as gen:
+            self.assertEqual(4, len(tc.generate_ideas(cfg, [])))
+        arguments = " ".join(str(v) for v in gen.call_args.args)
+        self.assertIn("Mu Kıtası", arguments)
+        self.assertIn("The Why Files", arguments)
+        self.assertIn("never copy", arguments)
 
     def test_no_replacement_topics_while_review_is_pending(self):
         with mock.patch.object(tc, "generate_ideas") as generate:
@@ -263,6 +320,31 @@ class DurableGuards(unittest.TestCase):
 
 
 class PipelineIntegration(unittest.TestCase):
+    def test_auto_publish_happens_once_after_uret_without_review_phase(self):
+        import pipeline
+        job = {"id": "abc", "publish_authorized": True, "target_date": "2026-11-07"}
+        with mock.patch.object(pipeline, "publish_rendered") as upload, \
+             mock.patch.object(tc, "complete_auto_publish") as complete, \
+             mock.patch.object(tc, "stage") as stage:
+            self.assertTrue(pipeline.auto_publish_editorial(
+                job, {"title": "Mu Kıtası"}, {"pillar": "Lost"}, [],
+                None, None, None, None, None, None, Path("long.mp4"),
+                Path("."), [], mock.Mock()))
+        upload.assert_called_once()
+        complete.assert_called_once_with(job)
+        stage.assert_not_called()
+
+    def test_no_auto_publish_without_uret_authorization(self):
+        import pipeline
+        with mock.patch.object(pipeline, "publish_rendered") as upload, \
+             mock.patch.object(tc, "complete_auto_publish") as complete:
+            with self.assertRaisesRegex(RuntimeError, "yayın yetkisi"):
+                pipeline.auto_publish_editorial(
+                    {"id": "abc"}, {}, {}, [], None, None, None, None,
+                    None, None, Path("long.mp4"), Path("."), [], mock.Mock())
+        upload.assert_not_called()
+        complete.assert_not_called()
+
     def test_approved_bundle_uses_existing_long_short_and_reel_path(self):
         import pipeline
         with tempfile.TemporaryDirectory() as tmp, ExitStack() as stack:
