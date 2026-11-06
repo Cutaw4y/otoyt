@@ -2987,13 +2987,21 @@ def push_now(path, msg):
     try:
         import subprocess
         run = lambda *a: subprocess.run(["git", *a], cwd=ROOT, capture_output=True, text=True, timeout=60)
+        import json_guard
+        # Fail closed: an autostash conflict must never be pushed as JSON.
+        json_guard.validate_repo(ROOT)
         run("config", "user.name", "otoyt-bot")
         run("config", "user.email", "otoyt@users.noreply.github.com")
-        run("add", str(path))
+        if run("add", str(path)).returncode != 0:
+            return
         if run("commit", "-m", f"otoyt: {msg}").returncode != 0:
             return
         for _ in range(3):
-            run("pull", "--rebase", "--autostash", "-X", "theirs", "-q")  # çalışma klasörü kirli olsa da
+            pulled = run("pull", "--rebase", "--autostash", "-q")
+            if pulled.returncode != 0:
+                log("Git eşzamanlı kayıt çakışması; belirsiz geçmiş gönderilmeyecek")
+                return
+            json_guard.validate_repo(ROOT)
             if run("push", "-q").returncode == 0:
                 return
     except Exception as e:
