@@ -247,7 +247,7 @@ min_length_ratio: 0.85         # bunun altındaysa senaryo genişletilir
 max_expand_rounds: 2
 min_diagram_ratio: 0.4         # sahnelerin en az %40'ı AI diyagram olsun
 min_quality_score: 7           # 5 editör kriterinin hepsi en az bu puan (hedef)
-min_quality_floor: 0           # 0 = hedef tutmasa da en iyi senaryo HER ZAMAN yayınlanır (videosuz gün olmaz)
+min_quality_floor: 5            # 06.11 (Claude+ChatGPT): editör bir başlıkta 5'in altı verirse yayınlanmaz, yeni konu denenir
 max_topic_attempts: 2          # fiyat/performans: en fazla 2 konu denenir, en iyi senaryo yayınlanır
 max_rewrites: 2
 # ABD izleyicisi: önce ABD birimleri + herkesin gözünde canlanan karşılaştırma

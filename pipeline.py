@@ -1651,7 +1651,32 @@ def make_thumbnails(script, workdir, ledger):
     except Exception as e:
         log(f"Thumbnail hakemi çalışmadı, ilki seçildi: {e}")
         order = list(range(len(cands)))
+    global THUMB_ALL
+    THUMB_ALL = [cands[i] for i in order]
     return cands[order[0]], (cands[order[1]] if len(order) > 1 else None)
+
+
+THUMB_ALL = []  # bu videonun tüm küçük resim adayları (iyiden kötüye) — Studio A/B testi için Telegram'a gider
+
+
+def send_thumb_options(vid, title):
+    """3 küçük resim adayını tek mesajda Telegram'a yollar: Studio'da 'Test et ve karşılaştır' ile yüklenmek üzere."""
+    tok, chat = os.getenv("TELEGRAM_BOT_TOKEN"), os.getenv("TELEGRAM_CHAT_ID")
+    files = [f for f in THUMB_ALL if f and Path(f).exists()][:3]
+    if DRY_RUN or not (tok and chat) or len(files) < 2:
+        return
+    cap = (f"{CFG.get('notify_prefix', '')} 🖼 Küçük resim testi (isteğe bağlı, 2 dk): {title}\n"
+           f"Studio → İçerik → videoya tıkla → Küçük resim → 'Test et ve karşılaştır' → bu {len(files)} resmi yükle → "
+           "'İzlenme süresine göre' seç → Kaydet. YouTube kazananı kendisi seçer.\n"
+           f"https://studio.youtube.com/video/{vid}/edit").strip()
+    try:
+        media_ = [{"type": "photo", "media": f"attach://t{i}", **({"caption": cap[:1000]} if i == 0 else {})}
+                  for i in range(len(files))]
+        handles = {f"t{i}": open(f, "rb") for i, f in enumerate(files)}
+        requests.post(f"https://api.telegram.org/bot{tok}/sendMediaGroup",
+                      data={"chat_id": chat, "media": json.dumps(media_)}, files=handles, timeout=60)
+    except Exception as e:
+        log(f"Küçük resim seçenekleri Telegram'a gönderilemedi: {str(e)[:150]}")
 
 
 THUMB_ALT = DATA / "thumb_alt"
@@ -3387,6 +3412,7 @@ def publish_rendered(script, idea, shorts, thumb, thumb_alt, en_srt, tr_srt,
     post_reels(script, idea, shorts, history, parent=vid)
     for f in OUT.glob("*"):
         f.unlink()
+    send_thumb_options(vid, script["title"])
     log(f"Bitti: https://youtu.be/{vid}")
 
 
