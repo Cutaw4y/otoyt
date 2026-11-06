@@ -171,6 +171,10 @@ class DurableGuards(unittest.TestCase):
     def test_telegram_polling_runs_around_the_clock(self):
         workflow = Path(__file__).resolve().parents[1] / ".github/workflows/telegram_gd.yml"
         text = workflow.read_text(encoding="utf-8")
+        import yaml
+        cfg = yaml.safe_load((workflow.parents[2] / "channels/golgedefter.yaml").read_text(encoding="utf-8"))
+        if not cfg.get("telegram_editorial", {}).get("enabled"):
+            self.skipTest("Telegram onayı kapalı: Gölgedefter tamamen otomatik, yoklama zamanlanmıyor")
         self.assertIn('3,8,13,18,23,28,33,38,43,48,53,58 * * * *', text)
         self.assertNotIn('17,47 5-20 * * *', text)
 

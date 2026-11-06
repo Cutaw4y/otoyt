@@ -2,6 +2,10 @@ name: OtoYT (Gölgedefter)
 run-name: "gd-${{ inputs.editorial_job }}-${{ inputs.editorial_action }}"
 
 on:
+  schedule:
+    - cron: "41 5 * * 0,2,5,6"   # Sal/Cuma/Cmt/Paz 05:41 UTC (08:41 TR) → video ~12:00 hazır (yayın 19:00, hafta sonu 16:00)
+    - cron: "13 6 * * 0,2,5,6"   # yedek: GitHub zamanlayıcısı bazen atlıyor/geciktiriyor (bugün video çıktıysa 1 dk'da kapanır)
+    - cron: "47 6 * * 0,2,5,6"   # ikinci yedek
   workflow_dispatch:            # "Run workflow" butonu = senin "Çalıştır" tuşun
     inputs:
       editorial_job:
@@ -43,7 +47,12 @@ jobs:
       - uses: actions/checkout@v4
         with: {ref: main}   # sırada bekleyen iş de en güncel kaydı görsün
       - run: pip install -q requests pyyaml
+      - name: Bugünün videosu zaten çıktı mı (çıktıysa 1 dk'da kapan)
+        if: github.event_name == 'schedule'
+        run: |
+          python3 -c "import json,datetime,sys; d=datetime.datetime.utcnow().date().isoformat(); h=json.load(open('data/golgedefter/history.json')); sys.exit(0 if any(x.get('type','long')=='long' and str(x.get('date','')).startswith(d) for x in h) else 1)" && echo "SKIP=1" >> $GITHUB_ENV && echo "Bugünün videosu zaten çıktı, atlanıyor" || true
       - name: Telegram işi var mı
+        if: inputs.editorial_job != ''
         env:
           GITHUB_TOKEN: ${{ github.token }}
           EDITORIAL_JOB: ${{ inputs.editorial_job }}

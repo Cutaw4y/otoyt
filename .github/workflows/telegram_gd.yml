@@ -3,8 +3,6 @@ on:
   push:
     branches: [main]
     paths: [".github/workflows/telegram_gd.yml", "telegram_control.py"]  # Bot değişince bekleyen seçimleri kontrol et
-  schedule:
-    - cron: "3,8,13,18,23,28,33,38,43,48,53,58 * * * *"  # Her 5 dk, 24 saat; Actions gecikebilir
   workflow_dispatch:
     inputs:
       offer_now:

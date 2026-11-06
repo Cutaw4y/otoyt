@@ -20,7 +20,7 @@ TR = timezone(timedelta(hours=3))
 # kanal → (iş akışı, geçmiş dosyası, video günleri (TR, 0=Pzt), en erken müdahale saati (TR), ad)
 CHANNELS = [
     ("otoyt.yml", ROOT / "history.json", {0, 2, 3}, 8, "Beyond Qaf"),
-    ("otoyt_tr.yml", ROOT / "data/golgedefter/history.json", {1, 4, 5, 6}, 12, "Gölgedefter"),
+    ("otoyt_tr.yml", ROOT / "data/golgedefter/history.json", {1, 4, 5, 6}, 10, "Gölgedefter"),
 ]
 # bu saate (TR) kadar video çıkmadıysa Furkan'a Telegram'dan haber ver
 ALARM_H = {"Beyond Qaf": 17, "Gölgedefter": 17}
