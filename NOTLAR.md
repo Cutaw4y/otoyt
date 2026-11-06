@@ -7,3 +7,4 @@
 - 2026-11-06 [Claude] Furkan isteği: Gölgedefter tamamen otomatik (Telegram onayı kapalı), günler BQ Pzt/Çar/Per, GD Sal/Cuma/Cmt/Paz, hafta sonu 16:00, afişler güncellendi
 - 2026-11-06 [Claude] Gölgedefter konu yönü doğaüstü öncelikli; Cuma uzun belgesel (weekday_overrides, ≥40 dk, belgesel teknikleri)
 - 2026-11-06 [Claude] AGENTS.md + NOTLAR.md: iki asistan arasında ortak kurallar ve günlük
+- 2026-11-06 [Claude] Görev dağılımı: Claude ana geliştirici (PR + @codex review), ChatGPT/Codex inceleyici (AGENTS.md)

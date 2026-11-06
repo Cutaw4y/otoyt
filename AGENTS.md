@@ -13,6 +13,13 @@ Birbirimizle doğrudan konuşamadığımız için köprü bu dosya ve `NOTLAR.md
 5. Diğer asistanın kararını geri almadan önce `NOTLAR.md`'ye gerekçesini yaz; kanal sahibinin (Furkan)
    açık isteği her şeyden önce gelir.
 
+## Görev dağılımı (Furkan'ın kararı, 06.11.2026)
+- **Claude = ana geliştirici.** Büyük değişiklikleri dal + PR olarak açar, PR'a `@codex review` yazar.
+- **ChatGPT/Codex = ikinci göz.** Claude'un PR'larını inceler; hata, risk ve eksikleri PR yorumu olarak yazar.
+  Kendisi değişiklik yapacaksa da main'e doğrudan değil, PR açarak yapar (yalnız küçük metin/yorum düzeltmeleri hariç).
+- Görüş ayrılığında iki taraf gerekçesini PR'a yazar; son karar Furkan'ındır.
+- Acil üretim hatası (video bugün çıkmayacaksa) doğrudan main'e düzeltilebilir; NOTLAR.md'ye `ACİL` diye yazılır.
+
 ## Bozulmaması gerekenler (kanal sahibinin kararları, 06.11.2026)
 - **Tamamen otomatik.** Gölgedefter'de Telegram onayı KAPALI (`telegram_editorial.enabled: false`).
   Konuyu sistem seçer; Furkan'dan onay beklenmez.
