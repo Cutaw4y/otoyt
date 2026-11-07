@@ -2260,7 +2260,8 @@ def post_due_comments():
 def make_manual_package(script, idea, shorts, thumb, main_srt, sub_srt, history, ledger):
     """Elle yükleme paketi: anlamlı adlı dosyalar + Türkçe yükleme rehberi (başlık, açıklama, etiketler...)."""
     for f in OUT.glob("*"):
-        f.unlink()
+        if f.is_file():
+            f.unlink()
     lc = CFG.get("language_code", "en")
     sub = CFG.get("subtitle_translation") or {}
     base = slug(script.get("core_keyword") or script["title"])
