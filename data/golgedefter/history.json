@@ -286,5 +286,29 @@
     "pillar": "Kayıp medeniyetler ve antik gizemler (Göbeklitepe, Sümerler, Nazca, Atlantis efsanesi, Mohenjo-daro)",
     "video_id": "NBgHHTfHUFI",
     "series_id": null
+  },
+  {
+    "date": "2026-11-07T01:52",
+    "type": "short",
+    "title": "Babil Kuyusundaki İki Melek",
+    "pillar": "Kayıp medeniyetler ve antik gizemler (Göbeklitepe, Sümerler, Nazca, Atlantis efsanesi, Mohenjo-daro)",
+    "video_id": "WT6FUTofFh8",
+    "parent": "NBgHHTfHUFI"
+  },
+  {
+    "date": "2026-11-07T01:52",
+    "type": "short",
+    "title": "Meleklerin Büyük İmtihanı",
+    "pillar": "Kayıp medeniyetler ve antik gizemler (Göbeklitepe, Sümerler, Nazca, Atlantis efsanesi, Mohenjo-daro)",
+    "video_id": "zeOr8KBatm0",
+    "parent": "NBgHHTfHUFI"
+  },
+  {
+    "date": "2026-11-07T01:52",
+    "type": "short",
+    "title": "İbn Kesir'in Büyük Uyarısı: İsrailiyat",
+    "pillar": "Kayıp medeniyetler ve antik gizemler (Göbeklitepe, Sümerler, Nazca, Atlantis efsanesi, Mohenjo-daro)",
+    "video_id": "tY_MmlB3lUA",
+    "parent": "NBgHHTfHUFI"
   }
 ]
