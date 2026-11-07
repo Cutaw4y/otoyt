@@ -1,0 +1,301 @@
+[00:09:59] Başladı (test modu: False, yayın: scheduled)
+[00:10:00] Ücretli Gemini anahtarı kullanılıyor
+[00:10:01] Kanal doğrulandı: GölgeDefter
+[00:10:02] Instagram anahtarı ve hesap kimliği doğrulandı: @golge.defter
+[00:10:03] Analitik: 3 video ölçüldü, sütun puanları: {'Anadolu ve dünya efsaneleri, mitolojik varlıklar, halk inançları': 3.2450926729545455, 'Açıklanamayan gerçek olaylar ve kayıplar (Dyatlov, Mary Celeste, Roanoke, Tunguska)': 1.5464026614276694, 'İslam tarihi ve kutsal kıssalar (Ashab-ı Kehf, Zülkarneyn, İrem ve Ad kavmi, Semud, Nuh tufanı)': 4.6352147587102985}
+[00:10:05] Konu (1): Babil'deki Lanetli Kuyu: Kıyamete Kadar İçinde Asılı Duran İki Melek — Harut ve Marut (Bakara 102; Taberî, İbn Kesir rivayetleri ve İsrailiyat eleştirisi; gerçek Babil harabeleri, Irak). Çok dramatik ve sinematik sunum: rivayetleri canlı sahnelerle, gerilimle anlat ama rivayet/zayıf olduğunu belirt; uydurma kaynak yok. Küçük resim fikri: İÇİNDE İKİ MELEK VAR  [Kayıp medeniyetler ve antik gizemler (Göbeklitepe, Sümerler, Nazca, Atlantis efsanesi, Mohenjo-daro)]
+[00:11:48] Senaryo yazıldı: 41 sahne, 1914 kelime
+[00:12:49] Anlatım sadeleştirildi (1914 → 1711 kelime)
+[00:13:35] Doğrulama kaynağı: Google araması
+[00:13:35] Doğrulama turu 1: 14 iddia, 1 yanlış, 0 belirsiz
+[00:17:15] Doğrulama kaynağı: Google araması
+[00:17:15] Doğrulama turu 2: 15 iddia, 0 yanlış, 1 belirsiz
+[00:18:57] Doğrulama kaynağı: Google araması
+[00:18:57] Doğrulama turu 3: 15 iddia, 0 yanlış, 0 belirsiz
+[00:18:58] En çok arananlar: harut ve marut hikayesi | harut ve marut | harut ve marut cübbeli | harut ve marut hayalhanem | harut ve marut mağarası | harut ve marut nerede | harut ve marut mehmet okuyan | harut ve marut kimdir
+[00:19:16] Başlık seçildi: Harut ve Marut Kuyusu: İki Melek Babil'de Zincirli mi?  (önceki: Babil'deki Lanetli Kuyu: Harut ve Marut Kuyusu Gerçeği) — Kanal sahibinin en sevdiği şablonu (somut yer + açıklanamayan iddia + cevapsız soru) birebir yansıtıyor. Kanalın 'Deccal Bir Adada Zincirli mi?' başar
+[00:19:18] Editör (min 6, ort 7.4): {'originality': 7, 'hook': 7, 'clarity': 8, 'simplicity': 6, 'flow': 8, 'value_density': 7, 'audience_fit': 9, 'problems': ["Quote: 'Bu anlatıların İsrailiyat olduğu ortaya çıktı.' -> Fix: Bu anlatıların İsrailiyat, yani eski Yahudi efsanelerinden İslam kültürüne karışmış hikâyeler olduğu ortaya çıktı.", "Quote: 'Ancak modern arkeologlar ve bulunan antik Weidner tabletleri gerçeği ortaya çıkardı;' -> Fix: Ancak modern arkeologlar ve eski yazılı tabletler gerçeği ortaya çıkardı;"], 'problems_tr': "Metinde geçen 'İsrailiyat' kavramı ilk başta yeterince açıklanmadan kullanılmış ve Weidner tabletleri gibi özel terimler akışı hafifçe zorlaştırmıştır."}
+[00:20:52] Anlatım sadeleştirildi (1616 → 1616 kelime)
+[00:20:52] Senaryo kısa (1616/2200 kelime) → genişletiliyor (1)
+[00:21:58] Senaryo kısa (1836/2200 kelime) → genişletiliyor (2)
+[00:22:57] Senaryo uzunluğu: 2147 kelime
+[00:23:36] Doğrulama kaynağı: Google araması
+[00:23:36] Doğrulama turu 1: 15 iddia, 1 yanlış, 0 belirsiz
+[00:25:25] Doğrulama kaynağı: Google araması
+[00:25:25] Doğrulama turu 2: 14 iddia, 0 yanlış, 0 belirsiz
+[00:25:27] Editör (min 6, ort 7.4): {'originality': 7, 'hook': 8, 'clarity': 7, 'simplicity': 6, 'flow': 7, 'value_density': 8, 'audience_fit': 9, 'problems': ["Quote: 'Bakara Suresi yüz ikinci ayet, Babil'de Harut ve Marut isimli iki meleğe indirilen bilgiden açıkça söz eder.' Fix: Kutsal kitabımız olan Kur'an-ı Kerim'in Bakara Suresi'nin 102. ayetinde, Babil'de Harut ve Marut adlı iki meleğe verilen bilgilerden açıkça bahsedilir.", "Quote: 'İsrailiyat, yani eski Yahudi efsanelerinden İslam kültürüne karışmış hikâyeler olduğu ortaya çıktı.' Fix: Bu hikâyelerin, eski Yahudi efsanelerinden (yani İsrailiyat kaynaklarından) zamanla İslam kültürüne geçmiş hikâyeler olduğu anlaşıldı.", "Quote: 'Babil'in Güney Sarayı'nın kuzeydoğu köşesinde yer alan bu kuyular, üç adet dikey bacadan oluşan eşsiz bir taş mühendisliği harikasıydı.' Fix: Babil'in sarayındaki bu kuyular, alt alta inen üç taştan bacayla kurulmuş çok akıllıca bir su sistemiydi.", "Quote: 'Irak sıcağında çalışan jeologlar, Babil toprağının alüvyonlu yani yumuşak nehir kiliyle kaplı olduğunu belgelerle kanıtladı.' Fix: Uzmanlar, Babil'in toprağının nehir kenarı olduğu için yumuşak balçıkla kaplı olduğunu kanıtladı.", "Quote: 'Kelimeyi zorlayarak kral anlamına çekmek, büyük dil bilginleri tarafından yetersiz bir yorum sayılmıştır.' Fix: Bu kelimeyi kral olarak çevirmek dil uzmanlarına göre doğru değildir."], 'problems_tr': "Metinde geçen 'İsrailiyat', 'alüvyonlu' gibi bazı akademik veya ağır kelimeler 12 yaşındaki bir çocuğun ilk dinlemede anlamakta zorlanabileceği şekildedir ve ayet referansları daha yalın ifade edilebilir."}
+[00:25:27] Konu kalite barajını geçemedi: Babil'deki Lanetli Kuyu: Kıyamete Kadar İçinde Asılı Duran İki Melek — Harut ve Marut (Bakara 102; Taberî, İbn Kesir rivayetleri ve İsrailiyat eleştirisi; gerçek Babil harabeleri, Irak). Çok dramatik ve sinematik sunum: rivayetleri canlı sahnelerle, gerilimle anlat ama rivayet/zayıf olduğunu belirt; uydurma kaynak yok. Küçük resim fikri: İÇİNDE İKİ MELEK VAR
+[00:25:27] Konu (2): Babil'deki Lanetli Kuyu: Kıyamete Kadar İçinde Asılı Duran İki Melek — Harut ve Marut (Bakara 102; Taberî, İbn Kesir rivayetleri ve İsrailiyat eleştirisi; gerçek Babil harabeleri, Irak). Çok dramatik ve sinematik sunum: rivayetleri canlı sahnelerle, gerilimle anlat ama rivayet/zayıf olduğunu belirt; uydurma kaynak yok. Küçük resim fikri: İÇİNDE İKİ MELEK VAR  [Kayıp medeniyetler ve antik gizemler (Göbeklitepe, Sümerler, Nazca, Atlantis efsanesi, Mohenjo-daro)]
+[00:27:16] Senaryo yazıldı: 43 sahne, 1948 kelime
+[00:28:45] Sadeleştirme sahne yapısını bozdu → eski metin kalıyor
+[00:29:16] Doğrulama kaynağı: Google araması
+[00:29:16] Doğrulama turu 1: 14 iddia, 0 yanlış, 0 belirsiz
+[00:29:16] En çok arananlar: harut ve marut hikayesi | harut ve marut | harut ve marut cübbeli | harut ve marut hayalhanem | harut ve marut mağarası | harut ve marut nerede | harut ve marut mehmet okuyan | harut ve marut kimdir
+[00:29:27] Başlık seçildi: Harut ve Marut Kuyusu: İki Melek Babil'de Neden Zincirlendi?  (önceki: Harut ve Marut Kuyusu: Babil'deki Lanetli Melekler) — Tam olarak kanal sahibinin formülüne uyar: Somut arama terimiyle başlar (Harut ve Marut Kuyusu), zihinde anında canlanan ürpertici bir detay sunar (ik
+[00:29:29] Editör (min 6, ort 7.9): {'originality': 7, 'hook': 8, 'clarity': 8, 'simplicity': 6, 'flow': 9, 'value_density': 8, 'audience_fit': 9, 'problems': ["Sentence: 'Hicri üçüncü yüzyılda yaşayan büyük tarihçi ve tefsirci İbn Cerîr et-Taberî...' -> 'Tefsirci' (Quran commentator) term needs a brief plain explanation for younger or non-expert listeners.", "Sentence: 'Bu ifade sıradan bir aile kavgası değildi; bir toplumun en kutsal bağını, sevgi ve sadakati kökünden kurutan metafizik bir yıkım aracıydı.' -> 'Metafizik' is too abstract for a 12-year-old; should be replaced or explained simply.", "Sentence: 'Kadın bu ismi telaffuz ederek göğe yükseldi; ancak ilahi bir ceza olarak gökyüzünde parlak bir gök cismine, yani Venüs yıldızına dönüştürüldü.' -> 'İsm-i azam' mentioned earlier and 'Venüs yıldızına dönüştürüldü' could use a slightly simpler framing since Venüs is a planet, not a star.", "Sentence: 'İbn Kesir ve İmam Kurtubî gibi büyük müfessirler bu soruya tek bir kelimeyle cevap verir: İsrailiyat.' -> 'Müfessir' and 'İsrailiyat' are specialized religious studies terms used without immediate simple definitions.", "Sentence: 'Birinci Hanok Kitabı olarak bilinen ve milattan önce yazılmış Yahudi apokrif metinlerinde...' -> 'Apokrif' is a complex literary/religious term left unexplained."], 'problems_tr': "Metinde geçen 'tefsirci', 'metafizik', 'müfessir', 'İsrailiyat' ve 'apokrif' gibi bazı özel terimler 12 yaşındaki bir dinleyicinin ilk defa duyduğunda kolayca anlayamayacağı kadar soyut bırakılmıştır; bu kelimelerin daha sade bir dille açıklanması gerekirdi."}
+[00:31:30] Anlatım sadeleştirildi (1950 → 1873 kelime)
+[00:31:59] Doğrulama kaynağı: Google araması
+[00:31:59] Doğrulama turu 1: 15 iddia, 0 yanlış, 0 belirsiz
+[00:32:00] Editör (min 6, ort 7.7): {'originality': 8, 'hook': 8, 'clarity': 7, 'simplicity': 6, 'flow': 8, 'value_density': 8, 'audience_fit': 9, 'problems': ["Quote: 'Zigguratlar, yani çok katlı piramid benzeri kule tapınaklar, büyücülerin gök kubbeyi izlediği birer rasathane gibiydi.' Fix: 'Ziggurat yani dev piramit tapınaklar, gökyüzünü izleme yeriydi.'", "Quote: 'Birinci Hanok Kitabı olarak bilinen ve kutsal kabul edilmeyen apokrif, yani dinen onaylanmamış eski Yahudi metinlerinde...' Fix: 'Eski ve dinen kabul görmeyen Yahudi metinlerinde...'"], 'problems_tr_tr': "Metinde geçen 'ziggurat' ve 'apokrif' gibi bazı yabancı ve akademik terimler kısa açıklamalarına rağmen 12 yaşındaki bir dinleyicinin akışını biraz zorlaştırabilir; bu terimler daha günlük kelimelerle basitleştirilebilir."}
+[00:32:00] Konu kalite barajını geçemedi: Babil'deki Lanetli Kuyu: Kıyamete Kadar İçinde Asılı Duran İki Melek — Harut ve Marut (Bakara 102; Taberî, İbn Kesir rivayetleri ve İsrailiyat eleştirisi; gerçek Babil harabeleri, Irak). Çok dramatik ve sinematik sunum: rivayetleri canlı sahnelerle, gerilimle anlat ama rivayet/zayıf olduğunu belirt; uydurma kaynak yok. Küçük resim fikri: İÇİNDE İKİ MELEK VAR
+[00:32:00] Baraj geçilemedi; en iyi senaryo kullanılıyor (min 6, ort 7.9)
+[00:32:04] Seslendirme başlıyor (Gemini Charon)...
+[00:43:23] Seslendirme: 1267 sn
+[00:43:48] Thumbnail sıralaması: [1, 2, 3] - Thumbnail #1 is the strongest because it immediately reveals the chained figures inside the well, creating a powerful visual hook that complements the title without repeating it, and features bold, easily readable text at phone size. #2 is decent with the torch and well setup, but the human figure adds unnecessary complexity and visual clutter. #3 focuses too heavily on abstract chains and fire, losing the clear focal subject required for a quick 0.5s scroll stop.
+[00:46:33] Cümle cümle görsel planı: 42/43 sahne
+[00:46:33] Sahne 1 (diagram, 55.2 sn, 10 çekim, cümleye bağlı)
+[00:46:43]    ilgisiz görüntü elendi: coastal ruins on green cliffside landscape
+[00:46:52]    ilgisiz görüntü elendi: Interior of a modern vandalized building
+[00:46:57]    ilgisiz görüntü elendi: close-up of a bicycle wheel rotating
+[00:47:13]    ilgisiz görüntü elendi: mountain peak with an animal standing
+[00:47:17]    ilgisiz görüntü elendi: washing machine washing clothes with soapy water
+[00:47:26]    ilgisiz görüntü elendi: Hikers walking along a canyon trail
+[00:47:30]    ilgisiz görüntü elendi: Earth globe from space with city lights
+[00:48:02]    ilgisiz görüntü elendi: aerial view of ocean waves breaking
+[00:48:13]    ilgisiz görüntü elendi: waves gently washing onto a sandy beach
+[00:48:15] Sahne 2 (diagram, 41.6 sn, 9 çekim, cümleye bağlı)
+[00:48:42]    ilgisiz görüntü elendi: painted ancient stone kiva walls and ceiling
+[00:48:57]    ilgisiz görüntü elendi: lush green river and small waterfall
+[00:49:23]    ilgisiz görüntü elendi: wikipedia promotional clips with faces and text
+[00:49:29]    ilgisiz görüntü elendi: aerial view of dry barren badlands
+[00:49:33]    ilgisiz görüntü elendi: aerial view of a desert highway sunset
+[00:49:39]    ilgisiz görüntü elendi: aerial view of colonial city square
+[00:50:01]    ilgisiz görüntü elendi: blue digital static tv noise screen
+[00:50:10]    ilgisiz görüntü elendi: dilapidated bridge structure over water
+[00:50:25]    ilgisiz görüntü elendi: view from space spacecraft exterior footage
+[00:50:29]    ilgisiz görüntü elendi: Narrow stone alleyway between old buildings
+[00:50:41] Sahne 3 (footage, 38.1 sn, 7 çekim, cümleye bağlı)
+[00:51:04]    ilgisiz görüntü elendi: animals chained in a courtyard setting
+[00:51:07]    ilgisiz görüntü elendi: applying henna patterns on fingers
+[00:51:12]    ilgisiz görüntü elendi: modern airport interior with moving walkway
+[00:51:22]    ilgisiz görüntü elendi: modern grand mosque aerial drone view
+[00:51:36]    ilgisiz görüntü elendi: several chickens on the ground
+[00:51:37] Sahne 4 (diagram, 34.5 sn, 7 çekim, cümleye bağlı)
+[00:51:46]    ilgisiz görüntü elendi: golden gate bridge and modern bay
+[00:51:54]    ilgisiz görüntü elendi: aerial view of modern city at sunrise
+[00:52:01]    ilgisiz görüntü elendi: night sky with moon over town
+[00:52:09]    ilgisiz görüntü elendi: Woman using a modern digital tablet
+[00:52:11] Sahne 5 (footage, 29.5 sn, 6 çekim, cümleye bağlı)
+[00:52:15]    ilgisiz görüntü elendi: Busy modern night street food market
+[00:52:32]    ilgisiz görüntü elendi: modern people walking on city street
+[00:52:39]    ilgisiz görüntü elendi: aerial view of modern building fire
+[00:53:30] Sahne 6 (diagram, 26.1 sn, 6 çekim, cümleye bağlı)
+[00:53:36]    ilgisiz görüntü elendi: red and orange ink in water
+[00:53:55]    ilgisiz görüntü elendi: bee pollinating flowers in a garden
+[00:54:03]    ilgisiz görüntü elendi: two ducks swimming in blue water
+[00:54:05] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[00:54:38]    ilgisiz görüntü elendi: person painting ceramic bowls at workshop
+[00:54:48]    ilgisiz görüntü elendi: Person placing plate of strawberries on table
+[00:54:49] Sahne 7 (footage, 32.4 sn, 6 çekim, cümleye bağlı)
+[00:54:59]    ilgisiz görüntü elendi: golden retriever running in shallow water
+[00:55:18]    ilgisiz görüntü elendi: woman typing on laptop near fan
+[00:55:20] Cloudflare günlük ücretsiz kota doldu: {"errors":[{"message":"AiError: AiError: you have used up your daily free allocation of 10,000 neurons, please upgrade to Cloudflare's Workers Paid plan if you would like to continue usage. (ba314586- → bu video için Pexels fotoğraflarına geçiliyor
+[00:55:35]    ilgisiz görüntü elendi: overhead shot of people walking inside hall
+[00:55:41]    ilgisiz görüntü elendi: human skull burning in the dark
+[00:55:53]    alakasız görsel yeniden çizilecek: ancient scroll burning in dungeon
+[00:55:53] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[00:56:14]    ilgisiz görüntü elendi: close up of burning firewood logs
+[00:56:16] Sahne 8 (diagram, 24.1 sn, 5 çekim, cümleye bağlı)
+[00:56:21]    ilgisiz görüntü elendi: raindrops on a glass window pane
+[00:57:25]    ilgisiz görüntü elendi: aerial view of beach and ocean
+[00:57:42]    ilgisiz görüntü elendi: aerial view of the colosseum at dusk
+[00:57:47]    ilgisiz görüntü elendi: crowded modern city street with skyscrapers
+[00:57:49] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[00:58:04]    ilgisiz görüntü elendi: blurry modern people at airport terminal
+[00:58:06] Sahne 9 (diagram, 24.9 sn, 5 çekim, cümleye bağlı)
+[00:58:11]    ilgisiz görüntü elendi: aerial view of a coastal city
+[00:59:14]    alakasız görsel yeniden çizilecek: text letters in the image
+[00:59:14] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[00:59:30]    ilgisiz görüntü elendi: aerial view of coastal walled city
+[00:59:34]    ilgisiz görüntü elendi: illuminated castle by the water at dusk
+[00:59:40]    ilgisiz görüntü elendi: Waves crashing under an old pier
+[01:00:39]    alakasız görsel yeniden çizilecek: broken stone tablets with text
+[01:00:51]    ilgisiz görüntü elendi: large satellite dish in green forest
+[01:00:53] Sahne 10 (footage, 29.9 sn, 6 çekim, cümleye bağlı)
+[01:01:01]    ilgisiz görüntü elendi: person praying inside a large mosque
+[01:01:13]    ilgisiz görüntü elendi: modern stone ruins with running child
+[01:01:22]    ilgisiz görüntü elendi: empty ornate gazebo by the sea
+[01:01:24] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[01:01:39]    ilgisiz görüntü elendi: a person rowing a wooden boat
+[01:01:41] Sahne 11 (footage, 26.1 sn, 5 çekim, cümleye bağlı)
+[01:01:45]    ilgisiz görüntü elendi: small river flowing through green forest
+[01:03:06]    ilgisiz görüntü elendi: person walking on park path near flower
+[01:03:14]    ilgisiz görüntü elendi: dark storm clouds over a landscape
+[01:03:30]    ilgisiz görüntü elendi: close up of a green field
+[01:03:36]    ilgisiz görüntü elendi: people relaxing on sunny tropical beach
+[01:03:38] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[01:03:51] Sahne 12 (diagram, 31.3 sn, 6 çekim, cümleye bağlı)
+[01:05:03]    alakasız görsel yeniden çizilecek: person writing by candlelight
+[01:05:19]    ilgisiz görüntü elendi: person browsing photo gallery on smartphone
+[01:05:24]    ilgisiz görüntü elendi: close-up of an open comic book
+[01:05:41]    ilgisiz görüntü elendi: fireworks exploding in dark night sky
+[01:05:43] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[01:06:01] Sahne 13 (diagram, 31.0 sn, 6 çekim, cümleye bağlı)
+[01:06:08]    ilgisiz görüntü elendi: aerial view of active volcanic eruption lava
+[01:07:14]    ilgisiz görüntü elendi: aerial view of sunset over mountains
+[01:07:18]    ilgisiz görüntü elendi: close up of burning fireplace wood
+[01:07:26]    ilgisiz görüntü elendi: man working out in a gym
+[01:07:51]    ilgisiz görüntü elendi: seabirds on a rocky coastal cliff
+[01:08:02]    alakasız görsel yeniden çizilecek: gothic castle with floating feathers
+[01:08:11] Sahne 14 (footage, 30.6 sn, 5 çekim, cümleye bağlı)
+[01:08:14]    ilgisiz görüntü elendi: Woman in bikini meditating on beach
+[01:08:16] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[01:08:28]    alakasız görsel yeniden çizilecek: stone scale with glowing fire
+[01:09:46]    ilgisiz görüntü elendi: Person paddleboarding on the open ocean
+[01:09:51]    ilgisiz görüntü elendi: close up of a wristwatch mechanism
+[01:09:57]    ilgisiz görüntü elendi: heavy rain splashing on the ground
+[01:10:04]    ilgisiz görüntü elendi: A modern bridge over water at sunset
+[01:10:15]    alakasız görsel yeniden çizilecek: dark stone doorway with light
+[01:10:15] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[01:10:27] Sahne 15 (diagram, 25.8 sn, 5 çekim, cümleye bağlı)
+[01:10:32]    ilgisiz görüntü elendi: Aerial view of lush green mountains
+[01:10:41]    ilgisiz görüntü elendi: aurora borealis lights in night sky
+[01:11:40]    alakasız görsel yeniden çizilecek: two bright stars in sky
+[01:11:41] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[01:11:56]    ilgisiz görüntü elendi: person airbrushing a model airplane
+[01:13:19]    ilgisiz görüntü elendi: ancient ruins with columns and arches
+[01:13:22] Sahne 16 (footage, 30.6 sn, 7 çekim, cümleye bağlı)
+[01:13:25]    ilgisiz görüntü elendi: aerial view of modern coastal city harbor
+[01:13:40]    ilgisiz görüntü elendi: European baroque cathedral with obelisk and statues
+[01:13:44]    ilgisiz görüntü elendi: renaissance architectural facade with classical statues
+[01:13:51]    ilgisiz görüntü elendi: stepping stones across a river stream
+[01:13:58] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[01:14:05]    alakasız görsel yeniden çizilecek: large stone sundial with figures
+[01:15:25]    ilgisiz görüntü elendi: sunlight shining through foggy forest trees
+[01:15:30]    ilgisiz görüntü elendi: narrow European alley with modern boy walking
+[01:15:45]    ilgisiz görüntü elendi: person walking on a countryside road
+[01:15:47] Sahne 17 (diagram, 28.0 sn, 6 çekim, cümleye bağlı)
+[01:16:10]    ilgisiz görüntü elendi: Modern young man talking in interview
+[01:16:15]    ilgisiz görüntü elendi: blonde woman dancing on urban bridge
+[01:16:27]    ilgisiz görüntü elendi: Camera moving through dark archway towards harbor
+[01:16:32]    ilgisiz görüntü elendi: ocean waves crashing at sunset
+[01:16:52]    ilgisiz görüntü elendi: close up of golden wheat field
+[01:16:54] Sahne 18 (footage, 29.7 sn, 5 çekim, cümleye bağlı)
+[01:17:01]    ilgisiz görüntü elendi: aerial view of megalithic stone tomb
+[01:17:03] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[01:17:22]    ilgisiz görüntü elendi: modern bronze statue against clear sky
+[01:18:33]    ilgisiz görüntü elendi: A large park fountain with statues.
+[01:18:46] Sahne 19 (diagram, 30.0 sn, 6 çekim, cümleye bağlı)
+[01:18:50]    ilgisiz görüntü elendi: Ornate interior architecture of a church.
+[01:19:05]    ilgisiz görüntü elendi: exterior facade of historic european church
+[01:19:10]    ilgisiz görüntü elendi: ornate buddhist temple dragon serpent architecture
+[01:19:15]    ilgisiz görüntü elendi: Person pouring wine into modern glass
+[01:19:17] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[01:19:33]    ilgisiz görüntü elendi: Row of colorful autumn grapevines
+[01:19:37]    ilgisiz görüntü elendi: modern wine glass with red wine
+[01:19:38] Sahne 20 (footage, 27.2 sn, 6 çekim, cümleye bağlı)
+[01:19:41]    ilgisiz görüntü elendi: close up shot of wine glass
+[01:20:48]    ilgisiz görüntü elendi: close up of fresh wine grapes
+[01:20:52]    ilgisiz görüntü elendi: modern minimalist studio with shadow figure
+[01:21:03]    alakasız görsel yeniden çizilecek: dark figures approaching seated woman
+[01:21:03] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[01:21:18]    ilgisiz görüntü elendi: modern decorated pedestrian street with buildings
+[01:22:29]    alakasız görsel yeniden çizilecek: broken pottery and wooden stick
+[01:22:29] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[01:22:43]    ilgisiz görüntü elendi: children running down a narrow alley
+[01:22:51]    ilgisiz görüntü elendi: outdoor bronze fountain statue in europe
+[01:23:55]    alakasız görsel yeniden çizilecek: statue and bowing figures
+[01:24:04] Sahne 21 (diagram, 29.6 sn, 6 çekim, cümleye bağlı)
+[01:24:17]    ilgisiz görüntü elendi: Close up of a burning flare
+[01:24:19] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[01:24:35]    ilgisiz görüntü elendi: hands trying on gemstone rings
+[01:25:52]    ilgisiz görüntü elendi: person fishing by lake and mountain
+[01:25:58]    ilgisiz görüntü elendi: close up of the full moon
+[01:26:13]    ilgisiz görüntü elendi: timelapse of moving clouds in sky
+[01:26:15] Sahne 22 (footage, 31.8 sn, 6 çekim, cümleye bağlı)
+[01:26:18]    ilgisiz görüntü elendi: blue sky with white clouds moving
+[01:26:20] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[01:26:35]    ilgisiz görüntü elendi: person using a computer mouse indoors
+[01:27:45]    alakasız görsel yeniden çizilecek: man holding ancient written parchment
+[01:27:58]    ilgisiz görüntü elendi: flames burning inside a metal container
+[01:28:16]    ilgisiz görüntü elendi: glowing orange sun or star footage
+[01:28:20]    ilgisiz görüntü elendi: sunset over sea with rocky shore
+[01:28:34] Sahne 23 (diagram, 26.6 sn, 6 çekim, cümleye bağlı)
+[01:28:36]    ilgisiz görüntü elendi: blurred footage of people walking outside
+[01:28:45]    ilgisiz görüntü elendi: modern city skyline and luxury yacht
+[01:28:55] Görsel aşaması zaman bütçesini aştı: kalan sahnelerde yalnız cümleye göre çizilen görseller (hızlı mod)
+[01:28:56] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[01:29:07] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[01:29:12] Sahne 24 (footage, 23.7 sn, 5 çekim, cümleye bağlı)
+[01:29:12] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[01:29:15] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[01:29:22] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[01:29:25] Sahne 25 (diagram, 29.2 sn, 7 çekim, cümleye bağlı)
+[01:29:25] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[01:29:27] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[01:29:29] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[01:29:33] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[01:29:36] Sahne 26 (footage, 26.7 sn, 6 çekim, cümleye bağlı)
+[01:29:40] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[01:29:42] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[01:29:45] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[01:29:47] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[01:29:50] Sahne 27 (footage, 24.8 sn, 6 çekim, cümleye bağlı)
+[01:29:56] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[01:30:05] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[01:30:07] Sahne 28 (diagram, 27.8 sn, 5 çekim, cümleye bağlı)
+[01:30:07] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[01:30:30] Sahne 29/43 (diagram, 20.5 sn, 4 çekim)
+[01:30:38] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[01:30:52]    ilgisiz görüntü elendi: aerial view of rocky mountain pillars
+[01:31:00]    ilgisiz görüntü elendi: Waves crashing on a sandy beach
+[01:31:02]    ilgisiz görüntü elendi: Newton's cradle swinging metal spheres
+[01:31:08]    ilgisiz görüntü elendi: small pile of wooden blocks burning
+[01:31:11]    ilgisiz görüntü elendi: modern lawyers with scales and gavel
+[01:31:14]    ilgisiz görüntü elendi: Newton's cradle physics toy on table
+[01:31:16] Sahne 30 (footage, 30.2 sn, 7 çekim, cümleye bağlı)
+[01:31:44] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[01:31:47] Sahne 31 (diagram, 30.8 sn, 7 çekim, cümleye bağlı)
+[01:31:52] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[01:32:08] Sahne 32 (diagram, 27.8 sn, 5 çekim, cümleye bağlı)
+[01:32:19] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[01:32:38] Sahne 33 (footage, 27.5 sn, 6 çekim, cümleye bağlı)
+[01:32:38] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[01:32:45] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[01:32:57] Sahne 34 (diagram, 36.3 sn, 7 çekim, cümleye bağlı)
+[01:33:09] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[01:33:19] Sahne 35 (diagram, 30.3 sn, 7 çekim, cümleye bağlı)
+[01:33:30] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[01:33:41] Sahne 36 (footage, 32.9 sn, 7 çekim, cümleye bağlı)
+[01:34:10] Sahne 37 (diagram, 25.6 sn, 6 çekim, cümleye bağlı)
+[01:34:24] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[01:34:37] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[01:34:44] Sahne 38 (footage, 25.5 sn, 5 çekim, cümleye bağlı)
+[01:34:57] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[01:35:07] Sahne 39 (diagram, 31.1 sn, 7 çekim, cümleye bağlı)
+[01:35:27] Sahne 40 (footage, 27.1 sn, 6 çekim, cümleye bağlı)
+[01:35:31] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[01:35:38] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[01:36:06] Sahne 41 (diagram, 27.5 sn, 5 çekim, cümleye bağlı)
+[01:36:39] Sahne 42 (footage, 24.9 sn, 5 çekim, cümleye bağlı)
+[01:36:44] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[01:36:58] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[01:37:02] Sahne 43 (diagram, 22.2 sn, 4 çekim, cümleye bağlı)
+[01:37:05] Görsel kaynakları tükendi; daha önceki bir sahne görseli yeniden kullanıldı
+[01:49:15] Ana video: 1312 sn
+[01:49:49] Short 1: sahne 0-2, 55 sn — Babil Kuyusundaki İki Melek
+[01:50:08] Short 2: sahne 15-17, 31 sn — Meleklerin Büyük İmtihanı
+[01:50:26] Short 3: sahne 32-34, 28 sn — İbn Kesir'in Büyük Uyarısı: İsrailiyat
+[01:50:26] Altyazı çevirisi: English (421 satır)
+[01:50:29] Çeviri parçası eksik geldi (30-60), tekrar deneniyor
+[01:50:41] Çeviri parçası eksik geldi (240-270), tekrar deneniyor
+[01:52:06] Altyazı eklendi: Türkçe
+[01:52:07] Altyazı eklendi: English
+[01:52:08] Oynatma listesine eklendi: Kayıp Medeniyetler ve Antik Gizemler
+[01:52:23] Instagram sırasına eklendi: Babil Kuyusundaki İki Melek
+[01:52:25] Instagram sırasına eklendi: Meleklerin Büyük İmtihanı
+[01:52:27] Instagram sırasına eklendi: İbn Kesir'in Büyük Uyarısı: İsrailiyat
+[02:27:20] Instagram Reel hatası: Instagram yükleme 6 denemede başarısız: Instagram yükleme: 400 {"debug_info":{"retriable":false,"type":"ProcessingFailedError","message":"Request processing failed"}} (code None)
+[02:27:21] HATA:
+Traceback (most recent call last):
+  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 3947, in <module>
+    res = run_once()
+          ^^^^^^^^^^
+  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 3550, in run_once
+    publish_rendered(script, idea, shorts, thumb, thumb_alt, en_srt, tr_srt,
+  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 3725, in publish_rendered
+    f.unlink()
+  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/pathlib.py", line 1342, in unlink
+    os.unlink(self)
+IsADirectoryError: [Errno 21] Is a directory: '/home/runner/work/otoyt/otoyt/out/tts_cache'
+
