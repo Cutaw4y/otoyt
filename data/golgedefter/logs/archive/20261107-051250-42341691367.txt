@@ -1,0 +1,258 @@
+[02:31:26] Başladı (test modu: False, yayın: scheduled)
+[02:31:26] Ücretli Gemini anahtarı kullanılıyor
+[02:31:27] Kanal doğrulandı: GölgeDefter
+[02:31:30] Instagram anahtarı ve hesap kimliği doğrulandı: @golge.defter
+[02:31:31] Analitik: 3 video ölçüldü, sütun puanları: {'Anadolu ve dünya efsaneleri, mitolojik varlıklar, halk inançları': 3.2450926729545455, 'Açıklanamayan gerçek olaylar ve kayıplar (Dyatlov, Mary Celeste, Roanoke, Tunguska)': 1.5464026614276694, 'İslam tarihi ve kutsal kıssalar (Ashab-ı Kehf, Zülkarneyn, İrem ve Ad kavmi, Semud, Nuh tufanı)': 4.6352147587102985}
+[02:31:35] Oynatma listesi kapağı kondu: Kayıp Medeniyetler ve Antik Gizemler
+[02:31:36] Konu (1): Cinlerin İnşa Ettiği Şehir: Baalbek'in 1000 Tonluk Taşları — Lübnan'daki Baalbek megalitleri (Hamile Kadın Taşı vb.), kimsenin taşıyamadığı dev bloklar; Arap/İslam rivayetlerinde Hz. Süleyman'ın cinlere yaptırdığı yapı inancı (Sebe 12-13, Sâd 37), tarihçi ve seyyah kayıtları, arkeolojinin açıklaması. Dramatik, sinematik anlatım; rivayetleri canlı sahnelerle ama rivayet olduğunu belirterek anlat; uydurma yok. Küçük resim fikri: BUNU CİNLER Mİ YAPTI?  [Kayıp medeniyetler ve antik gizemler (Göbeklitepe, Sümerler, Nazca, Atlantis efsanesi, Mohenjo-daro)]
+[02:33:14] Senaryo kısa (1723/2200 kelime) → genişletiliyor (1)
+[02:34:09] Senaryo kısa (1748/2200 kelime) → genişletiliyor (2)
+[02:35:18] Senaryo uzunluğu: 1887 kelime
+[02:35:18] Senaryo yazıldı: 44 sahne, 1887 kelime
+[02:36:27] Anlatım sadeleştirildi (1887 → 1784 kelime)
+[02:39:18] Doğrulama kaynağı: Google araması
+[02:39:18] Doğrulama turu 1: 15 iddia, 3 yanlış, 0 belirsiz
+[02:41:18] Doğrulama kaynağı: Google araması
+[02:41:18] Doğrulama turu 2: 15 iddia, 3 yanlış, 0 belirsiz
+[02:43:39] Doğrulama kaynağı: Google araması
+[02:43:39] Doğrulama turu 3: 15 iddia, 2 yanlış, 0 belirsiz
+[02:43:39] Bilgi doğrulamadan geçemedi → yeni konu
+[02:43:39] Konu (2): Cinlerin İnşa Ettiği Şehir: Baalbek'in 1000 Tonluk Taşları — Lübnan'daki Baalbek megalitleri (Hamile Kadın Taşı vb.), kimsenin taşıyamadığı dev bloklar; Arap/İslam rivayetlerinde Hz. Süleyman'ın cinlere yaptırdığı yapı inancı (Sebe 12-13, Sâd 37), tarihçi ve seyyah kayıtları, arkeolojinin açıklaması. Dramatik, sinematik anlatım; rivayetleri canlı sahnelerle ama rivayet olduğunu belirterek anlat; uydurma yok. Küçük resim fikri: BUNU CİNLER Mİ YAPTI?  [Kayıp medeniyetler ve antik gizemler (Göbeklitepe, Sümerler, Nazca, Atlantis efsanesi, Mohenjo-daro)]
+[02:45:38] Senaryo kısa (1294/2200 kelime) → genişletiliyor (1)
+[02:46:24] Senaryo kısa (1504/2200 kelime) → genişletiliyor (2)
+[02:47:48] Senaryo uzunluğu: 1504 kelime
+[02:47:48] Senaryo yazıldı: 51 sahne, 1504 kelime
+[02:48:56] Sadeleştirme sahne yapısını bozdu → eski metin kalıyor
+[02:50:43] Doğrulama kaynağı: Google araması
+[02:50:43] Doğrulama turu 1: 15 iddia, 3 yanlış, 0 belirsiz
+[02:53:00] Doğrulama kaynağı: Google araması
+[02:53:00] Doğrulama turu 2: 15 iddia, 0 yanlış, 0 belirsiz
+[02:53:01] En çok arananlar: baalbek antik kenti | baalbek antik kenti belgeseli | baalbek tapınağı | baalbek | baalbek stones | baalbek taşları | baalbek lebanon | baalbek dabke
+[02:53:12] Başlık seçildi: Baalbek Antik Kenti: Bin Tonluk Dev Taşları Kim Kaldırdı?  (önceki: Baalbek Antik Kenti Sırrı: 1000 Tonluk Taşları Kim Taşıdı?) — En yüksek arama hacmine sahip 'Baalbek Antik Kenti' ifadesiyle doğrudan başlıyor. 'Bin tonluk dev taşlar' gibi zihinde hemen canlanan somut bir görsel
+[02:53:12] SEO düzeltmesi: The title must contain the core keyword 'baalbek antik kenti sırrı' within its
+[02:54:01] Editör (min 7, ort 8.0): {'originality': 7, 'hook': 7, 'clarity': 8, 'simplicity': 8, 'flow': 9, 'value_density': 8, 'audience_fit': 9, 'problems': ["Quote: 'anathyrosis yani kenar tıraşlama tekniği ve tipik Roma kaldıraç oyukları' -> Fix: 'anathyrosis yani taşların birbirine sıfıra sıfır oturmasını sağlayan kenar tıraşlama tekniği'", "Quote: 'Alman Arkeoloji Enstitüsü'nün yaptığı temel sondajlarında' -> Fix: 'Alman arkeologların kalıntıların altında yaptığı kazılarda'"], 'problems_tr_tr': "Metin genel olarak çok akıcı ve anlaşılır. Sadece 'anathyrosis' kelimesi ilk başta biraz yabancı gelebilir, orada yapılan kısa açıklama yeterli olsa da terim doğrudan verilmiş. Sondaj kelimesi yerine kazı denmesi daha da sade olabilirdi."}
+[02:54:04] Seslendirme başlıyor (Gemini Charon)...
+[03:04:10] Seslendirme: 1002 sn
+[03:05:45] Thumbnail sıralaması: [1, 2, 3] - Candidate #1 has the strongest curiosity gap and emotional hook with the text 'Bunu Cinler Mi Yaptı?' contrasted against the massive monolithic stone, perfectly complementing the title while remaining extremely readable at phone size. Candidate #2 is a bit too literal, repeating the weight aspect found in the title ('1000 Tonluk Sır'), reducing the curiosity gap. Candidate #3 focuses too much on the temple columns rather than the impossible stones, and the text 'İnsan Gücü Yetmez' also directly spoils the title's core question.
+[03:08:00] Cümle cümle görsel planı: 51/51 sahne
+[03:08:00] Sahne 1 (diagram, 19.3 sn, 4 çekim, cümleye bağlı)
+[03:08:17]    ilgisiz görüntü elendi: modern open pit marble quarry aerial view
+[03:08:42]    ilgisiz görüntü elendi: men standing on platform at site
+[03:08:49]    ilgisiz görüntü elendi: flock of birds flying over fields
+[03:08:52] Sahne 2 (diagram, 17.8 sn, 4 çekim, cümleye bağlı)
+[03:09:30]    ilgisiz görüntü elendi: A cat resting on ancient stone wall
+[03:09:32] Sahne 3 (footage, 16.8 sn, 4 çekim, cümleye bağlı)
+[03:09:39]    ilgisiz görüntü elendi: Close up of an ancient stone statue
+[03:09:45]    ilgisiz görüntü elendi: snake swimming in water with vegetation
+[03:10:02]    ilgisiz görüntü elendi: modern escalators inside a white building
+[03:10:04] Sahne 4 (footage, 18.7 sn, 4 çekim, cümleye bağlı)
+[03:10:16]    ilgisiz görüntü elendi: night aerial view of modern city
+[03:10:30]    ilgisiz görüntü elendi: aerial view of Asian pagoda complex
+[03:10:32] Sahne 5 (diagram, 18.4 sn, 4 çekim, cümleye bağlı)
+[03:10:42]    ilgisiz görüntü elendi: aerial view of lake and mountains
+[03:10:52]    ilgisiz görüntü elendi: Heart shaped gift box and sparkler
+[03:10:55] Sahne 6 (diagram, 21.1 sn, 4 çekim, cümleye bağlı)
+[03:11:04]    ilgisiz görüntü elendi: clear water flowing over river stones
+[03:11:19]    ilgisiz görüntü elendi: aerial view of horses running outdoors
+[03:11:23] Sahne 7 (diagram, 17.8 sn, 4 çekim, cümleye bağlı)
+[03:11:30]    ilgisiz görüntü elendi: aerial view of a canyon landscape
+[03:11:45]    ilgisiz görüntü elendi: aerial view of green forest and sinkhole
+[03:11:47] Sahne 8 (footage, 21.3 sn, 4 çekim, cümleye bağlı)
+[03:11:50]    ilgisiz görüntü elendi: close up of people walking outdoors
+[03:12:03]    alakasız görsel yeniden çizilecek: stacked buses and monolith
+[03:12:20]    ilgisiz görüntü elendi: aerial view of town and canal
+[03:12:30]    ilgisiz görüntü elendi: an ancient dolmen monument outdoors in nature
+[03:12:34] Sahne 9 (diagram, 25.4 sn, 4 çekim, cümleye bağlı)
+[03:12:44]    ilgisiz görüntü elendi: green mountains by a lake
+[03:12:59]    ilgisiz görüntü elendi: stepping stones over a small river
+[03:13:02] Sahne 10 (footage, 16.6 sn, 4 çekim, cümleye bağlı)
+[03:13:13]    ilgisiz görüntü elendi: aerial view of flooded quarry lake
+[03:13:27]    ilgisiz görüntü elendi: Stepping stone bridge crossing a river.
+[03:13:29] Sahne 11 (diagram, 16.3 sn, 4 çekim, cümleye bağlı)
+[03:13:38]    ilgisiz görüntü elendi: A goat and rabbit on rocks.
+[03:13:48]    ilgisiz görüntü elendi: stepping stones across a flowing river
+[03:13:50] Sahne 12 (footage, 21.1 sn, 4 çekim, cümleye bağlı)
+[03:14:13]    ilgisiz görüntü elendi: modern construction demolition site with excavators
+[03:14:25]    ilgisiz görüntü elendi: modern residential house construction site aerial
+[03:14:28] Sahne 13 (diagram, 18.4 sn, 4 çekim, cümleye bağlı)
+[03:15:07]    ilgisiz görüntü elendi: children exploring a modern military tank
+[03:15:10]    ilgisiz görüntü elendi: modern mercedes car driving outdoors test track
+[03:15:41]    ilgisiz görüntü elendi: modern soldiers holding rifles in forest
+[03:15:45]    ilgisiz görüntü elendi: modern architecture interior with glass ceiling
+[03:15:56]    ilgisiz görüntü elendi: wikipedia donation pages and smiling child
+[03:16:00]    ilgisiz görüntü elendi: Alpine mountain valley with green fields
+[03:16:37]    ilgisiz görüntü elendi: wikipedia advertisement and donation call footage
+[03:16:39]    ilgisiz görüntü elendi: moving walkway in a modern airport
+[03:16:42] Sahne 14 (footage, 18.0 sn, 4 çekim, cümleye bağlı)
+[03:16:54]    ilgisiz görüntü elendi: modern wind turbines in green fields
+[03:17:06]    ilgisiz görüntü elendi: people gathered near large ancient stone wall
+[03:17:08] Sahne 15 (footage, 20.7 sn, 4 çekim, cümleye bağlı)
+[03:17:14]    ilgisiz görüntü elendi: Aerial view of a European church
+[03:17:29]    alakasız görsel yeniden çizilecek: open book with text pages
+[03:17:48]    ilgisiz görüntü elendi: aerial view of ancient ruins hilltop
+[03:18:04]    ilgisiz görüntü elendi: aerial view of modern coastal island fortress
+[03:18:06] Sahne 16 (diagram, 19.3 sn, 3 çekim, cümleye bağlı)
+[03:18:10]    ilgisiz görüntü elendi: mother pushing baby in stroller outdoors
+[03:18:11] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[03:18:27]    ilgisiz görüntü elendi: bats flying over trees outdoors daylight
+[03:18:32]    ilgisiz görüntü elendi: young boy riding bicycle in park
+[03:18:34] Sahne 17 (diagram, 19.9 sn, 4 çekim, cümleye bağlı)
+[03:18:53]    ilgisiz görüntü elendi: A woman wearing a black niqab
+[03:18:55] Cloudflare günlük ücretsiz kota doldu: {"errors":[{"message":"AiError: AiError: you have used up your daily free allocation of 10,000 neurons, please upgrade to Cloudflare's Workers Paid plan if you would like to continue usage. (dc0fb2cc- → bu video için Pexels fotoğraflarına geçiliyor
+[03:19:41]    alakasız görsel yeniden çizilecek: open book with text
+[03:20:01]    ilgisiz görüntü elendi: aerial view of green pine forest
+[03:20:03] Sahne 18 (footage, 20.3 sn, 4 çekim, cümleye bağlı)
+[03:20:15] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[03:20:27]    alakasız görsel yeniden çizilecek: old map on table
+[03:21:46]    ilgisiz görüntü elendi: aerial view of smoking volcanic crater
+[03:21:57]    ilgisiz görüntü elendi: traditional East Asian palace architecture outdoors
+[03:22:18]    ilgisiz görüntü elendi: woman sitting in bedroom drinking coffee
+[03:22:19] Sahne 19 (footage, 20.7 sn, 4 çekim, cümleye bağlı)
+[03:22:27]    ilgisiz görüntü elendi: A green cup on an open book
+[03:22:40]    ilgisiz görüntü elendi: Tourists overlooking a European river and town
+[03:22:43] Sahne 20 (footage, 15.7 sn, 3 çekim, cümleye bağlı)
+[03:22:59]    ilgisiz görüntü elendi: Close up shot of small pink flowers
+[03:23:08]    ilgisiz görüntü elendi: stepping stones across a river stream
+[03:23:10] Sahne 21 (footage, 22.5 sn, 5 çekim, cümleye bağlı)
+[03:23:20]    ilgisiz görüntü elendi: old ruined stone building with overgrown vegetation
+[03:23:25]    ilgisiz görüntü elendi: overgrown ruins of an old building
+[03:23:40]    ilgisiz görüntü elendi: modern open pit clay sand quarry
+[03:23:43] Sahne 22 (footage, 12.8 sn, 3 çekim, cümleye bağlı)
+[03:23:49]    ilgisiz görüntü elendi: aerial view of asian pagoda temple
+[03:23:58]    ilgisiz görüntü elendi: historical building courtyard with arched pillars
+[03:24:24] Sahne 23 (footage, 20.4 sn, 4 çekim, cümleye bağlı)
+[03:24:34]    ilgisiz görüntü elendi: aerial view of Venice with boats
+[03:24:56] Sahne 24 (footage, 20.5 sn, 4 çekim, cümleye bağlı)
+[03:25:06]    ilgisiz görüntü elendi: A person panning for gold in river
+[03:25:19]    ilgisiz görüntü elendi: abstract colorful fluid paint texture patterns
+[03:25:21] Sahne 25 (footage, 22.7 sn, 5 çekim, cümleye bağlı)
+[03:25:32]    ilgisiz görüntü elendi: Ancient marble statue outdoors with trees
+[03:25:41]    ilgisiz görüntü elendi: orange autumn leaves and traditional roof
+[03:25:56]    ilgisiz görüntü elendi: people climbing structure with flaming torches at night
+[03:25:58] Sahne 26 (diagram, 22.2 sn, 4 çekim, cümleye bağlı)
+[03:26:06]    ilgisiz görüntü elendi: paint roller dipping in white paint
+[03:26:27]    alakasız görsel yeniden çizilecek: stone wall at night
+[03:26:55] Sahne 27 (footage, 16.8 sn, 3 çekim, cümleye bağlı)
+[03:27:11]    ilgisiz görüntü elendi: close up of crystal mineral formation
+[03:27:14] Sahne 28 (diagram, 21.3 sn, 4 çekim, cümleye bağlı)
+[03:27:36]    ilgisiz görüntü elendi: A lighter igniting a sparkler.
+[03:27:43] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[03:27:55]    alakasız görsel yeniden çizilecek: person brushing archaeological artifact
+[03:29:15]    ilgisiz görüntü elendi: cute coffee cup with bear face
+[03:29:17] Sahne 29 (diagram, 20.2 sn, 4 çekim, cümleye bağlı)
+[03:29:42]    ilgisiz görüntü elendi: church rooftop against blue sky
+[03:29:52]    ilgisiz görüntü elendi: A fast flowing river with forest background
+[03:29:58] Sahne 30 (footage, 13.7 sn, 3 çekim, cümleye bağlı)
+[03:31:00]    ilgisiz görüntü elendi: modern industrial port crane operating outdoors
+[03:31:04]    ilgisiz görüntü elendi: worker pouring concrete from wheelbarrow construction
+[03:31:06] Sahne 31 (diagram, 28.6 sn, 5 çekim, cümleye bağlı)
+[03:31:18]    ilgisiz görüntü elendi: wide view of an industrial port city
+[03:31:30]    ilgisiz görüntü elendi: close up of a crowned crane
+[03:31:54] Sahne 32 (diagram, 20.9 sn, 5 çekim, cümleye bağlı)
+[03:32:04]    ilgisiz görüntü elendi: unrelated wikipedia pages and the moon
+[03:32:07]    ilgisiz görüntü elendi: autumn leaves framing an oriental temple building
+[03:32:09] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[03:32:26]    ilgisiz görüntü elendi: modern temple complex with high-rise city buildings
+[03:32:38]    ilgisiz görüntü elendi: stepping stones across a shallow river
+[03:32:45]    ilgisiz görüntü elendi: aerial view of a European castle tower
+[03:32:47] Sahne 33 (footage, 23.7 sn, 5 çekim, cümleye bağlı)
+[03:32:56]    ilgisiz görüntü elendi: scientist working at computer in laboratory
+[03:32:59]    ilgisiz görüntü elendi: An Epson printer printing a document.
+[03:33:33]    alakasız görsel yeniden çizilecek: man working with a microscope
+[03:34:24]    ilgisiz görüntü elendi: Doctor examining pregnant woman with ultrasound machine
+[03:34:27]    ilgisiz görüntü elendi: macro shot of colorful liquid swirling
+[03:34:41]    ilgisiz görüntü elendi: modern soldiers and landscape aerial view
+[03:34:47]    ilgisiz görüntü elendi: golden glitter floating on water surface
+[03:34:49] Sahne 34 (diagram, 21.9 sn, 4 çekim, cümleye bağlı)
+[03:34:57]    ilgisiz görüntü elendi: boats sailing on the open sea
+[03:35:15]    ilgisiz görüntü elendi: A wooden water wheel in motion
+[03:35:26]    ilgisiz görüntü elendi: modern excavator working on a construction site
+[03:35:29] Sahne 35 (diagram, 21.1 sn, 4 çekim, cümleye bağlı)
+[03:35:35]    ilgisiz görüntü elendi: Woman using a smartphone in bed
+[03:35:55]    ilgisiz görüntü elendi: aerial view of boats parked at dock
+[03:35:57] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[03:36:15]    ilgisiz görüntü elendi: aerial view of mountain valley
+[03:36:22]    ilgisiz görüntü elendi: three turtles basking on a log
+[03:36:24] Sahne 36 (diagram, 18.2 sn, 4 çekim, cümleye bağlı)
+[03:36:37]    ilgisiz görüntü elendi: generic green field and dirt road
+[03:36:45]    ilgisiz görüntü elendi: mossy rocks in a flowing river
+[03:37:29]    ilgisiz görüntü elendi: several mouflon sheep standing among rocks
+[03:37:31] Sahne 37 (diagram, 21.8 sn, 5 çekim, cümleye bağlı)
+[03:37:51]    ilgisiz görüntü elendi: aerial view of modern buildings and offices
+[03:37:57]    ilgisiz görüntü elendi: modern iron elevator tower in city
+[03:38:14]    ilgisiz görüntü elendi: A woman talking on video call
+[03:38:22]    ilgisiz görüntü elendi: modern cars driving on a road
+[03:38:32]    ilgisiz görüntü elendi: white bird standing near water
+[03:38:48]    ilgisiz görüntü elendi: A live crane bird walking on grass
+[03:38:50] Sahne 38 (diagram, 14.9 sn, 3 çekim, cümleye bağlı)
+[03:38:59]    ilgisiz görüntü elendi: modern amphitheater with stage and industrial background
+[03:39:21]    ilgisiz görüntü elendi: two red-crowned cranes in forest
+[03:39:35]    ilgisiz görüntü elendi: a live crane bird in nature
+[03:39:48] Sahne 39 (diagram, 20.5 sn, 4 çekim, cümleye bağlı)
+[03:39:59] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[03:40:16]    ilgisiz görüntü elendi: modern excavator moving rocks and dirt
+[03:40:26]    ilgisiz görüntü elendi: flock of birds and wind turbines
+[03:41:37]    ilgisiz görüntü elendi: flock of birds in a field
+[03:41:39] Sahne 40 (diagram, 18.9 sn, 4 çekim, cümleye bağlı)
+[03:42:19]    alakasız görsel yeniden çizilecek: man working on blueprints
+[03:42:20] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[03:43:07]    ilgisiz görüntü elendi: unrelated artwork, crowd, and unknown woman
+[03:43:10]    ilgisiz görüntü elendi: flowing water over rocks in river
+[03:43:17]    ilgisiz görüntü elendi: close up of a dog outdoors
+[03:43:50]    ilgisiz görüntü elendi: black cat inside carved jack o lantern
+[03:43:52] Sahne 41 (diagram, 20.0 sn, 4 çekim, cümleye bağlı)
+[03:44:01]    ilgisiz görüntü elendi: aerial view of modern city traffic
+[03:44:06]    ilgisiz görüntü elendi: close-up of autumn leaves on stream rocks
+[03:44:25]    ilgisiz görüntü elendi: fluffy dog standing before a waterfall
+[03:44:27] Sahne 42 (diagram, 22.2 sn, 4 çekim, cümleye bağlı)
+[03:44:30]    ilgisiz görüntü elendi: A waterfall with rocks and trees
+[03:44:32] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[03:44:51]    ilgisiz görüntü elendi: small waterfalls in a green forest
+[03:45:04]    ilgisiz görüntü elendi: European city street with timber-framed buildings
+[03:45:06] Sahne 43 (footage, 19.1 sn, 4 çekim, cümleye bağlı)
+[03:46:02]    ilgisiz görüntü elendi: modern concrete dam with reservoir view
+[03:46:15]    ilgisiz görüntü elendi: calm lake water surrounded by trees
+[03:46:18] Sahne 44 (footage, 22.2 sn, 4 çekim, cümleye bağlı)
+[03:46:40]    ilgisiz görüntü elendi: Ancient megalithic dolmen structure outdoors daytime
+[03:47:24]    ilgisiz görüntü elendi: aerial view of green field with stones
+[03:47:27]    ilgisiz görüntü elendi: abandoned brick building with wire fence
+[03:47:29] Sahne 45 (footage, 16.5 sn, 4 çekim, cümleye bağlı)
+[03:47:41]    ilgisiz görüntü elendi: Traditional Asian temple gate at night
+[03:47:53]    ilgisiz görüntü elendi: aerial view of dolmen stones arrangement
+[03:47:55] Sahne 46 (footage, 17.8 sn, 4 çekim, cümleye bağlı)
+[03:48:20]    ilgisiz görüntü elendi: Vintage footage showing a submarine at sea
+[03:48:25]    ilgisiz görüntü elendi: aerial view of an ancient Roman amphitheater
+[03:48:37]    ilgisiz görüntü elendi: aerial view of highway with traffic
+[03:48:38] Sahne 47 (footage, 21.0 sn, 4 çekim, cümleye bağlı)
+[03:48:42]    ilgisiz görüntü elendi: person wiping a modern whiteboard clean
+[03:48:58]    ilgisiz görüntü elendi: Hand using a modern gaming mouse
+[03:49:02]    ilgisiz görüntü elendi: papyrus plants growing near water surface
+[03:49:10] Sahne 48 (diagram, 20.9 sn, 5 çekim, cümleye bağlı)
+[03:49:20]    ilgisiz görüntü elendi: aerial view of green valley and road
+[03:49:26]    ilgisiz görüntü elendi: aerial view of green valley landscape
+[03:49:33]    ilgisiz görüntü elendi: people walking through a tulip field
+[03:49:45]    alakasız görsel yeniden çizilecek: deep trench with figures
+[03:49:45] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[03:50:02]    ilgisiz görüntü elendi: An excavator demolishing a modern building.
+[03:50:03] Sahne 49 (footage, 14.1 sn, 3 çekim, cümleye bağlı)
+[03:50:10]    ilgisiz görüntü elendi: modern skyscraper and cityscape at sunset
+[03:50:18]    ilgisiz görüntü elendi: aerial view of a sandy beach
+[03:50:20] Sahne 50 (footage, 20.4 sn, 4 çekim, cümleye bağlı)
+[03:50:31]    ilgisiz görüntü elendi: sheep rubbing against standing stones in grass
+[03:51:09] Görsel aşaması zaman bütçesini aştı: kalan sahnelerde yalnız cümleye göre çizilen görseller (hızlı mod)
+[03:51:28] Sahne 51 (diagram, 20.2 sn, 4 çekim, cümleye bağlı)
+[03:51:29] Vertex görsel kotası 429: 75 sn bekleme; bu arada yedek model/fotoğraf denenecek
+[04:04:22] Ana video: 1045 sn
+[04:05:07] Short 1: sahne 0-2, 54 sn — 1000 Tonluk Taşı Kim Kaldırdı?
+[04:05:52] Short 2: sahne 12-15, 57 sn — Süleyman Mabedi ve Cinler Rivayeti
+[04:06:24] Short 3: sahne 26-29, 38 sn — Modern Vinçlerin Çaresizliği
+[04:06:24] Altyazı çevirisi: English (337 satır)
+[04:06:26] Çeviri parçası eksik geldi (0-30), tekrar deneniyor
+[04:07:36] Altyazı eklendi: Türkçe
+[04:07:38] Altyazı eklendi: English
+[04:07:39] Oynatma listesine eklendi: Kayıp Medeniyetler ve Antik Gizemler
+[04:07:49] Instagram sırasına eklendi: 1000 Tonluk Taşı Kim Kaldırdı?
+[04:07:52] Instagram sırasına eklendi: Süleyman Mabedi ve Cinler Rivayeti
+[04:07:54] Instagram sırasına eklendi: Modern Vinçlerin Çaresizliği
+[04:11:21] Bitti: https://youtu.be/FSAl03M-eZA
+[04:11:21] Başarıyla bitti.
