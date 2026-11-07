@@ -1,0 +1,12 @@
+2026-11-07T02:27:21 deneme 1
+Traceback (most recent call last):
+  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 3947, in <module>
+    res = run_once()
+          ^^^^^^^^^^
+  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 3550, in run_once
+    publish_rendered(script, idea, shorts, thumb, thumb_alt, en_srt, tr_srt,
+  File "/home/runner/work/otoyt/otoyt/pipeline.py", line 3725, in publish_rendered
+    f.unlink()
+  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/pathlib.py", line 1342, in unlink
+    os.unlink(self)
+IsADirectoryError: [Errno 21] Is a directory: '/home/runner/work/otoyt/otoyt/out/tts_cache'
