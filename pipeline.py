@@ -1294,6 +1294,7 @@ def build_scene_videos(script, workdir, ledger):
         files = []
         for k, fr in enumerate(shots):
             out = workdir / f"shot_{i:02d}_{k:02d}.mp4"
+            VIS_STATS["shots"] = VIS_STATS.get("shots", 0) + 1
             # diyagram sahnesi: diyagram (geniş) → stok → diyagram (detay) → stok ...
             use_still = img is not None and (k % 2 == 0 or i < hook_n)
             clip = None
@@ -3576,7 +3577,7 @@ def publish_rendered(script, idea, shorts, thumb, thumb_alt, en_srt, tr_srt,
     # Aynı görselin yedek olarak tekrar kullanıldığı çekim oranı sınırı aşarsa video HERKESE AÇIK PLANLANMAZ:
     # gizli yüklenir ve 🆘 ile haber verilir (izleyici kalitesiz videoyu asla görmez).
     reused = sum(_REUSE.values())
-    shots = max(len(list(Path(w).glob("shot_*.mp4"))), 1)
+    shots = max(VIS_STATS.get("shots", 0), len(list(Path(w).glob("shot_*.mp4"))), 1)  # 07.11: dosyalar birleşince siliniyordu
     if reused > max(6, CFG.get("max_reuse_ratio", 0.08) * shots):
         sched = False
         notify(f"🆘 CLAUDE'A YAZ — Görsel kalitesi düşük çıktı: {shots} çekimin {reused} tanesinde aynı görseller tekrar "
