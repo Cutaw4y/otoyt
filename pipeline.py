@@ -1379,6 +1379,7 @@ def build_beat_scene(sc, i, bshots, workdir, ledger, style, hook, img_budget):
         prev_j = j
         b = plan[j]
         out = workdir / f"shot_{i:02d}_{k:02d}.mp4"
+        VIS_STATS["shots"] = VIS_STATS.get("shots", 0) + 1
         # diyagram sahnesi: önce cümlenin görseli, uzun cümlede ikinci çekim stok; stok sahne: tersi
         want_still = hook or (sc.get("visual") == "diagram") == (part % 2 == 0)
         if b.get("real") and part == 0:
