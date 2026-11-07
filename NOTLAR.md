@@ -31,3 +31,4 @@
 - 2026-11-07 01:50 [Claude] Yedek görsel kaynağı: OpenAI görsel API (gpt-image-1-mini → gpt-image-1), yalnız OPENAI_API_KEY secret eklenirse çalışır; Google kotası dolunca Cloudflare/stoktan önce. Furkan önerisi
 - 2026-11-07 02:00 [Claude] otoyt_tr.yml'e tek seferlik girişler: publish_at (yayın anı) ve topic (konu); normal çalışmayı etkilemez
 - 2026-11-07 02:15 [Claude] Furkan ana kuralı: dramatik/sıra dışı anlatım, ilk 15 sn, somut yer; başlık kuralı (title_rules → title_pass), küçük resim şok cümle formülü; izleyici geri bildirimleri AGENTS.md'de kalıcı
+- 2026-11-07 05:35 [Claude] ACİL: out/tts_cache klasörü yüzünden yükleme sonrası temizlikte çökme (IsADirectoryError) → yalnız dosyalar silinir

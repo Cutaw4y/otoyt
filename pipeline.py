@@ -3721,8 +3721,9 @@ def publish_rendered(script, idea, shorts, thumb, thumb_alt, en_srt, tr_srt,
                 break  # günlük yükleme hakkı doldu; kalanları zorlamayalım
 
     post_reels(script, idea, shorts, history, parent=vid)
-    for f in OUT.glob("*"):
-        f.unlink()
+    for f in OUT.glob("*"):  # 07.11: ses önbelleği klasörü de burada; klasörler silinmeye çalışılınca çöküyordu
+        if f.is_file():
+            f.unlink()
     send_thumb_options(vid, script["title"])
     log(f"Bitti: https://youtu.be/{vid}")
 
